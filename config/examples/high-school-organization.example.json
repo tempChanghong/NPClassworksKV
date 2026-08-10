@@ -1,0 +1,74 @@
+{
+  "school": {
+    "code": "DEMO-SCHOOL",
+    "name": "示例中学"
+  },
+  "term": {
+    "name": "2026-2027学年上学期",
+    "academicYear": 2026,
+    "semester": 1,
+    "status": "ACTIVE"
+  },
+  "grade": {
+    "code": "G2",
+    "name": "高二",
+    "sortOrder": 2
+  },
+  "subjects": [
+    {"code": "CHN", "name": "语文", "category": "CORE", "sortOrder": 10},
+    {"code": "MATH", "name": "数学", "category": "CORE", "sortOrder": 20},
+    {"code": "ENG", "name": "英语", "category": "CORE", "sortOrder": 30},
+    {"code": "PHY", "name": "物理", "category": "ELECTIVE", "sortOrder": 40},
+    {"code": "CHE", "name": "化学", "category": "ELECTIVE", "sortOrder": 50},
+    {"code": "BIO", "name": "生物", "category": "ELECTIVE", "sortOrder": 60},
+    {"code": "HIS", "name": "历史", "category": "ELECTIVE", "sortOrder": 70},
+    {"code": "GEO", "name": "地理", "category": "ELECTIVE", "sortOrder": 80},
+    {"code": "POL", "name": "政治", "category": "ELECTIVE", "sortOrder": 90}
+  ],
+  "administrativeClasses": [
+    {
+      "code": "G2-C1",
+      "name": "高二1班",
+      "subjectRules": {
+        "CHN": "ADMIN_CLASS",
+        "MATH": "ADMIN_CLASS",
+        "ENG": "ADMIN_CLASS",
+        "PHY": "ADMIN_CLASS",
+        "CHE": "ADMIN_CLASS",
+        "BIO": "ADMIN_CLASS"
+      }
+    },
+    {
+      "code": "G2-C2",
+      "name": "高二2班",
+      "subjectRules": {
+        "CHN": "ADMIN_CLASS",
+        "MATH": "ADMIN_CLASS",
+        "ENG": "ADMIN_CLASS",
+        "PHY": "ADMIN_CLASS",
+        "CHE": "ADMIN_CLASS",
+        "BIO": "ADMIN_CLASS"
+      }
+    },
+    {
+      "code": "G2-C5",
+      "name": "高二5班",
+      "subjectRules": {
+        "CHN": "ADMIN_CLASS",
+        "MATH": "ADMIN_CLASS",
+        "ENG": "ADMIN_CLASS",
+        "PHY": "COURSE_GROUP",
+        "CHE": "COURSE_GROUP",
+        "BIO": "COURSE_GROUP",
+        "HIS": "COURSE_GROUP",
+        "GEO": "COURSE_GROUP",
+        "POL": "COURSE_GROUP"
+      }
+    }
+  ],
+  "courseGroups": [
+    {"code": "G2-PHY-A1", "name": "物理A1", "subject": "PHY", "sourceClasses": ["G2-C5"]},
+    {"code": "G2-CHE-A2", "name": "化学A2", "subject": "CHE", "sourceClasses": ["G2-C5"]},
+    {"code": "G2-HIS-B1", "name": "历史B1", "subject": "HIS", "sourceClasses": ["G2-C5"]}
+  ]
+}

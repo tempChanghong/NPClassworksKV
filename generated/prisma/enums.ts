@@ -9,7 +9,111 @@
 * 🟢 You can import this file directly.
 */
 
+export const AcademicTermStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type AcademicTermStatus = (typeof AcademicTermStatus)[keyof typeof AcademicTermStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const SubjectCategory = {
+  CORE: 'CORE',
+  ELECTIVE: 'ELECTIVE',
+  OTHER: 'OTHER'
+} as const
+
+export type SubjectCategory = (typeof SubjectCategory)[keyof typeof SubjectCategory]
+
+
+export const WorkspaceType = {
+  ADMIN_CLASS: 'ADMIN_CLASS',
+  COURSE_GROUP: 'COURSE_GROUP',
+  GRADE_CHANNEL: 'GRADE_CHANNEL',
+  SCHOOL_CHANNEL: 'SCHOOL_CHANNEL'
+} as const
+
+export type WorkspaceType = (typeof WorkspaceType)[keyof typeof WorkspaceType]
+
+
+export const SubjectDeliveryMode = {
+  ADMIN_CLASS: 'ADMIN_CLASS',
+  COURSE_GROUP: 'COURSE_GROUP'
+} as const
+
+export type SubjectDeliveryMode = (typeof SubjectDeliveryMode)[keyof typeof SubjectDeliveryMode]
+
+
+export const WorkspaceMemberRole = {
+  OWNER: 'OWNER',
+  TEACHER: 'TEACHER',
+  ASSISTANT: 'ASSISTANT',
+  VIEWER: 'VIEWER'
+} as const
+
+export type WorkspaceMemberRole = (typeof WorkspaceMemberRole)[keyof typeof WorkspaceMemberRole]
+
+
+export const SchoolMemberRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MANAGER: 'MANAGER',
+  VIEWER: 'VIEWER'
+} as const
+
+export type SchoolMemberRole = (typeof SchoolMemberRole)[keyof typeof SchoolMemberRole]
+
+
+export const TeacherAuthMode = {
+  LOCAL_PIN: 'LOCAL_PIN',
+  SHARED_PASSWORD: 'SHARED_PASSWORD',
+  OAUTH_EMAIL: 'OAUTH_EMAIL'
+} as const
+
+export type TeacherAuthMode = (typeof TeacherAuthMode)[keyof typeof TeacherAuthMode]
+
+
+export const PublicationType = {
+  ASSIGNMENT: 'ASSIGNMENT',
+  NOTICE: 'NOTICE'
+} as const
+
+export type PublicationType = (typeof PublicationType)[keyof typeof PublicationType]
+
+
+export const PublicationStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  WITHDRAWN: 'WITHDRAWN'
+} as const
+
+export type PublicationStatus = (typeof PublicationStatus)[keyof typeof PublicationStatus]
+
+
+export const PublicationPriority = {
+  NORMAL: 'NORMAL',
+  IMPORTANT: 'IMPORTANT',
+  URGENT: 'URGENT'
+} as const
+
+export type PublicationPriority = (typeof PublicationPriority)[keyof typeof PublicationPriority]
+
+
+export const PublicationActorType = {
+  ACCOUNT: 'ACCOUNT',
+  CLASSROOM_SCREEN: 'CLASSROOM_SCREEN',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type PublicationActorType = (typeof PublicationActorType)[keyof typeof PublicationActorType]
+
+
+export const PublicationRevisionAction = {
+  CREATED: 'CREATED',
+  UPDATED: 'UPDATED',
+  RESTORED: 'RESTORED',
+  WITHDRAWN: 'WITHDRAWN'
+} as const
+
+export type PublicationRevisionAction = (typeof PublicationRevisionAction)[keyof typeof PublicationRevisionAction]

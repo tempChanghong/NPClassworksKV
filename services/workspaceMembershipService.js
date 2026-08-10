@@ -1,0 +1,111 @@
+import {prisma} from "../utils/prisma.js";
+import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
+
+const WORKSPACE_ROLES = new Set(["OWNER", "TEACHER", "ASSISTANT", "VIEWER"]);
+
+async function getManagedWorkspace(accountId, workspaceId) {
+    const workspace = await prisma.workspace.findUnique({
+        where: {id: workspaceId},
+        include: {term: {select: {schoolId: true}}},
+    });
+    if (!workspace) throw authorizationError("教学空间不存在", "WORKSPACE_NOT_FOUND", 404);
+    await assertSchoolManager(accountId, workspace.term.schoolId);
+    return workspace;
+}
+
+async function resolveAccount({accountId, email}) {
+    if (accountId) return prisma.account.findUnique({where: {id: accountId}});
+    if (email) return prisma.account.findFirst({where: {email: {equals: email.trim(), mode: "insensitive"}}});
+    return null;
+}
+
+export async function upsertWorkspaceMember({managerAccountId, workspaceId, accountId, email, role}) {
+    await getManagedWorkspace(managerAccountId, workspaceId);
+    if (!WORKSPACE_ROLES.has(role)) {
+        throw authorizationError("无效的教学空间角色", "INVALID_WORKSPACE_ROLE", 400, {role});
+    }
+    const account = await resolveAccount({accountId, email});
+    if (!account) throw authorizationError("未找到需要添加的教师账户", "ACCOUNT_NOT_FOUND", 404);
+
+    const membership = await prisma.workspaceMember.upsert({
+        where: {workspaceId_accountId: {workspaceId, accountId: account.id}},
+        update: {role},
+        create: {workspaceId, accountId: account.id, role},
+        include: {
+            account: {select: {id: true, name: true, email: true, avatarUrl: true}},
+        },
+    });
+    return membership;
+}
+
+export async function removeWorkspaceMember({managerAccountId, workspaceId, accountId}) {
+    await getManagedWorkspace(managerAccountId, workspaceId);
+    const existing = await prisma.workspaceMember.findUnique({
+        where: {workspaceId_accountId: {workspaceId, accountId}},
+    });
+    if (!existing) throw authorizationError("教学空间成员不存在", "WORKSPACE_MEMBER_NOT_FOUND", 404);
+    await prisma.workspaceMember.delete({
+        where: {workspaceId_accountId: {workspaceId, accountId}},
+    });
+}
+
+export async function listMyWorkspaces({accountId, termId}) {
+    const [account, schoolManagerMemberships, memberships] = await Promise.all([
+        prisma.account.findUnique({where: {id: accountId}, select: {provider: true}}),
+        prisma.schoolMember.findMany({
+            where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
+            select: {schoolId: true},
+        }),
+        prisma.workspaceMember.findMany({
+        where: {
+            accountId,
+            workspace: {
+                isActive: true,
+                ...(termId ? {termId} : {term: {status: "ACTIVE"}}),
+            },
+        },
+        orderBy: {workspace: {name: "asc"}},
+        include: {
+            workspace: {
+                include: {
+                    subject: {select: {id: true, code: true, name: true, category: true}},
+                    subjectRules: {
+                        include: {
+                            subject: {select: {id: true, code: true, name: true, category: true}},
+                        },
+                    },
+                    grade: {select: {id: true, code: true, name: true}},
+                    term: {
+                        include: {school: {select: {
+                            id: true,
+                            code: true,
+                            name: true,
+                            teacherAuthMode: true,
+                            allowOAuthTeacherLogin: true,
+                        }}},
+                    },
+                    sourceClasses: {
+                        include: {
+                            administrativeClass: {select: {id: true, code: true, name: true}},
+                        },
+                    },
+                },
+            },
+        },
+        }),
+    ]);
+
+    const managedSchoolIds = new Set(schoolManagerMemberships.map((membership) => membership.schoolId));
+    const permittedMemberships = memberships.filter((membership) => {
+        const school = membership.workspace.term.school;
+        if (managedSchoolIds.has(school.id)) return true;
+        if (account?.provider === "school-local") return school.teacherAuthMode !== "OAUTH_EMAIL";
+        return school.teacherAuthMode === "OAUTH_EMAIL" || school.allowOAuthTeacherLogin;
+    });
+
+    return permittedMemberships.map((membership) => ({
+        role: membership.role,
+        joinedAt: membership.createdAt,
+        workspace: membership.workspace,
+    }));
+}

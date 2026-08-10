@@ -1,0 +1,25 @@
+name: npclassworks-debug
+
+services:
+  postgres:
+    # 调试环境使用本机已有的稳定版本，避免每次调试依赖 Docker Hub。
+    # 生产 Compose 仍固定为 PostgreSQL 17。
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-classworks_debug}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?请先运行 pnpm run debug:init}
+      POSTGRES_DB: ${POSTGRES_DB:-classworks_debug}
+    ports:
+      - "127.0.0.1:${DEBUG_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres-debug-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+volumes:
+  postgres-debug-data:

@@ -252,6 +252,7 @@ export type DeviceWhereInput = {
   appInstalls?: Prisma.AppInstallListRelationFilter
   kvStore?: Prisma.KVStoreListRelationFilter
   autoAuths?: Prisma.AutoAuthListRelationFilter
+  legacyWorkspace?: Prisma.XOR<Prisma.WorkspaceNullableScalarRelationFilter, Prisma.WorkspaceWhereInput> | null
 }
 
 export type DeviceOrderByWithRelationInput = {
@@ -268,6 +269,7 @@ export type DeviceOrderByWithRelationInput = {
   appInstalls?: Prisma.AppInstallOrderByRelationAggregateInput
   kvStore?: Prisma.KVStoreOrderByRelationAggregateInput
   autoAuths?: Prisma.AutoAuthOrderByRelationAggregateInput
+  legacyWorkspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type DeviceWhereUniqueInput = Prisma.AtLeast<{
@@ -287,6 +289,7 @@ export type DeviceWhereUniqueInput = Prisma.AtLeast<{
   appInstalls?: Prisma.AppInstallListRelationFilter
   kvStore?: Prisma.KVStoreListRelationFilter
   autoAuths?: Prisma.AutoAuthListRelationFilter
+  legacyWorkspace?: Prisma.XOR<Prisma.WorkspaceNullableScalarRelationFilter, Prisma.WorkspaceWhereInput> | null
 }, "id" | "uuid" | "namespace">
 
 export type DeviceOrderByWithAggregationInput = {
@@ -333,6 +336,7 @@ export type DeviceCreateInput = {
   appInstalls?: Prisma.AppInstallCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUncheckedCreateInput = {
@@ -348,6 +352,7 @@ export type DeviceUncheckedCreateInput = {
   appInstalls?: Prisma.AppInstallUncheckedCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreUncheckedCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthUncheckedCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUpdateInput = {
@@ -362,6 +367,7 @@ export type DeviceUpdateInput = {
   appInstalls?: Prisma.AppInstallUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateInput = {
@@ -377,6 +383,7 @@ export type DeviceUncheckedUpdateInput = {
   appInstalls?: Prisma.AppInstallUncheckedUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUncheckedUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceCreateManyInput = {
@@ -472,6 +479,11 @@ export type DeviceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type DeviceNullableScalarRelationFilter = {
+  is?: Prisma.DeviceWhereInput | null
+  isNot?: Prisma.DeviceWhereInput | null
+}
+
 export type DeviceCreateNestedManyWithoutAccountInput = {
   create?: Prisma.XOR<Prisma.DeviceCreateWithoutAccountInput, Prisma.DeviceUncheckedCreateWithoutAccountInput> | Prisma.DeviceCreateWithoutAccountInput[] | Prisma.DeviceUncheckedCreateWithoutAccountInput[]
   connectOrCreate?: Prisma.DeviceCreateOrConnectWithoutAccountInput | Prisma.DeviceCreateOrConnectWithoutAccountInput[]
@@ -556,6 +568,22 @@ export type DeviceUpdateOneRequiredWithoutKvStoreNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DeviceUpdateToOneWithWhereWithoutKvStoreInput, Prisma.DeviceUpdateWithoutKvStoreInput>, Prisma.DeviceUncheckedUpdateWithoutKvStoreInput>
 }
 
+export type DeviceCreateNestedOneWithoutLegacyWorkspaceInput = {
+  create?: Prisma.XOR<Prisma.DeviceCreateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedCreateWithoutLegacyWorkspaceInput>
+  connectOrCreate?: Prisma.DeviceCreateOrConnectWithoutLegacyWorkspaceInput
+  connect?: Prisma.DeviceWhereUniqueInput
+}
+
+export type DeviceUpdateOneWithoutLegacyWorkspaceNestedInput = {
+  create?: Prisma.XOR<Prisma.DeviceCreateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedCreateWithoutLegacyWorkspaceInput>
+  connectOrCreate?: Prisma.DeviceCreateOrConnectWithoutLegacyWorkspaceInput
+  upsert?: Prisma.DeviceUpsertWithoutLegacyWorkspaceInput
+  disconnect?: Prisma.DeviceWhereInput | boolean
+  delete?: Prisma.DeviceWhereInput | boolean
+  connect?: Prisma.DeviceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DeviceUpdateToOneWithWhereWithoutLegacyWorkspaceInput, Prisma.DeviceUpdateWithoutLegacyWorkspaceInput>, Prisma.DeviceUncheckedUpdateWithoutLegacyWorkspaceInput>
+}
+
 export type DeviceCreateWithoutAccountInput = {
   uuid: string
   name?: string | null
@@ -567,6 +595,7 @@ export type DeviceCreateWithoutAccountInput = {
   appInstalls?: Prisma.AppInstallCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUncheckedCreateWithoutAccountInput = {
@@ -581,6 +610,7 @@ export type DeviceUncheckedCreateWithoutAccountInput = {
   appInstalls?: Prisma.AppInstallUncheckedCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreUncheckedCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthUncheckedCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceCreateOrConnectWithoutAccountInput = {
@@ -635,6 +665,7 @@ export type DeviceCreateWithoutAppInstallsInput = {
   account?: Prisma.AccountCreateNestedOneWithoutDevicesInput
   kvStore?: Prisma.KVStoreCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUncheckedCreateWithoutAppInstallsInput = {
@@ -649,6 +680,7 @@ export type DeviceUncheckedCreateWithoutAppInstallsInput = {
   namespace?: string | null
   kvStore?: Prisma.KVStoreUncheckedCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthUncheckedCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceCreateOrConnectWithoutAppInstallsInput = {
@@ -678,6 +710,7 @@ export type DeviceUpdateWithoutAppInstallsInput = {
   account?: Prisma.AccountUpdateOneWithoutDevicesNestedInput
   kvStore?: Prisma.KVStoreUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateWithoutAppInstallsInput = {
@@ -692,6 +725,7 @@ export type DeviceUncheckedUpdateWithoutAppInstallsInput = {
   namespace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   kvStore?: Prisma.KVStoreUncheckedUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceCreateWithoutAutoAuthsInput = {
@@ -705,6 +739,7 @@ export type DeviceCreateWithoutAutoAuthsInput = {
   account?: Prisma.AccountCreateNestedOneWithoutDevicesInput
   appInstalls?: Prisma.AppInstallCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUncheckedCreateWithoutAutoAuthsInput = {
@@ -719,6 +754,7 @@ export type DeviceUncheckedCreateWithoutAutoAuthsInput = {
   namespace?: string | null
   appInstalls?: Prisma.AppInstallUncheckedCreateNestedManyWithoutDeviceInput
   kvStore?: Prisma.KVStoreUncheckedCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceCreateOrConnectWithoutAutoAuthsInput = {
@@ -748,6 +784,7 @@ export type DeviceUpdateWithoutAutoAuthsInput = {
   account?: Prisma.AccountUpdateOneWithoutDevicesNestedInput
   appInstalls?: Prisma.AppInstallUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateWithoutAutoAuthsInput = {
@@ -762,6 +799,7 @@ export type DeviceUncheckedUpdateWithoutAutoAuthsInput = {
   namespace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appInstalls?: Prisma.AppInstallUncheckedUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUncheckedUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceCreateWithoutKvStoreInput = {
@@ -775,6 +813,7 @@ export type DeviceCreateWithoutKvStoreInput = {
   account?: Prisma.AccountCreateNestedOneWithoutDevicesInput
   appInstalls?: Prisma.AppInstallCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceUncheckedCreateWithoutKvStoreInput = {
@@ -789,6 +828,7 @@ export type DeviceUncheckedCreateWithoutKvStoreInput = {
   namespace?: string | null
   appInstalls?: Prisma.AppInstallUncheckedCreateNestedManyWithoutDeviceInput
   autoAuths?: Prisma.AutoAuthUncheckedCreateNestedManyWithoutDeviceInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput
 }
 
 export type DeviceCreateOrConnectWithoutKvStoreInput = {
@@ -818,6 +858,7 @@ export type DeviceUpdateWithoutKvStoreInput = {
   account?: Prisma.AccountUpdateOneWithoutDevicesNestedInput
   appInstalls?: Prisma.AppInstallUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateWithoutKvStoreInput = {
@@ -831,6 +872,81 @@ export type DeviceUncheckedUpdateWithoutKvStoreInput = {
   passwordHint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   namespace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   appInstalls?: Prisma.AppInstallUncheckedUpdateManyWithoutDeviceNestedInput
+  autoAuths?: Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput
+}
+
+export type DeviceCreateWithoutLegacyWorkspaceInput = {
+  uuid: string
+  name?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  password?: string | null
+  passwordHint?: string | null
+  namespace?: string | null
+  account?: Prisma.AccountCreateNestedOneWithoutDevicesInput
+  appInstalls?: Prisma.AppInstallCreateNestedManyWithoutDeviceInput
+  kvStore?: Prisma.KVStoreCreateNestedManyWithoutDeviceInput
+  autoAuths?: Prisma.AutoAuthCreateNestedManyWithoutDeviceInput
+}
+
+export type DeviceUncheckedCreateWithoutLegacyWorkspaceInput = {
+  id?: number
+  uuid: string
+  name?: string | null
+  accountId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  password?: string | null
+  passwordHint?: string | null
+  namespace?: string | null
+  appInstalls?: Prisma.AppInstallUncheckedCreateNestedManyWithoutDeviceInput
+  kvStore?: Prisma.KVStoreUncheckedCreateNestedManyWithoutDeviceInput
+  autoAuths?: Prisma.AutoAuthUncheckedCreateNestedManyWithoutDeviceInput
+}
+
+export type DeviceCreateOrConnectWithoutLegacyWorkspaceInput = {
+  where: Prisma.DeviceWhereUniqueInput
+  create: Prisma.XOR<Prisma.DeviceCreateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedCreateWithoutLegacyWorkspaceInput>
+}
+
+export type DeviceUpsertWithoutLegacyWorkspaceInput = {
+  update: Prisma.XOR<Prisma.DeviceUpdateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedUpdateWithoutLegacyWorkspaceInput>
+  create: Prisma.XOR<Prisma.DeviceCreateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedCreateWithoutLegacyWorkspaceInput>
+  where?: Prisma.DeviceWhereInput
+}
+
+export type DeviceUpdateToOneWithWhereWithoutLegacyWorkspaceInput = {
+  where?: Prisma.DeviceWhereInput
+  data: Prisma.XOR<Prisma.DeviceUpdateWithoutLegacyWorkspaceInput, Prisma.DeviceUncheckedUpdateWithoutLegacyWorkspaceInput>
+}
+
+export type DeviceUpdateWithoutLegacyWorkspaceInput = {
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  namespace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  account?: Prisma.AccountUpdateOneWithoutDevicesNestedInput
+  appInstalls?: Prisma.AppInstallUpdateManyWithoutDeviceNestedInput
+  kvStore?: Prisma.KVStoreUpdateManyWithoutDeviceNestedInput
+  autoAuths?: Prisma.AutoAuthUpdateManyWithoutDeviceNestedInput
+}
+
+export type DeviceUncheckedUpdateWithoutLegacyWorkspaceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uuid?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  namespace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  appInstalls?: Prisma.AppInstallUncheckedUpdateManyWithoutDeviceNestedInput
+  kvStore?: Prisma.KVStoreUncheckedUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceNestedInput
 }
 
@@ -856,6 +972,7 @@ export type DeviceUpdateWithoutAccountInput = {
   appInstalls?: Prisma.AppInstallUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateWithoutAccountInput = {
@@ -870,6 +987,7 @@ export type DeviceUncheckedUpdateWithoutAccountInput = {
   appInstalls?: Prisma.AppInstallUncheckedUpdateManyWithoutDeviceNestedInput
   kvStore?: Prisma.KVStoreUncheckedUpdateManyWithoutDeviceNestedInput
   autoAuths?: Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceNestedInput
+  legacyWorkspace?: Prisma.WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput
 }
 
 export type DeviceUncheckedUpdateManyWithoutAccountInput = {
@@ -946,6 +1064,7 @@ export type DeviceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   appInstalls?: boolean | Prisma.Device$appInstallsArgs<ExtArgs>
   kvStore?: boolean | Prisma.Device$kvStoreArgs<ExtArgs>
   autoAuths?: boolean | Prisma.Device$autoAuthsArgs<ExtArgs>
+  legacyWorkspace?: boolean | Prisma.Device$legacyWorkspaceArgs<ExtArgs>
   _count?: boolean | Prisma.DeviceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["device"]>
 
@@ -993,6 +1112,7 @@ export type DeviceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   appInstalls?: boolean | Prisma.Device$appInstallsArgs<ExtArgs>
   kvStore?: boolean | Prisma.Device$kvStoreArgs<ExtArgs>
   autoAuths?: boolean | Prisma.Device$autoAuthsArgs<ExtArgs>
+  legacyWorkspace?: boolean | Prisma.Device$legacyWorkspaceArgs<ExtArgs>
   _count?: boolean | Prisma.DeviceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DeviceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1009,6 +1129,7 @@ export type $DevicePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     appInstalls: Prisma.$AppInstallPayload<ExtArgs>[]
     kvStore: Prisma.$KVStorePayload<ExtArgs>[]
     autoAuths: Prisma.$AutoAuthPayload<ExtArgs>[]
+    legacyWorkspace: Prisma.$WorkspacePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1418,6 +1539,7 @@ export interface Prisma__DeviceClient<T, Null = never, ExtArgs extends runtime.T
   appInstalls<T extends Prisma.Device$appInstallsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Device$appInstallsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppInstallPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   kvStore<T extends Prisma.Device$kvStoreArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Device$kvStoreArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KVStorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   autoAuths<T extends Prisma.Device$autoAuthsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Device$autoAuthsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AutoAuthPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyWorkspace<T extends Prisma.Device$legacyWorkspaceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Device$legacyWorkspaceArgs<ExtArgs>>): Prisma.Prisma__WorkspaceClient<runtime.Types.Result.GetResult<Prisma.$WorkspacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1940,6 +2062,25 @@ export type Device$autoAuthsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AutoAuthScalarFieldEnum | Prisma.AutoAuthScalarFieldEnum[]
+}
+
+/**
+ * Device.legacyWorkspace
+ */
+export type Device$legacyWorkspaceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Workspace
+   */
+  select?: Prisma.WorkspaceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Workspace
+   */
+  omit?: Prisma.WorkspaceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkspaceInclude<ExtArgs> | null
+  where?: Prisma.WorkspaceWhereInput
 }
 
 /**

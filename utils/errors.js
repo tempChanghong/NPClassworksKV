@@ -44,6 +44,7 @@ const passError = (error, next) => {
             statusCode: error.statusCode || 500,
             message: error.message || '服务器错误',
             details: error.details || null,
+            code: error.code || undefined,
             originalError: error
         };
         next(httpError);

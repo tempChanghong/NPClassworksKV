@@ -3,7 +3,7 @@ import rateLimit from "express-rate-limit";
 // 获取客户端真实IP的函数
 export const getClientIp = (req) => {
     return (
-        req.headers["x-forwarded-for"] ||
+        req.ip ||
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         req.connection.socket?.remoteAddress ||
@@ -66,6 +66,19 @@ export const authLimiter = rateLimit({
     keyGenerator: getClientIp,
     skipSuccessfulRequests: true, // 成功的认证不计入限制
     skipFailedRequests: false, // 失败的认证计入限制
+});
+
+// 校园网络通常由大量设备共用一个公网 IP。教师短账号登录以“账号连续失败锁定”
+// 为主，这里仅拦截明显的全局撞库，避免五次误输把整所学校锁住。
+export const localAuthLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 60,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: "本网络登录失败次数过多，请稍后再试",
+    keyGenerator: getClientIp,
+    skipSuccessfulRequests: true,
+    skipFailedRequests: false,
 });
 
 // === Token 专用限速器（更宽松的限制，纯基于Token） ===

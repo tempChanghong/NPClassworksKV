@@ -5,11 +5,97 @@ import {generateTokenPair, refreshAccessToken, revokeAllTokens, revokeRefreshTok
 import {jwtAuth} from "../middleware/jwt-auth.js";
 import errors from "../utils/errors.js";
 import { prisma } from "../utils/prisma.js";
+import {claimWorkspaceInvitations} from "../services/workspaceAssignmentImportService.js";
+import {
+    bootstrapLocalAdministrator,
+    changeOwnLocalPin,
+    getLocalAuthStatus,
+    loginLocalAccount,
+    recoverLocalOwner,
+} from "../services/localAccountService.js";
+import {localAuthLimiter} from "../middleware/rateLimiter.js";
 
 const router = Router();
 
 // 存储OAuth state，防止CSRF攻击（生产环境应使用Redis等）
 const oauthStates = new Map();
+
+function sendLocalTokenPair(res, result, message) {
+    return res.json({
+        success: true,
+        message,
+        data: {
+            account: result.account,
+            access_token: result.accessToken,
+            refresh_token: result.refreshToken,
+            expires_in: result.accessTokenExpiresIn,
+            refresh_expires_in: result.refreshTokenExpiresIn,
+        },
+    });
+}
+
+router.get("/local/status", async (req, res, next) => {
+    try {
+        res.json({success: true, data: await getLocalAuthStatus()});
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/local/bootstrap", localAuthLimiter, async (req, res, next) => {
+    try {
+        const result = await bootstrapLocalAdministrator({
+            setupKey: req.body?.setupKey,
+            schoolCode: req.body?.schoolCode,
+            username: req.body?.username,
+            name: req.body?.name,
+            pin: req.body?.pin,
+        });
+        return sendLocalTokenPair(res, result, "首位本地管理员已创建");
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/local/login", localAuthLimiter, async (req, res, next) => {
+    try {
+        const result = await loginLocalAccount({
+            schoolCode: req.body?.schoolCode,
+            username: req.body?.username,
+            password: req.body?.password,
+        });
+        return sendLocalTokenPair(res, result, "登录成功");
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/local/recover-owner", localAuthLimiter, async (req, res, next) => {
+    try {
+        await recoverLocalOwner({
+            setupKey: req.body?.setupKey,
+            schoolCode: req.body?.schoolCode,
+            username: req.body?.username,
+            newPin: req.body?.newPin,
+        });
+        return res.json({success: true, message: "学校 OWNER PIN 已恢复，请重新登录"});
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/local/change-pin", jwtAuth, async (req, res, next) => {
+    try {
+        await changeOwnLocalPin({
+            accountId: res.locals.account.id,
+            currentPin: req.body?.currentPin,
+            newPin: req.body?.newPin,
+        });
+        return res.json({success: true, message: "PIN 已修改，请重新登录"});
+    } catch (error) {
+        next(error);
+    }
+});
 
 // 生成PKCE code_verifier 和 code_challenge
 function generatePkcePair() {
@@ -339,10 +425,13 @@ router.get("/oauth/:provider/callback", async (req, res) => {
             });
         }
 
-        // 5. 生成令牌对（访问令牌 + 刷新令牌）
+        // 5. 认领管理员在教师首次登录前按邮箱预分配的教学空间。
+        await claimWorkspaceInvitations({accountId: account.id, email: account.email});
+
+        // 6. 生成令牌对（访问令牌 + 刷新令牌）
         const tokens = await generateTokenPair(account);
 
-        // 6. 重定向到前端根路径，携带JWT token
+        // 7. 重定向到前端根路径，携带JWT token
         const frontendBaseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
         const callbackUrl = new URL(frontendBaseUrl);
         callbackUrl.searchParams.append("access_token", tokens.accessToken);
@@ -420,6 +509,7 @@ router.get("/profile", jwtAuth, async (req, res, next) => {
                 provider: account.provider,
                 providerInfo,
                 email: account.email,
+                username: account.localUsername,
                 name: account.name,
                 avatarUrl: account.avatarUrl,
                 devices: account.devices,
@@ -725,7 +815,7 @@ router.post("/logout", jwtAuth, async (req, res, next) => {
         const accountContext = res.locals.account;
 
         // 撤销当前设备的刷新令牌
-        await revokeRefreshToken(accountContext.id);
+        await revokeRefreshToken(accountContext.id, res.locals.tokenDecoded?.sessionId || null);
 
         res.json({
             success: true,

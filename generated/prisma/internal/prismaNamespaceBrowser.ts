@@ -52,10 +52,27 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Account: 'Account',
+  AccountSession: 'AccountSession',
   AppInstall: 'AppInstall',
   AutoAuth: 'AutoAuth',
   Device: 'Device',
-  KVStore: 'KVStore'
+  KVStore: 'KVStore',
+  School: 'School',
+  SchoolMember: 'SchoolMember',
+  AcademicTerm: 'AcademicTerm',
+  Grade: 'Grade',
+  Subject: 'Subject',
+  Workspace: 'Workspace',
+  WorkspaceSourceClass: 'WorkspaceSourceClass',
+  AdministrativeClassSubject: 'AdministrativeClassSubject',
+  WorkspaceMember: 'WorkspaceMember',
+  WorkspaceMemberInvite: 'WorkspaceMemberInvite',
+  Publication: 'Publication',
+  PublicationTarget: 'PublicationTarget',
+  ClassroomScreenBinding: 'ClassroomScreenBinding',
+  AdministrativeClassStudent: 'AdministrativeClassStudent',
+  ClassAttendanceDay: 'ClassAttendanceDay',
+  PublicationRevision: 'PublicationRevision'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,10 +104,30 @@ export const AccountScalarFieldEnum = {
   updatedAt: 'updatedAt',
   refreshToken: 'refreshToken',
   refreshTokenExpiry: 'refreshTokenExpiry',
-  tokenVersion: 'tokenVersion'
+  tokenVersion: 'tokenVersion',
+  localUsername: 'localUsername',
+  localPasswordHash: 'localPasswordHash',
+  localLoginFailures: 'localLoginFailures',
+  localLockedUntil: 'localLockedUntil',
+  localDisabled: 'localDisabled',
+  lastLoginAt: 'lastLoginAt'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const AccountSessionScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  refreshTokenHash: 'refreshTokenHash',
+  expiresAt: 'expiresAt',
+  lastUsedAt: 'lastUsedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountSessionScalarFieldEnum = (typeof AccountSessionScalarFieldEnum)[keyof typeof AccountSessionScalarFieldEnum]
 
 
 export const AppInstallScalarFieldEnum = {
@@ -146,6 +183,240 @@ export const KVStoreScalarFieldEnum = {
 } as const
 
 export type KVStoreScalarFieldEnum = (typeof KVStoreScalarFieldEnum)[keyof typeof KVStoreScalarFieldEnum]
+
+
+export const SchoolScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  teacherAuthMode: 'teacherAuthMode',
+  allowOAuthTeacherLogin: 'allowOAuthTeacherLogin',
+  teacherSharedPasswordHash: 'teacherSharedPasswordHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SchoolScalarFieldEnum = (typeof SchoolScalarFieldEnum)[keyof typeof SchoolScalarFieldEnum]
+
+
+export const SchoolMemberScalarFieldEnum = {
+  schoolId: 'schoolId',
+  accountId: 'accountId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SchoolMemberScalarFieldEnum = (typeof SchoolMemberScalarFieldEnum)[keyof typeof SchoolMemberScalarFieldEnum]
+
+
+export const AcademicTermScalarFieldEnum = {
+  id: 'id',
+  schoolId: 'schoolId',
+  name: 'name',
+  academicYear: 'academicYear',
+  semester: 'semester',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AcademicTermScalarFieldEnum = (typeof AcademicTermScalarFieldEnum)[keyof typeof AcademicTermScalarFieldEnum]
+
+
+export const GradeScalarFieldEnum = {
+  id: 'id',
+  termId: 'termId',
+  code: 'code',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GradeScalarFieldEnum = (typeof GradeScalarFieldEnum)[keyof typeof GradeScalarFieldEnum]
+
+
+export const SubjectScalarFieldEnum = {
+  id: 'id',
+  schoolId: 'schoolId',
+  code: 'code',
+  name: 'name',
+  category: 'category',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
+
+
+export const WorkspaceScalarFieldEnum = {
+  id: 'id',
+  termId: 'termId',
+  gradeId: 'gradeId',
+  subjectId: 'subjectId',
+  name: 'name',
+  code: 'code',
+  type: 'type',
+  isActive: 'isActive',
+  isStudentSelectable: 'isStudentSelectable',
+  legacyDeviceId: 'legacyDeviceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkspaceScalarFieldEnum = (typeof WorkspaceScalarFieldEnum)[keyof typeof WorkspaceScalarFieldEnum]
+
+
+export const WorkspaceSourceClassScalarFieldEnum = {
+  workspaceId: 'workspaceId',
+  administrativeClassId: 'administrativeClassId',
+  createdAt: 'createdAt'
+} as const
+
+export type WorkspaceSourceClassScalarFieldEnum = (typeof WorkspaceSourceClassScalarFieldEnum)[keyof typeof WorkspaceSourceClassScalarFieldEnum]
+
+
+export const AdministrativeClassSubjectScalarFieldEnum = {
+  administrativeClassId: 'administrativeClassId',
+  subjectId: 'subjectId',
+  deliveryMode: 'deliveryMode',
+  isCompulsory: 'isCompulsory',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdministrativeClassSubjectScalarFieldEnum = (typeof AdministrativeClassSubjectScalarFieldEnum)[keyof typeof AdministrativeClassSubjectScalarFieldEnum]
+
+
+export const WorkspaceMemberScalarFieldEnum = {
+  workspaceId: 'workspaceId',
+  accountId: 'accountId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
+
+
+export const WorkspaceMemberInviteScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  email: 'email',
+  normalizedEmail: 'normalizedEmail',
+  role: 'role',
+  invitedByAccountId: 'invitedByAccountId',
+  claimedByAccountId: 'claimedByAccountId',
+  claimedAt: 'claimedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkspaceMemberInviteScalarFieldEnum = (typeof WorkspaceMemberInviteScalarFieldEnum)[keyof typeof WorkspaceMemberInviteScalarFieldEnum]
+
+
+export const PublicationScalarFieldEnum = {
+  id: 'id',
+  authorAccountId: 'authorAccountId',
+  type: 'type',
+  subjectId: 'subjectId',
+  title: 'title',
+  content: 'content',
+  contentJson: 'contentJson',
+  publishAt: 'publishAt',
+  dueAt: 'dueAt',
+  expiresAt: 'expiresAt',
+  priority: 'priority',
+  status: 'status',
+  revision: 'revision',
+  isCertified: 'isCertified',
+  certifiedByAccountId: 'certifiedByAccountId',
+  certifiedAt: 'certifiedAt',
+  latestActorType: 'latestActorType',
+  latestScreenBindingId: 'latestScreenBindingId',
+  withdrawnAt: 'withdrawnAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
+
+
+export const PublicationTargetScalarFieldEnum = {
+  publicationId: 'publicationId',
+  workspaceId: 'workspaceId',
+  createdAt: 'createdAt'
+} as const
+
+export type PublicationTargetScalarFieldEnum = (typeof PublicationTargetScalarFieldEnum)[keyof typeof PublicationTargetScalarFieldEnum]
+
+
+export const ClassroomScreenBindingScalarFieldEnum = {
+  id: 'id',
+  schoolId: 'schoolId',
+  administrativeClassId: 'administrativeClassId',
+  deviceFingerprint: 'deviceFingerprint',
+  name: 'name',
+  tokenHash: 'tokenHash',
+  isActive: 'isActive',
+  lastUsedAt: 'lastUsedAt',
+  createdByAccountId: 'createdByAccountId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const AdministrativeClassStudentScalarFieldEnum = {
+  id: 'id',
+  administrativeClassId: 'administrativeClassId',
+  studentNumber: 'studentNumber',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdministrativeClassStudentScalarFieldEnum = (typeof AdministrativeClassStudentScalarFieldEnum)[keyof typeof AdministrativeClassStudentScalarFieldEnum]
+
+
+export const ClassAttendanceDayScalarFieldEnum = {
+  administrativeClassId: 'administrativeClassId',
+  attendanceDate: 'attendanceDate',
+  attendance: 'attendance',
+  updatedByAccountId: 'updatedByAccountId',
+  updatedByScreenBindingId: 'updatedByScreenBindingId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClassAttendanceDayScalarFieldEnum = (typeof ClassAttendanceDayScalarFieldEnum)[keyof typeof ClassAttendanceDayScalarFieldEnum]
+
+
+export const PublicationRevisionScalarFieldEnum = {
+  id: 'id',
+  publicationId: 'publicationId',
+  revision: 'revision',
+  snapshot: 'snapshot',
+  action: 'action',
+  actorType: 'actorType',
+  editorAccountId: 'editorAccountId',
+  screenBindingId: 'screenBindingId',
+  restoredFromRevision: 'restoredFromRevision',
+  isCertified: 'isCertified',
+  certifiedByAccountId: 'certifiedByAccountId',
+  certifiedAt: 'certifiedAt',
+  purgedAt: 'purgedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PublicationRevisionScalarFieldEnum = (typeof PublicationRevisionScalarFieldEnum)[keyof typeof PublicationRevisionScalarFieldEnum]
 
 
 export const SortOrder = {

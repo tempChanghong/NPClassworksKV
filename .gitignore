@@ -81,6 +81,7 @@ web_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 .env.local
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -145,3 +146,5 @@ dist
 
 prisma/database/data
 data/
+deploy/.env.production
+deploy/.env.debug

@@ -110,6 +110,7 @@ export function initSocket(server) {
     io.on("connection", (socket) => {
         // 初始化每个连接所加入的设备房间集合
         socket.data.deviceUuids = new Set();
+        socket.data.workspaceIds = new Set();
 
         // 仅允许通过 query.token/apptoken 加入
         const qToken = socket.handshake?.query?.token || socket.handshake?.query?.apptoken;
@@ -152,6 +153,50 @@ export function initSocket(server) {
         socket.on("leave-all", () => {
             const uuids = Array.from(socket.data.deviceUuids || []);
             uuids.forEach((u) => leaveDeviceRoom(socket, u));
+        });
+
+        // Classworks 2.0 学生端按本机选择的班级订阅公开失效事件。
+        // 房间仅传递 publication id/revision，不传递正文或草稿内容。
+        socket.on("join-workspaces", async (payload) => {
+            try {
+                const requestedIds = [...new Set(
+                    (Array.isArray(payload?.workspaceIds) ? payload.workspaceIds : [])
+                        .filter((id) => typeof id === "string" && id.trim())
+                        .map((id) => id.trim()),
+                )];
+                if (requestedIds.length === 0 || requestedIds.length > 20) {
+                    socket.emit("workspaces-join-error", {reason: "invalid_workspace_count", max: 20});
+                    return;
+                }
+                const workspaces = await prisma.workspace.findMany({
+                    where: {id: {in: requestedIds}, isActive: true, term: {status: "ACTIVE"}},
+                    select: {id: true},
+                });
+                const joinedIds = workspaces.map((workspace) => workspace.id);
+                const joinedIdSet = new Set(joinedIds);
+                for (const workspaceId of joinedIds) {
+                    socket.join(`workspace:${workspaceId}`);
+                    socket.data.workspaceIds.add(workspaceId);
+                }
+                socket.emit("workspaces-joined", {
+                    workspaceIds: joinedIds,
+                    rejectedWorkspaceIds: requestedIds.filter((id) => !joinedIdSet.has(id)),
+                });
+            } catch (error) {
+                console.error("join-workspaces error:", error);
+                socket.emit("workspaces-join-error", {reason: "database_error"});
+            }
+        });
+
+        socket.on("leave-workspaces", (payload) => {
+            const ids = Array.isArray(payload?.workspaceIds)
+                ? payload.workspaceIds
+                : Array.from(socket.data.workspaceIds || []);
+            for (const workspaceId of ids) {
+                if (typeof workspaceId !== "string") continue;
+                socket.leave(`workspace:${workspaceId}`);
+                socket.data.workspaceIds.delete(workspaceId);
+            }
         });
 
         // 获取事件历史记录
@@ -461,6 +506,32 @@ export function broadcastDeviceEvent(uuid, type, content = null, senderId = "sys
 }
 
 /**
+ * Broadcast a Classworks 2.0 invalidation event to one or more workspace rooms.
+ * Workspace room joining is added by the v2 clients; keeping this helper here
+ * ensures publication writes never transport the full document over Socket.IO.
+ */
+export function broadcastWorkspaceEvent(workspaceIds, type, content = null) {
+    if (!io || !Array.isArray(workspaceIds) || typeof type !== "string") return;
+    const timestamp = new Date().toISOString();
+    const eventPayload = {
+        eventId: `workspace-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+        content,
+        timestamp,
+        senderId: "publication-service",
+        senderInfo: {
+            appId: "classworks-v2",
+            deviceType: "server",
+            deviceName: "publication-service",
+            isReadOnly: false,
+            note: "Workspace feed invalidation",
+        },
+    };
+    for (const workspaceId of new Set(workspaceIds.filter(Boolean))) {
+        io.to(`workspace:${workspaceId}`).emit(type.trim(), eventPayload);
+    }
+}
+
+/**
  * 记录事件到历史记录
  * @param {string} uuid 设备UUID
  * @param {object} eventPayload 事件载荷
@@ -537,6 +608,7 @@ export default {
     getIO,
     broadcastKeyChanged,
     broadcastDeviceEvent,
+    broadcastWorkspaceEvent,
     getOnlineDevices,
     getEventHistory,
     getTokenInfo,

@@ -28,10 +28,12 @@ export type AggregateAccount = {
 
 export type AccountAvgAggregateOutputType = {
   tokenVersion: number | null
+  localLoginFailures: number | null
 }
 
 export type AccountSumAggregateOutputType = {
   tokenVersion: number | null
+  localLoginFailures: number | null
 }
 
 export type AccountMinAggregateOutputType = {
@@ -47,6 +49,12 @@ export type AccountMinAggregateOutputType = {
   refreshToken: string | null
   refreshTokenExpiry: Date | null
   tokenVersion: number | null
+  localUsername: string | null
+  localPasswordHash: string | null
+  localLoginFailures: number | null
+  localLockedUntil: Date | null
+  localDisabled: boolean | null
+  lastLoginAt: Date | null
 }
 
 export type AccountMaxAggregateOutputType = {
@@ -62,6 +70,12 @@ export type AccountMaxAggregateOutputType = {
   refreshToken: string | null
   refreshTokenExpiry: Date | null
   tokenVersion: number | null
+  localUsername: string | null
+  localPasswordHash: string | null
+  localLoginFailures: number | null
+  localLockedUntil: Date | null
+  localDisabled: boolean | null
+  lastLoginAt: Date | null
 }
 
 export type AccountCountAggregateOutputType = {
@@ -78,16 +92,24 @@ export type AccountCountAggregateOutputType = {
   refreshToken: number
   refreshTokenExpiry: number
   tokenVersion: number
+  localUsername: number
+  localPasswordHash: number
+  localLoginFailures: number
+  localLockedUntil: number
+  localDisabled: number
+  lastLoginAt: number
   _all: number
 }
 
 
 export type AccountAvgAggregateInputType = {
   tokenVersion?: true
+  localLoginFailures?: true
 }
 
 export type AccountSumAggregateInputType = {
   tokenVersion?: true
+  localLoginFailures?: true
 }
 
 export type AccountMinAggregateInputType = {
@@ -103,6 +125,12 @@ export type AccountMinAggregateInputType = {
   refreshToken?: true
   refreshTokenExpiry?: true
   tokenVersion?: true
+  localUsername?: true
+  localPasswordHash?: true
+  localLoginFailures?: true
+  localLockedUntil?: true
+  localDisabled?: true
+  lastLoginAt?: true
 }
 
 export type AccountMaxAggregateInputType = {
@@ -118,6 +146,12 @@ export type AccountMaxAggregateInputType = {
   refreshToken?: true
   refreshTokenExpiry?: true
   tokenVersion?: true
+  localUsername?: true
+  localPasswordHash?: true
+  localLoginFailures?: true
+  localLockedUntil?: true
+  localDisabled?: true
+  lastLoginAt?: true
 }
 
 export type AccountCountAggregateInputType = {
@@ -134,6 +168,12 @@ export type AccountCountAggregateInputType = {
   refreshToken?: true
   refreshTokenExpiry?: true
   tokenVersion?: true
+  localUsername?: true
+  localPasswordHash?: true
+  localLoginFailures?: true
+  localLockedUntil?: true
+  localDisabled?: true
+  lastLoginAt?: true
   _all?: true
 }
 
@@ -237,6 +277,12 @@ export type AccountGroupByOutputType = {
   refreshToken: string | null
   refreshTokenExpiry: Date | null
   tokenVersion: number
+  localUsername: string | null
+  localPasswordHash: string | null
+  localLoginFailures: number
+  localLockedUntil: Date | null
+  localDisabled: boolean
+  lastLoginAt: Date | null
   _count: AccountCountAggregateOutputType | null
   _avg: AccountAvgAggregateOutputType | null
   _sum: AccountSumAggregateOutputType | null
@@ -276,7 +322,22 @@ export type AccountWhereInput = {
   refreshToken?: Prisma.StringNullableFilter<"Account"> | string | null
   refreshTokenExpiry?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   tokenVersion?: Prisma.IntFilter<"Account"> | number
+  localUsername?: Prisma.StringNullableFilter<"Account"> | string | null
+  localPasswordHash?: Prisma.StringNullableFilter<"Account"> | string | null
+  localLoginFailures?: Prisma.IntFilter<"Account"> | number
+  localLockedUntil?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  localDisabled?: Prisma.BoolFilter<"Account"> | boolean
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   devices?: Prisma.DeviceListRelationFilter
+  sessions?: Prisma.AccountSessionListRelationFilter
+  publications?: Prisma.PublicationListRelationFilter
+  certifiedPublications?: Prisma.PublicationListRelationFilter
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingListRelationFilter
+  publicationRevisionEdits?: Prisma.PublicationRevisionListRelationFilter
+  publicationRevisionCertifications?: Prisma.PublicationRevisionListRelationFilter
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayListRelationFilter
+  schoolMemberships?: Prisma.SchoolMemberListRelationFilter
+  workspaceMemberships?: Prisma.WorkspaceMemberListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -293,7 +354,22 @@ export type AccountOrderByWithRelationInput = {
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
+  localUsername?: Prisma.SortOrderInput | Prisma.SortOrder
+  localPasswordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+  localLockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  localDisabled?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   devices?: Prisma.DeviceOrderByRelationAggregateInput
+  sessions?: Prisma.AccountSessionOrderByRelationAggregateInput
+  publications?: Prisma.PublicationOrderByRelationAggregateInput
+  certifiedPublications?: Prisma.PublicationOrderByRelationAggregateInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingOrderByRelationAggregateInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionOrderByRelationAggregateInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionOrderByRelationAggregateInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayOrderByRelationAggregateInput
+  schoolMemberships?: Prisma.SchoolMemberOrderByRelationAggregateInput
+  workspaceMemberships?: Prisma.WorkspaceMemberOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -314,7 +390,22 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   refreshToken?: Prisma.StringNullableFilter<"Account"> | string | null
   refreshTokenExpiry?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   tokenVersion?: Prisma.IntFilter<"Account"> | number
+  localUsername?: Prisma.StringNullableFilter<"Account"> | string | null
+  localPasswordHash?: Prisma.StringNullableFilter<"Account"> | string | null
+  localLoginFailures?: Prisma.IntFilter<"Account"> | number
+  localLockedUntil?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  localDisabled?: Prisma.BoolFilter<"Account"> | boolean
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   devices?: Prisma.DeviceListRelationFilter
+  sessions?: Prisma.AccountSessionListRelationFilter
+  publications?: Prisma.PublicationListRelationFilter
+  certifiedPublications?: Prisma.PublicationListRelationFilter
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingListRelationFilter
+  publicationRevisionEdits?: Prisma.PublicationRevisionListRelationFilter
+  publicationRevisionCertifications?: Prisma.PublicationRevisionListRelationFilter
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayListRelationFilter
+  schoolMemberships?: Prisma.SchoolMemberListRelationFilter
+  workspaceMemberships?: Prisma.WorkspaceMemberListRelationFilter
 }, "id" | "provider_providerId">
 
 export type AccountOrderByWithAggregationInput = {
@@ -331,6 +422,12 @@ export type AccountOrderByWithAggregationInput = {
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
+  localUsername?: Prisma.SortOrderInput | Prisma.SortOrder
+  localPasswordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+  localLockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  localDisabled?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AccountCountOrderByAggregateInput
   _avg?: Prisma.AccountAvgOrderByAggregateInput
   _max?: Prisma.AccountMaxOrderByAggregateInput
@@ -355,6 +452,12 @@ export type AccountScalarWhereWithAggregatesInput = {
   refreshToken?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   refreshTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
   tokenVersion?: Prisma.IntWithAggregatesFilter<"Account"> | number
+  localUsername?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  localPasswordHash?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  localLoginFailures?: Prisma.IntWithAggregatesFilter<"Account"> | number
+  localLockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  localDisabled?: Prisma.BoolWithAggregatesFilter<"Account"> | boolean
+  lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
 }
 
 export type AccountCreateInput = {
@@ -371,7 +474,22 @@ export type AccountCreateInput = {
   refreshToken?: string | null
   refreshTokenExpiry?: Date | string | null
   tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
@@ -388,7 +506,22 @@ export type AccountUncheckedCreateInput = {
   refreshToken?: string | null
   refreshTokenExpiry?: Date | string | null
   tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -405,7 +538,22 @@ export type AccountUpdateInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -422,7 +570,22 @@ export type AccountUncheckedUpdateInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
@@ -439,6 +602,12 @@ export type AccountCreateManyInput = {
   refreshToken?: string | null
   refreshTokenExpiry?: Date | string | null
   tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
 }
 
 export type AccountUpdateManyMutationInput = {
@@ -455,6 +624,12 @@ export type AccountUpdateManyMutationInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AccountUncheckedUpdateManyInput = {
@@ -471,6 +646,12 @@ export type AccountUncheckedUpdateManyInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AccountProviderProviderIdCompoundUniqueInput = {
@@ -492,10 +673,17 @@ export type AccountCountOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiry?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
+  localUsername?: Prisma.SortOrder
+  localPasswordHash?: Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+  localLockedUntil?: Prisma.SortOrder
+  localDisabled?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AccountAvgOrderByAggregateInput = {
   tokenVersion?: Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
 }
 
 export type AccountMaxOrderByAggregateInput = {
@@ -511,6 +699,12 @@ export type AccountMaxOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiry?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
+  localUsername?: Prisma.SortOrder
+  localPasswordHash?: Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+  localLockedUntil?: Prisma.SortOrder
+  localDisabled?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AccountMinOrderByAggregateInput = {
@@ -526,10 +720,22 @@ export type AccountMinOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiry?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
+  localUsername?: Prisma.SortOrder
+  localPasswordHash?: Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+  localLockedUntil?: Prisma.SortOrder
+  localDisabled?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AccountSumOrderByAggregateInput = {
   tokenVersion?: Prisma.SortOrder
+  localLoginFailures?: Prisma.SortOrder
+}
+
+export type AccountScalarRelationFilter = {
+  is?: Prisma.AccountWhereInput
+  isNot?: Prisma.AccountWhereInput
 }
 
 export type AccountNullableScalarRelationFilter = {
@@ -561,6 +767,24 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type AccountCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSessionsInput, Prisma.AccountUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSessionsInput, Prisma.AccountUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.AccountUpsertWithoutSessionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutSessionsInput, Prisma.AccountUpdateWithoutSessionsInput>, Prisma.AccountUncheckedUpdateWithoutSessionsInput>
+}
+
 export type AccountCreateNestedOneWithoutDevicesInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutDevicesInput, Prisma.AccountUncheckedCreateWithoutDevicesInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutDevicesInput
@@ -577,6 +801,268 @@ export type AccountUpdateOneWithoutDevicesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutDevicesInput, Prisma.AccountUpdateWithoutDevicesInput>, Prisma.AccountUncheckedUpdateWithoutDevicesInput>
 }
 
+export type AccountCreateNestedOneWithoutSchoolMembershipsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedCreateWithoutSchoolMembershipsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSchoolMembershipsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutSchoolMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedCreateWithoutSchoolMembershipsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSchoolMembershipsInput
+  upsert?: Prisma.AccountUpsertWithoutSchoolMembershipsInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutSchoolMembershipsInput, Prisma.AccountUpdateWithoutSchoolMembershipsInput>, Prisma.AccountUncheckedUpdateWithoutSchoolMembershipsInput>
+}
+
+export type AccountCreateNestedOneWithoutWorkspaceMembershipsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedCreateWithoutWorkspaceMembershipsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutWorkspaceMembershipsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedCreateWithoutWorkspaceMembershipsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutWorkspaceMembershipsInput
+  upsert?: Prisma.AccountUpsertWithoutWorkspaceMembershipsInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutWorkspaceMembershipsInput, Prisma.AccountUpdateWithoutWorkspaceMembershipsInput>, Prisma.AccountUncheckedUpdateWithoutWorkspaceMembershipsInput>
+}
+
+export type AccountCreateNestedOneWithoutPublicationsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationsInput, Prisma.AccountUncheckedCreateWithoutPublicationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountCreateNestedOneWithoutCertifiedPublicationsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedCreateWithoutCertifiedPublicationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCertifiedPublicationsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutPublicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationsInput, Prisma.AccountUncheckedCreateWithoutPublicationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationsInput
+  upsert?: Prisma.AccountUpsertWithoutPublicationsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPublicationsInput, Prisma.AccountUpdateWithoutPublicationsInput>, Prisma.AccountUncheckedUpdateWithoutPublicationsInput>
+}
+
+export type AccountUpdateOneWithoutCertifiedPublicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedCreateWithoutCertifiedPublicationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCertifiedPublicationsInput
+  upsert?: Prisma.AccountUpsertWithoutCertifiedPublicationsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutCertifiedPublicationsInput, Prisma.AccountUpdateWithoutCertifiedPublicationsInput>, Prisma.AccountUncheckedUpdateWithoutCertifiedPublicationsInput>
+}
+
+export type AccountCreateNestedOneWithoutClassroomScreensCreatedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedCreateWithoutClassroomScreensCreatedInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutClassroomScreensCreatedInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedCreateWithoutClassroomScreensCreatedInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutClassroomScreensCreatedInput
+  upsert?: Prisma.AccountUpsertWithoutClassroomScreensCreatedInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutClassroomScreensCreatedInput, Prisma.AccountUpdateWithoutClassroomScreensCreatedInput>, Prisma.AccountUncheckedUpdateWithoutClassroomScreensCreatedInput>
+}
+
+export type AccountCreateNestedOneWithoutAttendanceDaysUpdatedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutAttendanceDaysUpdatedInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutAttendanceDaysUpdatedInput
+  upsert?: Prisma.AccountUpsertWithoutAttendanceDaysUpdatedInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutAttendanceDaysUpdatedInput, Prisma.AccountUpdateWithoutAttendanceDaysUpdatedInput>, Prisma.AccountUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
+}
+
+export type AccountCreateNestedOneWithoutPublicationRevisionEditsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionEditsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationRevisionEditsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountCreateNestedOneWithoutPublicationRevisionCertificationsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationRevisionCertificationsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutPublicationRevisionEditsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionEditsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationRevisionEditsInput
+  upsert?: Prisma.AccountUpsertWithoutPublicationRevisionEditsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPublicationRevisionEditsInput, Prisma.AccountUpdateWithoutPublicationRevisionEditsInput>, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionEditsInput>
+}
+
+export type AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPublicationRevisionCertificationsInput
+  upsert?: Prisma.AccountUpsertWithoutPublicationRevisionCertificationsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPublicationRevisionCertificationsInput, Prisma.AccountUpdateWithoutPublicationRevisionCertificationsInput>, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput>
+}
+
+export type AccountCreateWithoutSessionsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSessionsInput, Prisma.AccountUncheckedCreateWithoutSessionsInput>
+}
+
+export type AccountUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutSessionsInput, Prisma.AccountUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSessionsInput, Prisma.AccountUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutSessionsInput, Prisma.AccountUncheckedUpdateWithoutSessionsInput>
+}
+
+export type AccountUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
 export type AccountCreateWithoutDevicesInput = {
   id?: string
   provider: string
@@ -591,6 +1077,21 @@ export type AccountCreateWithoutDevicesInput = {
   refreshToken?: string | null
   refreshTokenExpiry?: Date | string | null
   tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutDevicesInput = {
@@ -607,6 +1108,21 @@ export type AccountUncheckedCreateWithoutDevicesInput = {
   refreshToken?: string | null
   refreshTokenExpiry?: Date | string | null
   tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutDevicesInput = {
@@ -639,6 +1155,21 @@ export type AccountUpdateWithoutDevicesInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutDevicesInput = {
@@ -655,6 +1186,1141 @@ export type AccountUncheckedUpdateWithoutDevicesInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutSchoolMembershipsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutSchoolMembershipsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutSchoolMembershipsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedCreateWithoutSchoolMembershipsInput>
+}
+
+export type AccountUpsertWithoutSchoolMembershipsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedUpdateWithoutSchoolMembershipsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedCreateWithoutSchoolMembershipsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutSchoolMembershipsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutSchoolMembershipsInput, Prisma.AccountUncheckedUpdateWithoutSchoolMembershipsInput>
+}
+
+export type AccountUpdateWithoutSchoolMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutSchoolMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutWorkspaceMembershipsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutWorkspaceMembershipsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutWorkspaceMembershipsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedCreateWithoutWorkspaceMembershipsInput>
+}
+
+export type AccountUpsertWithoutWorkspaceMembershipsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedUpdateWithoutWorkspaceMembershipsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedCreateWithoutWorkspaceMembershipsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutWorkspaceMembershipsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutWorkspaceMembershipsInput, Prisma.AccountUncheckedUpdateWithoutWorkspaceMembershipsInput>
+}
+
+export type AccountUpdateWithoutWorkspaceMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutWorkspaceMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutPublicationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutPublicationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutPublicationsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationsInput, Prisma.AccountUncheckedCreateWithoutPublicationsInput>
+}
+
+export type AccountCreateWithoutCertifiedPublicationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutCertifiedPublicationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutCertifiedPublicationsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedCreateWithoutCertifiedPublicationsInput>
+}
+
+export type AccountUpsertWithoutPublicationsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationsInput, Prisma.AccountUncheckedUpdateWithoutPublicationsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationsInput, Prisma.AccountUncheckedCreateWithoutPublicationsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutPublicationsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationsInput, Prisma.AccountUncheckedUpdateWithoutPublicationsInput>
+}
+
+export type AccountUpdateWithoutPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUpsertWithoutCertifiedPublicationsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedUpdateWithoutCertifiedPublicationsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedCreateWithoutCertifiedPublicationsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutCertifiedPublicationsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutCertifiedPublicationsInput, Prisma.AccountUncheckedUpdateWithoutCertifiedPublicationsInput>
+}
+
+export type AccountUpdateWithoutCertifiedPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutCertifiedPublicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutClassroomScreensCreatedInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutClassroomScreensCreatedInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutClassroomScreensCreatedInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedCreateWithoutClassroomScreensCreatedInput>
+}
+
+export type AccountUpsertWithoutClassroomScreensCreatedInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedUpdateWithoutClassroomScreensCreatedInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedCreateWithoutClassroomScreensCreatedInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutClassroomScreensCreatedInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutClassroomScreensCreatedInput, Prisma.AccountUncheckedUpdateWithoutClassroomScreensCreatedInput>
+}
+
+export type AccountUpdateWithoutClassroomScreensCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutClassroomScreensCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutAttendanceDaysUpdatedInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutAttendanceDaysUpdatedInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput>
+}
+
+export type AccountUpsertWithoutAttendanceDaysUpdatedInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutAttendanceDaysUpdatedInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutAttendanceDaysUpdatedInput, Prisma.AccountUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
+}
+
+export type AccountUpdateWithoutAttendanceDaysUpdatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutAttendanceDaysUpdatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutPublicationRevisionEditsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutPublicationRevisionEditsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutPublicationRevisionEditsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionEditsInput>
+}
+
+export type AccountCreateWithoutPublicationRevisionCertificationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutPublicationRevisionCertificationsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput>
+}
+
+export type AccountUpsertWithoutPublicationRevisionEditsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionEditsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionEditsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutPublicationRevisionEditsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationRevisionEditsInput, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionEditsInput>
+}
+
+export type AccountUpdateWithoutPublicationRevisionEditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutPublicationRevisionEditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUpsertWithoutPublicationRevisionCertificationsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutPublicationRevisionCertificationsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutPublicationRevisionCertificationsInput, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput>
+}
+
+export type AccountUpdateWithoutPublicationRevisionCertificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 
@@ -664,10 +2330,28 @@ export type AccountUncheckedUpdateWithoutDevicesInput = {
 
 export type AccountCountOutputType = {
   devices: number
+  sessions: number
+  publications: number
+  certifiedPublications: number
+  classroomScreensCreated: number
+  publicationRevisionEdits: number
+  publicationRevisionCertifications: number
+  attendanceDaysUpdated: number
+  schoolMemberships: number
+  workspaceMemberships: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   devices?: boolean | AccountCountOutputTypeCountDevicesArgs
+  sessions?: boolean | AccountCountOutputTypeCountSessionsArgs
+  publications?: boolean | AccountCountOutputTypeCountPublicationsArgs
+  certifiedPublications?: boolean | AccountCountOutputTypeCountCertifiedPublicationsArgs
+  classroomScreensCreated?: boolean | AccountCountOutputTypeCountClassroomScreensCreatedArgs
+  publicationRevisionEdits?: boolean | AccountCountOutputTypeCountPublicationRevisionEditsArgs
+  publicationRevisionCertifications?: boolean | AccountCountOutputTypeCountPublicationRevisionCertificationsArgs
+  attendanceDaysUpdated?: boolean | AccountCountOutputTypeCountAttendanceDaysUpdatedArgs
+  schoolMemberships?: boolean | AccountCountOutputTypeCountSchoolMembershipsArgs
+  workspaceMemberships?: boolean | AccountCountOutputTypeCountWorkspaceMembershipsArgs
 }
 
 /**
@@ -687,6 +2371,69 @@ export type AccountCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types
   where?: Prisma.DeviceWhereInput
 }
 
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountSessionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountPublicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountCertifiedPublicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountClassroomScreensCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassroomScreenBindingWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountPublicationRevisionEditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationRevisionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountPublicationRevisionCertificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PublicationRevisionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountAttendanceDaysUpdatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassAttendanceDayWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountSchoolMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SchoolMemberWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountWorkspaceMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkspaceMemberWhereInput
+}
+
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -702,7 +2449,22 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   refreshToken?: boolean
   refreshTokenExpiry?: boolean
   tokenVersion?: boolean
+  localUsername?: boolean
+  localPasswordHash?: boolean
+  localLoginFailures?: boolean
+  localLockedUntil?: boolean
+  localDisabled?: boolean
+  lastLoginAt?: boolean
   devices?: boolean | Prisma.Account$devicesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Account$sessionsArgs<ExtArgs>
+  publications?: boolean | Prisma.Account$publicationsArgs<ExtArgs>
+  certifiedPublications?: boolean | Prisma.Account$certifiedPublicationsArgs<ExtArgs>
+  classroomScreensCreated?: boolean | Prisma.Account$classroomScreensCreatedArgs<ExtArgs>
+  publicationRevisionEdits?: boolean | Prisma.Account$publicationRevisionEditsArgs<ExtArgs>
+  publicationRevisionCertifications?: boolean | Prisma.Account$publicationRevisionCertificationsArgs<ExtArgs>
+  attendanceDaysUpdated?: boolean | Prisma.Account$attendanceDaysUpdatedArgs<ExtArgs>
+  schoolMemberships?: boolean | Prisma.Account$schoolMembershipsArgs<ExtArgs>
+  workspaceMemberships?: boolean | Prisma.Account$workspaceMembershipsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -720,6 +2482,12 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   refreshToken?: boolean
   refreshTokenExpiry?: boolean
   tokenVersion?: boolean
+  localUsername?: boolean
+  localPasswordHash?: boolean
+  localLoginFailures?: boolean
+  localLockedUntil?: boolean
+  localDisabled?: boolean
+  lastLoginAt?: boolean
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -736,6 +2504,12 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   refreshToken?: boolean
   refreshTokenExpiry?: boolean
   tokenVersion?: boolean
+  localUsername?: boolean
+  localPasswordHash?: boolean
+  localLoginFailures?: boolean
+  localLockedUntil?: boolean
+  localDisabled?: boolean
+  lastLoginAt?: boolean
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectScalar = {
@@ -752,11 +2526,26 @@ export type AccountSelectScalar = {
   refreshToken?: boolean
   refreshTokenExpiry?: boolean
   tokenVersion?: boolean
+  localUsername?: boolean
+  localPasswordHash?: boolean
+  localLoginFailures?: boolean
+  localLockedUntil?: boolean
+  localDisabled?: boolean
+  lastLoginAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "provider" | "providerId" | "email" | "name" | "avatarUrl" | "providerData" | "accessToken" | "createdAt" | "updatedAt" | "refreshToken" | "refreshTokenExpiry" | "tokenVersion", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "provider" | "providerId" | "email" | "name" | "avatarUrl" | "providerData" | "accessToken" | "createdAt" | "updatedAt" | "refreshToken" | "refreshTokenExpiry" | "tokenVersion" | "localUsername" | "localPasswordHash" | "localLoginFailures" | "localLockedUntil" | "localDisabled" | "lastLoginAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   devices?: boolean | Prisma.Account$devicesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Account$sessionsArgs<ExtArgs>
+  publications?: boolean | Prisma.Account$publicationsArgs<ExtArgs>
+  certifiedPublications?: boolean | Prisma.Account$certifiedPublicationsArgs<ExtArgs>
+  classroomScreensCreated?: boolean | Prisma.Account$classroomScreensCreatedArgs<ExtArgs>
+  publicationRevisionEdits?: boolean | Prisma.Account$publicationRevisionEditsArgs<ExtArgs>
+  publicationRevisionCertifications?: boolean | Prisma.Account$publicationRevisionCertificationsArgs<ExtArgs>
+  attendanceDaysUpdated?: boolean | Prisma.Account$attendanceDaysUpdatedArgs<ExtArgs>
+  schoolMemberships?: boolean | Prisma.Account$schoolMembershipsArgs<ExtArgs>
+  workspaceMemberships?: boolean | Prisma.Account$workspaceMembershipsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -766,6 +2555,15 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Account"
   objects: {
     devices: Prisma.$DevicePayload<ExtArgs>[]
+    sessions: Prisma.$AccountSessionPayload<ExtArgs>[]
+    publications: Prisma.$PublicationPayload<ExtArgs>[]
+    certifiedPublications: Prisma.$PublicationPayload<ExtArgs>[]
+    classroomScreensCreated: Prisma.$ClassroomScreenBindingPayload<ExtArgs>[]
+    publicationRevisionEdits: Prisma.$PublicationRevisionPayload<ExtArgs>[]
+    publicationRevisionCertifications: Prisma.$PublicationRevisionPayload<ExtArgs>[]
+    attendanceDaysUpdated: Prisma.$ClassAttendanceDayPayload<ExtArgs>[]
+    schoolMemberships: Prisma.$SchoolMemberPayload<ExtArgs>[]
+    workspaceMemberships: Prisma.$WorkspaceMemberPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -781,6 +2579,12 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     refreshToken: string | null
     refreshTokenExpiry: Date | null
     tokenVersion: number
+    localUsername: string | null
+    localPasswordHash: string | null
+    localLoginFailures: number
+    localLockedUntil: Date | null
+    localDisabled: boolean
+    lastLoginAt: Date | null
   }, ExtArgs["result"]["account"]>
   composites: {}
 }
@@ -1176,6 +2980,15 @@ readonly fields: AccountFieldRefs;
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   devices<T extends Prisma.Account$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Account$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publications<T extends Prisma.Account$publicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  certifiedPublications<T extends Prisma.Account$certifiedPublicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$certifiedPublicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  classroomScreensCreated<T extends Prisma.Account$classroomScreensCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$classroomScreensCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassroomScreenBindingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publicationRevisionEdits<T extends Prisma.Account$publicationRevisionEditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$publicationRevisionEditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  publicationRevisionCertifications<T extends Prisma.Account$publicationRevisionCertificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$publicationRevisionCertificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attendanceDaysUpdated<T extends Prisma.Account$attendanceDaysUpdatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$attendanceDaysUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassAttendanceDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  schoolMemberships<T extends Prisma.Account$schoolMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$schoolMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspaceMemberships<T extends Prisma.Account$workspaceMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$workspaceMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1218,6 +3031,12 @@ export interface AccountFieldRefs {
   readonly refreshToken: Prisma.FieldRef<"Account", 'String'>
   readonly refreshTokenExpiry: Prisma.FieldRef<"Account", 'DateTime'>
   readonly tokenVersion: Prisma.FieldRef<"Account", 'Int'>
+  readonly localUsername: Prisma.FieldRef<"Account", 'String'>
+  readonly localPasswordHash: Prisma.FieldRef<"Account", 'String'>
+  readonly localLoginFailures: Prisma.FieldRef<"Account", 'Int'>
+  readonly localLockedUntil: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly localDisabled: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly lastLoginAt: Prisma.FieldRef<"Account", 'DateTime'>
 }
     
 
@@ -1627,6 +3446,222 @@ export type Account$devicesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.DeviceScalarFieldEnum | Prisma.DeviceScalarFieldEnum[]
+}
+
+/**
+ * Account.sessions
+ */
+export type Account$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountSession
+   */
+  select?: Prisma.AccountSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccountSession
+   */
+  omit?: Prisma.AccountSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountSessionInclude<ExtArgs> | null
+  where?: Prisma.AccountSessionWhereInput
+  orderBy?: Prisma.AccountSessionOrderByWithRelationInput | Prisma.AccountSessionOrderByWithRelationInput[]
+  cursor?: Prisma.AccountSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountSessionScalarFieldEnum | Prisma.AccountSessionScalarFieldEnum[]
+}
+
+/**
+ * Account.publications
+ */
+export type Account$publicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Publication
+   */
+  select?: Prisma.PublicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Publication
+   */
+  omit?: Prisma.PublicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationInclude<ExtArgs> | null
+  where?: Prisma.PublicationWhereInput
+  orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
+}
+
+/**
+ * Account.certifiedPublications
+ */
+export type Account$certifiedPublicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Publication
+   */
+  select?: Prisma.PublicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Publication
+   */
+  omit?: Prisma.PublicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationInclude<ExtArgs> | null
+  where?: Prisma.PublicationWhereInput
+  orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
+}
+
+/**
+ * Account.classroomScreensCreated
+ */
+export type Account$classroomScreensCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassroomScreenBinding
+   */
+  select?: Prisma.ClassroomScreenBindingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassroomScreenBinding
+   */
+  omit?: Prisma.ClassroomScreenBindingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassroomScreenBindingInclude<ExtArgs> | null
+  where?: Prisma.ClassroomScreenBindingWhereInput
+  orderBy?: Prisma.ClassroomScreenBindingOrderByWithRelationInput | Prisma.ClassroomScreenBindingOrderByWithRelationInput[]
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassroomScreenBindingScalarFieldEnum | Prisma.ClassroomScreenBindingScalarFieldEnum[]
+}
+
+/**
+ * Account.publicationRevisionEdits
+ */
+export type Account$publicationRevisionEditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PublicationRevision
+   */
+  select?: Prisma.PublicationRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PublicationRevision
+   */
+  omit?: Prisma.PublicationRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationRevisionInclude<ExtArgs> | null
+  where?: Prisma.PublicationRevisionWhereInput
+  orderBy?: Prisma.PublicationRevisionOrderByWithRelationInput | Prisma.PublicationRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationRevisionScalarFieldEnum | Prisma.PublicationRevisionScalarFieldEnum[]
+}
+
+/**
+ * Account.publicationRevisionCertifications
+ */
+export type Account$publicationRevisionCertificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PublicationRevision
+   */
+  select?: Prisma.PublicationRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PublicationRevision
+   */
+  omit?: Prisma.PublicationRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PublicationRevisionInclude<ExtArgs> | null
+  where?: Prisma.PublicationRevisionWhereInput
+  orderBy?: Prisma.PublicationRevisionOrderByWithRelationInput | Prisma.PublicationRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PublicationRevisionScalarFieldEnum | Prisma.PublicationRevisionScalarFieldEnum[]
+}
+
+/**
+ * Account.attendanceDaysUpdated
+ */
+export type Account$attendanceDaysUpdatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassAttendanceDay
+   */
+  select?: Prisma.ClassAttendanceDaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassAttendanceDay
+   */
+  omit?: Prisma.ClassAttendanceDayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassAttendanceDayInclude<ExtArgs> | null
+  where?: Prisma.ClassAttendanceDayWhereInput
+  orderBy?: Prisma.ClassAttendanceDayOrderByWithRelationInput | Prisma.ClassAttendanceDayOrderByWithRelationInput[]
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassAttendanceDayScalarFieldEnum | Prisma.ClassAttendanceDayScalarFieldEnum[]
+}
+
+/**
+ * Account.schoolMemberships
+ */
+export type Account$schoolMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SchoolMember
+   */
+  select?: Prisma.SchoolMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SchoolMember
+   */
+  omit?: Prisma.SchoolMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SchoolMemberInclude<ExtArgs> | null
+  where?: Prisma.SchoolMemberWhereInput
+  orderBy?: Prisma.SchoolMemberOrderByWithRelationInput | Prisma.SchoolMemberOrderByWithRelationInput[]
+  cursor?: Prisma.SchoolMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SchoolMemberScalarFieldEnum | Prisma.SchoolMemberScalarFieldEnum[]
+}
+
+/**
+ * Account.workspaceMemberships
+ */
+export type Account$workspaceMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkspaceMember
+   */
+  select?: Prisma.WorkspaceMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkspaceMember
+   */
+  omit?: Prisma.WorkspaceMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkspaceMemberInclude<ExtArgs> | null
+  where?: Prisma.WorkspaceMemberWhereInput
+  orderBy?: Prisma.WorkspaceMemberOrderByWithRelationInput | Prisma.WorkspaceMemberOrderByWithRelationInput[]
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkspaceMemberScalarFieldEnum | Prisma.WorkspaceMemberScalarFieldEnum[]
 }
 
 /**

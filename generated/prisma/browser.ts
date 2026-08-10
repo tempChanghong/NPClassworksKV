@@ -23,6 +23,12 @@ export * from './enums.ts';
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model AccountSession
+ * 一个教师账户可以同时在多台一体机和个人设备上保持独立登录。
+ * 仅保存刷新令牌的 SHA-256 摘要，原始令牌只返回给客户端。
+ */
+export type AccountSession = Prisma.AccountSessionModel
+/**
  * Model AppInstall
  * 
  */
@@ -42,3 +48,85 @@ export type Device = Prisma.DeviceModel
  * 
  */
 export type KVStore = Prisma.KVStoreModel
+/**
+ * Model School
+ * 学校是 Classworks 2.0 教学组织的顶级边界。
+ */
+export type School = Prisma.SchoolModel
+/**
+ * Model SchoolMember
+ * 
+ */
+export type SchoolMember = Prisma.SchoolMemberModel
+/**
+ * Model AcademicTerm
+ * 每个班级与教学班都必须归属一个学期，避免跨学年复用“高二5班”。
+ */
+export type AcademicTerm = Prisma.AcademicTermModel
+/**
+ * Model Grade
+ * 
+ */
+export type Grade = Prisma.GradeModel
+/**
+ * Model Subject
+ * 
+ */
+export type Subject = Prisma.SubjectModel
+/**
+ * Model Workspace
+ * 行政班、走班教学班和通知频道统一为教学空间。
+ */
+export type Workspace = Prisma.WorkspaceModel
+/**
+ * Model WorkspaceSourceClass
+ * 表示一个走班教学班涉及哪些行政班，不要求第一阶段维护学生名单。
+ */
+export type WorkspaceSourceClass = Prisma.WorkspaceSourceClassModel
+/**
+ * Model AdministrativeClassSubject
+ * 明确记录行政班每个科目是随行政班还是走班。
+ * 例如一、二班的物化生为 ADMIN_CLASS，五至七班的选科可为 COURSE_GROUP。
+ */
+export type AdministrativeClassSubject = Prisma.AdministrativeClassSubjectModel
+/**
+ * Model WorkspaceMember
+ * 
+ */
+export type WorkspaceMember = Prisma.WorkspaceMemberModel
+/**
+ * Model WorkspaceMemberInvite
+ * 管理员可在教师首次 OAuth 登录前按邮箱预分配教学空间。
+ * 登录后邀请会转为 WorkspaceMember，同时保留认领时间用于排查。
+ */
+export type WorkspaceMemberInvite = Prisma.WorkspaceMemberInviteModel
+/**
+ * Model Publication
+ * Classworks 2.0 的统一作业/通知发布记录。
+ */
+export type Publication = Prisma.PublicationModel
+/**
+ * Model PublicationTarget
+ * 
+ */
+export type PublicationTarget = Prisma.PublicationTargetModel
+/**
+ * Model ClassroomScreenBinding
+ * 一体机只需由学校管理员绑定一次，之后使用随机令牌提交未认证版本。
+ */
+export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
+/**
+ * Model AdministrativeClassStudent
+ * 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
+ */
+export type AdministrativeClassStudent = Prisma.AdministrativeClassStudentModel
+/**
+ * Model ClassAttendanceDay
+ * 每个行政班每天保存一份考勤快照。JSON 中仅记录非正常出勤学生的 ID。
+ */
+export type ClassAttendanceDay = Prisma.ClassAttendanceDayModel
+/**
+ * Model PublicationRevision
+ * 每次保存产生一条完整、不可变的内容快照；Publication 仅保存当前生效版本。
+ */
+export type PublicationRevision = Prisma.PublicationRevisionModel

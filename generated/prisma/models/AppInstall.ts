@@ -449,10 +449,6 @@ export type AppInstallOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type AppInstallCreateNestedManyWithoutDeviceInput = {
   create?: Prisma.XOR<Prisma.AppInstallCreateWithoutDeviceInput, Prisma.AppInstallUncheckedCreateWithoutDeviceInput> | Prisma.AppInstallCreateWithoutDeviceInput[] | Prisma.AppInstallUncheckedCreateWithoutDeviceInput[]
   connectOrCreate?: Prisma.AppInstallCreateOrConnectWithoutDeviceInput | Prisma.AppInstallCreateOrConnectWithoutDeviceInput[]

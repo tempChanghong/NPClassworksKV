@@ -8,7 +8,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'your-refresh-t
 
 // Token 过期时间配置
 const ACCESS_TOKEN_EXPIRES_IN = process.env.ACCESS_TOKEN_EXPIRES_IN || '15m'; // 15分钟
-const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN || '7d'; // 7天
+const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN || '30d'; // 30天
 
 // JWT 算法配置
 const JWT_ALG = (process.env.JWT_ALG || 'HS256').toUpperCase();
@@ -41,7 +41,7 @@ function getKeys(tokenType = 'access') {
 /**
  * 生成访问令牌
  */
-export function generateAccessToken(account) {
+export function generateAccessToken(account, sessionId = null) {
     const {signKey} = getKeys('access');
 
     const payload = {
@@ -52,6 +52,7 @@ export function generateAccessToken(account) {
         name: account.name,
         avatarUrl: account.avatarUrl,
         tokenVersion: account.tokenVersion || 1,
+        ...(sessionId ? {sessionId} : {}),
     };
 
     return jwt.sign(payload, signKey, {
@@ -65,13 +66,14 @@ export function generateAccessToken(account) {
 /**
  * 生成刷新令牌
  */
-export function generateRefreshToken(account) {
+export function generateRefreshToken(account, sessionId = null) {
     const {signKey} = getKeys('refresh');
 
     const payload = {
         type: 'refresh',
         accountId: account.id,
         tokenVersion: account.tokenVersion || 1,
+        ...(sessionId ? {sessionId} : {}),
         // 添加随机字符串增加安全性
         jti: crypto.randomBytes(16).toString('hex'),
     };
@@ -134,21 +136,22 @@ export function verifyRefreshToken(token) {
  * 生成令牌对（访问令牌 + 刷新令牌）
  */
 export async function generateTokenPair(account) {
-    const accessToken = generateAccessToken(account);
-    const refreshToken = generateRefreshToken(account);
+    const sessionId = crypto.randomUUID();
+    const accessToken = generateAccessToken(account, sessionId);
+    const refreshToken = generateRefreshToken(account, sessionId);
 
     // 计算刷新令牌过期时间
     const refreshTokenExpiry = new Date();
     const expiresInMs = parseExpirationToMs(REFRESH_TOKEN_EXPIRES_IN);
     refreshTokenExpiry.setTime(refreshTokenExpiry.getTime() + expiresInMs);
 
-    // 更新数据库中的刷新令牌
-    await prisma.account.update({
-        where: {id: account.id},
+    // 每次登录创建独立会话，避免另一台一体机登录后覆盖当前设备。
+    await prisma.accountSession.create({
         data: {
-            refreshToken,
-            refreshTokenExpiry,
-            updatedAt: new Date(),
+            id: sessionId,
+            accountId: account.id,
+            refreshTokenHash: hashRefreshToken(refreshToken),
+            expiresAt: refreshTokenExpiry,
         },
     });
 
@@ -157,6 +160,7 @@ export async function generateTokenPair(account) {
         refreshToken,
         accessTokenExpiresIn: ACCESS_TOKEN_EXPIRES_IN,
         refreshTokenExpiresIn: REFRESH_TOKEN_EXPIRES_IN,
+        sessionId,
     };
 }
 
@@ -168,23 +172,38 @@ export async function refreshAccessToken(refreshToken) {
         // 验证刷新令牌
         const decoded = verifyRefreshToken(refreshToken);
 
-        // 从数据库获取账户信息
-        const account = await prisma.account.findUnique({
-            where: {id: decoded.accountId},
-        });
+        const sessionId = typeof decoded.sessionId === 'string' ? decoded.sessionId : null;
+        const [account, session] = await Promise.all([
+            prisma.account.findUnique({where: {id: decoded.accountId}}),
+            sessionId
+                ? prisma.accountSession.findUnique({where: {id: sessionId}})
+                : Promise.resolve(null),
+        ]);
 
         if (!account) {
             throw new Error('Account not found');
         }
 
-        // 验证刷新令牌是否匹配
-        if (account.refreshToken !== refreshToken) {
-            throw new Error('Invalid refresh token');
-        }
-
-        // 验证刷新令牌是否过期
-        if (account.refreshTokenExpiry && account.refreshTokenExpiry < new Date()) {
-            throw new Error('Refresh token expired');
+        if (sessionId) {
+            if (
+                !session ||
+                session.accountId !== account.id ||
+                session.revokedAt ||
+                session.refreshTokenHash !== hashRefreshToken(refreshToken)
+            ) {
+                throw new Error('Invalid refresh token');
+            }
+            if (session.expiresAt < new Date()) {
+                throw new Error('Refresh token expired');
+            }
+        } else {
+            // 兼容迁移前已经签发的单会话刷新令牌。
+            if (account.refreshToken !== refreshToken) {
+                throw new Error('Invalid refresh token');
+            }
+            if (account.refreshTokenExpiry && account.refreshTokenExpiry < new Date()) {
+                throw new Error('Refresh token expired');
+            }
         }
 
         // 验证令牌版本
@@ -193,7 +212,14 @@ export async function refreshAccessToken(refreshToken) {
         }
 
         // 生成新的访问令牌
-        const newAccessToken = generateAccessToken(account);
+        const newAccessToken = generateAccessToken(account, sessionId);
+
+        if (sessionId) {
+            await prisma.accountSession.update({
+                where: {id: sessionId},
+                data: {lastUsedAt: new Date()},
+            });
+        }
 
         return {
             accessToken: newAccessToken,
@@ -215,29 +241,52 @@ export async function refreshAccessToken(refreshToken) {
  * 撤销所有令牌（登出所有设备）
  */
 export async function revokeAllTokens(accountId) {
-    await prisma.account.update({
-        where: {id: accountId},
-        data: {
-            tokenVersion: {increment: 1},
-            refreshToken: null,
-            refreshTokenExpiry: null,
-            updatedAt: new Date(),
-        },
-    });
+    const now = new Date();
+    await prisma.$transaction([
+        prisma.account.update({
+            where: {id: accountId},
+            data: {
+                tokenVersion: {increment: 1},
+                refreshToken: null,
+                refreshTokenExpiry: null,
+                updatedAt: now,
+            },
+        }),
+        prisma.accountSession.updateMany({
+            where: {accountId, revokedAt: null},
+            data: {revokedAt: now},
+        }),
+    ]);
 }
 
 /**
  * 撤销当前刷新令牌（登出当前设备）
  */
-export async function revokeRefreshToken(accountId) {
+export async function revokeRefreshToken(accountId, sessionId = null) {
+    if (sessionId) {
+        await prisma.accountSession.updateMany({
+            where: {id: sessionId, accountId, revokedAt: null},
+            data: {revokedAt: new Date()},
+        });
+        return;
+    }
     await prisma.account.update({
         where: {id: accountId},
-        data: {
-            refreshToken: null,
-            refreshTokenExpiry: null,
-            updatedAt: new Date(),
-        },
+        data: {refreshToken: null, refreshTokenExpiry: null, updatedAt: new Date()},
     });
+}
+
+export function hashRefreshToken(token) {
+    return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+export function isLegacyAccountTokenPayload(decoded) {
+    return Boolean(
+        decoded &&
+        decoded.accountId &&
+        decoded.type === undefined &&
+        decoded.tokenVersion === undefined,
+    );
 }
 
 /**

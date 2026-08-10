@@ -6,7 +6,12 @@
  * 适用于只需要账户验证的接口
  */
 
-import {generateAccessToken, validateAccountToken, verifyAccessToken} from "../utils/tokenManager.js";
+import {
+    generateAccessToken,
+    isLegacyAccountTokenPayload,
+    validateAccountToken,
+    verifyAccessToken,
+} from "../utils/tokenManager.js";
 import {verifyToken} from "../utils/jwt.js";
 import errors from "../utils/errors.js";
 import { prisma } from "../utils/prisma.js";
@@ -41,7 +46,7 @@ export const jwtAuth = async (req, res, next) => {
 
             if (timeUntilExpiry < 300) { // 5分钟 = 300秒
                 // 生成新的access token
-                const newAccessToken = generateAccessToken(account);
+                const newAccessToken = generateAccessToken(account, decoded.sessionId || null);
                 res.set('X-New-Access-Token', newAccessToken);
                 res.set('X-Token-Refreshed', 'true');
             }
@@ -51,6 +56,12 @@ export const jwtAuth = async (req, res, next) => {
             // 如果新token系统验证失败，尝试旧的验证方式（向后兼容）
             try {
                 const decoded = verifyToken(token);
+
+                // 新版令牌不能在 tokenVersion 校验失败后降级为旧令牌，
+                // 否则 logout-all 撤销的令牌仍可能被接受。
+                if (!isLegacyAccountTokenPayload(decoded)) {
+                    return next(errors.createError(401, "token验证失败"));
+                }
 
                 // 从数据库获取账户信息
                 const account = await prisma.account.findUnique({

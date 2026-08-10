@@ -4,12 +4,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider     = "postgresql"
   relationMode = "prisma"
 }
 
 model Account {
-  id                 String    @id @db.VarChar(191) @default(cuid())
+  id                 String    @id @default(cuid()) @db.VarChar(191)
   provider           String    @db.VarChar(191)
   providerId         String    @db.VarChar(191)
   email              String?   @db.VarChar(191)
@@ -22,10 +22,43 @@ model Account {
   refreshToken       String?
   refreshTokenExpiry DateTime? @db.Timestamptz(6)
   tokenVersion       Int       @default(1)
+  localUsername      String?   @db.VarChar(64)
+  localPasswordHash  String?   @db.VarChar(191)
+  localLoginFailures Int       @default(0)
+  localLockedUntil   DateTime? @db.Timestamptz(6)
+  localDisabled      Boolean   @default(false)
+  lastLoginAt        DateTime? @db.Timestamptz(6)
 
-  devices          Device[]
+  devices                           Device[]
+  sessions                          AccountSession[]
+  publications                      Publication[]
+  certifiedPublications             Publication[]            @relation("PublicationCurrentCertifier")
+  classroomScreensCreated           ClassroomScreenBinding[] @relation("ClassroomScreenCreator")
+  publicationRevisionEdits          PublicationRevision[]    @relation("PublicationRevisionEditor")
+  publicationRevisionCertifications PublicationRevision[]    @relation("PublicationRevisionCertifier")
+  attendanceDaysUpdated             ClassAttendanceDay[]     @relation("ClassAttendanceAccountUpdater")
+  schoolMemberships                 SchoolMember[]
+  workspaceMemberships              WorkspaceMember[]
 
   @@unique([provider, providerId])
+}
+
+/// 一个教师账户可以同时在多台一体机和个人设备上保持独立登录。
+/// 仅保存刷新令牌的 SHA-256 摘要，原始令牌只返回给客户端。
+model AccountSession {
+  id               String    @id @db.VarChar(191)
+  accountId        String    @db.VarChar(191)
+  refreshTokenHash String    @unique @db.VarChar(64)
+  expiresAt        DateTime  @db.Timestamptz(6)
+  lastUsedAt       DateTime? @db.Timestamptz(6)
+  revokedAt        DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, revokedAt])
+  @@index([expiresAt])
 }
 
 model AppInstall {
@@ -39,7 +72,7 @@ model AppInstall {
   deviceType  String?  @db.VarChar(191)
   isReadOnly  Boolean  @default(false)
 
-  device      Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
   @@index([deviceId])
 }
@@ -53,27 +86,29 @@ model AutoAuth {
   createdAt  DateTime @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
-  device      Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
   @@unique([deviceId, password])
 }
 
 model Device {
-  id           Int          @id @default(autoincrement())
-  uuid         String       @unique @db.VarChar(191)
-  name         String?      @db.VarChar(191)
-  accountId    String?      @db.VarChar(191)
-  createdAt    DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
-  password     String?      @db.VarChar(191)
-  passwordHint String?      @db.VarChar(191)
-  namespace    String?      @unique @db.VarChar(191)
+  id           Int      @id @default(autoincrement())
+  uuid         String   @unique @db.VarChar(191)
+  name         String?  @db.VarChar(191)
+  accountId    String?  @db.VarChar(191)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  password     String?  @db.VarChar(191)
+  passwordHint String?  @db.VarChar(191)
+  namespace    String?  @unique @db.VarChar(191)
 
   // 关联关系
-  account      Account?   @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  appInstalls  AppInstall[]
-  kvStore      KVStore[]  // 设备相关的KV存储
-  autoAuths    AutoAuth[] // 自动授权配置
+  account         Account?     @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  appInstalls     AppInstall[]
+  kvStore         KVStore[] // 设备相关的KV存储
+  autoAuths       AutoAuth[] // 自动授权配置
+  legacyWorkspace Workspace?   @relation("LegacyDeviceWorkspace")
+
   @@index([accountId])
 }
 
@@ -83,9 +118,415 @@ model KVStore {
   value     Json     @db.Json
   creatorIp String?  @default("") @db.VarChar(191)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @updatedAt   @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
-  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 
   @@id([deviceId, key])
+}
+
+enum AcademicTermStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum SubjectCategory {
+  CORE
+  ELECTIVE
+  OTHER
+}
+
+enum WorkspaceType {
+  ADMIN_CLASS
+  COURSE_GROUP
+  GRADE_CHANNEL
+  SCHOOL_CHANNEL
+}
+
+enum SubjectDeliveryMode {
+  ADMIN_CLASS
+  COURSE_GROUP
+}
+
+enum WorkspaceMemberRole {
+  OWNER
+  TEACHER
+  ASSISTANT
+  VIEWER
+}
+
+enum SchoolMemberRole {
+  OWNER
+  ADMIN
+  MANAGER
+  VIEWER
+}
+
+enum TeacherAuthMode {
+  LOCAL_PIN
+  SHARED_PASSWORD
+  OAUTH_EMAIL
+}
+
+enum PublicationType {
+  ASSIGNMENT
+  NOTICE
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  WITHDRAWN
+}
+
+enum PublicationPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+enum PublicationActorType {
+  ACCOUNT
+  CLASSROOM_SCREEN
+  SYSTEM
+}
+
+enum PublicationRevisionAction {
+  CREATED
+  UPDATED
+  RESTORED
+  WITHDRAWN
+}
+
+/// 学校是 Classworks 2.0 教学组织的顶级边界。
+model School {
+  id                        String          @id @default(cuid()) @db.VarChar(191)
+  code                      String          @unique @db.VarChar(64)
+  name                      String          @db.VarChar(191)
+  teacherAuthMode           TeacherAuthMode @default(LOCAL_PIN)
+  allowOAuthTeacherLogin    Boolean         @default(false)
+  teacherSharedPasswordHash String?         @db.VarChar(191)
+  createdAt                 DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt                 DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
+
+  terms            AcademicTerm[]
+  subjects         Subject[]
+  members          SchoolMember[]
+  classroomScreens ClassroomScreenBinding[]
+}
+
+model SchoolMember {
+  schoolId  String           @db.VarChar(191)
+  accountId String           @db.VarChar(191)
+  role      SchoolMemberRole @default(VIEWER)
+  createdAt DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime         @default(now()) @updatedAt @db.Timestamptz(6)
+
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([schoolId, accountId])
+  @@index([accountId, role])
+}
+
+/// 每个班级与教学班都必须归属一个学期，避免跨学年复用“高二5班”。
+model AcademicTerm {
+  id           String             @id @default(cuid()) @db.VarChar(191)
+  schoolId     String             @db.VarChar(191)
+  name         String             @db.VarChar(191)
+  academicYear Int
+  semester     Int
+  startsAt     DateTime?          @db.Timestamptz(6)
+  endsAt       DateTime?          @db.Timestamptz(6)
+  status       AcademicTermStatus @default(DRAFT)
+  createdAt    DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime           @default(now()) @updatedAt @db.Timestamptz(6)
+
+  school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  grades     Grade[]
+  workspaces Workspace[]
+
+  @@unique([schoolId, academicYear, semester])
+  @@index([schoolId, status])
+}
+
+model Grade {
+  id        String   @id @default(cuid()) @db.VarChar(191)
+  termId    String   @db.VarChar(191)
+  code      String   @db.VarChar(64)
+  name      String   @db.VarChar(191)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  term       AcademicTerm @relation(fields: [termId], references: [id], onDelete: Cascade)
+  workspaces Workspace[]
+
+  @@unique([termId, code])
+  @@index([termId, sortOrder])
+}
+
+model Subject {
+  id        String          @id @default(cuid()) @db.VarChar(191)
+  schoolId  String          @db.VarChar(191)
+  code      String          @db.VarChar(64)
+  name      String          @db.VarChar(191)
+  category  SubjectCategory @default(OTHER)
+  sortOrder Int             @default(0)
+  createdAt DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
+
+  school       School                       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  workspaces   Workspace[]
+  publications Publication[]
+  subjectRules AdministrativeClassSubject[]
+
+  @@unique([schoolId, code])
+  @@index([schoolId, sortOrder])
+}
+
+/// 行政班、走班教学班和通知频道统一为教学空间。
+model Workspace {
+  id                  String        @id @default(cuid()) @db.VarChar(191)
+  termId              String        @db.VarChar(191)
+  gradeId             String?       @db.VarChar(191)
+  subjectId           String?       @db.VarChar(191)
+  name                String        @db.VarChar(191)
+  code                String        @db.VarChar(64)
+  type                WorkspaceType
+  isActive            Boolean       @default(true)
+  isStudentSelectable Boolean       @default(true)
+  legacyDeviceId      Int?          @unique
+  createdAt           DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+
+  term         AcademicTerm @relation(fields: [termId], references: [id], onDelete: Cascade)
+  grade        Grade?       @relation(fields: [gradeId], references: [id], onDelete: SetNull)
+  subject      Subject?     @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  legacyDevice Device?      @relation("LegacyDeviceWorkspace", fields: [legacyDeviceId], references: [id], onDelete: SetNull)
+
+  // COURSE_GROUP -> ADMIN_CLASS 来源关系。
+  sourceClasses       WorkspaceSourceClass[] @relation("CourseGroupSourceClasses")
+  sourcedCourseGroups WorkspaceSourceClass[] @relation("AdministrativeClassCourseGroups")
+
+  subjectRules       AdministrativeClassSubject[]
+  members            WorkspaceMember[]
+  pendingInvitations WorkspaceMemberInvite[]
+  publicationTargets PublicationTarget[]
+  classroomScreens   ClassroomScreenBinding[]     @relation("ClassroomScreenAdministrativeClass")
+  students           AdministrativeClassStudent[] @relation("AdministrativeClassStudents")
+  attendanceDays     ClassAttendanceDay[]         @relation("AdministrativeClassAttendanceDays")
+
+  @@unique([termId, code])
+  @@index([termId, gradeId, type])
+  @@index([subjectId, type])
+}
+
+/// 表示一个走班教学班涉及哪些行政班，不要求第一阶段维护学生名单。
+model WorkspaceSourceClass {
+  workspaceId           String   @db.VarChar(191)
+  administrativeClassId String   @db.VarChar(191)
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+
+  workspace           Workspace @relation("CourseGroupSourceClasses", fields: [workspaceId], references: [id], onDelete: Cascade)
+  administrativeClass Workspace @relation("AdministrativeClassCourseGroups", fields: [administrativeClassId], references: [id], onDelete: Cascade)
+
+  @@id([workspaceId, administrativeClassId])
+  @@index([administrativeClassId])
+}
+
+/// 明确记录行政班每个科目是随行政班还是走班。
+/// 例如一、二班的物化生为 ADMIN_CLASS，五至七班的选科可为 COURSE_GROUP。
+model AdministrativeClassSubject {
+  administrativeClassId String              @db.VarChar(191)
+  subjectId             String              @db.VarChar(191)
+  deliveryMode          SubjectDeliveryMode
+  isCompulsory          Boolean             @default(false)
+  createdAt             DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
+
+  administrativeClass Workspace @relation(fields: [administrativeClassId], references: [id], onDelete: Cascade)
+  subject             Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([administrativeClassId, subjectId])
+  @@index([subjectId, deliveryMode])
+}
+
+model WorkspaceMember {
+  workspaceId String              @db.VarChar(191)
+  accountId   String              @db.VarChar(191)
+  role        WorkspaceMemberRole @default(TEACHER)
+  createdAt   DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([workspaceId, accountId])
+  @@index([accountId, role])
+}
+
+/// 管理员可在教师首次 OAuth 登录前按邮箱预分配教学空间。
+/// 登录后邀请会转为 WorkspaceMember，同时保留认领时间用于排查。
+model WorkspaceMemberInvite {
+  id                 String              @id @default(cuid()) @db.VarChar(191)
+  workspaceId        String              @db.VarChar(191)
+  email              String              @db.VarChar(191)
+  normalizedEmail    String              @db.VarChar(191)
+  role               WorkspaceMemberRole @default(TEACHER)
+  invitedByAccountId String              @db.VarChar(191)
+  claimedByAccountId String?             @db.VarChar(191)
+  claimedAt          DateTime?           @db.Timestamptz(6)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, normalizedEmail])
+  @@index([normalizedEmail, claimedAt])
+  @@index([invitedByAccountId])
+}
+
+/// Classworks 2.0 的统一作业/通知发布记录。
+model Publication {
+  id                    String               @id @default(cuid()) @db.VarChar(191)
+  authorAccountId       String?              @db.VarChar(191)
+  type                  PublicationType
+  subjectId             String?              @db.VarChar(191)
+  title                 String?              @db.VarChar(191)
+  content               String               @db.Text
+  contentJson           Json?                @db.Json
+  publishAt             DateTime             @default(now()) @db.Timestamptz(6)
+  dueAt                 DateTime?            @db.Timestamptz(6)
+  expiresAt             DateTime?            @db.Timestamptz(6)
+  priority              PublicationPriority  @default(NORMAL)
+  status                PublicationStatus    @default(DRAFT)
+  revision              Int                  @default(1)
+  isCertified           Boolean              @default(true)
+  certifiedByAccountId  String?              @db.VarChar(191)
+  certifiedAt           DateTime?            @db.Timestamptz(6)
+  latestActorType       PublicationActorType @default(ACCOUNT)
+  latestScreenBindingId String?              @db.VarChar(191)
+  withdrawnAt           DateTime?            @db.Timestamptz(6)
+  createdAt             DateTime             @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime             @default(now()) @updatedAt @db.Timestamptz(6)
+
+  author              Account?                @relation(fields: [authorAccountId], references: [id], onDelete: SetNull)
+  certifiedBy         Account?                @relation("PublicationCurrentCertifier", fields: [certifiedByAccountId], references: [id], onDelete: SetNull)
+  latestScreenBinding ClassroomScreenBinding? @relation(fields: [latestScreenBindingId], references: [id], onDelete: SetNull)
+  subject             Subject?                @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  targets             PublicationTarget[]
+  revisions           PublicationRevision[]
+
+  @@index([authorAccountId, updatedAt])
+  @@index([status, publishAt])
+  @@index([subjectId, status])
+  @@index([isCertified, updatedAt])
+  @@index([latestScreenBindingId])
+  @@index([certifiedByAccountId])
+}
+
+model PublicationTarget {
+  publicationId String   @db.VarChar(191)
+  workspaceId   String   @db.VarChar(191)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@id([publicationId, workspaceId])
+  @@index([workspaceId, publicationId])
+}
+
+/// 一体机只需由学校管理员绑定一次，之后使用随机令牌提交未认证版本。
+model ClassroomScreenBinding {
+  id                    String    @id @default(cuid()) @db.VarChar(191)
+  schoolId              String    @db.VarChar(191)
+  administrativeClassId String    @db.VarChar(191)
+  deviceFingerprint     String    @db.VarChar(191)
+  name                  String    @db.VarChar(191)
+  tokenHash             String    @unique @db.VarChar(64)
+  isActive              Boolean   @default(true)
+  lastUsedAt            DateTime? @db.Timestamptz(6)
+  createdByAccountId    String    @db.VarChar(191)
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  school                School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  administrativeClass   Workspace             @relation("ClassroomScreenAdministrativeClass", fields: [administrativeClassId], references: [id], onDelete: Cascade)
+  createdBy             Account               @relation("ClassroomScreenCreator", fields: [createdByAccountId], references: [id], onDelete: Restrict)
+  latestPublications    Publication[]
+  publicationRevisions  PublicationRevision[]
+  attendanceDaysUpdated ClassAttendanceDay[]  @relation("ClassAttendanceScreenUpdater")
+
+  @@unique([schoolId, deviceFingerprint])
+  @@index([administrativeClassId, isActive])
+  @@index([createdByAccountId])
+}
+
+/// 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
+model AdministrativeClassStudent {
+  id                    String   @id @default(cuid()) @db.VarChar(191)
+  administrativeClassId String   @db.VarChar(191)
+  studentNumber         String?  @db.VarChar(64)
+  name                  String   @db.VarChar(64)
+  sortOrder             Int      @default(0)
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  administrativeClass Workspace @relation("AdministrativeClassStudents", fields: [administrativeClassId], references: [id], onDelete: Cascade)
+
+  @@index([administrativeClassId, isActive, sortOrder])
+  @@index([administrativeClassId, studentNumber])
+}
+
+/// 每个行政班每天保存一份考勤快照。JSON 中仅记录非正常出勤学生的 ID。
+model ClassAttendanceDay {
+  administrativeClassId    String   @db.VarChar(191)
+  attendanceDate           DateTime @db.Date
+  attendance               Json     @db.Json
+  updatedByAccountId       String?  @db.VarChar(191)
+  updatedByScreenBindingId String?  @db.VarChar(191)
+  createdAt                DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt                DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  administrativeClass Workspace               @relation("AdministrativeClassAttendanceDays", fields: [administrativeClassId], references: [id], onDelete: Cascade)
+  updatedByAccount    Account?                @relation("ClassAttendanceAccountUpdater", fields: [updatedByAccountId], references: [id], onDelete: SetNull)
+  updatedByScreen     ClassroomScreenBinding? @relation("ClassAttendanceScreenUpdater", fields: [updatedByScreenBindingId], references: [id], onDelete: SetNull)
+
+  @@id([administrativeClassId, attendanceDate])
+  @@index([updatedByAccountId])
+  @@index([updatedByScreenBindingId])
+}
+
+/// 每次保存产生一条完整、不可变的内容快照；Publication 仅保存当前生效版本。
+model PublicationRevision {
+  id                   String                    @id @default(cuid()) @db.VarChar(191)
+  publicationId        String                    @db.VarChar(191)
+  revision             Int
+  snapshot             Json                      @db.Json
+  action               PublicationRevisionAction
+  actorType            PublicationActorType
+  editorAccountId      String?                   @db.VarChar(191)
+  screenBindingId      String?                   @db.VarChar(191)
+  restoredFromRevision Int?
+  isCertified          Boolean                   @default(false)
+  certifiedByAccountId String?                   @db.VarChar(191)
+  certifiedAt          DateTime?                 @db.Timestamptz(6)
+  purgedAt             DateTime?                 @db.Timestamptz(6)
+  createdAt            DateTime                  @default(now()) @db.Timestamptz(6)
+
+  publication   Publication             @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  editor        Account?                @relation("PublicationRevisionEditor", fields: [editorAccountId], references: [id], onDelete: SetNull)
+  screenBinding ClassroomScreenBinding? @relation(fields: [screenBindingId], references: [id], onDelete: SetNull)
+  certifiedBy   Account?                @relation("PublicationRevisionCertifier", fields: [certifiedByAccountId], references: [id], onDelete: SetNull)
+
+  @@unique([publicationId, revision])
+  @@index([publicationId, createdAt])
+  @@index([screenBindingId, createdAt])
+  @@index([isCertified, purgedAt, createdAt])
+  @@index([editorAccountId])
+  @@index([certifiedByAccountId])
 }

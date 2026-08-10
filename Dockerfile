@@ -1,25 +1,29 @@
-FROM node:22-alpine
+FROM node:22-bookworm-slim AS dependencies
+
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
 
 WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-# Set production environment by default
+FROM node:22-bookworm-slim AS runtime
+
 ENV NODE_ENV=production
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable
 
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
+RUN pnpm exec prisma generate
 
-# Install dependencies
-RUN npm install
-
-# Copy all application files
-
-
-# Make the management script executable
-RUN chmod +x classworks.js
-
+USER node
 EXPOSE 3000
 
-# Use the management script as entrypoint
-ENTRYPOINT ["node", "classworks.js"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:3000/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 
-# Default command (can be overridden)
-CMD []
+CMD ["sh", "-c", "./node_modules/.bin/prisma migrate deploy && exec node ./bin/www"]
