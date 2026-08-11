@@ -164,6 +164,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 subjectId: physics.id,
                 title: "数据库集成测试作业",
                 content: "验证教师列表与学生 feed",
+                boardDate: new Date().toISOString().slice(0, 10),
                 publishAt: new Date(Date.now() - 1000).toISOString(),
                 targetWorkspaceIds: [classOneWorkspace.id],
             },
@@ -178,6 +179,11 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.equal(populatedFeed.items.length, 1);
         assert.equal(populatedFeed.items[0].title, "数据库集成测试作业");
         assert.equal(teacherPublication.isCertified, true);
+        const historicalFeed = await publicationService.listPublishedFeed({
+            workspaceIds: [classOneWorkspace.id],
+            boardDate: "1999-01-01",
+        });
+        assert.equal(historicalFeed.items.length, 0);
         assert.equal((await publicationService.listPublicationRevisions({
             accountId: teacherLogin.account.id,
             publicationId: teacherPublication.id,
@@ -231,6 +237,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 input: {
                     subjectId: physics.id,
                     content: "不应允许写入无关走班",
+                    boardDate: new Date().toISOString().slice(0, 10),
                     publishAt: new Date(Date.now() - 1000).toISOString(),
                     targetWorkspaceIds: [unrelatedPhysicsWorkspace.id],
                 },
@@ -281,12 +288,26 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 subjectId: physics.id,
                 title: "大屏未认证作业",
                 content: "版本一",
+                boardDate: new Date().toISOString().slice(0, 10),
                 publishAt: new Date(Date.now() - 1000).toISOString(),
                 targetWorkspaceIds: [physicsA1Workspace.id],
             },
         });
         assert.equal(screenPublication.isCertified, false);
         assert.equal(screenPublication.latestActorType, "CLASSROOM_SCREEN");
+        const copiedBoard = await publicationService.copyScreenBoardDate({
+            screenBinding: authenticatedScreen,
+            sourceBoardDate: new Date().toISOString().slice(0, 10),
+            targetBoardDate: "2099-01-01",
+        });
+        assert.equal(copiedBoard.createdCount, 1);
+        const copiedAgain = await publicationService.copyScreenBoardDate({
+            screenBinding: authenticatedScreen,
+            sourceBoardDate: new Date().toISOString().slice(0, 10),
+            targetBoardDate: "2099-01-01",
+        });
+        assert.equal(copiedAgain.createdCount, 0);
+        assert.equal(copiedAgain.skippedCount, 1);
         screenPublication = await publicationService.updateScreenPublication({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,

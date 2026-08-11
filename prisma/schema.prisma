@@ -397,6 +397,7 @@ model Publication {
   title                 String?              @db.VarChar(191)
   content               String               @db.Text
   contentJson           Json?                @db.Json
+  boardDate             DateTime?            @db.Date
   publishAt             DateTime             @default(now()) @db.Timestamptz(6)
   dueAt                 DateTime?            @db.Timestamptz(6)
   expiresAt             DateTime?            @db.Timestamptz(6)
@@ -412,15 +413,17 @@ model Publication {
   createdAt             DateTime             @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime             @default(now()) @updatedAt @db.Timestamptz(6)
 
-  author              Account?                @relation(fields: [authorAccountId], references: [id], onDelete: SetNull)
-  certifiedBy         Account?                @relation("PublicationCurrentCertifier", fields: [certifiedByAccountId], references: [id], onDelete: SetNull)
-  latestScreenBinding ClassroomScreenBinding? @relation(fields: [latestScreenBindingId], references: [id], onDelete: SetNull)
-  subject             Subject?                @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  author              Account?                     @relation(fields: [authorAccountId], references: [id], onDelete: SetNull)
+  certifiedBy         Account?                     @relation("PublicationCurrentCertifier", fields: [certifiedByAccountId], references: [id], onDelete: SetNull)
+  latestScreenBinding ClassroomScreenBinding?      @relation(fields: [latestScreenBindingId], references: [id], onDelete: SetNull)
+  subject             Subject?                     @relation(fields: [subjectId], references: [id], onDelete: SetNull)
   targets             PublicationTarget[]
   revisions           PublicationRevision[]
+  screenDeliveries    NotificationScreenDelivery[]
 
   @@index([authorAccountId, updatedAt])
   @@index([status, publishAt])
+  @@index([status, boardDate, publishAt])
   @@index([subjectId, status])
   @@index([isCertified, updatedAt])
   @@index([latestScreenBindingId])
@@ -453,16 +456,33 @@ model ClassroomScreenBinding {
   createdAt             DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
 
-  school                School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  administrativeClass   Workspace             @relation("ClassroomScreenAdministrativeClass", fields: [administrativeClassId], references: [id], onDelete: Cascade)
-  createdBy             Account               @relation("ClassroomScreenCreator", fields: [createdByAccountId], references: [id], onDelete: Restrict)
-  latestPublications    Publication[]
-  publicationRevisions  PublicationRevision[]
-  attendanceDaysUpdated ClassAttendanceDay[]  @relation("ClassAttendanceScreenUpdater")
+  school                 School                       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  administrativeClass    Workspace                    @relation("ClassroomScreenAdministrativeClass", fields: [administrativeClassId], references: [id], onDelete: Cascade)
+  createdBy              Account                      @relation("ClassroomScreenCreator", fields: [createdByAccountId], references: [id], onDelete: Restrict)
+  latestPublications     Publication[]
+  publicationRevisions   PublicationRevision[]
+  notificationDeliveries NotificationScreenDelivery[]
+  attendanceDaysUpdated  ClassAttendanceDay[]         @relation("ClassAttendanceScreenUpdater")
 
   @@unique([schoolId, deviceFingerprint])
   @@index([administrativeClassId, isActive])
   @@index([createdByAccountId])
+}
+
+/// 班级大屏对通知当前版本的接收与展示回执，不跟踪个人学生阅读状态。
+model NotificationScreenDelivery {
+  publicationId   String    @db.VarChar(191)
+  screenBindingId String    @db.VarChar(191)
+  revision        Int
+  receivedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  displayedAt     DateTime? @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  publication   Publication            @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  screenBinding ClassroomScreenBinding @relation(fields: [screenBindingId], references: [id], onDelete: Cascade)
+
+  @@id([publicationId, screenBindingId])
+  @@index([screenBindingId, updatedAt])
 }
 
 /// 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。

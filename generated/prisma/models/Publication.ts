@@ -41,6 +41,7 @@ export type PublicationMinAggregateOutputType = {
   subjectId: string | null
   title: string | null
   content: string | null
+  boardDate: Date | null
   publishAt: Date | null
   dueAt: Date | null
   expiresAt: Date | null
@@ -64,6 +65,7 @@ export type PublicationMaxAggregateOutputType = {
   subjectId: string | null
   title: string | null
   content: string | null
+  boardDate: Date | null
   publishAt: Date | null
   dueAt: Date | null
   expiresAt: Date | null
@@ -88,6 +90,7 @@ export type PublicationCountAggregateOutputType = {
   title: number
   content: number
   contentJson: number
+  boardDate: number
   publishAt: number
   dueAt: number
   expiresAt: number
@@ -121,6 +124,7 @@ export type PublicationMinAggregateInputType = {
   subjectId?: true
   title?: true
   content?: true
+  boardDate?: true
   publishAt?: true
   dueAt?: true
   expiresAt?: true
@@ -144,6 +148,7 @@ export type PublicationMaxAggregateInputType = {
   subjectId?: true
   title?: true
   content?: true
+  boardDate?: true
   publishAt?: true
   dueAt?: true
   expiresAt?: true
@@ -168,6 +173,7 @@ export type PublicationCountAggregateInputType = {
   title?: true
   content?: true
   contentJson?: true
+  boardDate?: true
   publishAt?: true
   dueAt?: true
   expiresAt?: true
@@ -279,6 +285,7 @@ export type PublicationGroupByOutputType = {
   title: string | null
   content: string
   contentJson: runtime.JsonValue | null
+  boardDate: Date | null
   publishAt: Date
   dueAt: Date | null
   expiresAt: Date | null
@@ -326,6 +333,7 @@ export type PublicationWhereInput = {
   title?: Prisma.StringNullableFilter<"Publication"> | string | null
   content?: Prisma.StringFilter<"Publication"> | string
   contentJson?: Prisma.JsonNullableFilter<"Publication">
+  boardDate?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   publishAt?: Prisma.DateTimeFilter<"Publication"> | Date | string
   dueAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
@@ -346,6 +354,7 @@ export type PublicationWhereInput = {
   subject?: Prisma.XOR<Prisma.SubjectNullableScalarRelationFilter, Prisma.SubjectWhereInput> | null
   targets?: Prisma.PublicationTargetListRelationFilter
   revisions?: Prisma.PublicationRevisionListRelationFilter
+  screenDeliveries?: Prisma.NotificationScreenDeliveryListRelationFilter
 }
 
 export type PublicationOrderByWithRelationInput = {
@@ -356,6 +365,7 @@ export type PublicationOrderByWithRelationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   contentJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  boardDate?: Prisma.SortOrderInput | Prisma.SortOrder
   publishAt?: Prisma.SortOrder
   dueAt?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,6 +386,7 @@ export type PublicationOrderByWithRelationInput = {
   subject?: Prisma.SubjectOrderByWithRelationInput
   targets?: Prisma.PublicationTargetOrderByRelationAggregateInput
   revisions?: Prisma.PublicationRevisionOrderByRelationAggregateInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryOrderByRelationAggregateInput
 }
 
 export type PublicationWhereUniqueInput = Prisma.AtLeast<{
@@ -389,6 +400,7 @@ export type PublicationWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringNullableFilter<"Publication"> | string | null
   content?: Prisma.StringFilter<"Publication"> | string
   contentJson?: Prisma.JsonNullableFilter<"Publication">
+  boardDate?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   publishAt?: Prisma.DateTimeFilter<"Publication"> | Date | string
   dueAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
@@ -409,6 +421,7 @@ export type PublicationWhereUniqueInput = Prisma.AtLeast<{
   subject?: Prisma.XOR<Prisma.SubjectNullableScalarRelationFilter, Prisma.SubjectWhereInput> | null
   targets?: Prisma.PublicationTargetListRelationFilter
   revisions?: Prisma.PublicationRevisionListRelationFilter
+  screenDeliveries?: Prisma.NotificationScreenDeliveryListRelationFilter
 }, "id">
 
 export type PublicationOrderByWithAggregationInput = {
@@ -419,6 +432,7 @@ export type PublicationOrderByWithAggregationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   content?: Prisma.SortOrder
   contentJson?: Prisma.SortOrderInput | Prisma.SortOrder
+  boardDate?: Prisma.SortOrderInput | Prisma.SortOrder
   publishAt?: Prisma.SortOrder
   dueAt?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -451,6 +465,7 @@ export type PublicationScalarWhereWithAggregatesInput = {
   title?: Prisma.StringNullableWithAggregatesFilter<"Publication"> | string | null
   content?: Prisma.StringWithAggregatesFilter<"Publication"> | string
   contentJson?: Prisma.JsonNullableWithAggregatesFilter<"Publication">
+  boardDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Publication"> | Date | string | null
   publishAt?: Prisma.DateTimeWithAggregatesFilter<"Publication"> | Date | string
   dueAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Publication"> | Date | string | null
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Publication"> | Date | string | null
@@ -473,6 +488,7 @@ export type PublicationCreateInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -491,6 +507,7 @@ export type PublicationCreateInput = {
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateInput = {
@@ -501,6 +518,7 @@ export type PublicationUncheckedCreateInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -517,6 +535,7 @@ export type PublicationUncheckedCreateInput = {
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUpdateInput = {
@@ -525,6 +544,7 @@ export type PublicationUpdateInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543,6 +563,7 @@ export type PublicationUpdateInput = {
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateInput = {
@@ -553,6 +574,7 @@ export type PublicationUncheckedUpdateInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -569,6 +591,7 @@ export type PublicationUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationCreateManyInput = {
@@ -579,6 +602,7 @@ export type PublicationCreateManyInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -601,6 +625,7 @@ export type PublicationUpdateManyMutationInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -623,6 +648,7 @@ export type PublicationUncheckedUpdateManyInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -657,6 +683,7 @@ export type PublicationCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
   contentJson?: Prisma.SortOrder
+  boardDate?: Prisma.SortOrder
   publishAt?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -684,6 +711,7 @@ export type PublicationMaxOrderByAggregateInput = {
   subjectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  boardDate?: Prisma.SortOrder
   publishAt?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -707,6 +735,7 @@ export type PublicationMinOrderByAggregateInput = {
   subjectId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  boardDate?: Prisma.SortOrder
   publishAt?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -930,6 +959,20 @@ export type PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput 
   deleteMany?: Prisma.PublicationScalarWhereInput | Prisma.PublicationScalarWhereInput[]
 }
 
+export type PublicationCreateNestedOneWithoutScreenDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.PublicationCreateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedCreateWithoutScreenDeliveriesInput>
+  connectOrCreate?: Prisma.PublicationCreateOrConnectWithoutScreenDeliveriesInput
+  connect?: Prisma.PublicationWhereUniqueInput
+}
+
+export type PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.PublicationCreateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedCreateWithoutScreenDeliveriesInput>
+  connectOrCreate?: Prisma.PublicationCreateOrConnectWithoutScreenDeliveriesInput
+  upsert?: Prisma.PublicationUpsertWithoutScreenDeliveriesInput
+  connect?: Prisma.PublicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PublicationUpdateToOneWithWhereWithoutScreenDeliveriesInput, Prisma.PublicationUpdateWithoutScreenDeliveriesInput>, Prisma.PublicationUncheckedUpdateWithoutScreenDeliveriesInput>
+}
+
 export type PublicationCreateNestedOneWithoutRevisionsInput = {
   create?: Prisma.XOR<Prisma.PublicationCreateWithoutRevisionsInput, Prisma.PublicationUncheckedCreateWithoutRevisionsInput>
   connectOrCreate?: Prisma.PublicationCreateOrConnectWithoutRevisionsInput
@@ -950,6 +993,7 @@ export type PublicationCreateWithoutAuthorInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -967,6 +1011,7 @@ export type PublicationCreateWithoutAuthorInput = {
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateWithoutAuthorInput = {
@@ -976,6 +1021,7 @@ export type PublicationUncheckedCreateWithoutAuthorInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -992,6 +1038,7 @@ export type PublicationUncheckedCreateWithoutAuthorInput = {
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutAuthorInput = {
@@ -1010,6 +1057,7 @@ export type PublicationCreateWithoutCertifiedByInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1027,6 +1075,7 @@ export type PublicationCreateWithoutCertifiedByInput = {
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateWithoutCertifiedByInput = {
@@ -1037,6 +1086,7 @@ export type PublicationUncheckedCreateWithoutCertifiedByInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1052,6 +1102,7 @@ export type PublicationUncheckedCreateWithoutCertifiedByInput = {
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutCertifiedByInput = {
@@ -1091,6 +1142,7 @@ export type PublicationScalarWhereInput = {
   title?: Prisma.StringNullableFilter<"Publication"> | string | null
   content?: Prisma.StringFilter<"Publication"> | string
   contentJson?: Prisma.JsonNullableFilter<"Publication">
+  boardDate?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   publishAt?: Prisma.DateTimeFilter<"Publication"> | Date | string
   dueAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Publication"> | Date | string | null
@@ -1129,6 +1181,7 @@ export type PublicationCreateWithoutSubjectInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1146,6 +1199,7 @@ export type PublicationCreateWithoutSubjectInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutLatestPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateWithoutSubjectInput = {
@@ -1155,6 +1209,7 @@ export type PublicationUncheckedCreateWithoutSubjectInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1171,6 +1226,7 @@ export type PublicationUncheckedCreateWithoutSubjectInput = {
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutSubjectInput = {
@@ -1205,6 +1261,7 @@ export type PublicationCreateWithoutTargetsInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1222,6 +1279,7 @@ export type PublicationCreateWithoutTargetsInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutLatestPublicationsInput
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateWithoutTargetsInput = {
@@ -1232,6 +1290,7 @@ export type PublicationUncheckedCreateWithoutTargetsInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1247,6 +1306,7 @@ export type PublicationUncheckedCreateWithoutTargetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutTargetsInput = {
@@ -1271,6 +1331,7 @@ export type PublicationUpdateWithoutTargetsInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1288,6 +1349,7 @@ export type PublicationUpdateWithoutTargetsInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutLatestPublicationsNestedInput
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutTargetsInput = {
@@ -1298,6 +1360,7 @@ export type PublicationUncheckedUpdateWithoutTargetsInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1313,6 +1376,7 @@ export type PublicationUncheckedUpdateWithoutTargetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationCreateWithoutLatestScreenBindingInput = {
@@ -1321,6 +1385,7 @@ export type PublicationCreateWithoutLatestScreenBindingInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1338,6 +1403,7 @@ export type PublicationCreateWithoutLatestScreenBindingInput = {
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationUncheckedCreateWithoutLatestScreenBindingInput = {
@@ -1348,6 +1414,7 @@ export type PublicationUncheckedCreateWithoutLatestScreenBindingInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1363,6 +1430,7 @@ export type PublicationUncheckedCreateWithoutLatestScreenBindingInput = {
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
   revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutLatestScreenBindingInput = {
@@ -1391,12 +1459,13 @@ export type PublicationUpdateManyWithWhereWithoutLatestScreenBindingInput = {
   data: Prisma.XOR<Prisma.PublicationUpdateManyMutationInput, Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingInput>
 }
 
-export type PublicationCreateWithoutRevisionsInput = {
+export type PublicationCreateWithoutScreenDeliveriesInput = {
   id?: string
   type: $Enums.PublicationType
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1414,9 +1483,10 @@ export type PublicationCreateWithoutRevisionsInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutLatestPublicationsInput
   subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
   targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
+  revisions?: Prisma.PublicationRevisionCreateNestedManyWithoutPublicationInput
 }
 
-export type PublicationUncheckedCreateWithoutRevisionsInput = {
+export type PublicationUncheckedCreateWithoutScreenDeliveriesInput = {
   id?: string
   authorAccountId?: string | null
   type: $Enums.PublicationType
@@ -1424,6 +1494,7 @@ export type PublicationUncheckedCreateWithoutRevisionsInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1439,6 +1510,131 @@ export type PublicationUncheckedCreateWithoutRevisionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
+  revisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutPublicationInput
+}
+
+export type PublicationCreateOrConnectWithoutScreenDeliveriesInput = {
+  where: Prisma.PublicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.PublicationCreateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedCreateWithoutScreenDeliveriesInput>
+}
+
+export type PublicationUpsertWithoutScreenDeliveriesInput = {
+  update: Prisma.XOR<Prisma.PublicationUpdateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedUpdateWithoutScreenDeliveriesInput>
+  create: Prisma.XOR<Prisma.PublicationCreateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedCreateWithoutScreenDeliveriesInput>
+  where?: Prisma.PublicationWhereInput
+}
+
+export type PublicationUpdateToOneWithWhereWithoutScreenDeliveriesInput = {
+  where?: Prisma.PublicationWhereInput
+  data: Prisma.XOR<Prisma.PublicationUpdateWithoutScreenDeliveriesInput, Prisma.PublicationUncheckedUpdateWithoutScreenDeliveriesInput>
+}
+
+export type PublicationUpdateWithoutScreenDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priority?: Prisma.EnumPublicationPriorityFieldUpdateOperationsInput | $Enums.PublicationPriority
+  status?: Prisma.EnumPublicationStatusFieldUpdateOperationsInput | $Enums.PublicationStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  isCertified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latestActorType?: Prisma.EnumPublicationActorTypeFieldUpdateOperationsInput | $Enums.PublicationActorType
+  withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.AccountUpdateOneWithoutPublicationsNestedInput
+  certifiedBy?: Prisma.AccountUpdateOneWithoutCertifiedPublicationsNestedInput
+  latestScreenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutLatestPublicationsNestedInput
+  subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
+  targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
+  revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+}
+
+export type PublicationUncheckedUpdateWithoutScreenDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authorAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumPublicationTypeFieldUpdateOperationsInput | $Enums.PublicationType
+  subjectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priority?: Prisma.EnumPublicationPriorityFieldUpdateOperationsInput | $Enums.PublicationPriority
+  status?: Prisma.EnumPublicationStatusFieldUpdateOperationsInput | $Enums.PublicationStatus
+  revision?: Prisma.IntFieldUpdateOperationsInput | number
+  isCertified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  certifiedByAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  latestActorType?: Prisma.EnumPublicationActorTypeFieldUpdateOperationsInput | $Enums.PublicationActorType
+  latestScreenBindingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  withdrawnAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
+  revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+}
+
+export type PublicationCreateWithoutRevisionsInput = {
+  id?: string
+  type: $Enums.PublicationType
+  title?: string | null
+  content: string
+  contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
+  publishAt?: Date | string
+  dueAt?: Date | string | null
+  expiresAt?: Date | string | null
+  priority?: $Enums.PublicationPriority
+  status?: $Enums.PublicationStatus
+  revision?: number
+  isCertified?: boolean
+  certifiedAt?: Date | string | null
+  latestActorType?: $Enums.PublicationActorType
+  withdrawnAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author?: Prisma.AccountCreateNestedOneWithoutPublicationsInput
+  certifiedBy?: Prisma.AccountCreateNestedOneWithoutCertifiedPublicationsInput
+  latestScreenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutLatestPublicationsInput
+  subject?: Prisma.SubjectCreateNestedOneWithoutPublicationsInput
+  targets?: Prisma.PublicationTargetCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutPublicationInput
+}
+
+export type PublicationUncheckedCreateWithoutRevisionsInput = {
+  id?: string
+  authorAccountId?: string | null
+  type: $Enums.PublicationType
+  subjectId?: string | null
+  title?: string | null
+  content: string
+  contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
+  publishAt?: Date | string
+  dueAt?: Date | string | null
+  expiresAt?: Date | string | null
+  priority?: $Enums.PublicationPriority
+  status?: $Enums.PublicationStatus
+  revision?: number
+  isCertified?: boolean
+  certifiedByAccountId?: string | null
+  certifiedAt?: Date | string | null
+  latestActorType?: $Enums.PublicationActorType
+  latestScreenBindingId?: string | null
+  withdrawnAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  targets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutPublicationInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutPublicationInput
 }
 
 export type PublicationCreateOrConnectWithoutRevisionsInput = {
@@ -1463,6 +1659,7 @@ export type PublicationUpdateWithoutRevisionsInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1480,6 +1677,7 @@ export type PublicationUpdateWithoutRevisionsInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutLatestPublicationsNestedInput
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutRevisionsInput = {
@@ -1490,6 +1688,7 @@ export type PublicationUncheckedUpdateWithoutRevisionsInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1505,6 +1704,7 @@ export type PublicationUncheckedUpdateWithoutRevisionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationCreateManyAuthorInput = {
@@ -1514,6 +1714,7 @@ export type PublicationCreateManyAuthorInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1538,6 +1739,7 @@ export type PublicationCreateManyCertifiedByInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1559,6 +1761,7 @@ export type PublicationUpdateWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1576,6 +1779,7 @@ export type PublicationUpdateWithoutAuthorInput = {
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutAuthorInput = {
@@ -1585,6 +1789,7 @@ export type PublicationUncheckedUpdateWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1601,6 +1806,7 @@ export type PublicationUncheckedUpdateWithoutAuthorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateManyWithoutAuthorInput = {
@@ -1610,6 +1816,7 @@ export type PublicationUncheckedUpdateManyWithoutAuthorInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1632,6 +1839,7 @@ export type PublicationUpdateWithoutCertifiedByInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1649,6 +1857,7 @@ export type PublicationUpdateWithoutCertifiedByInput = {
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutCertifiedByInput = {
@@ -1659,6 +1868,7 @@ export type PublicationUncheckedUpdateWithoutCertifiedByInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1674,6 +1884,7 @@ export type PublicationUncheckedUpdateWithoutCertifiedByInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateManyWithoutCertifiedByInput = {
@@ -1684,6 +1895,7 @@ export type PublicationUncheckedUpdateManyWithoutCertifiedByInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1706,6 +1918,7 @@ export type PublicationCreateManySubjectInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1728,6 +1941,7 @@ export type PublicationUpdateWithoutSubjectInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1745,6 +1959,7 @@ export type PublicationUpdateWithoutSubjectInput = {
   latestScreenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutLatestPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutSubjectInput = {
@@ -1754,6 +1969,7 @@ export type PublicationUncheckedUpdateWithoutSubjectInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1770,6 +1986,7 @@ export type PublicationUncheckedUpdateWithoutSubjectInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateManyWithoutSubjectInput = {
@@ -1779,6 +1996,7 @@ export type PublicationUncheckedUpdateManyWithoutSubjectInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1803,6 +2021,7 @@ export type PublicationCreateManyLatestScreenBindingInput = {
   title?: string | null
   content: string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Date | string | null
   publishAt?: Date | string
   dueAt?: Date | string | null
   expiresAt?: Date | string | null
@@ -1824,6 +2043,7 @@ export type PublicationUpdateWithoutLatestScreenBindingInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1841,6 +2061,7 @@ export type PublicationUpdateWithoutLatestScreenBindingInput = {
   subject?: Prisma.SubjectUpdateOneWithoutPublicationsNestedInput
   targets?: Prisma.PublicationTargetUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateWithoutLatestScreenBindingInput = {
@@ -1851,6 +2072,7 @@ export type PublicationUncheckedUpdateWithoutLatestScreenBindingInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1866,6 +2088,7 @@ export type PublicationUncheckedUpdateWithoutLatestScreenBindingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   targets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput
   revisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationNestedInput
+  screenDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationNestedInput
 }
 
 export type PublicationUncheckedUpdateManyWithoutLatestScreenBindingInput = {
@@ -1876,6 +2099,7 @@ export type PublicationUncheckedUpdateManyWithoutLatestScreenBindingInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   content?: Prisma.StringFieldUpdateOperationsInput | string
   contentJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  boardDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1899,11 +2123,13 @@ export type PublicationUncheckedUpdateManyWithoutLatestScreenBindingInput = {
 export type PublicationCountOutputType = {
   targets: number
   revisions: number
+  screenDeliveries: number
 }
 
 export type PublicationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   targets?: boolean | PublicationCountOutputTypeCountTargetsArgs
   revisions?: boolean | PublicationCountOutputTypeCountRevisionsArgs
+  screenDeliveries?: boolean | PublicationCountOutputTypeCountScreenDeliveriesArgs
 }
 
 /**
@@ -1930,6 +2156,13 @@ export type PublicationCountOutputTypeCountRevisionsArgs<ExtArgs extends runtime
   where?: Prisma.PublicationRevisionWhereInput
 }
 
+/**
+ * PublicationCountOutputType without action
+ */
+export type PublicationCountOutputTypeCountScreenDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationScreenDeliveryWhereInput
+}
+
 
 export type PublicationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1939,6 +2172,7 @@ export type PublicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   title?: boolean
   content?: boolean
   contentJson?: boolean
+  boardDate?: boolean
   publishAt?: boolean
   dueAt?: boolean
   expiresAt?: boolean
@@ -1959,6 +2193,7 @@ export type PublicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   subject?: boolean | Prisma.Publication$subjectArgs<ExtArgs>
   targets?: boolean | Prisma.Publication$targetsArgs<ExtArgs>
   revisions?: boolean | Prisma.Publication$revisionsArgs<ExtArgs>
+  screenDeliveries?: boolean | Prisma.Publication$screenDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.PublicationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["publication"]>
 
@@ -1970,6 +2205,7 @@ export type PublicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   title?: boolean
   content?: boolean
   contentJson?: boolean
+  boardDate?: boolean
   publishAt?: boolean
   dueAt?: boolean
   expiresAt?: boolean
@@ -1998,6 +2234,7 @@ export type PublicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   title?: boolean
   content?: boolean
   contentJson?: boolean
+  boardDate?: boolean
   publishAt?: boolean
   dueAt?: boolean
   expiresAt?: boolean
@@ -2026,6 +2263,7 @@ export type PublicationSelectScalar = {
   title?: boolean
   content?: boolean
   contentJson?: boolean
+  boardDate?: boolean
   publishAt?: boolean
   dueAt?: boolean
   expiresAt?: boolean
@@ -2042,7 +2280,7 @@ export type PublicationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PublicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorAccountId" | "type" | "subjectId" | "title" | "content" | "contentJson" | "publishAt" | "dueAt" | "expiresAt" | "priority" | "status" | "revision" | "isCertified" | "certifiedByAccountId" | "certifiedAt" | "latestActorType" | "latestScreenBindingId" | "withdrawnAt" | "createdAt" | "updatedAt", ExtArgs["result"]["publication"]>
+export type PublicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorAccountId" | "type" | "subjectId" | "title" | "content" | "contentJson" | "boardDate" | "publishAt" | "dueAt" | "expiresAt" | "priority" | "status" | "revision" | "isCertified" | "certifiedByAccountId" | "certifiedAt" | "latestActorType" | "latestScreenBindingId" | "withdrawnAt" | "createdAt" | "updatedAt", ExtArgs["result"]["publication"]>
 export type PublicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Publication$authorArgs<ExtArgs>
   certifiedBy?: boolean | Prisma.Publication$certifiedByArgs<ExtArgs>
@@ -2050,6 +2288,7 @@ export type PublicationInclude<ExtArgs extends runtime.Types.Extensions.Internal
   subject?: boolean | Prisma.Publication$subjectArgs<ExtArgs>
   targets?: boolean | Prisma.Publication$targetsArgs<ExtArgs>
   revisions?: boolean | Prisma.Publication$revisionsArgs<ExtArgs>
+  screenDeliveries?: boolean | Prisma.Publication$screenDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.PublicationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PublicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2074,6 +2313,7 @@ export type $PublicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     subject: Prisma.$SubjectPayload<ExtArgs> | null
     targets: Prisma.$PublicationTargetPayload<ExtArgs>[]
     revisions: Prisma.$PublicationRevisionPayload<ExtArgs>[]
+    screenDeliveries: Prisma.$NotificationScreenDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2083,6 +2323,7 @@ export type $PublicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     title: string | null
     content: string
     contentJson: runtime.JsonValue | null
+    boardDate: Date | null
     publishAt: Date
     dueAt: Date | null
     expiresAt: Date | null
@@ -2497,6 +2738,7 @@ export interface Prisma__PublicationClient<T, Null = never, ExtArgs extends runt
   subject<T extends Prisma.Publication$subjectArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Publication$subjectArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   targets<T extends Prisma.Publication$targetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Publication$targetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   revisions<T extends Prisma.Publication$revisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Publication$revisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  screenDeliveries<T extends Prisma.Publication$screenDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Publication$screenDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationScreenDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2533,6 +2775,7 @@ export interface PublicationFieldRefs {
   readonly title: Prisma.FieldRef<"Publication", 'String'>
   readonly content: Prisma.FieldRef<"Publication", 'String'>
   readonly contentJson: Prisma.FieldRef<"Publication", 'Json'>
+  readonly boardDate: Prisma.FieldRef<"Publication", 'DateTime'>
   readonly publishAt: Prisma.FieldRef<"Publication", 'DateTime'>
   readonly dueAt: Prisma.FieldRef<"Publication", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"Publication", 'DateTime'>
@@ -3064,6 +3307,30 @@ export type Publication$revisionsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.PublicationRevisionScalarFieldEnum | Prisma.PublicationRevisionScalarFieldEnum[]
+}
+
+/**
+ * Publication.screenDeliveries
+ */
+export type Publication$screenDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationScreenDelivery
+   */
+  select?: Prisma.NotificationScreenDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationScreenDelivery
+   */
+  omit?: Prisma.NotificationScreenDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationScreenDeliveryInclude<ExtArgs> | null
+  where?: Prisma.NotificationScreenDeliveryWhereInput
+  orderBy?: Prisma.NotificationScreenDeliveryOrderByWithRelationInput | Prisma.NotificationScreenDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScreenDeliveryScalarFieldEnum | Prisma.NotificationScreenDeliveryScalarFieldEnum[]
 }
 
 /**

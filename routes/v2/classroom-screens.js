@@ -6,6 +6,7 @@ import {
     resolveClassroomScreenWorkspaces,
 } from "../../services/classroomScreenService.js";
 import {
+    copyScreenBoardDate,
     createScreenPublication,
     listPublishedFeed,
     listScreenPublicationRevisions,
@@ -18,6 +19,7 @@ import {
     replaceClassRoster,
     saveClassAttendance,
 } from "../../services/classroomToolsService.js";
+import {acknowledgeScreenNotifications} from "../../services/notificationDeliveryService.js";
 
 const router = Router();
 
@@ -51,10 +53,19 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
     const workspaces = await resolveClassroomScreenWorkspaces(res.locals.classroomScreen);
     const result = await listPublishedFeed({
         workspaceIds: workspaces.map((workspace) => workspace.id),
+        boardDate: req.query.boardDate,
         limit: req.query.limit,
         skip: req.query.skip,
     });
     return res.json(errors.createSuccessResponse(result));
+}));
+
+router.post("/notification-deliveries", errors.catchAsync(async (req, res) => {
+    const deliveries = await acknowledgeScreenNotifications({
+        screenBinding: res.locals.classroomScreen,
+        items: req.body?.items,
+    });
+    return res.json(errors.createSuccessResponse({count: deliveries.length}));
 }));
 
 router.get("/students", errors.catchAsync(async (req, res) => {
@@ -94,6 +105,15 @@ router.post("/publications", errors.catchAsync(async (req, res) => {
     });
     res.set("ETag", `"${publication.revision}"`);
     return res.status(201).json(errors.createSuccessResponse(publication, "作业已保存为未认证版本"));
+}));
+
+router.post("/board/copy", errors.catchAsync(async (req, res) => {
+    const result = await copyScreenBoardDate({
+        screenBinding: res.locals.classroomScreen,
+        sourceBoardDate: req.body?.sourceBoardDate,
+        targetBoardDate: req.body?.targetBoardDate,
+    });
+    return res.status(201).json(errors.createSuccessResponse(result, "作业已复制到目标日期"));
 }));
 
 router.patch("/publications/:id", errors.catchAsync(async (req, res) => {

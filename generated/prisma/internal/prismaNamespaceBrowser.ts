@@ -70,6 +70,7 @@ export const ModelName = {
   Publication: 'Publication',
   PublicationTarget: 'PublicationTarget',
   ClassroomScreenBinding: 'ClassroomScreenBinding',
+  NotificationScreenDelivery: 'NotificationScreenDelivery',
   AdministrativeClassStudent: 'AdministrativeClassStudent',
   ClassAttendanceDay: 'ClassAttendanceDay',
   PublicationRevision: 'PublicationRevision'
@@ -327,6 +328,7 @@ export const PublicationScalarFieldEnum = {
   title: 'title',
   content: 'content',
   contentJson: 'contentJson',
+  boardDate: 'boardDate',
   publishAt: 'publishAt',
   dueAt: 'dueAt',
   expiresAt: 'expiresAt',
@@ -370,6 +372,18 @@ export const ClassroomScreenBindingScalarFieldEnum = {
 } as const
 
 export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const NotificationScreenDeliveryScalarFieldEnum = {
+  publicationId: 'publicationId',
+  screenBindingId: 'screenBindingId',
+  revision: 'revision',
+  receivedAt: 'receivedAt',
+  displayedAt: 'displayedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScreenDeliveryScalarFieldEnum = (typeof NotificationScreenDeliveryScalarFieldEnum)[keyof typeof NotificationScreenDeliveryScalarFieldEnum]
 
 
 export const AdministrativeClassStudentScalarFieldEnum = {

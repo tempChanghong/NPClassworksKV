@@ -116,6 +116,11 @@ export type PublicationTarget = Prisma.PublicationTargetModel
  */
 export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
 /**
+ * Model NotificationScreenDelivery
+ * 班级大屏对通知当前版本的接收与展示回执，不跟踪个人学生阅读状态。
+ */
+export type NotificationScreenDelivery = Prisma.NotificationScreenDeliveryModel
+/**
  * Model AdministrativeClassStudent
  * 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
  */

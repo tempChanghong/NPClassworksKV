@@ -17,6 +17,7 @@ import {
     updatePublication,
     withdrawPublication,
 } from "../../services/publicationService.js";
+import {listNotificationScreenDeliveries} from "../../services/notificationDeliveryService.js";
 
 const router = Router();
 
@@ -46,6 +47,7 @@ function setRevisionHeader(res, publication) {
 router.get("/feed", errors.catchAsync(async (req, res) => {
     const result = await listPublishedFeed({
         workspaceIds: parseWorkspaceIds(req.query),
+        boardDate: req.query.boardDate,
         limit: req.query.limit,
         skip: req.query.skip,
     });
@@ -107,6 +109,14 @@ router.get("/:id/revisions", errors.catchAsync(async (req, res) => {
         publicationId: req.params.id,
     });
     return res.json(errors.createSuccessResponse(revisions));
+}));
+
+router.get("/:id/screen-deliveries", errors.catchAsync(async (req, res) => {
+    const deliveries = await listNotificationScreenDeliveries({
+        accountId: res.locals.account.id,
+        publicationId: req.params.id,
+    });
+    return res.json(errors.createSuccessResponse(deliveries));
 }));
 
 router.post("/:id/certify", errors.catchAsync(async (req, res) => {

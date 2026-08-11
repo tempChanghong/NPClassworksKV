@@ -4,6 +4,7 @@ import {
     PUBLICATION_TYPES,
     PUBLICATION_STATUSES,
     earliestPublicationTransition,
+    parseBoardDate,
     validatePublicationSnapshot,
 } from "../domain/publication.js";
 import {
@@ -18,7 +19,10 @@ import {
 } from "./publicationAuthorizationService.js";
 import {authorizationError} from "./academicAuthorizationService.js";
 import {broadcastWorkspaceEvent} from "../utils/socket.js";
-import {isClassroomScreenWorkspaceAllowed} from "./classroomScreenService.js";
+import {
+    isClassroomScreenWorkspaceAllowed,
+    resolveClassroomScreenWorkspaces,
+} from "./classroomScreenService.js";
 
 const publicationInclude = {
     author: {select: {id: true, name: true, email: true, avatarUrl: true}},
@@ -87,6 +91,7 @@ function toPublicationData(normalized) {
         subjectId: normalized.subjectId,
         title: normalized.title,
         content: normalized.content,
+        boardDate: normalized.boardDate,
         publishAt: normalized.publishAt,
         dueAt: normalized.dueAt,
         expiresAt: normalized.expiresAt,
@@ -106,6 +111,9 @@ function toSnapshot(normalized) {
         title: normalized.title,
         content: normalized.content,
         contentJson: normalized.contentJson ?? null,
+        boardDate: normalized.boardDate instanceof Date
+            ? normalized.boardDate.toISOString().slice(0, 10)
+            : normalized.boardDate || null,
         publishAt: dateValue(normalized.publishAt),
         dueAt: dateValue(normalized.dueAt),
         expiresAt: dateValue(normalized.expiresAt),
@@ -283,7 +291,27 @@ export async function listPublications({accountId, workspaceId, status, type, li
     return {items, total, limit: safeLimit, skip: safeSkip};
 }
 
-export async function listPublishedFeed({workspaceIds, limit = 50, skip = 0, now = new Date()}) {
+function shanghaiBoardDate(now = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Shanghai",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).formatToParts(now);
+    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+}
+
+function normalizeBoardDate(value, {defaultToday = false} = {}) {
+    const errors = [];
+    const parsed = parseBoardDate(value || (defaultToday ? shanghaiBoardDate() : null), errors, {required: true});
+    if (!parsed) {
+        throw publicationError("无效的作业板日期", "INVALID_BOARD_DATE", 422, {errors});
+    }
+    return parsed;
+}
+
+export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, skip = 0, now = new Date()}) {
     const targetIds = [...new Set((workspaceIds || []).filter(Boolean))];
     if (targetIds.length === 0) {
         throw publicationError("至少需要选择一个教学空间", "PUBLICATION_TARGET_REQUIRED", 400);
@@ -308,10 +336,18 @@ export async function listPublishedFeed({workspaceIds, limit = 50, skip = 0, now
 
     const safeLimit = Math.min(Math.max(Number(limit) || 50, 1), 100);
     const safeSkip = Math.max(Number(skip) || 0, 0);
+    const selectedBoardDate = normalizeBoardDate(boardDate, {defaultToday: true});
+    const visibleForBoardDate = [
+        {type: PUBLICATION_TYPES.ASSIGNMENT, boardDate: selectedBoardDate},
+        {
+            type: PUBLICATION_TYPES.NOTICE,
+            OR: [{expiresAt: null}, {expiresAt: {gt: now}}],
+        },
+    ];
     const where = {
         status: PUBLICATION_STATUSES.PUBLISHED,
         publishAt: {lte: now},
-        OR: [{expiresAt: null}, {expiresAt: {gt: now}}],
+        OR: visibleForBoardDate,
         targets: {some: {workspaceId: {in: targetIds}}},
     };
     const [items, total, nextScheduled, nextExpiry] = await Promise.all([
@@ -327,6 +363,7 @@ export async function listPublishedFeed({workspaceIds, limit = 50, skip = 0, now
             where: {
                 status: PUBLICATION_STATUSES.PUBLISHED,
                 publishAt: {gt: now},
+                OR: visibleForBoardDate,
                 targets: {some: {workspaceId: {in: targetIds}}},
             },
             orderBy: {publishAt: "asc"},
@@ -335,6 +372,7 @@ export async function listPublishedFeed({workspaceIds, limit = 50, skip = 0, now
         prisma.publication.findFirst({
             where: {
                 status: PUBLICATION_STATUSES.PUBLISHED,
+                type: PUBLICATION_TYPES.NOTICE,
                 publishAt: {lte: now},
                 expiresAt: {gt: now},
                 targets: {some: {workspaceId: {in: targetIds}}},
@@ -349,6 +387,7 @@ export async function listPublishedFeed({workspaceIds, limit = 50, skip = 0, now
         limit: safeLimit,
         skip: safeSkip,
         workspaceIds: targetIds,
+        boardDate: selectedBoardDate.toISOString().slice(0, 10),
         generatedAt: now,
         nextTransitionAt: earliestPublicationTransition(
             nextScheduled?.publishAt,
@@ -552,6 +591,82 @@ export async function createScreenPublication({screenBinding, input}) {
     return publication;
 }
 
+export async function copyScreenBoardDate({screenBinding, sourceBoardDate, targetBoardDate}) {
+    const source = normalizeBoardDate(sourceBoardDate);
+    const target = normalizeBoardDate(targetBoardDate);
+    const sourceValue = source.toISOString().slice(0, 10);
+    const targetValue = target.toISOString().slice(0, 10);
+    if (sourceValue === targetValue) {
+        throw publicationError("来源日期和目标日期不能相同", "BOARD_DATE_COPY_SAME_DATE", 422);
+    }
+
+    const workspaces = await resolveClassroomScreenWorkspaces(screenBinding);
+    const allowedIds = workspaces.map((workspace) => workspace.id);
+    const sourceItems = await prisma.publication.findMany({
+        where: {
+            type: PUBLICATION_TYPES.ASSIGNMENT,
+            status: PUBLICATION_STATUSES.PUBLISHED,
+            boardDate: source,
+            targets: {some: {workspaceId: {in: allowedIds}}},
+        },
+        orderBy: [{publishAt: "asc"}, {createdAt: "asc"}],
+        take: 100,
+        include: {targets: true},
+    });
+    const existingItems = await prisma.publication.findMany({
+        where: {
+            type: PUBLICATION_TYPES.ASSIGNMENT,
+            status: PUBLICATION_STATUSES.PUBLISHED,
+            boardDate: target,
+            targets: {some: {workspaceId: {in: allowedIds}}},
+        },
+        select: {
+            subjectId: true,
+            title: true,
+            content: true,
+            targets: {select: {workspaceId: true}},
+        },
+    });
+    const signature = (item, workspaceId) => [
+        workspaceId,
+        item.subjectId || "",
+        item.title || "",
+        item.content || "",
+    ].join("\u0000");
+    const existingSignatures = new Set(existingItems.flatMap((item) => (
+        item.targets.map((targetItem) => signature(item, targetItem.workspaceId))
+    )));
+
+    const created = [];
+    let skipped = 0;
+    for (const item of sourceItems) {
+        for (const targetItem of item.targets.filter((candidate) => allowedIds.includes(candidate.workspaceId))) {
+            const itemSignature = signature(item, targetItem.workspaceId);
+            if (existingSignatures.has(itemSignature)) {
+                skipped += 1;
+                continue;
+            }
+            created.push(await createScreenPublication({
+                screenBinding,
+                input: {
+                    subjectId: item.subjectId,
+                    title: item.title,
+                    content: item.content,
+                    contentJson: item.contentJson,
+                    priority: item.priority,
+                    boardDate: targetValue,
+                    publishAt: new Date(),
+                    dueAt: null,
+                    expiresAt: null,
+                    targetWorkspaceIds: [targetItem.workspaceId],
+                },
+            }));
+            existingSignatures.add(itemSignature);
+        }
+    }
+    return {created, createdCount: created.length, skippedCount: skipped, sourceBoardDate: sourceValue, targetBoardDate: targetValue};
+}
+
 export async function updateScreenPublication({screenBinding, publicationId, expectedRevision, input}) {
     if (!Number.isInteger(expectedRevision) || expectedRevision < 1) {
         throw publicationError("需要提供有效的 revision 或 If-Match", "PUBLICATION_REVISION_REQUIRED", 428);
@@ -571,6 +686,7 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
         title: hasOwn(input, "title") ? input.title : existing.title,
         content: hasOwn(input, "content") ? input.content : existing.content,
         contentJson: hasOwn(input, "contentJson") ? input.contentJson : existing.contentJson,
+        boardDate: hasOwn(input, "boardDate") ? input.boardDate : existing.boardDate,
         publishAt: hasOwn(input, "publishAt") ? input.publishAt : existing.publishAt,
         dueAt: hasOwn(input, "dueAt") ? input.dueAt : existing.dueAt,
         expiresAt: hasOwn(input, "expiresAt") ? input.expiresAt : existing.expiresAt,
@@ -759,6 +875,7 @@ export async function updatePublication({accountId, publicationId, expectedRevis
         title: hasOwn(input, "title") ? input.title : existing.title,
         content: hasOwn(input, "content") ? input.content : existing.content,
         contentJson: hasOwn(input, "contentJson") ? input.contentJson : existing.contentJson,
+        boardDate: hasOwn(input, "boardDate") ? input.boardDate : existing.boardDate,
         publishAt: hasOwn(input, "publishAt") ? input.publishAt : existing.publishAt,
         dueAt: hasOwn(input, "dueAt") ? input.dueAt : existing.dueAt,
         expiresAt: hasOwn(input, "expiresAt") ? input.expiresAt : existing.expiresAt,
@@ -847,6 +964,7 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
         title: existing.title,
         content: existing.content,
         contentJson: existing.contentJson,
+        boardDate: existing.boardDate,
         publishAt: existing.publishAt,
         dueAt: existing.dueAt,
         expiresAt: existing.expiresAt,
@@ -909,6 +1027,7 @@ export async function clonePublication({accountId, publicationId, input = {}}) {
             title: hasOwn(input, "title") ? input.title : existing.title,
             content: hasOwn(input, "content") ? input.content : existing.content,
             contentJson: hasOwn(input, "contentJson") ? input.contentJson : existing.contentJson,
+            boardDate: hasOwn(input, "boardDate") ? input.boardDate : existing.boardDate,
             priority: hasOwn(input, "priority") ? input.priority : existing.priority,
             status: PUBLICATION_STATUSES.DRAFT,
             publishAt: input.publishAt || new Date(),

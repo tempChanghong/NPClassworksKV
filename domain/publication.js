@@ -51,6 +51,26 @@ function parseDate(value, path, errors, {required = false} = {}) {
     return date;
 }
 
+export function parseBoardDate(value, errors = [], {required = false} = {}) {
+    if (value === null || value === undefined || value === "") {
+        if (required) {
+            errors.push({path: "boardDate", code: "BOARD_DATE_REQUIRED", message: "作业板日期不能为空"});
+        }
+        return null;
+    }
+    if (typeof value === "string") {
+        const match = value.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (match) {
+            const date = new Date(`${value.trim()}T00:00:00.000Z`);
+            if (date.toISOString().slice(0, 10) === value.trim()) return date;
+        }
+    } else if (value instanceof Date && !Number.isNaN(value.getTime())) {
+        return new Date(`${value.toISOString().slice(0, 10)}T00:00:00.000Z`);
+    }
+    errors.push({path: "boardDate", code: "INVALID_BOARD_DATE", message: "作业板日期必须采用 YYYY-MM-DD 格式"});
+    return null;
+}
+
 function workspaceSchoolId(workspace) {
     return workspace.schoolId || workspace.term?.schoolId || workspace.term?.school?.id;
 }
@@ -157,6 +177,9 @@ export function validatePublicationSnapshot({input, workspaces}) {
     }
 
     const publishAt = parseDate(input?.publishAt || new Date(), "publishAt", errors, {required: true});
+    const boardDate = type === PUBLICATION_TYPES.ASSIGNMENT
+        ? parseBoardDate(input?.boardDate, errors, {required: true})
+        : null;
     const dueAt = parseDate(input?.dueAt, "dueAt", errors);
     const expiresAt = parseDate(input?.expiresAt, "expiresAt", errors);
     if (publishAt && dueAt && dueAt < publishAt) {
@@ -181,6 +204,7 @@ export function validatePublicationSnapshot({input, workspaces}) {
                 : input?.contentJson && typeof input.contentJson === "object"
                     ? input.contentJson
                     : undefined,
+            boardDate,
             publishAt,
             dueAt,
             expiresAt,

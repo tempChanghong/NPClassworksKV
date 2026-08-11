@@ -403,6 +403,7 @@ export const ModelName = {
   Publication: 'Publication',
   PublicationTarget: 'PublicationTarget',
   ClassroomScreenBinding: 'ClassroomScreenBinding',
+  NotificationScreenDelivery: 'NotificationScreenDelivery',
   AdministrativeClassStudent: 'AdministrativeClassStudent',
   ClassAttendanceDay: 'ClassAttendanceDay',
   PublicationRevision: 'PublicationRevision'
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
+    modelProps: "account" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1831,6 +1832,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NotificationScreenDelivery: {
+      payload: Prisma.$NotificationScreenDeliveryPayload<ExtArgs>
+      fields: Prisma.NotificationScreenDeliveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NotificationScreenDeliveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NotificationScreenDeliveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        findFirst: {
+          args: Prisma.NotificationScreenDeliveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NotificationScreenDeliveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        findMany: {
+          args: Prisma.NotificationScreenDeliveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>[]
+        }
+        create: {
+          args: Prisma.NotificationScreenDeliveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        createMany: {
+          args: Prisma.NotificationScreenDeliveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NotificationScreenDeliveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>[]
+        }
+        delete: {
+          args: Prisma.NotificationScreenDeliveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        update: {
+          args: Prisma.NotificationScreenDeliveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.NotificationScreenDeliveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NotificationScreenDeliveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NotificationScreenDeliveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.NotificationScreenDeliveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationScreenDeliveryPayload>
+        }
+        aggregate: {
+          args: Prisma.NotificationScreenDeliveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotificationScreenDelivery>
+        }
+        groupBy: {
+          args: Prisma.NotificationScreenDeliveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationScreenDeliveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NotificationScreenDeliveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationScreenDeliveryCountAggregateOutputType> | number
+        }
+      }
+    }
     AdministrativeClassStudent: {
       payload: Prisma.$AdministrativeClassStudentPayload<ExtArgs>
       fields: Prisma.AdministrativeClassStudentFieldRefs
@@ -2328,6 +2403,7 @@ export const PublicationScalarFieldEnum = {
   title: 'title',
   content: 'content',
   contentJson: 'contentJson',
+  boardDate: 'boardDate',
   publishAt: 'publishAt',
   dueAt: 'dueAt',
   expiresAt: 'expiresAt',
@@ -2371,6 +2447,18 @@ export const ClassroomScreenBindingScalarFieldEnum = {
 } as const
 
 export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const NotificationScreenDeliveryScalarFieldEnum = {
+  publicationId: 'publicationId',
+  screenBindingId: 'screenBindingId',
+  revision: 'revision',
+  receivedAt: 'receivedAt',
+  displayedAt: 'displayedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScreenDeliveryScalarFieldEnum = (typeof NotificationScreenDeliveryScalarFieldEnum)[keyof typeof NotificationScreenDeliveryScalarFieldEnum]
 
 
 export const AdministrativeClassStudentScalarFieldEnum = {
@@ -2832,6 +2920,7 @@ export type GlobalOmitConfig = {
   publication?: Prisma.PublicationOmit
   publicationTarget?: Prisma.PublicationTargetOmit
   classroomScreenBinding?: Prisma.ClassroomScreenBindingOmit
+  notificationScreenDelivery?: Prisma.NotificationScreenDeliveryOmit
   administrativeClassStudent?: Prisma.AdministrativeClassStudentOmit
   classAttendanceDay?: Prisma.ClassAttendanceDayOmit
   publicationRevision?: Prisma.PublicationRevisionOmit

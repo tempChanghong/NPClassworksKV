@@ -46,6 +46,7 @@ function assignment(targetWorkspaceIds) {
         subjectId: "physics",
         content: "完成练习册第10页",
         status: "PUBLISHED",
+        boardDate: "2026-08-10",
         publishAt: "2026-08-09T08:00:00.000Z",
         dueAt: "2026-08-10T08:00:00.000Z",
         targetWorkspaceIds,
@@ -147,6 +148,28 @@ test("published content cannot have both an empty title and body", () => {
 
     assert.equal(result.valid, false);
     assert.ok(result.errors.some((error) => error.code === "PUBLICATION_CONTENT_REQUIRED"));
+});
+
+test("assignments require a strict calendar date while notices remain date-independent", () => {
+    const classOne = adminClass("g2-c1", "高二1班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
+    const missingDate = assignment([classOne.id]);
+    delete missingDate.boardDate;
+    const assignmentResult = validatePublicationSnapshot({input: missingDate, workspaces: [classOne]});
+    assert.equal(assignmentResult.valid, false);
+    assert.ok(assignmentResult.errors.some((error) => error.code === "BOARD_DATE_REQUIRED"));
+
+    const noticeResult = validatePublicationSnapshot({
+        input: {
+            type: "NOTICE",
+            title: "持续通知",
+            status: "PUBLISHED",
+            boardDate: "not-a-date",
+            targetWorkspaceIds: [classOne.id],
+        },
+        workspaces: [classOne],
+    });
+    assert.equal(noticeResult.valid, true);
+    assert.equal(noticeResult.normalized.boardDate, null);
 });
 
 test("the feed chooses the earliest scheduled publish or expiry boundary", () => {
