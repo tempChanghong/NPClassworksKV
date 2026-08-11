@@ -14,6 +14,10 @@ import {
     recoverLocalOwner,
 } from "../services/localAccountService.js";
 import {localAuthLimiter} from "../middleware/rateLimiter.js";
+import {
+    getTeacherTargetPreferences,
+    saveTeacherTargetPreferences,
+} from "../services/accountPreferenceService.js";
 
 const router = Router();
 
@@ -92,6 +96,27 @@ router.post("/local/change-pin", jwtAuth, async (req, res, next) => {
             newPin: req.body?.newPin,
         });
         return res.json({success: true, message: "PIN 已修改，请重新登录"});
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get("/preferences/teacher-targets", jwtAuth, async (req, res, next) => {
+    try {
+        const data = await getTeacherTargetPreferences(res.locals.account.id);
+        return res.json({success: true, data});
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put("/preferences/teacher-targets", jwtAuth, async (req, res, next) => {
+    try {
+        const data = await saveTeacherTargetPreferences(
+            res.locals.account.id,
+            req.body?.preferences || {},
+        );
+        return res.json({success: true, message: "教师偏好已同步", data});
     } catch (error) {
         next(error);
     }

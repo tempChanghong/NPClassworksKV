@@ -330,6 +330,7 @@ export type AccountWhereInput = {
   lastLoginAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   devices?: Prisma.DeviceListRelationFilter
   sessions?: Prisma.AccountSessionListRelationFilter
+  preferences?: Prisma.AccountPreferenceListRelationFilter
   publications?: Prisma.PublicationListRelationFilter
   certifiedPublications?: Prisma.PublicationListRelationFilter
   classroomScreensCreated?: Prisma.ClassroomScreenBindingListRelationFilter
@@ -362,6 +363,7 @@ export type AccountOrderByWithRelationInput = {
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   devices?: Prisma.DeviceOrderByRelationAggregateInput
   sessions?: Prisma.AccountSessionOrderByRelationAggregateInput
+  preferences?: Prisma.AccountPreferenceOrderByRelationAggregateInput
   publications?: Prisma.PublicationOrderByRelationAggregateInput
   certifiedPublications?: Prisma.PublicationOrderByRelationAggregateInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingOrderByRelationAggregateInput
@@ -398,6 +400,7 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   lastLoginAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   devices?: Prisma.DeviceListRelationFilter
   sessions?: Prisma.AccountSessionListRelationFilter
+  preferences?: Prisma.AccountPreferenceListRelationFilter
   publications?: Prisma.PublicationListRelationFilter
   certifiedPublications?: Prisma.PublicationListRelationFilter
   classroomScreensCreated?: Prisma.ClassroomScreenBindingListRelationFilter
@@ -482,6 +485,7 @@ export type AccountCreateInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -514,6 +518,7 @@ export type AccountUncheckedCreateInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -546,6 +551,7 @@ export type AccountUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -578,6 +584,7 @@ export type AccountUncheckedUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -771,6 +778,20 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type AccountCreateNestedOneWithoutPreferencesInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPreferencesInput, Prisma.AccountUncheckedCreateWithoutPreferencesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPreferencesInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutPreferencesNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPreferencesInput, Prisma.AccountUncheckedCreateWithoutPreferencesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPreferencesInput
+  upsert?: Prisma.AccountUpsertWithoutPreferencesInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPreferencesInput, Prisma.AccountUpdateWithoutPreferencesInput>, Prisma.AccountUncheckedUpdateWithoutPreferencesInput>
+}
+
 export type AccountCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutSessionsInput, Prisma.AccountUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSessionsInput
@@ -923,6 +944,150 @@ export type AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPublicationRevisionCertificationsInput, Prisma.AccountUpdateWithoutPublicationRevisionCertificationsInput>, Prisma.AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput>
 }
 
+export type AccountCreateWithoutPreferencesInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutPreferencesInput = {
+  id?: string
+  provider: string
+  providerId: string
+  email?: string | null
+  name?: string | null
+  avatarUrl?: string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshToken?: string | null
+  refreshTokenExpiry?: Date | string | null
+  tokenVersion?: number
+  localUsername?: string | null
+  localPasswordHash?: string | null
+  localLoginFailures?: number
+  localLockedUntil?: Date | string | null
+  localDisabled?: boolean
+  lastLoginAt?: Date | string | null
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
+  certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutCertifiedByInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByAccountInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedCreateNestedManyWithoutAccountInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutPreferencesInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPreferencesInput, Prisma.AccountUncheckedCreateWithoutPreferencesInput>
+}
+
+export type AccountUpsertWithoutPreferencesInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutPreferencesInput, Prisma.AccountUncheckedUpdateWithoutPreferencesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPreferencesInput, Prisma.AccountUncheckedCreateWithoutPreferencesInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutPreferencesInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutPreferencesInput, Prisma.AccountUncheckedUpdateWithoutPreferencesInput>
+}
+
+export type AccountUpdateWithoutPreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutPreferencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  accessToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  localUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localLoginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  localLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
+  certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
+  classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
+  publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
+  publicationRevisionCertifications?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByNestedInput
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountNestedInput
+  schoolMemberships?: Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountNestedInput
+  workspaceMemberships?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
 export type AccountCreateWithoutSessionsInput = {
   id?: string
   provider: string
@@ -944,6 +1109,7 @@ export type AccountCreateWithoutSessionsInput = {
   localDisabled?: boolean
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -975,6 +1141,7 @@ export type AccountUncheckedCreateWithoutSessionsInput = {
   localDisabled?: boolean
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1022,6 +1189,7 @@ export type AccountUpdateWithoutSessionsInput = {
   localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -1053,6 +1221,7 @@ export type AccountUncheckedUpdateWithoutSessionsInput = {
   localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1084,6 +1253,7 @@ export type AccountCreateWithoutDevicesInput = {
   localDisabled?: boolean
   lastLoginAt?: Date | string | null
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -1115,6 +1285,7 @@ export type AccountUncheckedCreateWithoutDevicesInput = {
   localDisabled?: boolean
   lastLoginAt?: Date | string | null
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1162,6 +1333,7 @@ export type AccountUpdateWithoutDevicesInput = {
   localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -1193,6 +1365,7 @@ export type AccountUncheckedUpdateWithoutDevicesInput = {
   localDisabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1225,6 +1398,7 @@ export type AccountCreateWithoutSchoolMembershipsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -1256,6 +1430,7 @@ export type AccountUncheckedCreateWithoutSchoolMembershipsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1303,6 +1478,7 @@ export type AccountUpdateWithoutSchoolMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -1334,6 +1510,7 @@ export type AccountUncheckedUpdateWithoutSchoolMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1365,6 +1542,7 @@ export type AccountCreateWithoutWorkspaceMembershipsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -1396,6 +1574,7 @@ export type AccountUncheckedCreateWithoutWorkspaceMembershipsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1443,6 +1622,7 @@ export type AccountUpdateWithoutWorkspaceMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -1474,6 +1654,7 @@ export type AccountUncheckedUpdateWithoutWorkspaceMembershipsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1505,6 +1686,7 @@ export type AccountCreateWithoutPublicationsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
@@ -1536,6 +1718,7 @@ export type AccountUncheckedCreateWithoutPublicationsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
@@ -1572,6 +1755,7 @@ export type AccountCreateWithoutCertifiedPublicationsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
@@ -1603,6 +1787,7 @@ export type AccountUncheckedCreateWithoutCertifiedPublicationsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
@@ -1650,6 +1835,7 @@ export type AccountUpdateWithoutPublicationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
@@ -1681,6 +1867,7 @@ export type AccountUncheckedUpdateWithoutPublicationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
@@ -1723,6 +1910,7 @@ export type AccountUpdateWithoutCertifiedPublicationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
@@ -1754,6 +1942,7 @@ export type AccountUncheckedUpdateWithoutCertifiedPublicationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
@@ -1785,6 +1974,7 @@ export type AccountCreateWithoutClassroomScreensCreatedInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionCreateNestedManyWithoutEditorInput
@@ -1816,6 +2006,7 @@ export type AccountUncheckedCreateWithoutClassroomScreensCreatedInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutEditorInput
@@ -1863,6 +2054,7 @@ export type AccountUpdateWithoutClassroomScreensCreatedInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUpdateManyWithoutEditorNestedInput
@@ -1894,6 +2086,7 @@ export type AccountUncheckedUpdateWithoutClassroomScreensCreatedInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   publicationRevisionEdits?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorNestedInput
@@ -1925,6 +2118,7 @@ export type AccountCreateWithoutAttendanceDaysUpdatedInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -1956,6 +2150,7 @@ export type AccountUncheckedCreateWithoutAttendanceDaysUpdatedInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2003,6 +2198,7 @@ export type AccountUpdateWithoutAttendanceDaysUpdatedInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -2034,6 +2230,7 @@ export type AccountUncheckedUpdateWithoutAttendanceDaysUpdatedInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2065,6 +2262,7 @@ export type AccountCreateWithoutPublicationRevisionEditsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -2096,6 +2294,7 @@ export type AccountUncheckedCreateWithoutPublicationRevisionEditsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2132,6 +2331,7 @@ export type AccountCreateWithoutPublicationRevisionCertificationsInput = {
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput
@@ -2163,6 +2363,7 @@ export type AccountUncheckedCreateWithoutPublicationRevisionCertificationsInput 
   lastLoginAt?: Date | string | null
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutAccountInput
   sessions?: Prisma.AccountSessionUncheckedCreateNestedManyWithoutAccountInput
+  preferences?: Prisma.AccountPreferenceUncheckedCreateNestedManyWithoutAccountInput
   publications?: Prisma.PublicationUncheckedCreateNestedManyWithoutAuthorInput
   certifiedPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutCertifiedByInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2210,6 +2411,7 @@ export type AccountUpdateWithoutPublicationRevisionEditsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -2241,6 +2443,7 @@ export type AccountUncheckedUpdateWithoutPublicationRevisionEditsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2283,6 +2486,7 @@ export type AccountUpdateWithoutPublicationRevisionCertificationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUpdateManyWithoutCreatedByNestedInput
@@ -2314,6 +2518,7 @@ export type AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput 
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutAccountNestedInput
   sessions?: Prisma.AccountSessionUncheckedUpdateManyWithoutAccountNestedInput
+  preferences?: Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountNestedInput
   publications?: Prisma.PublicationUncheckedUpdateManyWithoutAuthorNestedInput
   certifiedPublications?: Prisma.PublicationUncheckedUpdateManyWithoutCertifiedByNestedInput
   classroomScreensCreated?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2331,6 +2536,7 @@ export type AccountUncheckedUpdateWithoutPublicationRevisionCertificationsInput 
 export type AccountCountOutputType = {
   devices: number
   sessions: number
+  preferences: number
   publications: number
   certifiedPublications: number
   classroomScreensCreated: number
@@ -2344,6 +2550,7 @@ export type AccountCountOutputType = {
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   devices?: boolean | AccountCountOutputTypeCountDevicesArgs
   sessions?: boolean | AccountCountOutputTypeCountSessionsArgs
+  preferences?: boolean | AccountCountOutputTypeCountPreferencesArgs
   publications?: boolean | AccountCountOutputTypeCountPublicationsArgs
   certifiedPublications?: boolean | AccountCountOutputTypeCountCertifiedPublicationsArgs
   classroomScreensCreated?: boolean | AccountCountOutputTypeCountClassroomScreensCreatedArgs
@@ -2376,6 +2583,13 @@ export type AccountCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types
  */
 export type AccountCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AccountSessionWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountPreferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountPreferenceWhereInput
 }
 
 /**
@@ -2457,6 +2671,7 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   lastLoginAt?: boolean
   devices?: boolean | Prisma.Account$devicesArgs<ExtArgs>
   sessions?: boolean | Prisma.Account$sessionsArgs<ExtArgs>
+  preferences?: boolean | Prisma.Account$preferencesArgs<ExtArgs>
   publications?: boolean | Prisma.Account$publicationsArgs<ExtArgs>
   certifiedPublications?: boolean | Prisma.Account$certifiedPublicationsArgs<ExtArgs>
   classroomScreensCreated?: boolean | Prisma.Account$classroomScreensCreatedArgs<ExtArgs>
@@ -2538,6 +2753,7 @@ export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   devices?: boolean | Prisma.Account$devicesArgs<ExtArgs>
   sessions?: boolean | Prisma.Account$sessionsArgs<ExtArgs>
+  preferences?: boolean | Prisma.Account$preferencesArgs<ExtArgs>
   publications?: boolean | Prisma.Account$publicationsArgs<ExtArgs>
   certifiedPublications?: boolean | Prisma.Account$certifiedPublicationsArgs<ExtArgs>
   classroomScreensCreated?: boolean | Prisma.Account$classroomScreensCreatedArgs<ExtArgs>
@@ -2556,6 +2772,7 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     devices: Prisma.$DevicePayload<ExtArgs>[]
     sessions: Prisma.$AccountSessionPayload<ExtArgs>[]
+    preferences: Prisma.$AccountPreferencePayload<ExtArgs>[]
     publications: Prisma.$PublicationPayload<ExtArgs>[]
     certifiedPublications: Prisma.$PublicationPayload<ExtArgs>[]
     classroomScreensCreated: Prisma.$ClassroomScreenBindingPayload<ExtArgs>[]
@@ -2981,6 +3198,7 @@ export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   devices<T extends Prisma.Account$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.Account$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  preferences<T extends Prisma.Account$preferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$preferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   publications<T extends Prisma.Account$publicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$publicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   certifiedPublications<T extends Prisma.Account$certifiedPublicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$certifiedPublicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   classroomScreensCreated<T extends Prisma.Account$classroomScreensCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$classroomScreensCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassroomScreenBindingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3470,6 +3688,30 @@ export type Account$sessionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AccountSessionScalarFieldEnum | Prisma.AccountSessionScalarFieldEnum[]
+}
+
+/**
+ * Account.preferences
+ */
+export type Account$preferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountPreference
+   */
+  select?: Prisma.AccountPreferenceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccountPreference
+   */
+  omit?: Prisma.AccountPreferenceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountPreferenceInclude<ExtArgs> | null
+  where?: Prisma.AccountPreferenceWhereInput
+  orderBy?: Prisma.AccountPreferenceOrderByWithRelationInput | Prisma.AccountPreferenceOrderByWithRelationInput[]
+  cursor?: Prisma.AccountPreferenceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountPreferenceScalarFieldEnum | Prisma.AccountPreferenceScalarFieldEnum[]
 }
 
 /**

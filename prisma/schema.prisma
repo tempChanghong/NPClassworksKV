@@ -31,6 +31,7 @@ model Account {
 
   devices                           Device[]
   sessions                          AccountSession[]
+  preferences                       AccountPreference[]
   publications                      Publication[]
   certifiedPublications             Publication[]            @relation("PublicationCurrentCertifier")
   classroomScreensCreated           ClassroomScreenBinding[] @relation("ClassroomScreenCreator")
@@ -41,6 +42,20 @@ model Account {
   workspaceMemberships              WorkspaceMember[]
 
   @@unique([provider, providerId])
+}
+
+/// 跨设备同步的轻量账号偏好。按 key 独立更新，避免覆盖认证提供者数据。
+model AccountPreference {
+  accountId String   @db.VarChar(191)
+  key       String   @db.VarChar(64)
+  value     Json     @db.Json
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([accountId, key])
+  @@index([accountId, updatedAt])
 }
 
 /// 一个教师账户可以同时在多台一体机和个人设备上保持独立登录。

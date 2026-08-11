@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Account: 'Account',
+  AccountPreference: 'AccountPreference',
   AccountSession: 'AccountSession',
   AppInstall: 'AppInstall',
   AutoAuth: 'AutoAuth',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
+    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -497,6 +498,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AccountCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    AccountPreference: {
+      payload: Prisma.$AccountPreferencePayload<ExtArgs>
+      fields: Prisma.AccountPreferenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccountPreferenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccountPreferenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        findFirst: {
+          args: Prisma.AccountPreferenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccountPreferenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        findMany: {
+          args: Prisma.AccountPreferenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>[]
+        }
+        create: {
+          args: Prisma.AccountPreferenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        createMany: {
+          args: Prisma.AccountPreferenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccountPreferenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>[]
+        }
+        delete: {
+          args: Prisma.AccountPreferenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        update: {
+          args: Prisma.AccountPreferenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        deleteMany: {
+          args: Prisma.AccountPreferenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccountPreferenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccountPreferenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>[]
+        }
+        upsert: {
+          args: Prisma.AccountPreferenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountPreferencePayload>
+        }
+        aggregate: {
+          args: Prisma.AccountPreferenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccountPreference>
+        }
+        groupBy: {
+          args: Prisma.AccountPreferenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountPreferenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccountPreferenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountPreferenceCountAggregateOutputType> | number
         }
       }
     }
@@ -2192,6 +2267,17 @@ export const AccountScalarFieldEnum = {
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+export const AccountPreferenceScalarFieldEnum = {
+  accountId: 'accountId',
+  key: 'key',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountPreferenceScalarFieldEnum = (typeof AccountPreferenceScalarFieldEnum)[keyof typeof AccountPreferenceScalarFieldEnum]
+
+
 export const AccountSessionScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -2902,6 +2988,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
+  accountPreference?: Prisma.AccountPreferenceOmit
   accountSession?: Prisma.AccountSessionOmit
   appInstall?: Prisma.AppInstallOmit
   autoAuth?: Prisma.AutoAuthOmit

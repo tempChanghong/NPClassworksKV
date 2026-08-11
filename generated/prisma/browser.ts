@@ -23,6 +23,11 @@ export * from './enums.ts';
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model AccountPreference
+ * 跨设备同步的轻量账号偏好。按 key 独立更新，避免覆盖认证提供者数据。
+ */
+export type AccountPreference = Prisma.AccountPreferenceModel
+/**
  * Model AccountSession
  * 一个教师账户可以同时在多台一体机和个人设备上保持独立登录。
  * 仅保存刷新令牌的 SHA-256 摘要，原始令牌只返回给客户端。
