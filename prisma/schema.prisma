@@ -491,6 +491,7 @@ model NotificationScreenDelivery {
   revision        Int
   receivedAt      DateTime  @default(now()) @db.Timestamptz(6)
   displayedAt     DateTime? @db.Timestamptz(6)
+  acknowledgedAt  DateTime? @db.Timestamptz(6)
   updatedAt       DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
 
   publication   Publication            @relation(fields: [publicationId], references: [id], onDelete: Cascade)

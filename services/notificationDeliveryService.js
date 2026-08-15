@@ -3,17 +3,14 @@ import {authorizationError} from "./academicAuthorizationService.js";
 import {assertCanReadPublication} from "./publicationAuthorizationService.js";
 import {publicationInclude} from "./publicationService.js";
 import {resolveClassroomScreenWorkspaces} from "./classroomScreenService.js";
+import {normalizeNotificationDeliveryItems} from "../domain/notificationDelivery.js";
 
 function deliveryError(message, code, statusCode = 400) {
     return authorizationError(message, code, statusCode);
 }
 
 export async function acknowledgeScreenNotifications({screenBinding, items}) {
-    const normalized = (Array.isArray(items) ? items : []).map((item) => ({
-        publicationId: typeof item?.publicationId === "string" ? item.publicationId : "",
-        revision: Number(item?.revision),
-        displayed: item?.displayed === true,
-    })).filter((item) => item.publicationId && Number.isInteger(item.revision) && item.revision > 0).slice(0, 100);
+    const normalized = normalizeNotificationDeliveryItems(items);
     if (!normalized.length) return [];
 
     const workspaces = await resolveClassroomScreenWorkspaces(screenBinding);
@@ -54,11 +51,17 @@ export async function acknowledgeScreenNotifications({screenBinding, items}) {
                 revision: item.revision,
                 receivedAt: now,
                 displayedAt: item.displayed ? now : null,
+                acknowledgedAt: item.acknowledged ? now : null,
             },
             update: {
                 revision: item.revision,
-                ...(newRevision ? {receivedAt: now, displayedAt: item.displayed ? now : null} : {}),
+                ...(newRevision ? {
+                    receivedAt: now,
+                    displayedAt: item.displayed ? now : null,
+                    acknowledgedAt: item.acknowledged ? now : null,
+                } : {}),
                 ...(!newRevision && item.displayed && !previous?.displayedAt ? {displayedAt: now} : {}),
+                ...(!newRevision && item.acknowledged && !previous?.acknowledgedAt ? {acknowledgedAt: now} : {}),
             },
         })];
     });
