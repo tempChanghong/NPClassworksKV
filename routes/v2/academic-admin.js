@@ -42,6 +42,10 @@ import {
     replaceAdministrativeClassSubjectRules,
     updateManagedCourseGroup,
 } from "../../services/academicStructureManagementService.js";
+import {
+    getSchoolHomeworkSettings,
+    updateSchoolHomeworkSettings,
+} from "../../services/schoolHomeworkSettingsService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -196,6 +200,23 @@ router.get("/schools/:schoolId/classroom-screens", errors.catchAsync(async (req,
         schoolId: req.params.schoolId,
     });
     return res.json(errors.createSuccessResponse(bindings));
+}));
+
+router.get("/schools/:schoolId/homework-settings", errors.catchAsync(async (req, res) => {
+    const settings = await getSchoolHomeworkSettings({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+    });
+    return res.json(errors.createSuccessResponse(settings));
+}));
+
+router.put("/schools/:schoolId/homework-settings", errors.catchAsync(async (req, res) => {
+    const settings = await updateSchoolHomeworkSettings({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        quickDeadlines: req.body?.quickDeadlines,
+    });
+    return res.json(errors.createSuccessResponse(settings, "作业快捷截止时间已更新"));
 }));
 
 router.post("/schools/:schoolId/classroom-screens/bind", errors.catchAsync(async (req, res) => {

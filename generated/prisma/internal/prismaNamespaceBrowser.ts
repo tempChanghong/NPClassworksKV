@@ -205,6 +205,7 @@ export const SchoolScalarFieldEnum = {
   teacherAuthMode: 'teacherAuthMode',
   allowOAuthTeacherLogin: 'allowOAuthTeacherLogin',
   teacherSharedPasswordHash: 'teacherSharedPasswordHash',
+  homeworkQuickDeadlines: 'homeworkQuickDeadlines',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

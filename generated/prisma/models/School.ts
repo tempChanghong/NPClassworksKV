@@ -53,6 +53,7 @@ export type SchoolCountAggregateOutputType = {
   teacherAuthMode: number
   allowOAuthTeacherLogin: number
   teacherSharedPasswordHash: number
+  homeworkQuickDeadlines: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -88,6 +89,7 @@ export type SchoolCountAggregateInputType = {
   teacherAuthMode?: true
   allowOAuthTeacherLogin?: true
   teacherSharedPasswordHash?: true
+  homeworkQuickDeadlines?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +174,7 @@ export type SchoolGroupByOutputType = {
   teacherAuthMode: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin: boolean
   teacherSharedPasswordHash: string | null
+  homeworkQuickDeadlines: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: SchoolCountAggregateOutputType | null
@@ -204,6 +207,7 @@ export type SchoolWhereInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFilter<"School"> | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFilter<"School"> | boolean
   teacherSharedPasswordHash?: Prisma.StringNullableFilter<"School"> | string | null
+  homeworkQuickDeadlines?: Prisma.JsonNullableFilter<"School">
   createdAt?: Prisma.DateTimeFilter<"School"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"School"> | Date | string
   terms?: Prisma.AcademicTermListRelationFilter
@@ -219,6 +223,7 @@ export type SchoolOrderByWithRelationInput = {
   teacherAuthMode?: Prisma.SortOrder
   allowOAuthTeacherLogin?: Prisma.SortOrder
   teacherSharedPasswordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeworkQuickDeadlines?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   terms?: Prisma.AcademicTermOrderByRelationAggregateInput
@@ -237,6 +242,7 @@ export type SchoolWhereUniqueInput = Prisma.AtLeast<{
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFilter<"School"> | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFilter<"School"> | boolean
   teacherSharedPasswordHash?: Prisma.StringNullableFilter<"School"> | string | null
+  homeworkQuickDeadlines?: Prisma.JsonNullableFilter<"School">
   createdAt?: Prisma.DateTimeFilter<"School"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"School"> | Date | string
   terms?: Prisma.AcademicTermListRelationFilter
@@ -252,6 +258,7 @@ export type SchoolOrderByWithAggregationInput = {
   teacherAuthMode?: Prisma.SortOrder
   allowOAuthTeacherLogin?: Prisma.SortOrder
   teacherSharedPasswordHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  homeworkQuickDeadlines?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SchoolCountOrderByAggregateInput
@@ -269,6 +276,7 @@ export type SchoolScalarWhereWithAggregatesInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeWithAggregatesFilter<"School"> | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolWithAggregatesFilter<"School"> | boolean
   teacherSharedPasswordHash?: Prisma.StringNullableWithAggregatesFilter<"School"> | string | null
+  homeworkQuickDeadlines?: Prisma.JsonNullableWithAggregatesFilter<"School">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"School"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"School"> | Date | string
 }
@@ -280,6 +288,7 @@ export type SchoolCreateInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermCreateNestedManyWithoutSchoolInput
@@ -295,6 +304,7 @@ export type SchoolUncheckedCreateInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermUncheckedCreateNestedManyWithoutSchoolInput
@@ -310,6 +320,7 @@ export type SchoolUpdateInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUpdateManyWithoutSchoolNestedInput
@@ -325,6 +336,7 @@ export type SchoolUncheckedUpdateInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUncheckedUpdateManyWithoutSchoolNestedInput
@@ -340,6 +352,7 @@ export type SchoolCreateManyInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -351,6 +364,7 @@ export type SchoolUpdateManyMutationInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -362,6 +376,7 @@ export type SchoolUncheckedUpdateManyInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -373,6 +388,7 @@ export type SchoolCountOrderByAggregateInput = {
   teacherAuthMode?: Prisma.SortOrder
   allowOAuthTeacherLogin?: Prisma.SortOrder
   teacherSharedPasswordHash?: Prisma.SortOrder
+  homeworkQuickDeadlines?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -471,6 +487,7 @@ export type SchoolCreateWithoutMembersInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermCreateNestedManyWithoutSchoolInput
@@ -485,6 +502,7 @@ export type SchoolUncheckedCreateWithoutMembersInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermUncheckedCreateNestedManyWithoutSchoolInput
@@ -515,6 +533,7 @@ export type SchoolUpdateWithoutMembersInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUpdateManyWithoutSchoolNestedInput
@@ -529,6 +548,7 @@ export type SchoolUncheckedUpdateWithoutMembersInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUncheckedUpdateManyWithoutSchoolNestedInput
@@ -543,6 +563,7 @@ export type SchoolCreateWithoutTermsInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.SubjectCreateNestedManyWithoutSchoolInput
@@ -557,6 +578,7 @@ export type SchoolUncheckedCreateWithoutTermsInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutSchoolInput
@@ -587,6 +609,7 @@ export type SchoolUpdateWithoutTermsInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.SubjectUpdateManyWithoutSchoolNestedInput
@@ -601,6 +624,7 @@ export type SchoolUncheckedUpdateWithoutTermsInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subjects?: Prisma.SubjectUncheckedUpdateManyWithoutSchoolNestedInput
@@ -615,6 +639,7 @@ export type SchoolCreateWithoutSubjectsInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermCreateNestedManyWithoutSchoolInput
@@ -629,6 +654,7 @@ export type SchoolUncheckedCreateWithoutSubjectsInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermUncheckedCreateNestedManyWithoutSchoolInput
@@ -659,6 +685,7 @@ export type SchoolUpdateWithoutSubjectsInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUpdateManyWithoutSchoolNestedInput
@@ -673,6 +700,7 @@ export type SchoolUncheckedUpdateWithoutSubjectsInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUncheckedUpdateManyWithoutSchoolNestedInput
@@ -687,6 +715,7 @@ export type SchoolCreateWithoutClassroomScreensInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermCreateNestedManyWithoutSchoolInput
@@ -701,6 +730,7 @@ export type SchoolUncheckedCreateWithoutClassroomScreensInput = {
   teacherAuthMode?: $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   terms?: Prisma.AcademicTermUncheckedCreateNestedManyWithoutSchoolInput
@@ -731,6 +761,7 @@ export type SchoolUpdateWithoutClassroomScreensInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUpdateManyWithoutSchoolNestedInput
@@ -745,6 +776,7 @@ export type SchoolUncheckedUpdateWithoutClassroomScreensInput = {
   teacherAuthMode?: Prisma.EnumTeacherAuthModeFieldUpdateOperationsInput | $Enums.TeacherAuthMode
   allowOAuthTeacherLogin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   teacherSharedPasswordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  homeworkQuickDeadlines?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   terms?: Prisma.AcademicTermUncheckedUpdateManyWithoutSchoolNestedInput
@@ -817,6 +849,7 @@ export type SchoolSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   teacherAuthMode?: boolean
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: boolean
+  homeworkQuickDeadlines?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   terms?: boolean | Prisma.School$termsArgs<ExtArgs>
@@ -833,6 +866,7 @@ export type SchoolSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   teacherAuthMode?: boolean
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: boolean
+  homeworkQuickDeadlines?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["school"]>
@@ -844,6 +878,7 @@ export type SchoolSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   teacherAuthMode?: boolean
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: boolean
+  homeworkQuickDeadlines?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["school"]>
@@ -855,11 +890,12 @@ export type SchoolSelectScalar = {
   teacherAuthMode?: boolean
   allowOAuthTeacherLogin?: boolean
   teacherSharedPasswordHash?: boolean
+  homeworkQuickDeadlines?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SchoolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "teacherAuthMode" | "allowOAuthTeacherLogin" | "teacherSharedPasswordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
+export type SchoolOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name" | "teacherAuthMode" | "allowOAuthTeacherLogin" | "teacherSharedPasswordHash" | "homeworkQuickDeadlines" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
 export type SchoolInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   terms?: boolean | Prisma.School$termsArgs<ExtArgs>
   subjects?: boolean | Prisma.School$subjectsArgs<ExtArgs>
@@ -885,6 +921,7 @@ export type $SchoolPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     teacherAuthMode: $Enums.TeacherAuthMode
     allowOAuthTeacherLogin: boolean
     teacherSharedPasswordHash: string | null
+    homeworkQuickDeadlines: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["school"]>
@@ -1320,6 +1357,7 @@ export interface SchoolFieldRefs {
   readonly teacherAuthMode: Prisma.FieldRef<"School", 'TeacherAuthMode'>
   readonly allowOAuthTeacherLogin: Prisma.FieldRef<"School", 'Boolean'>
   readonly teacherSharedPasswordHash: Prisma.FieldRef<"School", 'String'>
+  readonly homeworkQuickDeadlines: Prisma.FieldRef<"School", 'Json'>
   readonly createdAt: Prisma.FieldRef<"School", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"School", 'DateTime'>
 }

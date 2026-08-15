@@ -8,6 +8,7 @@ import {
     validateScreenLoginCode,
     validateScreenPin,
 } from "../domain/classroomScreenAccount.js";
+import {sanitizeHomeworkQuickDeadlines} from "../domain/schoolHomeworkSettings.js";
 
 const MAX_LOGIN_FAILURES = 5;
 const LOCK_MINUTES = 15;
@@ -15,7 +16,7 @@ const BCRYPT_ROUNDS = Math.min(14, Math.max(10, Number(process.env.LOCAL_AUTH_BC
 const DUMMY_HASH = "$2b$12$C6UzMDM.H6dfI/f/IKcEe.5l4KJg7jL7vY4PZwXH0mD7tZKX8zXn2";
 
 const screenInclude = {
-    school: {select: {id: true, code: true, name: true}},
+    school: {select: {id: true, code: true, name: true, homeworkQuickDeadlines: true}},
     administrativeClass: {
         include: {
             term: {include: {school: {select: {id: true, code: true, name: true}}}},
@@ -410,6 +411,9 @@ export async function listClassroomScreenTargets(binding) {
     return {
         binding: publicScreenBinding(binding),
         workspaces: await resolveClassroomScreenWorkspaces(binding),
+        homeworkSettings: {
+            quickDeadlines: sanitizeHomeworkQuickDeadlines(binding.school?.homeworkQuickDeadlines),
+        },
     };
 }
 

@@ -200,7 +200,7 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
+   *
    * Count returned ClassroomScreenBindings
   **/
   _count?: true | ClassroomScreenBindingCountAggregateInputType
@@ -218,13 +218,13 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
   _sum?: ClassroomScreenBindingSumAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
+   *
    * Select which fields to find the minimum value
   **/
   _min?: ClassroomScreenBindingMinAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
+   *
    * Select which fields to find the maximum value
   **/
   _max?: ClassroomScreenBindingMaxAggregateInputType
@@ -2078,7 +2078,7 @@ export interface ClassroomScreenBindingDelegate<ExtArgs extends runtime.Types.Ex
    * @example
    * // Get all ClassroomScreenBindings
    * const classroomScreenBindings = await prisma.classroomScreenBinding.findMany()
-   * 
+   *
    * // Get first 10 ClassroomScreenBindings
    * const classroomScreenBindings = await prisma.classroomScreenBinding.findMany({ take: 10 })
    * 

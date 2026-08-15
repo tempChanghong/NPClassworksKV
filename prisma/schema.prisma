@@ -222,6 +222,7 @@ model School {
   teacherAuthMode           TeacherAuthMode @default(LOCAL_PIN)
   allowOAuthTeacherLogin    Boolean         @default(false)
   teacherSharedPasswordHash String?         @db.VarChar(191)
+  homeworkQuickDeadlines    Json?           @db.Json
   createdAt                 DateTime        @default(now()) @db.Timestamptz(6)
   updatedAt                 DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
 
