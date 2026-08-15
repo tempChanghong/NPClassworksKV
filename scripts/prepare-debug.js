@@ -36,11 +36,13 @@ const [
     {localProviderId},
     localAccountService,
     {importOrganization},
+    classroomScreenService,
 ] = await Promise.all([
     import("../utils/prisma.js"),
     import("../domain/localAccount.js"),
     import("../services/localAccountService.js"),
     import("../services/organizationAdminService.js"),
+    import("../services/classroomScreenService.js"),
 ]);
 
 const schoolCode = "DEBUG-SCHOOL";
@@ -50,6 +52,7 @@ const credentials = {
     backup: {username: "backup-admin", pin: "260102", name: "调试备用管理员"},
     classOne: {username: "class1-teacher", pin: "260101", name: "一班教师"},
     streamed: {username: "walk-teacher", pin: "260103", name: "走班教师"},
+    screen: {loginCode: "G2-C1-SCREEN", pin: "260110", name: "高二1班一体机"},
 };
 
 try {
@@ -123,12 +126,48 @@ try {
         role: "ADMIN",
     });
 
+    const administrativeClass = await prisma.workspace.findFirst({
+        where: {termId: term.id, type: "ADMIN_CLASS", code: "G2-C1"},
+    });
+    let existingScreen = await prisma.classroomScreenBinding.findUnique({
+        where: {schoolId_loginCode: {schoolId: school.id, loginCode: credentials.screen.loginCode}},
+    });
+    const legacyScreen = await prisma.classroomScreenBinding.findFirst({
+        where: {
+            schoolId: school.id,
+            administrativeClassId: administrativeClass.id,
+            deviceFingerprint: {not: null},
+            ...(existingScreen ? {NOT: {id: existingScreen.id}} : {}),
+        },
+        orderBy: {createdAt: "asc"},
+    });
+    if (legacyScreen) {
+        if (existingScreen && !existingScreen.deviceFingerprint) {
+            await prisma.classroomScreenBinding.delete({where: {id: existingScreen.id}});
+        }
+        existingScreen = await classroomScreenService.configureClassroomScreenAccount({
+            managerAccountId: owner.id,
+            schoolId: school.id,
+            bindingId: legacyScreen.id,
+            loginCode: credentials.screen.loginCode,
+            pin: credentials.screen.pin,
+        });
+    } else if (!existingScreen) {
+        await classroomScreenService.createClassroomScreenAccount({
+            managerAccountId: owner.id,
+            schoolId: school.id,
+            administrativeClassId: administrativeClass.id,
+            ...credentials.screen,
+        });
+    }
+
     console.log("\n本地调试数据准备完成：");
     console.log(`学校代码：${schoolCode}`);
     console.log(`OWNER：${credentials.owner.username} / ${credentials.owner.pin}`);
     console.log(`备用管理员：${credentials.backup.username} / ${credentials.backup.pin}`);
     console.log(`一班教师：${credentials.classOne.username} / ${credentials.classOne.pin}`);
     console.log(`走班教师：${credentials.streamed.username} / ${credentials.streamed.pin}`);
+    console.log(`一班大屏：${credentials.screen.loginCode} / ${credentials.screen.pin}`);
     console.log("管理页：http://localhost:3031/classworks-admin");
     console.log("Classworks 作业板：http://localhost:3031/");
 } finally {

@@ -117,7 +117,7 @@ export type Publication = Prisma.PublicationModel
 export type PublicationTarget = Prisma.PublicationTargetModel
 /**
  * Model ClassroomScreenBinding
- * 一体机只需由学校管理员绑定一次，之后使用随机令牌提交未认证版本。
+ * 班级大屏使用独立设备账号首次登录，之后使用随机令牌提交未认证版本。
  */
 export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
 /**

@@ -2524,8 +2524,14 @@ export const ClassroomScreenBindingScalarFieldEnum = {
   administrativeClassId: 'administrativeClassId',
   deviceFingerprint: 'deviceFingerprint',
   name: 'name',
+  loginCode: 'loginCode',
+  pinHash: 'pinHash',
   tokenHash: 'tokenHash',
   isActive: 'isActive',
+  loginFailures: 'loginFailures',
+  lockedUntil: 'lockedUntil',
+  credentialVersion: 'credentialVersion',
+  activatedAt: 'activatedAt',
   lastUsedAt: 'lastUsedAt',
   createdByAccountId: 'createdByAccountId',
   createdAt: 'createdAt',
@@ -2541,6 +2547,7 @@ export const NotificationScreenDeliveryScalarFieldEnum = {
   revision: 'revision',
   receivedAt: 'receivedAt',
   displayedAt: 'displayedAt',
+  acknowledgedAt: 'acknowledgedAt',
   updatedAt: 'updatedAt'
 } as const
 

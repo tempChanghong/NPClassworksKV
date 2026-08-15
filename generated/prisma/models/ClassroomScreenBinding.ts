@@ -14,14 +14,26 @@ import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model ClassroomScreenBinding
- * 一体机只需由学校管理员绑定一次，之后使用随机令牌提交未认证版本。
+ * 班级大屏使用独立设备账号首次登录，之后使用随机令牌提交未认证版本。
  */
 export type ClassroomScreenBindingModel = runtime.Types.Result.DefaultSelection<Prisma.$ClassroomScreenBindingPayload>
 
 export type AggregateClassroomScreenBinding = {
   _count: ClassroomScreenBindingCountAggregateOutputType | null
+  _avg: ClassroomScreenBindingAvgAggregateOutputType | null
+  _sum: ClassroomScreenBindingSumAggregateOutputType | null
   _min: ClassroomScreenBindingMinAggregateOutputType | null
   _max: ClassroomScreenBindingMaxAggregateOutputType | null
+}
+
+export type ClassroomScreenBindingAvgAggregateOutputType = {
+  loginFailures: number | null
+  credentialVersion: number | null
+}
+
+export type ClassroomScreenBindingSumAggregateOutputType = {
+  loginFailures: number | null
+  credentialVersion: number | null
 }
 
 export type ClassroomScreenBindingMinAggregateOutputType = {
@@ -30,8 +42,14 @@ export type ClassroomScreenBindingMinAggregateOutputType = {
   administrativeClassId: string | null
   deviceFingerprint: string | null
   name: string | null
+  loginCode: string | null
+  pinHash: string | null
   tokenHash: string | null
   isActive: boolean | null
+  loginFailures: number | null
+  lockedUntil: Date | null
+  credentialVersion: number | null
+  activatedAt: Date | null
   lastUsedAt: Date | null
   createdByAccountId: string | null
   createdAt: Date | null
@@ -44,8 +62,14 @@ export type ClassroomScreenBindingMaxAggregateOutputType = {
   administrativeClassId: string | null
   deviceFingerprint: string | null
   name: string | null
+  loginCode: string | null
+  pinHash: string | null
   tokenHash: string | null
   isActive: boolean | null
+  loginFailures: number | null
+  lockedUntil: Date | null
+  credentialVersion: number | null
+  activatedAt: Date | null
   lastUsedAt: Date | null
   createdByAccountId: string | null
   createdAt: Date | null
@@ -58,8 +82,14 @@ export type ClassroomScreenBindingCountAggregateOutputType = {
   administrativeClassId: number
   deviceFingerprint: number
   name: number
+  loginCode: number
+  pinHash: number
   tokenHash: number
   isActive: number
+  loginFailures: number
+  lockedUntil: number
+  credentialVersion: number
+  activatedAt: number
   lastUsedAt: number
   createdByAccountId: number
   createdAt: number
@@ -68,14 +98,30 @@ export type ClassroomScreenBindingCountAggregateOutputType = {
 }
 
 
+export type ClassroomScreenBindingAvgAggregateInputType = {
+  loginFailures?: true
+  credentialVersion?: true
+}
+
+export type ClassroomScreenBindingSumAggregateInputType = {
+  loginFailures?: true
+  credentialVersion?: true
+}
+
 export type ClassroomScreenBindingMinAggregateInputType = {
   id?: true
   schoolId?: true
   administrativeClassId?: true
   deviceFingerprint?: true
   name?: true
+  loginCode?: true
+  pinHash?: true
   tokenHash?: true
   isActive?: true
+  loginFailures?: true
+  lockedUntil?: true
+  credentialVersion?: true
+  activatedAt?: true
   lastUsedAt?: true
   createdByAccountId?: true
   createdAt?: true
@@ -88,8 +134,14 @@ export type ClassroomScreenBindingMaxAggregateInputType = {
   administrativeClassId?: true
   deviceFingerprint?: true
   name?: true
+  loginCode?: true
+  pinHash?: true
   tokenHash?: true
   isActive?: true
+  loginFailures?: true
+  lockedUntil?: true
+  credentialVersion?: true
+  activatedAt?: true
   lastUsedAt?: true
   createdByAccountId?: true
   createdAt?: true
@@ -102,8 +154,14 @@ export type ClassroomScreenBindingCountAggregateInputType = {
   administrativeClassId?: true
   deviceFingerprint?: true
   name?: true
+  loginCode?: true
+  pinHash?: true
   tokenHash?: true
   isActive?: true
+  loginFailures?: true
+  lockedUntil?: true
+  credentialVersion?: true
+  activatedAt?: true
   lastUsedAt?: true
   createdByAccountId?: true
   createdAt?: true
@@ -118,25 +176,25 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ClassroomScreenBindingWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-   * 
+   *
    * Determine the order of ClassroomScreenBindings to fetch.
    */
   orderBy?: Prisma.ClassroomScreenBindingOrderByWithRelationInput | Prisma.ClassroomScreenBindingOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-   * 
+   *
    * Sets the start position
    */
   cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-   * 
+   *
    * Take `±n` ClassroomScreenBindings from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-   * 
+   *
    * Skip the first `n` ClassroomScreenBindings.
    */
   skip?: number
@@ -146,6 +204,18 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
    * Count returned ClassroomScreenBindings
   **/
   _count?: true | ClassroomScreenBindingCountAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to average
+  **/
+  _avg?: ClassroomScreenBindingAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to sum
+  **/
+  _sum?: ClassroomScreenBindingSumAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
@@ -179,6 +249,8 @@ export type ClassroomScreenBindingGroupByArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   _count?: ClassroomScreenBindingCountAggregateInputType | true
+  _avg?: ClassroomScreenBindingAvgAggregateInputType
+  _sum?: ClassroomScreenBindingSumAggregateInputType
   _min?: ClassroomScreenBindingMinAggregateInputType
   _max?: ClassroomScreenBindingMaxAggregateInputType
 }
@@ -187,15 +259,23 @@ export type ClassroomScreenBindingGroupByOutputType = {
   id: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint: string | null
   name: string
+  loginCode: string | null
+  pinHash: string | null
   tokenHash: string
   isActive: boolean
+  loginFailures: number
+  lockedUntil: Date | null
+  credentialVersion: number
+  activatedAt: Date | null
   lastUsedAt: Date | null
   createdByAccountId: string
   createdAt: Date
   updatedAt: Date
   _count: ClassroomScreenBindingCountAggregateOutputType | null
+  _avg: ClassroomScreenBindingAvgAggregateOutputType | null
+  _sum: ClassroomScreenBindingSumAggregateOutputType | null
   _min: ClassroomScreenBindingMinAggregateOutputType | null
   _max: ClassroomScreenBindingMaxAggregateOutputType | null
 }
@@ -222,10 +302,16 @@ export type ClassroomScreenBindingWhereInput = {
   id?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   schoolId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   administrativeClassId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
-  deviceFingerprint?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  deviceFingerprint?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   name?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  loginCode?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
+  pinHash?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   tokenHash?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   isActive?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  loginFailures?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -243,10 +329,16 @@ export type ClassroomScreenBindingOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   schoolId?: Prisma.SortOrder
   administrativeClassId?: Prisma.SortOrder
-  deviceFingerprint?: Prisma.SortOrder
+  deviceFingerprint?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
+  loginCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinHash?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  loginFailures?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -264,14 +356,21 @@ export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   tokenHash?: string
   schoolId_deviceFingerprint?: Prisma.ClassroomScreenBindingSchoolIdDeviceFingerprintCompoundUniqueInput
+  schoolId_loginCode?: Prisma.ClassroomScreenBindingSchoolIdLoginCodeCompoundUniqueInput
   AND?: Prisma.ClassroomScreenBindingWhereInput | Prisma.ClassroomScreenBindingWhereInput[]
   OR?: Prisma.ClassroomScreenBindingWhereInput[]
   NOT?: Prisma.ClassroomScreenBindingWhereInput | Prisma.ClassroomScreenBindingWhereInput[]
   schoolId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   administrativeClassId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
-  deviceFingerprint?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  deviceFingerprint?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   name?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  loginCode?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
+  pinHash?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   isActive?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  loginFailures?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -283,23 +382,31 @@ export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   publicationRevisions?: Prisma.PublicationRevisionListRelationFilter
   notificationDeliveries?: Prisma.NotificationScreenDeliveryListRelationFilter
   attendanceDaysUpdated?: Prisma.ClassAttendanceDayListRelationFilter
-}, "id" | "tokenHash" | "schoolId_deviceFingerprint">
+}, "id" | "tokenHash" | "schoolId_deviceFingerprint" | "schoolId_loginCode">
 
 export type ClassroomScreenBindingOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   schoolId?: Prisma.SortOrder
   administrativeClassId?: Prisma.SortOrder
-  deviceFingerprint?: Prisma.SortOrder
+  deviceFingerprint?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
+  loginCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinHash?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  loginFailures?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ClassroomScreenBindingCountOrderByAggregateInput
+  _avg?: Prisma.ClassroomScreenBindingAvgOrderByAggregateInput
   _max?: Prisma.ClassroomScreenBindingMaxOrderByAggregateInput
   _min?: Prisma.ClassroomScreenBindingMinOrderByAggregateInput
+  _sum?: Prisma.ClassroomScreenBindingSumOrderByAggregateInput
 }
 
 export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
@@ -309,10 +416,16 @@ export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
   schoolId?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
   administrativeClassId?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
-  deviceFingerprint?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
+  deviceFingerprint?: Prisma.StringNullableWithAggregatesFilter<"ClassroomScreenBinding"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
+  loginCode?: Prisma.StringNullableWithAggregatesFilter<"ClassroomScreenBinding"> | string | null
+  pinHash?: Prisma.StringNullableWithAggregatesFilter<"ClassroomScreenBinding"> | string | null
   tokenHash?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"ClassroomScreenBinding"> | boolean
+  loginFailures?: Prisma.IntWithAggregatesFilter<"ClassroomScreenBinding"> | number
+  lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
+  credentialVersion?: Prisma.IntWithAggregatesFilter<"ClassroomScreenBinding"> | number
+  activatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   createdByAccountId?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string
@@ -321,10 +434,16 @@ export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
 
 export type ClassroomScreenBindingCreateInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -341,10 +460,16 @@ export type ClassroomScreenBindingUncheckedCreateInput = {
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -357,10 +482,16 @@ export type ClassroomScreenBindingUncheckedCreateInput = {
 
 export type ClassroomScreenBindingUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,10 +508,16 @@ export type ClassroomScreenBindingUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -395,10 +532,16 @@ export type ClassroomScreenBindingCreateManyInput = {
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -407,10 +550,16 @@ export type ClassroomScreenBindingCreateManyInput = {
 
 export type ClassroomScreenBindingUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -420,10 +569,16 @@ export type ClassroomScreenBindingUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -450,18 +605,34 @@ export type ClassroomScreenBindingSchoolIdDeviceFingerprintCompoundUniqueInput =
   deviceFingerprint: string
 }
 
+export type ClassroomScreenBindingSchoolIdLoginCodeCompoundUniqueInput = {
+  schoolId: string
+  loginCode: string
+}
+
 export type ClassroomScreenBindingCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   schoolId?: Prisma.SortOrder
   administrativeClassId?: Prisma.SortOrder
   deviceFingerprint?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  loginCode?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  loginFailures?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClassroomScreenBindingAvgOrderByAggregateInput = {
+  loginFailures?: Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
 }
 
 export type ClassroomScreenBindingMaxOrderByAggregateInput = {
@@ -470,8 +641,14 @@ export type ClassroomScreenBindingMaxOrderByAggregateInput = {
   administrativeClassId?: Prisma.SortOrder
   deviceFingerprint?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  loginCode?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  loginFailures?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,12 +661,23 @@ export type ClassroomScreenBindingMinOrderByAggregateInput = {
   administrativeClassId?: Prisma.SortOrder
   deviceFingerprint?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  loginCode?: Prisma.SortOrder
+  pinHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  loginFailures?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ClassroomScreenBindingSumOrderByAggregateInput = {
+  loginFailures?: Prisma.SortOrder
+  credentialVersion?: Prisma.SortOrder
 }
 
 export type ClassroomScreenBindingScalarRelationFilter = {
@@ -687,10 +875,16 @@ export type ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInpu
 
 export type ClassroomScreenBindingCreateWithoutCreatedByInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -706,10 +900,16 @@ export type ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput = {
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -752,10 +952,16 @@ export type ClassroomScreenBindingScalarWhereInput = {
   id?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   schoolId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   administrativeClassId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
-  deviceFingerprint?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  deviceFingerprint?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   name?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
+  loginCode?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
+  pinHash?: Prisma.StringNullableFilter<"ClassroomScreenBinding"> | string | null
   tokenHash?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   isActive?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  loginFailures?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
+  activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -764,10 +970,16 @@ export type ClassroomScreenBindingScalarWhereInput = {
 
 export type ClassroomScreenBindingCreateWithoutSchoolInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -782,10 +994,16 @@ export type ClassroomScreenBindingCreateWithoutSchoolInput = {
 export type ClassroomScreenBindingUncheckedCreateWithoutSchoolInput = {
   id?: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -824,10 +1042,16 @@ export type ClassroomScreenBindingUpdateManyWithWhereWithoutSchoolInput = {
 
 export type ClassroomScreenBindingCreateWithoutAdministrativeClassInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -842,10 +1066,16 @@ export type ClassroomScreenBindingCreateWithoutAdministrativeClassInput = {
 export type ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput = {
   id?: string
   schoolId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -884,10 +1114,16 @@ export type ClassroomScreenBindingUpdateManyWithWhereWithoutAdministrativeClassI
 
 export type ClassroomScreenBindingCreateWithoutLatestPublicationsInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -903,10 +1139,16 @@ export type ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput 
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -934,10 +1176,16 @@ export type ClassroomScreenBindingUpdateToOneWithWhereWithoutLatestPublicationsI
 
 export type ClassroomScreenBindingUpdateWithoutLatestPublicationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -953,10 +1201,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput 
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -968,10 +1222,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput 
 
 export type ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -987,10 +1247,16 @@ export type ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesIn
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -1018,10 +1284,16 @@ export type ClassroomScreenBindingUpdateToOneWithWhereWithoutNotificationDeliver
 
 export type ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1037,10 +1309,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesIn
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1052,10 +1330,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesIn
 
 export type ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1071,10 +1355,16 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInp
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -1102,10 +1392,16 @@ export type ClassroomScreenBindingUpdateToOneWithWhereWithoutAttendanceDaysUpdat
 
 export type ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1121,10 +1417,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInp
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1136,10 +1438,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInp
 
 export type ClassroomScreenBindingCreateWithoutPublicationRevisionsInput = {
   id?: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1155,10 +1463,16 @@ export type ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInpu
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -1186,10 +1500,16 @@ export type ClassroomScreenBindingUpdateToOneWithWhereWithoutPublicationRevision
 
 export type ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1205,10 +1525,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInpu
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1222,10 +1548,16 @@ export type ClassroomScreenBindingCreateManyCreatedByInput = {
   id?: string
   schoolId: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1233,10 +1565,16 @@ export type ClassroomScreenBindingCreateManyCreatedByInput = {
 
 export type ClassroomScreenBindingUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1252,10 +1590,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1269,10 +1613,16 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1281,10 +1631,16 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput = {
 export type ClassroomScreenBindingCreateManySchoolInput = {
   id?: string
   administrativeClassId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -1293,10 +1649,16 @@ export type ClassroomScreenBindingCreateManySchoolInput = {
 
 export type ClassroomScreenBindingUpdateWithoutSchoolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1311,10 +1673,16 @@ export type ClassroomScreenBindingUpdateWithoutSchoolInput = {
 export type ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1328,10 +1696,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput = {
 export type ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1341,10 +1715,16 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput = {
 export type ClassroomScreenBindingCreateManyAdministrativeClassInput = {
   id?: string
   schoolId: string
-  deviceFingerprint: string
+  deviceFingerprint?: string | null
   name: string
+  loginCode?: string | null
+  pinHash?: string | null
   tokenHash: string
   isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   createdByAccountId: string
   createdAt?: Date | string
@@ -1353,10 +1733,16 @@ export type ClassroomScreenBindingCreateManyAdministrativeClassInput = {
 
 export type ClassroomScreenBindingUpdateWithoutAdministrativeClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1371,10 +1757,16 @@ export type ClassroomScreenBindingUpdateWithoutAdministrativeClassInput = {
 export type ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1388,10 +1780,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput
 export type ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   schoolId?: Prisma.StringFieldUpdateOperationsInput | string
-  deviceFingerprint?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1462,8 +1860,14 @@ export type ClassroomScreenBindingSelect<ExtArgs extends runtime.Types.Extension
   administrativeClassId?: boolean
   deviceFingerprint?: boolean
   name?: boolean
+  loginCode?: boolean
+  pinHash?: boolean
   tokenHash?: boolean
   isActive?: boolean
+  loginFailures?: boolean
+  lockedUntil?: boolean
+  credentialVersion?: boolean
+  activatedAt?: boolean
   lastUsedAt?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
@@ -1484,8 +1888,14 @@ export type ClassroomScreenBindingSelectCreateManyAndReturn<ExtArgs extends runt
   administrativeClassId?: boolean
   deviceFingerprint?: boolean
   name?: boolean
+  loginCode?: boolean
+  pinHash?: boolean
   tokenHash?: boolean
   isActive?: boolean
+  loginFailures?: boolean
+  lockedUntil?: boolean
+  credentialVersion?: boolean
+  activatedAt?: boolean
   lastUsedAt?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
@@ -1501,8 +1911,14 @@ export type ClassroomScreenBindingSelectUpdateManyAndReturn<ExtArgs extends runt
   administrativeClassId?: boolean
   deviceFingerprint?: boolean
   name?: boolean
+  loginCode?: boolean
+  pinHash?: boolean
   tokenHash?: boolean
   isActive?: boolean
+  loginFailures?: boolean
+  lockedUntil?: boolean
+  credentialVersion?: boolean
+  activatedAt?: boolean
   lastUsedAt?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
@@ -1518,15 +1934,21 @@ export type ClassroomScreenBindingSelectScalar = {
   administrativeClassId?: boolean
   deviceFingerprint?: boolean
   name?: boolean
+  loginCode?: boolean
+  pinHash?: boolean
   tokenHash?: boolean
   isActive?: boolean
+  loginFailures?: boolean
+  lockedUntil?: boolean
+  credentialVersion?: boolean
+  activatedAt?: boolean
   lastUsedAt?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "tokenHash" | "isActive" | "lastUsedAt" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
+export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "loginCode" | "pinHash" | "tokenHash" | "isActive" | "loginFailures" | "lockedUntil" | "credentialVersion" | "activatedAt" | "lastUsedAt" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
 export type ClassroomScreenBindingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   school?: boolean | Prisma.SchoolDefaultArgs<ExtArgs>
   administrativeClass?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -1563,10 +1985,16 @@ export type $ClassroomScreenBindingPayload<ExtArgs extends runtime.Types.Extensi
     id: string
     schoolId: string
     administrativeClassId: string
-    deviceFingerprint: string
+    deviceFingerprint: string | null
     name: string
+    loginCode: string | null
+    pinHash: string | null
     tokenHash: string
     isActive: boolean
+    loginFailures: number
+    lockedUntil: Date | null
+    credentialVersion: number
+    activatedAt: Date | null
     lastUsedAt: Date | null
     createdByAccountId: string
     createdAt: Date
@@ -2006,8 +2434,14 @@ export interface ClassroomScreenBindingFieldRefs {
   readonly administrativeClassId: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly deviceFingerprint: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly name: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
+  readonly loginCode: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
+  readonly pinHash: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly tokenHash: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly isActive: Prisma.FieldRef<"ClassroomScreenBinding", 'Boolean'>
+  readonly loginFailures: Prisma.FieldRef<"ClassroomScreenBinding", 'Int'>
+  readonly lockedUntil: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
+  readonly credentialVersion: Prisma.FieldRef<"ClassroomScreenBinding", 'Int'>
+  readonly activatedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly lastUsedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly createdByAccountId: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly createdAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>

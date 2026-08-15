@@ -30,8 +30,11 @@ import {
 } from "../../services/localAccountService.js";
 import {
     bindClassroomScreen,
+    configureClassroomScreenAccount,
+    createClassroomScreenAccount,
     listClassroomScreens,
-    setClassroomScreenActive,
+    resetClassroomScreenDevice,
+    updateClassroomScreenAccount,
 } from "../../services/classroomScreenService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
@@ -150,14 +153,50 @@ router.post("/schools/:schoolId/classroom-screens/bind", errors.catchAsync(async
     return res.status(201).json(errors.createSuccessResponse(result, "当前浏览器已绑定为班级大屏"));
 }));
 
-router.patch("/schools/:schoolId/classroom-screens/:bindingId", errors.catchAsync(async (req, res) => {
-    const binding = await setClassroomScreenActive({
+router.post("/schools/:schoolId/classroom-screen-accounts", errors.catchAsync(async (req, res) => {
+    const binding = await createClassroomScreenAccount({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        administrativeClassId: req.body?.administrativeClassId,
+        loginCode: req.body?.loginCode,
+        pin: req.body?.pin,
+        name: req.body?.name,
+    });
+    return res.status(201).json(errors.createSuccessResponse(binding, "大屏账号已创建"));
+}));
+
+router.patch("/schools/:schoolId/classroom-screens/:bindingId/account", errors.catchAsync(async (req, res) => {
+    const binding = await configureClassroomScreenAccount({
         managerAccountId: res.locals.account.id,
         schoolId: req.params.schoolId,
         bindingId: req.params.bindingId,
+        loginCode: req.body?.loginCode,
+        pin: req.body?.pin,
+    });
+    return res.json(errors.createSuccessResponse(binding, "现有大屏已升级为设备账号"));
+}));
+
+router.patch("/schools/:schoolId/classroom-screens/:bindingId", errors.catchAsync(async (req, res) => {
+    const binding = await updateClassroomScreenAccount({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        bindingId: req.params.bindingId,
+        administrativeClassId: req.body?.administrativeClassId,
+        loginCode: req.body?.loginCode,
+        pin: req.body?.pin,
+        name: req.body?.name,
         isActive: req.body?.isActive,
     });
-    return res.json(errors.createSuccessResponse(binding, binding.isActive ? "大屏绑定已启用" : "大屏绑定已停用"));
+    return res.json(errors.createSuccessResponse(binding, "大屏账号已更新"));
+}));
+
+router.post("/schools/:schoolId/classroom-screens/:bindingId/reset-device", errors.catchAsync(async (req, res) => {
+    const binding = await resetClassroomScreenDevice({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        bindingId: req.params.bindingId,
+    });
+    return res.json(errors.createSuccessResponse(binding, "原设备登录已失效，可在新设备上重新登录"));
 }));
 
 router.post("/schools/:schoolId/local-admins", errors.catchAsync(async (req, res) => {

@@ -457,15 +457,21 @@ model PublicationTarget {
   @@index([workspaceId, publicationId])
 }
 
-/// 一体机只需由学校管理员绑定一次，之后使用随机令牌提交未认证版本。
+/// 班级大屏使用独立设备账号首次登录，之后使用随机令牌提交未认证版本。
 model ClassroomScreenBinding {
   id                    String    @id @default(cuid()) @db.VarChar(191)
   schoolId              String    @db.VarChar(191)
   administrativeClassId String    @db.VarChar(191)
-  deviceFingerprint     String    @db.VarChar(191)
+  deviceFingerprint     String?   @db.VarChar(191)
   name                  String    @db.VarChar(191)
+  loginCode             String?   @db.VarChar(32)
+  pinHash               String?   @db.VarChar(191)
   tokenHash             String    @unique @db.VarChar(64)
   isActive              Boolean   @default(true)
+  loginFailures         Int       @default(0)
+  lockedUntil           DateTime? @db.Timestamptz(6)
+  credentialVersion     Int       @default(1)
+  activatedAt           DateTime? @db.Timestamptz(6)
   lastUsedAt            DateTime? @db.Timestamptz(6)
   createdByAccountId    String    @db.VarChar(191)
   createdAt             DateTime  @default(now()) @db.Timestamptz(6)
@@ -480,6 +486,7 @@ model ClassroomScreenBinding {
   attendanceDaysUpdated  ClassAttendanceDay[]         @relation("ClassAttendanceScreenUpdater")
 
   @@unique([schoolId, deviceFingerprint])
+  @@unique([schoolId, loginCode])
   @@index([administrativeClassId, isActive])
   @@index([createdByAccountId])
 }

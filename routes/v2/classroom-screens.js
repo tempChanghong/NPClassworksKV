@@ -1,9 +1,12 @@
 import {Router} from "express";
+import rateLimit from "express-rate-limit";
 import errors from "../../utils/errors.js";
 import {
     authenticateClassroomScreen,
+    loginClassroomScreen,
     listClassroomScreenTargets,
     resolveClassroomScreenWorkspaces,
+    verifyClassroomScreenPin,
 } from "../../services/classroomScreenService.js";
 import {
     copyScreenBoardDate,
@@ -22,6 +25,12 @@ import {
 import {acknowledgeScreenNotifications} from "../../services/notificationDeliveryService.js";
 
 const router = Router();
+const screenLoginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 30,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+});
 
 function readToken(req) {
     const explicit = req.get("X-Classworks-Screen-Token");
@@ -39,9 +48,24 @@ function parseExpectedRevision(req) {
     return match ? Number(match[1]) : null;
 }
 
+router.post("/login", screenLoginLimiter, errors.catchAsync(async (req, res) => {
+    const result = await loginClassroomScreen({
+        schoolCode: req.body?.schoolCode,
+        loginCode: req.body?.loginCode,
+        pin: req.body?.pin,
+        deviceFingerprint: req.body?.deviceFingerprint,
+    });
+    return res.json(errors.createSuccessResponse(result, "班级大屏登录成功"));
+}));
+
 router.use(errors.catchAsync(async (req, res, next) => {
     res.locals.classroomScreen = await authenticateClassroomScreen(readToken(req));
     next();
+}));
+
+router.post("/unlock", screenLoginLimiter, errors.catchAsync(async (req, res) => {
+    const result = await verifyClassroomScreenPin(res.locals.classroomScreen, req.body?.pin);
+    return res.json(errors.createSuccessResponse(result, "大屏 PIN 验证成功"));
 }));
 
 router.get("/session", errors.catchAsync(async (req, res) => {

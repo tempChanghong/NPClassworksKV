@@ -40,6 +40,7 @@ export type NotificationScreenDeliveryMinAggregateOutputType = {
   revision: number | null
   receivedAt: Date | null
   displayedAt: Date | null
+  acknowledgedAt: Date | null
   updatedAt: Date | null
 }
 
@@ -49,6 +50,7 @@ export type NotificationScreenDeliveryMaxAggregateOutputType = {
   revision: number | null
   receivedAt: Date | null
   displayedAt: Date | null
+  acknowledgedAt: Date | null
   updatedAt: Date | null
 }
 
@@ -58,6 +60,7 @@ export type NotificationScreenDeliveryCountAggregateOutputType = {
   revision: number
   receivedAt: number
   displayedAt: number
+  acknowledgedAt: number
   updatedAt: number
   _all: number
 }
@@ -77,6 +80,7 @@ export type NotificationScreenDeliveryMinAggregateInputType = {
   revision?: true
   receivedAt?: true
   displayedAt?: true
+  acknowledgedAt?: true
   updatedAt?: true
 }
 
@@ -86,6 +90,7 @@ export type NotificationScreenDeliveryMaxAggregateInputType = {
   revision?: true
   receivedAt?: true
   displayedAt?: true
+  acknowledgedAt?: true
   updatedAt?: true
 }
 
@@ -95,6 +100,7 @@ export type NotificationScreenDeliveryCountAggregateInputType = {
   revision?: true
   receivedAt?: true
   displayedAt?: true
+  acknowledgedAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -191,6 +197,7 @@ export type NotificationScreenDeliveryGroupByOutputType = {
   revision: number
   receivedAt: Date
   displayedAt: Date | null
+  acknowledgedAt: Date | null
   updatedAt: Date
   _count: NotificationScreenDeliveryCountAggregateOutputType | null
   _avg: NotificationScreenDeliveryAvgAggregateOutputType | null
@@ -223,6 +230,7 @@ export type NotificationScreenDeliveryWhereInput = {
   revision?: Prisma.IntFilter<"NotificationScreenDelivery"> | number
   receivedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
   displayedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
+  acknowledgedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
   publication?: Prisma.XOR<Prisma.PublicationScalarRelationFilter, Prisma.PublicationWhereInput>
   screenBinding?: Prisma.XOR<Prisma.ClassroomScreenBindingScalarRelationFilter, Prisma.ClassroomScreenBindingWhereInput>
@@ -234,6 +242,7 @@ export type NotificationScreenDeliveryOrderByWithRelationInput = {
   revision?: Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   displayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  acknowledgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   publication?: Prisma.PublicationOrderByWithRelationInput
   screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
@@ -249,6 +258,7 @@ export type NotificationScreenDeliveryWhereUniqueInput = Prisma.AtLeast<{
   revision?: Prisma.IntFilter<"NotificationScreenDelivery"> | number
   receivedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
   displayedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
+  acknowledgedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
   publication?: Prisma.XOR<Prisma.PublicationScalarRelationFilter, Prisma.PublicationWhereInput>
   screenBinding?: Prisma.XOR<Prisma.ClassroomScreenBindingScalarRelationFilter, Prisma.ClassroomScreenBindingWhereInput>
@@ -260,6 +270,7 @@ export type NotificationScreenDeliveryOrderByWithAggregationInput = {
   revision?: Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   displayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  acknowledgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationScreenDeliveryCountOrderByAggregateInput
   _avg?: Prisma.NotificationScreenDeliveryAvgOrderByAggregateInput
@@ -277,6 +288,7 @@ export type NotificationScreenDeliveryScalarWhereWithAggregatesInput = {
   revision?: Prisma.IntWithAggregatesFilter<"NotificationScreenDelivery"> | number
   receivedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationScreenDelivery"> | Date | string
   displayedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"NotificationScreenDelivery"> | Date | string | null
+  acknowledgedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"NotificationScreenDelivery"> | Date | string | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationScreenDelivery"> | Date | string
 }
 
@@ -284,6 +296,7 @@ export type NotificationScreenDeliveryCreateInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
   publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInput
   screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInput
@@ -295,6 +308,7 @@ export type NotificationScreenDeliveryUncheckedCreateInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -302,6 +316,7 @@ export type NotificationScreenDeliveryUpdateInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInput
   screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInput
@@ -313,6 +328,7 @@ export type NotificationScreenDeliveryUncheckedUpdateInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -322,6 +338,7 @@ export type NotificationScreenDeliveryCreateManyInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -329,6 +346,7 @@ export type NotificationScreenDeliveryUpdateManyMutationInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -338,6 +356,7 @@ export type NotificationScreenDeliveryUncheckedUpdateManyInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -362,6 +381,7 @@ export type NotificationScreenDeliveryCountOrderByAggregateInput = {
   revision?: Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   displayedAt?: Prisma.SortOrder
+  acknowledgedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -375,6 +395,7 @@ export type NotificationScreenDeliveryMaxOrderByAggregateInput = {
   revision?: Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   displayedAt?: Prisma.SortOrder
+  acknowledgedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -384,6 +405,7 @@ export type NotificationScreenDeliveryMinOrderByAggregateInput = {
   revision?: Prisma.SortOrder
   receivedAt?: Prisma.SortOrder
   displayedAt?: Prisma.SortOrder
+  acknowledgedAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -479,6 +501,7 @@ export type NotificationScreenDeliveryCreateWithoutPublicationInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
   screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInput
 }
@@ -488,6 +511,7 @@ export type NotificationScreenDeliveryUncheckedCreateWithoutPublicationInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -526,6 +550,7 @@ export type NotificationScreenDeliveryScalarWhereInput = {
   revision?: Prisma.IntFilter<"NotificationScreenDelivery"> | number
   receivedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
   displayedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
+  acknowledgedAt?: Prisma.DateTimeNullableFilter<"NotificationScreenDelivery"> | Date | string | null
   updatedAt?: Prisma.DateTimeFilter<"NotificationScreenDelivery"> | Date | string
 }
 
@@ -533,6 +558,7 @@ export type NotificationScreenDeliveryCreateWithoutScreenBindingInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
   publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInput
 }
@@ -542,6 +568,7 @@ export type NotificationScreenDeliveryUncheckedCreateWithoutScreenBindingInput =
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -576,6 +603,7 @@ export type NotificationScreenDeliveryCreateManyPublicationInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -583,6 +611,7 @@ export type NotificationScreenDeliveryUpdateWithoutPublicationInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInput
 }
@@ -592,6 +621,7 @@ export type NotificationScreenDeliveryUncheckedUpdateWithoutPublicationInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -600,6 +630,7 @@ export type NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationInput
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -608,6 +639,7 @@ export type NotificationScreenDeliveryCreateManyScreenBindingInput = {
   revision: number
   receivedAt?: Date | string
   displayedAt?: Date | string | null
+  acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
 }
 
@@ -615,6 +647,7 @@ export type NotificationScreenDeliveryUpdateWithoutScreenBindingInput = {
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInput
 }
@@ -624,6 +657,7 @@ export type NotificationScreenDeliveryUncheckedUpdateWithoutScreenBindingInput =
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -632,6 +666,7 @@ export type NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingInp
   revision?: Prisma.IntFieldUpdateOperationsInput | number
   receivedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -643,6 +678,7 @@ export type NotificationScreenDeliverySelect<ExtArgs extends runtime.Types.Exten
   revision?: boolean
   receivedAt?: boolean
   displayedAt?: boolean
+  acknowledgedAt?: boolean
   updatedAt?: boolean
   publication?: boolean | Prisma.PublicationDefaultArgs<ExtArgs>
   screenBinding?: boolean | Prisma.ClassroomScreenBindingDefaultArgs<ExtArgs>
@@ -654,6 +690,7 @@ export type NotificationScreenDeliverySelectCreateManyAndReturn<ExtArgs extends 
   revision?: boolean
   receivedAt?: boolean
   displayedAt?: boolean
+  acknowledgedAt?: boolean
   updatedAt?: boolean
   publication?: boolean | Prisma.PublicationDefaultArgs<ExtArgs>
   screenBinding?: boolean | Prisma.ClassroomScreenBindingDefaultArgs<ExtArgs>
@@ -665,6 +702,7 @@ export type NotificationScreenDeliverySelectUpdateManyAndReturn<ExtArgs extends 
   revision?: boolean
   receivedAt?: boolean
   displayedAt?: boolean
+  acknowledgedAt?: boolean
   updatedAt?: boolean
   publication?: boolean | Prisma.PublicationDefaultArgs<ExtArgs>
   screenBinding?: boolean | Prisma.ClassroomScreenBindingDefaultArgs<ExtArgs>
@@ -676,10 +714,11 @@ export type NotificationScreenDeliverySelectScalar = {
   revision?: boolean
   receivedAt?: boolean
   displayedAt?: boolean
+  acknowledgedAt?: boolean
   updatedAt?: boolean
 }
 
-export type NotificationScreenDeliveryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"publicationId" | "screenBindingId" | "revision" | "receivedAt" | "displayedAt" | "updatedAt", ExtArgs["result"]["notificationScreenDelivery"]>
+export type NotificationScreenDeliveryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"publicationId" | "screenBindingId" | "revision" | "receivedAt" | "displayedAt" | "acknowledgedAt" | "updatedAt", ExtArgs["result"]["notificationScreenDelivery"]>
 export type NotificationScreenDeliveryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   publication?: boolean | Prisma.PublicationDefaultArgs<ExtArgs>
   screenBinding?: boolean | Prisma.ClassroomScreenBindingDefaultArgs<ExtArgs>
@@ -705,6 +744,7 @@ export type $NotificationScreenDeliveryPayload<ExtArgs extends runtime.Types.Ext
     revision: number
     receivedAt: Date
     displayedAt: Date | null
+    acknowledgedAt: Date | null
     updatedAt: Date
   }, ExtArgs["result"]["notificationScreenDelivery"]>
   composites: {}
@@ -1136,6 +1176,7 @@ export interface NotificationScreenDeliveryFieldRefs {
   readonly revision: Prisma.FieldRef<"NotificationScreenDelivery", 'Int'>
   readonly receivedAt: Prisma.FieldRef<"NotificationScreenDelivery", 'DateTime'>
   readonly displayedAt: Prisma.FieldRef<"NotificationScreenDelivery", 'DateTime'>
+  readonly acknowledgedAt: Prisma.FieldRef<"NotificationScreenDelivery", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"NotificationScreenDelivery", 'DateTime'>
 }
     
