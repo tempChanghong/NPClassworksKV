@@ -36,6 +36,12 @@ import {
     resetClassroomScreenDevice,
     updateClassroomScreenAccount,
 } from "../../services/classroomScreenService.js";
+import {
+    createManagedCourseGroup,
+    getManagedAcademicStructure,
+    replaceAdministrativeClassSubjectRules,
+    updateManagedCourseGroup,
+} from "../../services/academicStructureManagementService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -124,6 +130,56 @@ router.get("/schools/:schoolId/workspace-memberships", errors.catchAsync(async (
         termId: req.query.termId,
     });
     return res.json(errors.createSuccessResponse(roster));
+}));
+
+router.get("/schools/:schoolId/academic-structure", errors.catchAsync(async (req, res) => {
+    const structure = await getManagedAcademicStructure({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.query.termId,
+    });
+    return res.json(errors.createSuccessResponse(structure));
+}));
+
+router.put("/schools/:schoolId/administrative-classes/:classId/subject-rules", errors.catchAsync(async (req, res) => {
+    const administrativeClass = await replaceAdministrativeClassSubjectRules({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        administrativeClassId: req.params.classId,
+        subjectRules: req.body?.subjectRules,
+        removeConflictingSources: req.body?.removeConflictingSources === true,
+    });
+    return res.json(errors.createSuccessResponse(administrativeClass, "行政班授课规则已更新"));
+}));
+
+router.post("/schools/:schoolId/course-groups", errors.catchAsync(async (req, res) => {
+    const courseGroup = await createManagedCourseGroup({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.body?.termId,
+        gradeId: req.body?.gradeId,
+        code: req.body?.code,
+        name: req.body?.name,
+        subjectId: req.body?.subjectId,
+        sourceClassIds: req.body?.sourceClassIds,
+        isStudentSelectable: req.body?.isStudentSelectable,
+    });
+    return res.status(201).json(errors.createSuccessResponse(courseGroup, "走班教学班已创建"));
+}));
+
+router.patch("/schools/:schoolId/course-groups/:courseGroupId", errors.catchAsync(async (req, res) => {
+    const courseGroup = await updateManagedCourseGroup({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        courseGroupId: req.params.courseGroupId,
+        code: req.body?.code,
+        name: req.body?.name,
+        subjectId: req.body?.subjectId,
+        sourceClassIds: req.body?.sourceClassIds,
+        isStudentSelectable: req.body?.isStudentSelectable,
+        isActive: req.body?.isActive,
+    });
+    return res.json(errors.createSuccessResponse(courseGroup, "走班教学班已更新"));
 }));
 
 router.get("/schools/:schoolId/local-accounts", errors.catchAsync(async (req, res) => {
