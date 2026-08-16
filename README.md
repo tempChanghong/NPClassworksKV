@@ -1,51 +1,83 @@
-# Classworks KV
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./images/官网用星火动力反色.svg">
+    <img src="./images/星火动力0702.svg" width="112" alt="星火动力 NOVARK POWER">
+  </picture>
+</p>
 
-[Classworks](https://cs.houlangs.com)用于班级大屏的作业板小工具
+<h1 align="center">NPClassworksKV</h1>
 
+<p align="center">
+  NPClassworks 的后端、实时同步与学校数据服务<br>
+  由 <strong>星火动力（NOVARK POWER）</strong> 维护
+</p>
 
-ClassworksKV 是 Classworks 的后端实现，这是一个KV存储服务，用于存储和查询数据信息，如作业、花名册等，也可以用于其他用途。
+![License](https://img.shields.io/github/license/tempChanghong/NPClassworksKV?style=flat-square)
+![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169e1?style=flat-square&logo=postgresql&logoColor=white)
 
+NPClassworksKV 是 [NPClassworks](https://github.com/tempChanghong/NPClassworks) 的配套后端，负责学校组织结构、账号与权限、作业和通知、历史版本、班级大屏设备以及 Socket.IO 实时同步。它源自 Classworks 后端体系，现已针对多行政班、选科定班和走班教学进行了扩展。
 
-此项目由[厚浪云](https://houlangs.com)提供，访问公开实例零配置使用 [Classworks](https://cs.houlangs.com)
+## 主要能力
 
-[![通过雨云一键部署](https://rainyun-apps.cn-nb1.rains3.com/materials/deploy-on-rainyun-cn.svg)](https://app.rainyun.com/apps/rca/store/6229/wuyuan_)
+- 学校、学期、年级、行政班、走班教学班和学科规则
+- 学生、教师、学校管理员和班级大屏账号体系
+- 本地短账号、个人 PIN、学校通用教师口令及可选 OAuth
+- 作业、通知、教师认证、修订历史和恢复机制
+- 大屏独立设备绑定、课堂工具与通知送达回执
+- 学校级快捷词、快捷截止时间等统一配置
+- PostgreSQL + Prisma 数据层和数据库迁移
+- Socket.IO 房间同步、限流、健康检查和可观测性接口
 
-## 文档
+## 本地调试
 
-[Classworks 文档](https://docs.wuyuan.dev)
+环境要求：Node.js 22+、pnpm 10+、Docker。
 
-## 许可证
+```bash
+git clone https://github.com/tempChanghong/NPClassworksKV.git
+cd NPClassworksKV
+pnpm install
+pnpm run debug:init
+pnpm run debug:db:up
+pnpm run debug:prepare
+pnpm run debug:server
+```
 
-This project is licensed under the **GNU AGPL v3.0**.
+默认后端地址为 `http://localhost:3000`。调试数据库只监听本机 `127.0.0.1:55432`。
 
-Copyright (C) 2025 **Sunwuyuan** (<https://wuyuan.dev>)
-See [LICENSE](./LICENSE) for details.
+```bash
+pnpm test
+pnpm run debug:db:status
+```
 
-## 配置（OAuth / JWT）
+## 生产部署
 
-在根目录创建或编辑 `.env`：
+仓库提供 Docker Compose、Caddy 和生产环境初始化脚本。推荐只向公网暴露 HTTPS 网关，PostgreSQL 保持在内部网络。
 
-- 基础地址（用于回调）：
-  - `BASE_URL`: `http://localhost:3030`
-  - `FRONTEND_URL`: `http://localhost:5173`
+```bash
+pnpm run deploy:init
+pnpm run deploy:check
+docker compose up -d --build
+```
 
-- STCN（Casdoor）OIDC：
-  - `STCN_CLIENT_ID`: `53e65cfd81232e729730`
-  - `STCN_CLIENT_SECRET`: `e1b1277f8906e5df162b1d2f2eb3692182dd2920`
-  - 回调地址：`${BASE_URL}/accounts/oauth/stcn/callback`
+首次部署前应配置强随机密钥、生产域名和一次性管理员初始化密钥。不要把 `.env`、OAuth Client Secret、JWT 密钥或数据库密码提交到仓库。
 
-- 其他可选提供者：GitHub、ZeroCat、厚浪云（Logto）
+部署容器会在服务启动前执行 Prisma migrations。更多阶段设计和联调说明见 [`docs`](./docs)。
 
-- JWT：
-  - 默认 HS256（提供 `JWT_SECRET`）
-  - 如需 RS256，请设置：
-    - `JWT_ALG=RS256`
-    - `JWT_PRIVATE_KEY`（PEM，\n 转义）
-    - `JWT_PUBLIC_KEY`（PEM，\n 转义）
-    - `JWT_EXPIRES_IN=7d`
+## 健康检查
 
-完成后启动服务并访问：
+- `GET /check`：进程存活检查
+- `GET /ready`：数据库就绪检查
+- `GET /metrics`：Prometheus 指标；生产环境应配置访问令牌
 
-- GET /accounts/oauth/providers 列出可用登录方式
-- 浏览器打开 /accounts/oauth/stcn 发起 STCN 登录
+## 项目关系与致谢
 
+NPClassworksKV 是 Classworks 生态的衍生后端，不是 Classworks 官方服务。感谢上游作者和贡献者；本项目保留相关版权与许可证声明。
+
+项目维护与部署支持：**星火动力（NOVARK POWER）**。
+
+品牌素材位于 [`images`](./images)；反色版本用于深色背景，请勿改变图形比例。
+
+## 开源协议
+
+本项目遵循 [GNU AGPL-3.0](./LICENSE)。
