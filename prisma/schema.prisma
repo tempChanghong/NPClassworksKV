@@ -223,6 +223,7 @@ model School {
   allowOAuthTeacherLogin    Boolean         @default(false)
   teacherSharedPasswordHash String?         @db.VarChar(191)
   homeworkQuickDeadlines    Json?           @db.Json
+  homeworkQuickInputs       Json?           @db.Json
   createdAt                 DateTime        @default(now()) @db.Timestamptz(6)
   updatedAt                 DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
 

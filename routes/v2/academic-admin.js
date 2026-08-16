@@ -215,8 +215,9 @@ router.put("/schools/:schoolId/homework-settings", errors.catchAsync(async (req,
         managerAccountId: res.locals.account.id,
         schoolId: req.params.schoolId,
         quickDeadlines: req.body?.quickDeadlines,
+        quickInputs: req.body?.quickInputs,
     });
-    return res.json(errors.createSuccessResponse(settings, "作业快捷截止时间已更新"));
+    return res.json(errors.createSuccessResponse(settings, "作业快捷设置已更新"));
 }));
 
 router.post("/schools/:schoolId/classroom-screens/bind", errors.catchAsync(async (req, res) => {

@@ -9,6 +9,7 @@ import {
     listWorkspaces,
 } from "../../services/academicCatalogService.js";
 import {WORKSPACE_TYPES} from "../../domain/academicCatalog.js";
+import {getPublicSchoolHomeworkSettings} from "../../services/schoolHomeworkSettingsService.js";
 
 const router = Router();
 
@@ -44,6 +45,10 @@ router.get("/subjects", errors.catchAsync(async (req, res, next) => {
         return next(errors.createError(400, "需要提供 schoolId", null, "SCHOOL_REQUIRED"));
     }
     return res.json(errors.createSuccessResponse(await listSubjects(schoolId)));
+}));
+
+router.get("/schools/:schoolId/homework-settings", errors.catchAsync(async (req, res) => {
+    return res.json(errors.createSuccessResponse(await getPublicSchoolHomeworkSettings(req.params.schoolId)));
 }));
 
 router.get("/workspaces", errors.catchAsync(async (req, res, next) => {
