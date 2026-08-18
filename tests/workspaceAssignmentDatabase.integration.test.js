@@ -315,6 +315,25 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             input: {content: "版本二"},
         });
         assert.equal(screenPublication.revision, 2);
+        assert.equal((await publicationService.getScreenPublication({
+            screenBinding: authenticatedScreen,
+            publicationId: screenPublication.id,
+        })).revision, 2);
+        await assert.rejects(
+            publicationService.updateScreenPublication({
+                screenBinding: authenticatedScreen,
+                publicationId: screenPublication.id,
+                expectedRevision: 1,
+                input: {content: "不应覆盖版本二"},
+            }),
+            (error) => error.code === "PUBLICATION_REVISION_CONFLICT"
+                && error.details.revision === 2,
+        );
+        let actionCenter = await publicationService.listActionRequiredPublications({
+            accountId: teacherLogin.account.id,
+        });
+        assert.equal(actionCenter.summary.total, 1);
+        assert.equal(actionCenter.items[0].reason, "CREATED_BY_SCREEN");
         assert.equal((await publicationService.listScreenPublicationRevisions({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,
@@ -326,6 +345,10 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         });
         assert.equal(screenPublication.isCertified, true);
         assert.equal(screenPublication.revision, 2);
+        actionCenter = await publicationService.listActionRequiredPublications({
+            accountId: teacherLogin.account.id,
+        });
+        assert.equal(actionCenter.summary.total, 0);
         screenPublication = await publicationService.updateScreenPublication({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,
@@ -333,6 +356,11 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             input: {content: "版本三，认证后又被大屏修改"},
         });
         assert.equal(screenPublication.isCertified, false);
+        actionCenter = await publicationService.listActionRequiredPublications({
+            accountId: teacherLogin.account.id,
+        });
+        assert.equal(actionCenter.items[0].reason, "CHANGED_AFTER_CERTIFICATION");
+        assert.deepEqual(actionCenter.items[0].changedFields.map((change) => change.field), ["content"]);
         screenPublication = await publicationService.restoreScreenPublicationRevision({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,
@@ -342,6 +370,10 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.equal(screenPublication.revision, 4);
         assert.equal(screenPublication.content, "版本二");
         assert.equal(screenPublication.isCertified, true);
+        actionCenter = await publicationService.listActionRequiredPublications({
+            accountId: teacherLogin.account.id,
+        });
+        assert.equal(actionCenter.summary.total, 0);
         assert.equal((await publicationService.listScreenPublicationRevisions({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,

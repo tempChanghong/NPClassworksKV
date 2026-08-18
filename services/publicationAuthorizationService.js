@@ -113,7 +113,7 @@ export async function assertCanCertifyPublication(accountId, publication, client
     const writableIds = await getWritableWorkspaceIds(accountId, workspaces, client);
     if (writableIds.length === workspaces.length) return;
     throw authorizationError(
-        "只能认证自己负责教学空间中的内容",
+        "只能确认自己负责教学空间中的内容",
         "PUBLICATION_CERTIFY_FORBIDDEN",
     );
 }

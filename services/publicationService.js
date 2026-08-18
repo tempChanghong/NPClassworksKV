@@ -23,6 +23,11 @@ import {
     isClassroomScreenWorkspaceAllowed,
     resolveClassroomScreenWorkspaces,
 } from "./classroomScreenService.js";
+import {
+    ACTION_REQUIRED_REASONS,
+    classifyActionRequiredPublication,
+    compareActionRequiredItems,
+} from "../domain/publicationActionCenter.js";
 
 const publicationInclude = {
     author: {select: {id: true, name: true, email: true, avatarUrl: true}},
@@ -291,6 +296,116 @@ export async function listPublications({accountId, workspaceId, status, type, li
     return {items, total, limit: safeLimit, skip: safeSkip};
 }
 
+async function getActionCenterWorkspaceIds(accountId) {
+    const [workspaceMemberships, schoolMemberships] = await Promise.all([
+        prisma.workspaceMember.findMany({
+            where: {accountId, role: {in: ["OWNER", "TEACHER", "ASSISTANT"]}},
+            select: {workspaceId: true},
+        }),
+        prisma.schoolMember.findMany({
+            where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
+            select: {schoolId: true},
+        }),
+    ]);
+    const managedSchoolIds = schoolMemberships.map((membership) => membership.schoolId);
+    const schoolWorkspaces = managedSchoolIds.length
+        ? await prisma.workspace.findMany({
+            where: {isActive: true, term: {schoolId: {in: managedSchoolIds}}},
+            select: {id: true},
+        })
+        : [];
+    const candidateIds = [...new Set([
+        ...workspaceMemberships.map((membership) => membership.workspaceId),
+        ...schoolWorkspaces.map((workspace) => workspace.id),
+    ])];
+    if (!candidateIds.length) return [];
+    const workspaces = await loadPublicationWorkspaces(candidateIds);
+    return getWritableWorkspaceIds(accountId, workspaces);
+}
+
+export async function listActionRequiredPublications({
+    accountId,
+    schoolId,
+    workspaceId,
+    subjectId,
+    reason,
+    limit = 20,
+    skip = 0,
+    now = new Date(),
+}) {
+    const safeLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
+    const safeSkip = Math.max(Number(skip) || 0, 0);
+    const writableWorkspaceIds = await getActionCenterWorkspaceIds(accountId);
+    if (!writableWorkspaceIds.length) {
+        return {
+            items: [],
+            total: 0,
+            limit: safeLimit,
+            skip: safeSkip,
+            summary: {total: 0, changedAfterCertified: 0, createdByScreen: 0, other: 0, dueSoon: 0, overdue: 0},
+            generatedAt: now,
+        };
+    }
+
+    const targetSome = {};
+    if (workspaceId) targetSome.workspaceId = workspaceId;
+    if (schoolId) targetSome.workspace = {term: {schoolId}};
+    const targetFilter = {
+        every: {workspaceId: {in: writableWorkspaceIds}},
+        some: targetSome,
+    };
+    const publications = await prisma.publication.findMany({
+        where: {
+            status: PUBLICATION_STATUSES.PUBLISHED,
+            isCertified: false,
+            publishAt: {lte: now},
+            ...(subjectId ? {subjectId} : {}),
+            targets: targetFilter,
+        },
+        include: {
+            ...publicationInclude,
+            revisions: {
+                where: {isCertified: true, purgedAt: null},
+                orderBy: {revision: "desc"},
+                take: 1,
+                select: {
+                    id: true,
+                    revision: true,
+                    snapshot: true,
+                    certifiedAt: true,
+                    certifiedBy: {select: {id: true, name: true}},
+                },
+            },
+        },
+    });
+    const allItems = publications
+        .map((publication) => classifyActionRequiredPublication(publication, {now}))
+        .sort(compareActionRequiredItems);
+    const summary = {
+        total: allItems.length,
+        changedAfterCertified: allItems.filter(
+            (item) => item.reason === ACTION_REQUIRED_REASONS.CHANGED_AFTER_CERTIFICATION,
+        ).length,
+        createdByScreen: allItems.filter(
+            (item) => item.reason === ACTION_REQUIRED_REASONS.CREATED_BY_SCREEN,
+        ).length,
+        other: allItems.filter(
+            (item) => item.reason === ACTION_REQUIRED_REASONS.OTHER_UNCERTIFIED,
+        ).length,
+        dueSoon: allItems.filter((item) => item.dueSoon).length,
+        overdue: allItems.filter((item) => item.overdue).length,
+    };
+    const filteredItems = reason ? allItems.filter((item) => item.reason === reason) : allItems;
+    return {
+        items: filteredItems.slice(safeSkip, safeSkip + safeLimit),
+        total: filteredItems.length,
+        limit: safeLimit,
+        skip: safeSkip,
+        summary,
+        generatedAt: now,
+    };
+}
+
 function shanghaiBoardDate(now = new Date()) {
     const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Asia/Shanghai",
@@ -423,7 +538,7 @@ export async function certifyPublication({accountId, publicationId, expectedRevi
     const existing = await getPublicationOrThrow(publicationId);
     await assertCanCertifyPublication(accountId, existing);
     if (existing.status !== PUBLICATION_STATUSES.PUBLISHED) {
-        throw publicationError("只能认证已发布内容", "PUBLICATION_NOT_PUBLISHED", 409);
+        throw publicationError("只能确认已发布内容", "PUBLICATION_NOT_PUBLISHED", 409);
     }
     if (existing.isCertified) return existing;
 
@@ -439,7 +554,7 @@ export async function certifyPublication({accountId, publicationId, expectedRevi
                 select: {revision: true, isCertified: true, updatedAt: true},
             });
             throw publicationError(
-                "内容已被修改或认证，请刷新后重试",
+                "内容已被修改或由教师确认，请刷新后重试",
                 "PUBLICATION_REVISION_CONFLICT",
                 409,
                 latest,
@@ -763,6 +878,18 @@ export async function listScreenPublicationRevisions({screenBinding, publication
             screenBinding: {select: {id: true, name: true}},
         },
     });
+}
+
+export async function getScreenPublication({screenBinding, publicationId}) {
+    const publication = await getPublicationOrThrow(publicationId);
+    if (publication.type !== PUBLICATION_TYPES.ASSIGNMENT || publication.status === PUBLICATION_STATUSES.WITHDRAWN) {
+        throw publicationError("大屏只能读取当前可编辑的作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
+    }
+    assertScreenCanWriteWorkspaces(
+        screenBinding,
+        publication.targets.map((target) => target.workspace),
+    );
+    return publication;
 }
 
 export async function restoreScreenPublicationRevision({

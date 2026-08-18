@@ -10,6 +10,7 @@ import {
     certifyPublication,
     createPublication,
     getPublication,
+    listActionRequiredPublications,
     listPublicationRevisions,
     listPublications,
     listPublishedFeed,
@@ -85,6 +86,28 @@ router.get("/", errors.catchAsync(async (req, res, next) => {
     return res.json(errors.createSuccessResponse(result));
 }));
 
+router.get("/action-required", errors.catchAsync(async (req, res, next) => {
+    const reason = typeof req.query.reason === "string" ? req.query.reason.toUpperCase() : undefined;
+    const validReasons = new Set([
+        "CHANGED_AFTER_CERTIFICATION",
+        "CREATED_BY_SCREEN",
+        "OTHER_UNCERTIFIED",
+    ]);
+    if (reason && !validReasons.has(reason)) {
+        return next(errors.createError(400, "无效的待处理类型", {reason}, "INVALID_ACTION_REQUIRED_REASON"));
+    }
+    const result = await listActionRequiredPublications({
+        accountId: res.locals.account.id,
+        schoolId: typeof req.query.schoolId === "string" ? req.query.schoolId : undefined,
+        workspaceId: typeof req.query.workspaceId === "string" ? req.query.workspaceId : undefined,
+        subjectId: typeof req.query.subjectId === "string" ? req.query.subjectId : undefined,
+        reason,
+        limit: req.query.limit,
+        skip: req.query.skip,
+    });
+    return res.json(errors.createSuccessResponse(result));
+}));
+
 router.post("/", errors.catchAsync(async (req, res) => {
     const publication = await createPublication({
         accountId: res.locals.account.id,
@@ -126,7 +149,7 @@ router.post("/:id/certify", errors.catchAsync(async (req, res) => {
         expectedRevision: parseExpectedRevision(req),
     });
     setRevisionHeader(res, publication);
-    return res.json(errors.createSuccessResponse(publication, "当前版本已认证"));
+    return res.json(errors.createSuccessResponse(publication, "当前版本已由教师确认"));
 }));
 
 router.post("/:id/restore", errors.catchAsync(async (req, res) => {

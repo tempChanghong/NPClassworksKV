@@ -11,6 +11,7 @@ import {
 import {
     copyScreenBoardDate,
     createScreenPublication,
+    getScreenPublication,
     listPublishedFeed,
     listScreenPublicationRevisions,
     restoreScreenPublicationRevision,
@@ -128,7 +129,7 @@ router.post("/publications", errors.catchAsync(async (req, res) => {
         input: req.body,
     });
     res.set("ETag", `"${publication.revision}"`);
-    return res.status(201).json(errors.createSuccessResponse(publication, "作业已保存为未认证版本"));
+    return res.status(201).json(errors.createSuccessResponse(publication, "作业已保存，等待教师确认"));
 }));
 
 router.post("/board/copy", errors.catchAsync(async (req, res) => {
@@ -149,6 +150,15 @@ router.patch("/publications/:id", errors.catchAsync(async (req, res) => {
     });
     res.set("ETag", `"${publication.revision}"`);
     return res.json(errors.createSuccessResponse(publication, "新版本已保存，原版本仍可恢复"));
+}));
+
+router.get("/publications/:id", errors.catchAsync(async (req, res) => {
+    const publication = await getScreenPublication({
+        screenBinding: res.locals.classroomScreen,
+        publicationId: req.params.id,
+    });
+    res.set("ETag", `"${publication.revision}"`);
+    return res.json(errors.createSuccessResponse(publication));
 }));
 
 router.get("/publications/:id/revisions", errors.catchAsync(async (req, res) => {
