@@ -28,6 +28,7 @@ import {
     classifyActionRequiredPublication,
     compareActionRequiredItems,
 } from "../domain/publicationActionCenter.js";
+import {findDuplicateAssignmentCandidates} from "../domain/publicationDuplicate.js";
 
 const publicationInclude = {
     author: {select: {id: true, name: true, email: true, avatarUrl: true}},
@@ -185,6 +186,55 @@ async function getPublicationOrThrow(id, client = prisma) {
     return publication;
 }
 
+async function assertNoDuplicateAssignment({normalized, input, excludePublicationId = null}) {
+    if (
+        input?.allowDuplicate === true
+        || normalized.type !== PUBLICATION_TYPES.ASSIGNMENT
+        || normalized.status !== PUBLICATION_STATUSES.PUBLISHED
+    ) return;
+
+    const candidates = await prisma.publication.findMany({
+        where: {
+            type: PUBLICATION_TYPES.ASSIGNMENT,
+            status: PUBLICATION_STATUSES.PUBLISHED,
+            subjectId: normalized.subjectId,
+            boardDate: normalized.boardDate,
+            ...(excludePublicationId ? {id: {not: excludePublicationId}} : {}),
+            targets: {some: {workspaceId: {in: normalized.targetWorkspaceIds}}},
+        },
+        include: publicationInclude,
+        orderBy: {updatedAt: "desc"},
+        take: 30,
+    });
+    const matches = findDuplicateAssignmentCandidates(normalized, candidates);
+    if (!matches.length) return;
+
+    const targetIds = new Set(normalized.targetWorkspaceIds);
+    const duplicates = matches.slice(0, 5).map(({candidate, reason}) => ({
+        id: candidate.id,
+        revision: candidate.revision,
+        title: candidate.title,
+        content: candidate.content,
+        boardDate: candidate.boardDate?.toISOString().slice(0, 10) || null,
+        dueAt: candidate.dueAt,
+        updatedAt: candidate.updatedAt,
+        isCertified: candidate.isCertified,
+        reason,
+        sourceName: candidate.latestActorType === "CLASSROOM_SCREEN"
+            ? candidate.latestScreenBinding?.name || "班级大屏"
+            : candidate.author?.name || "教师",
+        targets: candidate.targets
+            .filter((target) => targetIds.has(target.workspaceId))
+            .map((target) => ({id: target.workspaceId, name: target.workspace.name})),
+    }));
+    throw publicationError(
+        "检测到同一天、同一科目和班级中已有内容相同的作业",
+        "DUPLICATE_ASSIGNMENT_SUSPECTED",
+        409,
+        {duplicates},
+    );
+}
+
 export async function createPublication({accountId, input}) {
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
     const workspaces = await loadPublicationWorkspaces(targetIds);
@@ -194,6 +244,7 @@ export async function createPublication({accountId, input}) {
 
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
+    await assertNoDuplicateAssignment({normalized, input});
     const certifiedAt = new Date();
     const publication = await prisma.$transaction(async (tx) => {
         const created = await tx.publication.create({
@@ -674,6 +725,7 @@ export async function createScreenPublication({screenBinding, input}) {
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
+    await assertNoDuplicateAssignment({normalized, input});
 
     const publication = await prisma.$transaction(async (tx) => {
         const created = await tx.publication.create({
@@ -815,6 +867,7 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
+    await assertNoDuplicateAssignment({normalized, input, excludePublicationId: publicationId});
 
     const publication = await prisma.$transaction(async (tx) => {
         const result = await tx.publication.updateMany({
@@ -1016,6 +1069,7 @@ export async function updatePublication({accountId, publicationId, expectedRevis
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
+    await assertNoDuplicateAssignment({normalized, input, excludePublicationId: publicationId});
 
     const certifiedAt = new Date();
     const publication = await prisma.$transaction(async (tx) => {
