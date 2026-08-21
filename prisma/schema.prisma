@@ -33,13 +33,16 @@ model Account {
   sessions                          AccountSession[]
   preferences                       AccountPreference[]
   publications                      Publication[]
-  certifiedPublications             Publication[]            @relation("PublicationCurrentCertifier")
-  classroomScreensCreated           ClassroomScreenBinding[] @relation("ClassroomScreenCreator")
-  publicationRevisionEdits          PublicationRevision[]    @relation("PublicationRevisionEditor")
-  publicationRevisionCertifications PublicationRevision[]    @relation("PublicationRevisionCertifier")
-  attendanceDaysUpdated             ClassAttendanceDay[]     @relation("ClassAttendanceAccountUpdater")
+  certifiedPublications             Publication[]                   @relation("PublicationCurrentCertifier")
+  classroomScreensCreated           ClassroomScreenBinding[]        @relation("ClassroomScreenCreator")
+  publicationRevisionEdits          PublicationRevision[]           @relation("PublicationRevisionEditor")
+  publicationRevisionCertifications PublicationRevision[]           @relation("PublicationRevisionCertifier")
+  attendanceDaysUpdated             ClassAttendanceDay[]            @relation("ClassAttendanceAccountUpdater")
   schoolMemberships                 SchoolMember[]
   workspaceMemberships              WorkspaceMember[]
+  teachingAssignments               TeachingAssignment[]
+  gradeLeaderships                  GradeLeadership[]
+  administrativeClassLeaderships    AdministrativeClassLeadership[]
 
   @@unique([provider, providerId])
 }
@@ -171,6 +174,21 @@ enum WorkspaceMemberRole {
   VIEWER
 }
 
+enum TeachingAssignmentPosition {
+  PRIMARY
+  CO_TEACHER
+}
+
+enum GradeLeadershipPosition {
+  PRIMARY
+  DEPUTY
+}
+
+enum AdministrativeClassLeadershipPosition {
+  HEAD_TEACHER
+  CO_HEAD_TEACHER
+}
+
 enum SchoolMemberRole {
   OWNER
   ADMIN
@@ -224,6 +242,9 @@ model School {
   teacherSharedPasswordHash String?         @db.VarChar(191)
   homeworkQuickDeadlines    Json?           @db.Json
   homeworkQuickInputs       Json?           @db.Json
+  gradeLeaderMustBeHomeroom Boolean         @default(true)
+  gradeLeaderMustTeach      Boolean         @default(true)
+  homeroomMustTeach         Boolean         @default(true)
   createdAt                 DateTime        @default(now()) @db.Timestamptz(6)
   updatedAt                 DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
 
@@ -277,8 +298,9 @@ model Grade {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
-  term       AcademicTerm @relation(fields: [termId], references: [id], onDelete: Cascade)
-  workspaces Workspace[]
+  term        AcademicTerm      @relation(fields: [termId], references: [id], onDelete: Cascade)
+  workspaces  Workspace[]
+  leaderships GradeLeadership[]
 
   @@unique([termId, code])
   @@index([termId, sortOrder])
@@ -294,10 +316,11 @@ model Subject {
   createdAt DateTime        @default(now()) @db.Timestamptz(6)
   updatedAt DateTime        @default(now()) @updatedAt @db.Timestamptz(6)
 
-  school       School                       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  workspaces   Workspace[]
-  publications Publication[]
-  subjectRules AdministrativeClassSubject[]
+  school              School                       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  workspaces          Workspace[]
+  publications        Publication[]
+  subjectRules        AdministrativeClassSubject[]
+  teachingAssignments TeachingAssignment[]
 
   @@unique([schoolId, code])
   @@index([schoolId, sortOrder])
@@ -327,13 +350,15 @@ model Workspace {
   sourceClasses       WorkspaceSourceClass[] @relation("CourseGroupSourceClasses")
   sourcedCourseGroups WorkspaceSourceClass[] @relation("AdministrativeClassCourseGroups")
 
-  subjectRules       AdministrativeClassSubject[]
-  members            WorkspaceMember[]
-  pendingInvitations WorkspaceMemberInvite[]
-  publicationTargets PublicationTarget[]
-  classroomScreens   ClassroomScreenBinding[]     @relation("ClassroomScreenAdministrativeClass")
-  students           AdministrativeClassStudent[] @relation("AdministrativeClassStudents")
-  attendanceDays     ClassAttendanceDay[]         @relation("AdministrativeClassAttendanceDays")
+  subjectRules        AdministrativeClassSubject[]
+  members             WorkspaceMember[]
+  teachingAssignments TeachingAssignment[]
+  pendingInvitations  WorkspaceMemberInvite[]
+  publicationTargets  PublicationTarget[]
+  classroomScreens    ClassroomScreenBinding[]        @relation("ClassroomScreenAdministrativeClass")
+  students            AdministrativeClassStudent[]    @relation("AdministrativeClassStudents")
+  attendanceDays      ClassAttendanceDay[]            @relation("AdministrativeClassAttendanceDays")
+  leaderships         AdministrativeClassLeadership[]
 
   @@unique([termId, code])
   @@index([termId, gradeId, type])
@@ -382,6 +407,64 @@ model WorkspaceMember {
 
   @@id([workspaceId, accountId])
   @@index([accountId, role])
+}
+
+/// 教师实际承担的授课关系。WorkspaceMember 只负责空间访问权限，本表负责表达“教哪一科”。
+/// 行政班必须明确 subjectId；走班教学班的 subjectId 必须与 Workspace.subjectId 一致。
+model TeachingAssignment {
+  id          String                     @id @default(cuid()) @db.VarChar(191)
+  workspaceId String                     @db.VarChar(191)
+  subjectId   String                     @db.VarChar(191)
+  accountId   String                     @db.VarChar(191)
+  position    TeachingAssignmentPosition @default(PRIMARY)
+  isActive    Boolean                    @default(true)
+  createdAt   DateTime                   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime                   @default(now()) @updatedAt @db.Timestamptz(6)
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  subject   Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, subjectId, accountId])
+  @@index([accountId, isActive])
+  @@index([subjectId])
+  @@index([workspaceId, subjectId, position, isActive])
+}
+
+/// 年级管理职责。它授予年级范围内的业务管理能力，但不代表本人教授全年级所有课程。
+model GradeLeadership {
+  id        String                  @id @default(cuid()) @db.VarChar(191)
+  gradeId   String                  @db.VarChar(191)
+  accountId String                  @db.VarChar(191)
+  position  GradeLeadershipPosition @default(PRIMARY)
+  isActive  Boolean                 @default(true)
+  createdAt DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime                @default(now()) @updatedAt @db.Timestamptz(6)
+
+  grade   Grade   @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([gradeId, accountId])
+  @@index([accountId, isActive])
+  @@index([gradeId, position, isActive])
+}
+
+/// 行政班管理职责。与具体任教学科分开保存。
+model AdministrativeClassLeadership {
+  id                    String                                @id @default(cuid()) @db.VarChar(191)
+  administrativeClassId String                                @db.VarChar(191)
+  accountId             String                                @db.VarChar(191)
+  position              AdministrativeClassLeadershipPosition @default(HEAD_TEACHER)
+  isActive              Boolean                               @default(true)
+  createdAt             DateTime                              @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime                              @default(now()) @updatedAt @db.Timestamptz(6)
+
+  administrativeClass Workspace @relation(fields: [administrativeClassId], references: [id], onDelete: Cascade)
+  account             Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([administrativeClassId, accountId])
+  @@index([accountId, isActive])
+  @@index([administrativeClassId, position, isActive])
 }
 
 /// 管理员可在教师首次 OAuth 登录前按邮箱预分配教学空间。

@@ -46,6 +46,20 @@ import {
     getSchoolHomeworkSettings,
     updateSchoolHomeworkSettings,
 } from "../../services/schoolHomeworkSettingsService.js";
+import {
+    getTeachingRelationshipOverview,
+    removeTeachingAssignment,
+    upsertTeachingAssignment,
+    upsertTeachingAssignmentBatch,
+} from "../../services/teachingRelationshipService.js";
+import {
+    getStaffResponsibilityOverview,
+    removeClassLeadership,
+    removeGradeLeadership,
+    updateStaffResponsibilityPolicy,
+    upsertClassLeadership,
+    upsertGradeLeadership,
+} from "../../services/staffResponsibilityService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -143,6 +157,97 @@ router.get("/schools/:schoolId/academic-structure", errors.catchAsync(async (req
         termId: req.query.termId,
     });
     return res.json(errors.createSuccessResponse(structure));
+}));
+
+router.get("/schools/:schoolId/teaching-relationships", errors.catchAsync(async (req, res) => {
+    const overview = await getTeachingRelationshipOverview({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.query.termId,
+        gradeId: req.query.gradeId,
+    });
+    return res.json(errors.createSuccessResponse(overview));
+}));
+
+router.get("/schools/:schoolId/staff-responsibilities", errors.catchAsync(async (req, res) => {
+    const overview = await getStaffResponsibilityOverview({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.query.termId,
+    });
+    return res.json(errors.createSuccessResponse(overview));
+}));
+
+router.put("/schools/:schoolId/grade-leaderships", errors.catchAsync(async (req, res) => {
+    const leadership = await upsertGradeLeadership({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        input: req.body,
+    });
+    return res.json(errors.createSuccessResponse(leadership, "年级职责已保存"));
+}));
+
+router.delete("/schools/:schoolId/grade-leaderships/:leadershipId", errors.catchAsync(async (req, res) => {
+    const result = await removeGradeLeadership({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        leadershipId: req.params.leadershipId,
+    });
+    return res.json(errors.createSuccessResponse(result, "年级职责已移除"));
+}));
+
+router.put("/schools/:schoolId/class-leaderships", errors.catchAsync(async (req, res) => {
+    const leadership = await upsertClassLeadership({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        input: req.body,
+    });
+    return res.json(errors.createSuccessResponse(leadership, "班主任职责已保存"));
+}));
+
+router.delete("/schools/:schoolId/class-leaderships/:leadershipId", errors.catchAsync(async (req, res) => {
+    const result = await removeClassLeadership({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        leadershipId: req.params.leadershipId,
+    });
+    return res.json(errors.createSuccessResponse(result, "班主任职责已移除"));
+}));
+
+router.put("/schools/:schoolId/staff-responsibility-policy", errors.catchAsync(async (req, res) => {
+    const policy = await updateStaffResponsibilityPolicy({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        input: req.body,
+    });
+    return res.json(errors.createSuccessResponse(policy, "岗位联动规则已更新"));
+}));
+
+router.put("/schools/:schoolId/teaching-assignments", errors.catchAsync(async (req, res) => {
+    const assignment = await upsertTeachingAssignment({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        input: req.body,
+    });
+    return res.json(errors.createSuccessResponse(assignment, "任课关系已保存"));
+}));
+
+router.put("/schools/:schoolId/teaching-assignments/bulk", errors.catchAsync(async (req, res) => {
+    const result = await upsertTeachingAssignmentBatch({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        input: req.body,
+    });
+    return res.json(errors.createSuccessResponse(result, `已保存 ${result.count} 项任课关系`));
+}));
+
+router.delete("/schools/:schoolId/teaching-assignments/:assignmentId", errors.catchAsync(async (req, res) => {
+    const result = await removeTeachingAssignment({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        assignmentId: req.params.assignmentId,
+    });
+    return res.json(errors.createSuccessResponse(result, "任课关系已移除"));
 }));
 
 router.put("/schools/:schoolId/administrative-classes/:classId/subject-rules", errors.catchAsync(async (req, res) => {

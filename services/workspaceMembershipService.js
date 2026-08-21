@@ -1,7 +1,32 @@
 import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
+import {getResponsibilityWorkspaceIds} from "./staffAuthorizationService.js";
 
 const WORKSPACE_ROLES = new Set(["OWNER", "TEACHER", "ASSISTANT", "VIEWER"]);
+
+const myWorkspaceInclude = {
+    subject: {select: {id: true, code: true, name: true, category: true}},
+    subjectRules: {
+        include: {
+            subject: {select: {id: true, code: true, name: true, category: true}},
+        },
+    },
+    grade: {select: {id: true, code: true, name: true}},
+    term: {
+        include: {school: {select: {
+            id: true,
+            code: true,
+            name: true,
+            teacherAuthMode: true,
+            allowOAuthTeacherLogin: true,
+        }}},
+    },
+    sourceClasses: {
+        include: {
+            administrativeClass: {select: {id: true, code: true, name: true}},
+        },
+    },
+};
 
 async function getManagedWorkspace(accountId, workspaceId) {
     const workspace = await prisma.workspace.findUnique({
@@ -50,7 +75,7 @@ export async function removeWorkspaceMember({managerAccountId, workspaceId, acco
 }
 
 export async function listMyWorkspaces({accountId, termId}) {
-    const [account, schoolManagerMemberships, memberships] = await Promise.all([
+    const [account, schoolManagerMemberships, memberships, responsibilityAccess] = await Promise.all([
         prisma.account.findUnique({where: {id: accountId}, select: {provider: true}}),
         prisma.schoolMember.findMany({
             where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
@@ -65,34 +90,9 @@ export async function listMyWorkspaces({accountId, termId}) {
             },
         },
         orderBy: {workspace: {name: "asc"}},
-        include: {
-            workspace: {
-                include: {
-                    subject: {select: {id: true, code: true, name: true, category: true}},
-                    subjectRules: {
-                        include: {
-                            subject: {select: {id: true, code: true, name: true, category: true}},
-                        },
-                    },
-                    grade: {select: {id: true, code: true, name: true}},
-                    term: {
-                        include: {school: {select: {
-                            id: true,
-                            code: true,
-                            name: true,
-                            teacherAuthMode: true,
-                            allowOAuthTeacherLogin: true,
-                        }}},
-                    },
-                    sourceClasses: {
-                        include: {
-                            administrativeClass: {select: {id: true, code: true, name: true}},
-                        },
-                    },
-                },
-            },
-        },
+        include: {workspace: {include: myWorkspaceInclude}},
         }),
+        getResponsibilityWorkspaceIds(accountId, {termId}),
     ]);
 
     const managedSchoolIds = new Set(schoolManagerMemberships.map((membership) => membership.schoolId));
@@ -103,9 +103,30 @@ export async function listMyWorkspaces({accountId, termId}) {
         return school.teacherAuthMode === "OAUTH_EMAIL" || school.allowOAuthTeacherLogin;
     });
 
-    return permittedMemberships.map((membership) => ({
-        role: membership.role,
+    const writableSet = new Set(responsibilityAccess.writableIds);
+    const readableSet = new Set(responsibilityAccess.readableIds);
+    const membershipResults = permittedMemberships.map((membership) => ({
+        role: writableSet.has(membership.workspace.id) && membership.role === "VIEWER"
+            ? "TEACHER"
+            : membership.role,
         joinedAt: membership.createdAt,
+        ...(readableSet.has(membership.workspace.id) ? {responsibilityDerived: true} : {}),
         workspace: membership.workspace,
     }));
+    const existingIds = new Set(membershipResults.map((item) => item.workspace.id));
+    const responsibilityIds = responsibilityAccess.readableIds.filter((id) => !existingIds.has(id));
+    const responsibilityWorkspaces = responsibilityIds.length ? await prisma.workspace.findMany({
+        where: {id: {in: responsibilityIds}},
+        include: myWorkspaceInclude,
+        orderBy: {name: "asc"},
+    }) : [];
+    return [
+        ...membershipResults,
+        ...responsibilityWorkspaces.map((workspace) => ({
+            role: writableSet.has(workspace.id) ? "TEACHER" : "VIEWER",
+            joinedAt: null,
+            responsibilityDerived: true,
+            workspace,
+        })),
+    ];
 }

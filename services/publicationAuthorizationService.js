@@ -1,5 +1,6 @@
 import {prisma} from "../utils/prisma.js";
 import {authorizationError} from "./academicAuthorizationService.js";
+import {getResponsibilityAccessForWorkspaces} from "./staffAuthorizationService.js";
 
 const WORKSPACE_WRITE_ROLES = new Set(["OWNER", "TEACHER", "ASSISTANT"]);
 const SCHOOL_WRITE_ROLES = new Set(["OWNER", "ADMIN"]);
@@ -29,7 +30,7 @@ export async function loadPublicationWorkspaces(workspaceIds, client = prisma) {
 async function loadAccessMaps(accountId, workspaces, client = prisma) {
     const workspaceIds = workspaces.map((workspace) => workspace.id);
     const schoolIds = [...new Set(workspaces.map((workspace) => workspace.term.schoolId))];
-    const [account, workspaceMemberships, schoolMemberships] = await Promise.all([
+    const [account, workspaceMemberships, schoolMemberships, responsibilityAccess] = await Promise.all([
         client.account.findUnique({where: {id: accountId}, select: {provider: true}}),
         client.workspaceMember.findMany({
             where: {accountId, workspaceId: {in: workspaceIds}},
@@ -37,6 +38,7 @@ async function loadAccessMaps(accountId, workspaces, client = prisma) {
         client.schoolMember.findMany({
             where: {accountId, schoolId: {in: schoolIds}},
         }),
+        getResponsibilityAccessForWorkspaces(accountId, workspaces, client),
     ]);
     const schoolById = new Map(workspaces.map((workspace) => [workspace.term.schoolId, workspace.term.school]));
     const schoolRoles = new Map(schoolMemberships.map((item) => [item.schoolId, item.role]));
@@ -50,6 +52,7 @@ async function loadAccessMaps(accountId, workspaces, client = prisma) {
         workspaceRoles: new Map(workspaceMemberships.map((item) => [item.workspaceId, item.role])),
         schoolRoles,
         permittedSchoolIds,
+        responsibilityAccess,
     };
 }
 
@@ -73,7 +76,9 @@ export async function getWritableWorkspaceIds(accountId, workspaces, client = pr
         const workspaceRole = access.workspaceRoles.get(workspace.id);
         const schoolRole = access.schoolRoles.get(workspace.term.schoolId);
         return SCHOOL_WRITE_ROLES.has(schoolRole) || (
-            access.permittedSchoolIds.has(workspace.term.schoolId) && WORKSPACE_WRITE_ROLES.has(workspaceRole)
+            access.permittedSchoolIds.has(workspace.term.schoolId) && (
+                WORKSPACE_WRITE_ROLES.has(workspaceRole) || access.responsibilityAccess.writableIds.has(workspace.id)
+            )
         );
     }).map((workspace) => workspace.id);
 }
@@ -84,7 +89,9 @@ export async function getReadableWorkspaceIds(accountId, workspaceIds, client = 
     return workspaces
         .filter((workspace) =>
             SCHOOL_WRITE_ROLES.has(access.schoolRoles.get(workspace.term.schoolId)) || (
-                access.permittedSchoolIds.has(workspace.term.schoolId) && access.workspaceRoles.has(workspace.id)
+                access.permittedSchoolIds.has(workspace.term.schoolId) && (
+                    access.workspaceRoles.has(workspace.id) || access.responsibilityAccess.readableIds.has(workspace.id)
+                )
             ),
         )
         .map((workspace) => workspace.id);

@@ -17,6 +17,7 @@ import {
     loadPublicationWorkspaces,
     publicationWorkspaceInclude,
 } from "./publicationAuthorizationService.js";
+import {getResponsibilityWorkspaceIds} from "./staffAuthorizationService.js";
 import {authorizationError} from "./academicAuthorizationService.js";
 import {broadcastWorkspaceEvent} from "../utils/socket.js";
 import {
@@ -303,7 +304,7 @@ export async function listPublications({accountId, workspaceId, status, type, li
             where.status = PUBLICATION_STATUSES.PUBLISHED;
         }
     } else {
-        const [workspaceMemberships, schoolMemberships] = await Promise.all([
+        const [workspaceMemberships, schoolMemberships, responsibilityAccess] = await Promise.all([
             prisma.workspaceMember.findMany({
                 where: {accountId, role: {in: ["OWNER", "TEACHER", "ASSISTANT"]}},
                 select: {workspaceId: true},
@@ -312,6 +313,7 @@ export async function listPublications({accountId, workspaceId, status, type, li
                 where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
                 select: {schoolId: true},
             }),
+            getResponsibilityWorkspaceIds(accountId),
         ]);
         const managedSchoolIds = schoolMemberships.map((membership) => membership.schoolId);
         const managedWorkspaces = managedSchoolIds.length
@@ -323,6 +325,7 @@ export async function listPublications({accountId, workspaceId, status, type, li
         const readableWorkspaceIds = [...new Set([
             ...workspaceMemberships.map((membership) => membership.workspaceId),
             ...managedWorkspaces.map((workspace) => workspace.id),
+            ...responsibilityAccess.readableIds,
         ])];
         where.OR = [
             {authorAccountId: accountId},
@@ -348,7 +351,7 @@ export async function listPublications({accountId, workspaceId, status, type, li
 }
 
 async function getActionCenterWorkspaceIds(accountId) {
-    const [workspaceMemberships, schoolMemberships] = await Promise.all([
+    const [workspaceMemberships, schoolMemberships, responsibilityAccess] = await Promise.all([
         prisma.workspaceMember.findMany({
             where: {accountId, role: {in: ["OWNER", "TEACHER", "ASSISTANT"]}},
             select: {workspaceId: true},
@@ -357,6 +360,7 @@ async function getActionCenterWorkspaceIds(accountId) {
             where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
             select: {schoolId: true},
         }),
+        getResponsibilityWorkspaceIds(accountId),
     ]);
     const managedSchoolIds = schoolMemberships.map((membership) => membership.schoolId);
     const schoolWorkspaces = managedSchoolIds.length
@@ -368,6 +372,7 @@ async function getActionCenterWorkspaceIds(accountId) {
     const candidateIds = [...new Set([
         ...workspaceMemberships.map((membership) => membership.workspaceId),
         ...schoolWorkspaces.map((workspace) => workspace.id),
+        ...responsibilityAccess.writableIds,
     ])];
     if (!candidateIds.length) return [];
     const workspaces = await loadPublicationWorkspaces(candidateIds);
