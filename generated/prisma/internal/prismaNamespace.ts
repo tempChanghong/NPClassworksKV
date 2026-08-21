@@ -392,6 +392,7 @@ export const ModelName = {
   Device: 'Device',
   KVStore: 'KVStore',
   School: 'School',
+  InstanceSetup: 'InstanceSetup',
   SchoolMember: 'SchoolMember',
   AcademicTerm: 'AcademicTerm',
   Grade: 'Grade',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
+    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1019,6 +1020,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SchoolCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SchoolCountAggregateOutputType> | number
+        }
+      }
+    }
+    InstanceSetup: {
+      payload: Prisma.$InstanceSetupPayload<ExtArgs>
+      fields: Prisma.InstanceSetupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InstanceSetupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InstanceSetupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        findFirst: {
+          args: Prisma.InstanceSetupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InstanceSetupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        findMany: {
+          args: Prisma.InstanceSetupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>[]
+        }
+        create: {
+          args: Prisma.InstanceSetupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        createMany: {
+          args: Prisma.InstanceSetupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InstanceSetupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>[]
+        }
+        delete: {
+          args: Prisma.InstanceSetupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        update: {
+          args: Prisma.InstanceSetupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        deleteMany: {
+          args: Prisma.InstanceSetupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InstanceSetupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InstanceSetupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>[]
+        }
+        upsert: {
+          args: Prisma.InstanceSetupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstanceSetupPayload>
+        }
+        aggregate: {
+          args: Prisma.InstanceSetupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInstanceSetup>
+        }
+        groupBy: {
+          args: Prisma.InstanceSetupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstanceSetupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InstanceSetupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstanceSetupCountAggregateOutputType> | number
         }
       }
     }
@@ -2591,6 +2666,19 @@ export const SchoolScalarFieldEnum = {
 export type SchoolScalarFieldEnum = (typeof SchoolScalarFieldEnum)[keyof typeof SchoolScalarFieldEnum]
 
 
+export const InstanceSetupScalarFieldEnum = {
+  id: 'id',
+  setupVersion: 'setupVersion',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  completedByAccountId: 'completedByAccountId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstanceSetupScalarFieldEnum = (typeof InstanceSetupScalarFieldEnum)[keyof typeof InstanceSetupScalarFieldEnum]
+
+
 export const SchoolMemberScalarFieldEnum = {
   schoolId: 'schoolId',
   accountId: 'accountId',
@@ -3314,6 +3402,7 @@ export type GlobalOmitConfig = {
   device?: Prisma.DeviceOmit
   kVStore?: Prisma.KVStoreOmit
   school?: Prisma.SchoolOmit
+  instanceSetup?: Prisma.InstanceSetupOmit
   schoolMember?: Prisma.SchoolMemberOmit
   academicTerm?: Prisma.AcademicTermOmit
   grade?: Prisma.GradeOmit

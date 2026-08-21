@@ -59,6 +59,11 @@ export type KVStore = Prisma.KVStoreModel
  */
 export type School = Prisma.SchoolModel
 /**
+ * Model InstanceSetup
+ * 实例级首次配置状态。业务数据决定实际进度，本表只记录 OOBE 生命周期与版本。
+ */
+export type InstanceSetup = Prisma.InstanceSetupModel
+/**
  * Model SchoolMember
  *
  */

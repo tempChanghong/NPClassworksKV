@@ -1,0 +1,11 @@
+CREATE TABLE "InstanceSetup" (
+    "id" VARCHAR(32) NOT NULL,
+    "setupVersion" INTEGER NOT NULL DEFAULT 1,
+    "startedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "completedAt" TIMESTAMPTZ(6),
+    "completedByAccountId" VARCHAR(191),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "InstanceSetup_pkey" PRIMARY KEY ("id")
+);

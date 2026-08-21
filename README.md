@@ -60,7 +60,9 @@ pnpm run deploy:check
 docker compose up -d --build
 ```
 
-首次部署前应配置强随机密钥、生产域名和一次性管理员初始化密钥。不要把 `.env`、OAuth Client Secret、JWT 密钥或数据库密码提交到仓库。
+服务就绪后打开前端 `/setup`。向导会检查关键环境、验证一次性初始化密钥，并在同一事务中创建首位管理员、学校和启用学期。班级、走班关系、教师与大屏账号可以在完成初始化后继续配置。
+
+首次部署前应配置强随机密钥、生产域名和一次性管理员初始化密钥。`BOOTSTRAP_SETUP_KEY` 只用于换取15分钟的初始化会话和 OWNER 恢复，不是日常登录密码。不要把 `.env`、OAuth Client Secret、JWT 密钥或数据库密码提交到仓库。
 
 部署容器会在服务启动前执行 Prisma migrations。更多阶段设计和联调说明见 [`docs`](./docs)。
 

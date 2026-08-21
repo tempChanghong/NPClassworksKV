@@ -254,6 +254,17 @@ model School {
   classroomScreens ClassroomScreenBinding[]
 }
 
+/// 实例级首次配置状态。业务数据决定实际进度，本表只记录 OOBE 生命周期与版本。
+model InstanceSetup {
+  id                   String    @id @db.VarChar(32)
+  setupVersion         Int       @default(1)
+  startedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  completedAt          DateTime? @db.Timestamptz(6)
+  completedByAccountId String?   @db.VarChar(191)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+}
+
 model SchoolMember {
   schoolId  String           @db.VarChar(191)
   accountId String           @db.VarChar(191)

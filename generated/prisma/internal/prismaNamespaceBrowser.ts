@@ -59,6 +59,7 @@ export const ModelName = {
   Device: 'Device',
   KVStore: 'KVStore',
   School: 'School',
+  InstanceSetup: 'InstanceSetup',
   SchoolMember: 'SchoolMember',
   AcademicTerm: 'AcademicTerm',
   Grade: 'Grade',
@@ -218,6 +219,19 @@ export const SchoolScalarFieldEnum = {
 } as const
 
 export type SchoolScalarFieldEnum = (typeof SchoolScalarFieldEnum)[keyof typeof SchoolScalarFieldEnum]
+
+
+export const InstanceSetupScalarFieldEnum = {
+  id: 'id',
+  setupVersion: 'setupVersion',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  completedByAccountId: 'completedByAccountId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstanceSetupScalarFieldEnum = (typeof InstanceSetupScalarFieldEnum)[keyof typeof InstanceSetupScalarFieldEnum]
 
 
 export const SchoolMemberScalarFieldEnum = {
