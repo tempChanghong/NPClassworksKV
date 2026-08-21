@@ -10,7 +10,9 @@ import {
     validateTeacherPin,
 } from "../domain/localAccount.js";
 import {authorizationError} from "./academicAuthorizationService.js";
-import {publicLocalAccount} from "./localAccountService.js";
+import {importLocalTeachers, publicLocalAccount} from "./localAccountService.js";
+import {importOrganization} from "./organizationAdminService.js";
+import {createClassroomScreenAccount} from "./classroomScreenService.js";
 
 const SETUP_ID = "default";
 const SETUP_VERSION = 1;
@@ -75,7 +77,8 @@ function runtimeChecks() {
 }
 
 async function loadSetupSnapshot(client = prisma) {
-    const [setup, schoolCount, localAccountCount, ownerCount, activeTermCount, gradeCount, subjectCount, screenCount] =
+    const [setup, schoolCount, localAccountCount, ownerCount, activeTermCount, gradeCount, subjectCount,
+        workspaceCount, teacherMembershipCount, screenCount] =
         await Promise.all([
             client.instanceSetup.findUnique({where: {id: SETUP_ID}}),
             client.school.count(),
@@ -84,6 +87,8 @@ async function loadSetupSnapshot(client = prisma) {
             client.academicTerm.count({where: {status: "ACTIVE"}}),
             client.grade.count(),
             client.subject.count(),
+            client.workspace.count({where: {isActive: true}}),
+            client.workspaceMember.count({where: {role: {in: ["OWNER", "TEACHER", "ASSISTANT"]}}}),
             client.classroomScreenBinding.count(),
         ]);
     const legacyCompleted = !setup && schoolCount > 0;
@@ -95,7 +100,8 @@ async function loadSetupSnapshot(client = prisma) {
         completed,
         legacyCompleted,
         counts: {schools: schoolCount, localAccounts: localAccountCount, owners: ownerCount,
-            activeTerms: activeTermCount, grades: gradeCount, subjects: subjectCount, screens: screenCount},
+            activeTerms: activeTermCount, grades: gradeCount, subjects: subjectCount,
+            workspaces: workspaceCount, teacherMemberships: teacherMembershipCount, screens: screenCount},
     };
 }
 
@@ -105,7 +111,8 @@ export async function getInstanceSetupStatus() {
     const steps = [
         {id: "runtime", title: "服务与密钥", complete: checks.every((item) => item.ok || item.severity !== "ERROR")},
         {id: "core", title: "管理员、学校与学期", complete: snapshot.counts.owners > 0 && snapshot.counts.activeTerms > 0},
-        {id: "organization", title: "组织与班级（可稍后处理）", complete: snapshot.counts.grades > 0, optional: true},
+        {id: "organization", title: "组织与班级（可稍后处理）", complete: snapshot.counts.grades > 0 && snapshot.counts.workspaces > 0, optional: true},
+        {id: "teachers", title: "首批教师（可稍后处理）", complete: snapshot.counts.teacherMemberships > 0, optional: true},
         {id: "screens", title: "班级大屏（可稍后处理）", complete: snapshot.counts.screens > 0, optional: true},
         {id: "complete", title: "完成初始化", complete: snapshot.completed},
     ];
@@ -122,6 +129,91 @@ export async function getInstanceSetupStatus() {
         steps,
         nextStep,
     };
+}
+
+async function requireSetupContext() {
+    const snapshot = await loadSetupSnapshot();
+    if (snapshot.completed) throw setupError("实例已经完成初始化", "SETUP_ALREADY_COMPLETED", 409);
+    const membership = await prisma.schoolMember.findFirst({
+        where: {role: "OWNER"},
+        include: {
+            account: {select: {id: true, name: true}},
+            school: {
+                include: {
+                    subjects: {orderBy: [{sortOrder: "asc"}, {name: "asc"}]},
+                    terms: {
+                        where: {status: "ACTIVE"},
+                        take: 1,
+                        include: {
+                            grades: {orderBy: [{sortOrder: "asc"}, {name: "asc"}]},
+                            workspaces: {
+                                where: {isActive: true},
+                                orderBy: [{type: "asc"}, {name: "asc"}],
+                                select: {id: true, code: true, name: true, type: true, gradeId: true, subjectId: true},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+    const term = membership?.school?.terms?.[0];
+    if (!membership || !term) throw setupError("请先完成管理员、学校与学期初始化", "SETUP_CORE_INCOMPLETE", 409);
+    return {membership, school: membership.school, term};
+}
+
+export async function getInstanceSetupContext() {
+    const {membership, school, term} = await requireSetupContext();
+    return {
+        owner: membership.account,
+        school: {
+            id: school.id,
+            code: school.code,
+            name: school.name,
+            teacherAuthMode: school.teacherAuthMode,
+            allowOAuthTeacherLogin: school.allowOAuthTeacherLogin,
+        },
+        term: {
+            id: term.id,
+            name: term.name,
+            academicYear: term.academicYear,
+            semester: term.semester,
+            startsAt: term.startsAt,
+            endsAt: term.endsAt,
+            status: term.status,
+        },
+        subjects: school.subjects,
+        grades: term.grades,
+        workspaces: term.workspaces,
+    };
+}
+
+export async function importInstanceSetupOrganization(document, dryRun = false) {
+    const {membership} = await requireSetupContext();
+    return importOrganization({accountId: membership.accountId, document, dryRun});
+}
+
+export async function importInstanceSetupTeachers(document, dryRun = false) {
+    const {membership, school, term} = await requireSetupContext();
+    return importLocalTeachers({
+        managerAccountId: membership.accountId,
+        schoolId: school.id,
+        termId: term.id,
+        document,
+        dryRun,
+    });
+}
+
+export async function createInstanceSetupScreen(input) {
+    const {membership, school} = await requireSetupContext();
+    return createClassroomScreenAccount({
+        managerAccountId: membership.accountId,
+        schoolId: school.id,
+        administrativeClassId: input?.administrativeClassId,
+        loginCode: input?.loginCode,
+        pin: input?.pin,
+        name: input?.name,
+    });
 }
 
 function normalizeCoreInput(input = {}) {

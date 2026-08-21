@@ -1,12 +1,22 @@
 import {Router} from "express";
+import {readFileSync} from "node:fs";
 import errors from "../../utils/errors.js";
 import {localAuthLimiter} from "../../middleware/rateLimiter.js";
 import {createSetupToken, setupKeyMatches, setupTokenAuth} from "../../utils/setupToken.js";
 import {
     completeInstanceSetup,
+    createInstanceSetupScreen,
+    getInstanceSetupContext,
     getInstanceSetupStatus,
+    importInstanceSetupOrganization,
+    importInstanceSetupTeachers,
     initializeInstanceCore,
 } from "../../services/instanceSetupService.js";
+
+const organizationTemplate = JSON.parse(readFileSync(
+    new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
+    "utf8",
+));
 
 const router = Router();
 
@@ -28,6 +38,49 @@ router.post("/session", localAuthLimiter, errors.catchAsync(async (req, res) => 
 router.post("/initialize", setupTokenAuth, errors.catchAsync(async (req, res) => {
     const result = await initializeInstanceCore(req.body || {});
     return res.status(201).json(errors.createSuccessResponse(result, "管理员、学校与学期已创建"));
+}));
+
+router.get("/context", setupTokenAuth, errors.catchAsync(async (req, res) => {
+    return res.json(errors.createSuccessResponse(await getInstanceSetupContext()));
+}));
+
+router.get("/organization/template", setupTokenAuth, (req, res) => {
+    return res.json(errors.createSuccessResponse(organizationTemplate));
+});
+
+router.post("/organization/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
+    const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
+    const result = await importInstanceSetupOrganization(req.body?.organization || req.body, dryRun);
+    if (!result.valid) {
+        return res.status(422).json({
+            success: false,
+            code: "ORGANIZATION_VALIDATION_FAILED",
+            message: "学校组织配置校验失败",
+            data: result,
+        });
+    }
+    return res.status(result.imported ? 201 : 200).json(errors.createSuccessResponse(result));
+}));
+
+router.post("/teachers/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
+    const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
+    const result = await importInstanceSetupTeachers(req.body?.assignmentPlan || req.body, dryRun);
+    if (!result.valid) {
+        return res.status(422).json({
+            success: false,
+            code: "LOCAL_TEACHER_IMPORT_VALIDATION_FAILED",
+            message: "教师账号与任课空间校验失败",
+            data: result,
+        });
+    }
+    return res.status(result.imported ? 201 : 200).json(errors.createSuccessResponse(result));
+}));
+
+router.post("/screens", setupTokenAuth, errors.catchAsync(async (req, res) => {
+    return res.status(201).json(errors.createSuccessResponse(
+        await createInstanceSetupScreen(req.body || {}),
+        "首个大屏账号已创建",
+    ));
 }));
 
 router.post("/complete", setupTokenAuth, errors.catchAsync(async (req, res) => {
