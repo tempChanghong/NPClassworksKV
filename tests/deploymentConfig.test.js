@@ -35,6 +35,7 @@ test("Caddy sends every backend namespace and readiness route to Node", () => {
 });
 
 test("the backend image deploys migrations before accepting traffic", () => {
+    assert.match(dockerfile, /apt-get install -y --no-install-recommends openssl/);
     assert.match(dockerfile, /COPY \. \./);
     assert.match(dockerfile, /\.\/node_modules\/\.bin\/prisma migrate deploy && exec node \.\/bin\/www/);
     assert.match(dockerfile, /\/ready/);
@@ -49,6 +50,7 @@ test("the production stack supplies the one-time local bootstrap key", () => {
 test("production images have stable local tags for application rollback", () => {
     assert.match(compose, /backend:[\s\S]*image: npclassworks-backend:current/);
     assert.match(compose, /frontend:[\s\S]*image: npclassworks-frontend:current/);
+    assert.match(compose, /VITE_DEFAULT_SERVER_PROVIDER: kv-server/);
 });
 
 test("database operations create verified backups and require explicit restore confirmation", () => {

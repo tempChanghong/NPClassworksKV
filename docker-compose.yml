@@ -64,6 +64,7 @@ services:
       args:
         VITE_DEFAULT_KV_SERVER: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
         VITE_DEFAULT_AUTH_SERVER: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+        VITE_DEFAULT_SERVER_PROVIDER: kv-server
     restart: unless-stopped
 
   caddy:
