@@ -3,10 +3,13 @@ import crypto from "node:crypto";
 import {prisma} from "../utils/prisma.js";
 import {localProviderId} from "../domain/localAccount.js";
 import {validateStaffConfigurationImport} from "../domain/staffConfigurationImport.js";
+import {mapWithConcurrency} from "../utils/asyncPool.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 
 const LOCAL_PROVIDER = "school-local";
 const BCRYPT_ROUNDS = Math.min(14, Math.max(10, Number(process.env.LOCAL_AUTH_BCRYPT_ROUNDS) || 10));
+const HASH_CONCURRENCY = Math.min(8, Math.max(1, Number(process.env.STAFF_IMPORT_HASH_CONCURRENCY) || 4));
+const TRANSACTION_TIMEOUT_MS = Math.min(180000, Math.max(60000, Number(process.env.STAFF_IMPORT_TRANSACTION_TIMEOUT_MS) || 120000));
 
 function importError(message, code, statusCode = 422, details = null) {
     return authorizationError(message, code, statusCode, details);
@@ -146,15 +149,14 @@ export async function importStaffConfiguration({managerAccountId, schoolId, term
     const usedPins = new Set(normalized.teachers
         .filter((teacher) => teacher.credential.mode === "FIXED_PIN")
         .map((teacher) => teacher.credential.pin));
-    const credentialPlans = [];
-    for (const teacher of normalized.teachers) {
+    const credentialPlans = await mapWithConcurrency(normalized.teachers, HASH_CONCURRENCY, async (teacher) => {
         const providerId = localProviderId(school.code, teacher.username);
         const existing = existingByProviderId.get(providerId);
         let pin = "";
         if (teacher.credential.mode === "FIXED_PIN") pin = teacher.credential.pin;
         else if (teacher.credential.mode === "GENERATE_PIN" && !existing?.localPasswordHash) pin = generateUniquePin(usedPins);
-        credentialPlans.push({teacher, providerId, existing, pin, passwordHash: pin ? await bcrypt.hash(pin, BCRYPT_ROUNDS) : null});
-    }
+        return {teacher, providerId, existing, pin, passwordHash: pin ? await bcrypt.hash(pin, BCRYPT_ROUNDS) : null};
+    });
 
     const result = await prisma.$transaction(async (tx) => {
         const accountsByUsername = new Map();
@@ -245,7 +247,7 @@ export async function importStaffConfiguration({managerAccountId, schoolId, term
             },
         });
         return importResult;
-    }, {timeout: 60000});
+    }, {timeout: TRANSACTION_TIMEOUT_MS});
 
     const credentials = credentialPlans.filter((plan) => plan.pin).map((plan) => ({
         username: plan.teacher.username,

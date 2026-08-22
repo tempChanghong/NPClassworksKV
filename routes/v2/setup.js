@@ -25,6 +25,13 @@ const staffConfigurationTemplate = JSON.parse(readFileSync(
 ));
 
 const router = Router();
+const BULK_IMPORT_TIMEOUT_MS = 150000;
+
+function bulkImportTimeout(req, res, next) {
+    req.setTimeout(BULK_IMPORT_TIMEOUT_MS);
+    res.setTimeout(BULK_IMPORT_TIMEOUT_MS);
+    next();
+}
 
 router.get("/status", errors.catchAsync(async (req, res) => {
     return res.json(errors.createSuccessResponse(await getInstanceSetupStatus()));
@@ -72,7 +79,7 @@ router.post("/organization/import", setupTokenAuth, errors.catchAsync(async (req
     return res.status(result.imported ? 201 : 200).json(errors.createSuccessResponse(result));
 }));
 
-router.post("/teachers/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
+router.post("/teachers/import", setupTokenAuth, bulkImportTimeout, errors.catchAsync(async (req, res) => {
     const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
     const result = await importInstanceSetupTeachers(req.body?.assignmentPlan || req.body, dryRun);
     if (!result.valid) {
@@ -86,7 +93,7 @@ router.post("/teachers/import", setupTokenAuth, errors.catchAsync(async (req, re
     return res.status(result.imported ? 201 : 200).json(errors.createSuccessResponse(result));
 }));
 
-router.post("/staff-configuration/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
+router.post("/staff-configuration/import", setupTokenAuth, bulkImportTimeout, errors.catchAsync(async (req, res) => {
     const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
     const result = await importInstanceSetupStaffConfiguration(req.body?.staffConfiguration || req.body, dryRun);
     if (!result.valid) {
