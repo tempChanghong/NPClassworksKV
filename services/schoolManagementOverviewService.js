@@ -2,6 +2,7 @@ import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 import {getTeachingRelationshipOverview} from "./teachingRelationshipService.js";
 import {getStaffResponsibilityOverview} from "./staffResponsibilityService.js";
+import {classroomScreenDutyState} from "../domain/classroomScreenDuty.js";
 
 function diagnostic(source, severity, code, message, details = {}) {
     return {source, severity, code, message, ...details};
@@ -53,13 +54,21 @@ export async function getSchoolManagementOverview({managerAccountId, schoolId, t
                 `${screen.name}已创建账号，但尚未在一体机上完成首次登录`,
                 {screenId: screen.id, workspaceId: administrativeClass.id, targetTab: "screens"},
             ));
-        } else if (screen.lastUsedAt && Date.now() - screen.lastUsedAt.getTime() > 7 * 24 * 60 * 60 * 1000) {
+        } else if (classroomScreenDutyState(screen) === "OFFLINE") {
             diagnostics.push(diagnostic(
                 "SCREEN",
                 "WARNING",
-                "SCREEN_STALE",
-                `${screen.name}已超过 7 天没有连接`,
-                {screenId: screen.id, lastUsedAt: screen.lastUsedAt, targetTab: "screens"},
+                "SCREEN_OFFLINE",
+                `${screen.name}当前没有值守心跳`,
+                {screenId: screen.id, lastHeartbeatAt: screen.lastHeartbeatAt, targetTab: "screens"},
+            ));
+        } else if (classroomScreenDutyState(screen) === "DEGRADED") {
+            diagnostics.push(diagnostic(
+                "SCREEN",
+                "WARNING",
+                "SCREEN_DEGRADED",
+                `${screen.name}在线，但存在断线、待同步作业或运行错误`,
+                {screenId: screen.id, runtimeStatus: screen.runtimeStatus, targetTab: "screens"},
             ));
         }
     }
@@ -109,6 +118,8 @@ export async function getSchoolManagementOverview({managerAccountId, schoolId, t
             teachingAssignments: teaching.summary.teachingAssignments,
             screens: screens.length,
             activatedScreens: screens.filter((item) => item.activatedAt).length,
+            onlineScreens: screens.filter((item) => classroomScreenDutyState(item) === "ONLINE").length,
+            attentionScreens: screens.filter((item) => ["OFFLINE", "DEGRADED"].includes(classroomScreenDutyState(item))).length,
             errors,
             warnings,
             healthy: errors === 0 && warnings === 0,

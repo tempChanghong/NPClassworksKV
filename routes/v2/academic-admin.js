@@ -67,6 +67,8 @@ import {
     getAcademicTermReadiness,
     previewAcademicTermTransition,
 } from "../../services/academicTermTransitionService.js";
+import {createAuditMiddleware, listAuditLogs} from "../../services/auditLogService.js";
+import {issueClassroomScreenCommand} from "../../services/classroomScreenDutyService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -76,6 +78,10 @@ const organizationTemplate = JSON.parse(readFileSync(
 const router = Router();
 
 router.use(jwtAuth);
+router.use(createAuditMiddleware({
+    actorType: "ACCOUNT",
+    actorResolver: (_req, res) => ({accountId: res.locals.account?.id}),
+}));
 
 router.get("/organization/template", (req, res) => {
     return res.json(errors.createSuccessResponse(organizationTemplate));
@@ -323,6 +329,18 @@ router.get("/schools/:schoolId/classroom-screens", errors.catchAsync(async (req,
     return res.json(errors.createSuccessResponse(bindings));
 }));
 
+router.get("/schools/:schoolId/audit-logs", errors.catchAsync(async (req, res) => {
+    const logs = await listAuditLogs({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        action: req.query.action,
+        actorType: req.query.actorType,
+        cursor: req.query.cursor,
+        limit: req.query.limit,
+    });
+    return res.json(errors.createSuccessResponse(logs));
+}));
+
 router.get("/schools/:schoolId/homework-settings", errors.catchAsync(async (req, res) => {
     const settings = await getSchoolHomeworkSettings({
         managerAccountId: res.locals.account.id,
@@ -396,6 +414,17 @@ router.post("/schools/:schoolId/classroom-screens/:bindingId/reset-device", erro
         bindingId: req.params.bindingId,
     });
     return res.json(errors.createSuccessResponse(binding, "原设备登录已失效，可在新设备上重新登录"));
+}));
+
+router.post("/schools/:schoolId/classroom-screens/:bindingId/commands", errors.catchAsync(async (req, res) => {
+    const command = await issueClassroomScreenCommand({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        bindingId: req.params.bindingId,
+        type: req.body?.type,
+        payload: req.body?.payload,
+    });
+    return res.status(201).json(errors.createSuccessResponse(command, "值守指令已下发"));
 }));
 
 router.post("/schools/:schoolId/local-admins", errors.catchAsync(async (req, res) => {

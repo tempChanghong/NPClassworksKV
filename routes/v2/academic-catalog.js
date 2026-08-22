@@ -7,6 +7,7 @@ import {
     listSchools,
     listSubjects,
     listWorkspaces,
+    validateAdministrativeClassStudentSelection,
 } from "../../services/academicCatalogService.js";
 import {WORKSPACE_TYPES} from "../../domain/academicCatalog.js";
 import {getPublicSchoolHomeworkSettings} from "../../services/schoolHomeworkSettingsService.js";
@@ -78,6 +79,26 @@ router.get(
             }
             throw error;
         }
+    }),
+);
+
+router.post(
+    "/administrative-classes/:id/student-selection/validate",
+    errors.catchAsync(async (req, res, next) => {
+        const validation = await validateAdministrativeClassStudentSelection(req.params.id, req.body);
+        if (!validation) {
+            return next(errors.createError(404, "行政班不存在", null, "ADMIN_CLASS_NOT_FOUND"));
+        }
+        return res.status(validation.valid ? 200 : 422).json(
+            validation.valid
+                ? errors.createSuccessResponse(validation, "选班校验通过")
+                : {
+                    success: false,
+                    code: "STUDENT_SELECTION_INVALID",
+                    message: "选班尚未完成，请处理标记项目",
+                    data: validation,
+                },
+        );
     }),
 );
 

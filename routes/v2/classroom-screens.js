@@ -24,6 +24,11 @@ import {
     saveClassAttendance,
 } from "../../services/classroomToolsService.js";
 import {acknowledgeScreenNotifications} from "../../services/notificationDeliveryService.js";
+import {
+    acknowledgeClassroomScreenCommand,
+    reportClassroomScreenHeartbeat,
+} from "../../services/classroomScreenDutyService.js";
+import {createAuditMiddleware} from "../../services/auditLogService.js";
 
 const router = Router();
 const screenLoginLimiter = rateLimit({
@@ -62,6 +67,31 @@ router.post("/login", screenLoginLimiter, errors.catchAsync(async (req, res) => 
 router.use(errors.catchAsync(async (req, res, next) => {
     res.locals.classroomScreen = await authenticateClassroomScreen(readToken(req));
     next();
+}));
+router.use(createAuditMiddleware({
+    actorType: "CLASSROOM_SCREEN",
+    actorResolver: (_req, res) => ({
+        schoolId: res.locals.classroomScreen?.schoolId,
+        screenBindingId: res.locals.classroomScreen?.id,
+    }),
+}));
+
+router.post("/heartbeat", errors.catchAsync(async (req, res) => {
+    const result = await reportClassroomScreenHeartbeat({
+        screenBinding: res.locals.classroomScreen,
+        status: req.body,
+    });
+    return res.json(errors.createSuccessResponse(result));
+}));
+
+router.post("/commands/:commandId/ack", errors.catchAsync(async (req, res) => {
+    const command = await acknowledgeClassroomScreenCommand({
+        screenBinding: res.locals.classroomScreen,
+        commandId: req.params.commandId,
+        success: req.body?.success !== false,
+        result: req.body?.result,
+    });
+    return res.json(errors.createSuccessResponse(command));
 }));
 
 router.post("/unlock", screenLoginLimiter, errors.catchAsync(async (req, res) => {

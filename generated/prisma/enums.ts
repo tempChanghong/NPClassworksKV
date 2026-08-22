@@ -13,7 +13,7 @@ export const AcademicTermStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
   ARCHIVED: 'ARCHIVED'
-} as const
+} as cons
 
 export type AcademicTermStatus = (typeof AcademicTermStatus)[keyof typeof AcademicTermStatus]
 
@@ -22,7 +22,7 @@ export const SubjectCategory = {
   CORE: 'CORE',
   ELECTIVE: 'ELECTIVE',
   OTHER: 'OTHER'
-} as const
+} as cons
 
 export type SubjectCategory = (typeof SubjectCategory)[keyof typeof SubjectCategory]
 
@@ -32,7 +32,7 @@ export const WorkspaceType = {
   COURSE_GROUP: 'COURSE_GROUP',
   GRADE_CHANNEL: 'GRADE_CHANNEL',
   SCHOOL_CHANNEL: 'SCHOOL_CHANNEL'
-} as const
+} as cons
 
 export type WorkspaceType = (typeof WorkspaceType)[keyof typeof WorkspaceType]
 
@@ -40,7 +40,7 @@ export type WorkspaceType = (typeof WorkspaceType)[keyof typeof WorkspaceType]
 export const SubjectDeliveryMode = {
   ADMIN_CLASS: 'ADMIN_CLASS',
   COURSE_GROUP: 'COURSE_GROUP'
-} as const
+} as cons
 
 export type SubjectDeliveryMode = (typeof SubjectDeliveryMode)[keyof typeof SubjectDeliveryMode]
 
@@ -50,7 +50,7 @@ export const WorkspaceMemberRole = {
   TEACHER: 'TEACHER',
   ASSISTANT: 'ASSISTANT',
   VIEWER: 'VIEWER'
-} as const
+} as cons
 
 export type WorkspaceMemberRole = (typeof WorkspaceMemberRole)[keyof typeof WorkspaceMemberRole]
 
@@ -58,7 +58,7 @@ export type WorkspaceMemberRole = (typeof WorkspaceMemberRole)[keyof typeof Work
 export const TeachingAssignmentPosition = {
   PRIMARY: 'PRIMARY',
   CO_TEACHER: 'CO_TEACHER'
-} as const
+} as cons
 
 export type TeachingAssignmentPosition = (typeof TeachingAssignmentPosition)[keyof typeof TeachingAssignmentPosition]
 
@@ -66,7 +66,7 @@ export type TeachingAssignmentPosition = (typeof TeachingAssignmentPosition)[key
 export const GradeLeadershipPosition = {
   PRIMARY: 'PRIMARY',
   DEPUTY: 'DEPUTY'
-} as const
+} as cons
 
 export type GradeLeadershipPosition = (typeof GradeLeadershipPosition)[keyof typeof GradeLeadershipPosition]
 
@@ -74,7 +74,7 @@ export type GradeLeadershipPosition = (typeof GradeLeadershipPosition)[keyof typ
 export const AdministrativeClassLeadershipPosition = {
   HEAD_TEACHER: 'HEAD_TEACHER',
   CO_HEAD_TEACHER: 'CO_HEAD_TEACHER'
-} as const
+} as cons
 
 export type AdministrativeClassLeadershipPosition = (typeof AdministrativeClassLeadershipPosition)[keyof typeof AdministrativeClassLeadershipPosition]
 
@@ -84,7 +84,7 @@ export const SchoolMemberRole = {
   ADMIN: 'ADMIN',
   MANAGER: 'MANAGER',
   VIEWER: 'VIEWER'
-} as const
+} as cons
 
 export type SchoolMemberRole = (typeof SchoolMemberRole)[keyof typeof SchoolMemberRole]
 
@@ -93,7 +93,7 @@ export const TeacherAuthMode = {
   LOCAL_PIN: 'LOCAL_PIN',
   SHARED_PASSWORD: 'SHARED_PASSWORD',
   OAUTH_EMAIL: 'OAUTH_EMAIL'
-} as const
+} as cons
 
 export type TeacherAuthMode = (typeof TeacherAuthMode)[keyof typeof TeacherAuthMode]
 
@@ -101,7 +101,7 @@ export type TeacherAuthMode = (typeof TeacherAuthMode)[keyof typeof TeacherAuthM
 export const PublicationType = {
   ASSIGNMENT: 'ASSIGNMENT',
   NOTICE: 'NOTICE'
-} as const
+} as cons
 
 export type PublicationType = (typeof PublicationType)[keyof typeof PublicationType]
 
@@ -110,7 +110,7 @@ export const PublicationStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',
   WITHDRAWN: 'WITHDRAWN'
-} as const
+} as cons
 
 export type PublicationStatus = (typeof PublicationStatus)[keyof typeof PublicationStatus]
 
@@ -119,7 +119,7 @@ export const PublicationPriority = {
   NORMAL: 'NORMAL',
   IMPORTANT: 'IMPORTANT',
   URGENT: 'URGENT'
-} as const
+} as cons
 
 export type PublicationPriority = (typeof PublicationPriority)[keyof typeof PublicationPriority]
 
@@ -128,7 +128,7 @@ export const PublicationActorType = {
   ACCOUNT: 'ACCOUNT',
   CLASSROOM_SCREEN: 'CLASSROOM_SCREEN',
   SYSTEM: 'SYSTEM'
-} as const
+} as cons
 
 export type PublicationActorType = (typeof PublicationActorType)[keyof typeof PublicationActorType]
 
@@ -138,6 +138,6 @@ export const PublicationRevisionAction = {
   UPDATED: 'UPDATED',
   RESTORED: 'RESTORED',
   WITHDRAWN: 'WITHDRAWN'
-} as const
+} as cons
 
 export type PublicationRevisionAction = (typeof PublicationRevisionAction)[keyof typeof PublicationRevisionAction]

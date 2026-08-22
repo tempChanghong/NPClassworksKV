@@ -23,9 +23,9 @@ import * as Prisma from "./internal/prismaNamespace.ts"
 export * as $Enums from './enums.ts'
 export * from "./enums.ts"
 /**
- * ## Prisma Client
+ * ## Prisma Clien
  *
- * Type-safe database client for TypeScript
+ * Type-safe database client for TypeScrip
  * @example
  * ```
  * const prisma = new PrismaClient()
@@ -40,7 +40,7 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Account
+ * Model Accoun
  *
  */
 export type Account = Prisma.AccountModel
@@ -101,7 +101,7 @@ export type AcademicTerm = Prisma.AcademicTermModel
  */
 export type Grade = Prisma.GradeModel
 /**
- * Model Subject
+ * Model Subjec
  *
  */
 export type Subject = Prisma.SubjectModel
@@ -116,7 +116,7 @@ export type Workspace = Prisma.WorkspaceModel
  */
 export type WorkspaceSourceClass = Prisma.WorkspaceSourceClassModel
 /**
- * Model AdministrativeClassSubject
+ * Model AdministrativeClassSubjec
  * 明确记录行政班每个科目是随行政班还是走班。
  * 例如一、二班的物化生为 ADMIN_CLASS，五至七班的选科可为 COURSE_GROUP。
  */
@@ -127,7 +127,7 @@ export type AdministrativeClassSubject = Prisma.AdministrativeClassSubjectModel
  */
 export type WorkspaceMember = Prisma.WorkspaceMemberModel
 /**
- * Model TeachingAssignment
+ * Model TeachingAssignmen
  * 教师实际承担的授课关系。WorkspaceMember 只负责空间访问权限，本表负责表达“教哪一科”。
  * 行政班必须明确 subjectId；走班教学班的 subjectId 必须与 Workspace.subjectId 一致。
  */
@@ -154,7 +154,7 @@ export type WorkspaceMemberInvite = Prisma.WorkspaceMemberInviteModel
  */
 export type Publication = Prisma.PublicationModel
 /**
- * Model PublicationTarget
+ * Model PublicationTarge
  *
  */
 export type PublicationTarget = Prisma.PublicationTargetModel
@@ -164,12 +164,22 @@ export type PublicationTarget = Prisma.PublicationTargetModel
  */
 export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
 /**
+ * Model AuditLog
+ * 管理操作和大屏写操作的不可变审计摘要。敏感字段在写入前统一脱敏。
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model ClassroomScreenCommand
+ * 管理员下发给大屏的轻量值守指令；大屏以心跳领取并回执。
+ */
+export type ClassroomScreenCommand = Prisma.ClassroomScreenCommandModel
+/**
  * Model NotificationScreenDelivery
  * 班级大屏对通知当前版本的接收与展示回执，不跟踪个人学生阅读状态。
  */
 export type NotificationScreenDelivery = Prisma.NotificationScreenDeliveryModel
 /**
- * Model AdministrativeClassStudent
+ * Model AdministrativeClassStuden
  * 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
  */
 export type AdministrativeClassStudent = Prisma.AdministrativeClassStudentModel

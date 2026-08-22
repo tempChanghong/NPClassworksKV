@@ -51,6 +51,7 @@ export type ClassroomScreenBindingMinAggregateOutputType = {
   credentialVersion: number | null
   activatedAt: Date | null
   lastUsedAt: Date | null
+  lastHeartbeatAt: Date | null
   createdByAccountId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -71,6 +72,7 @@ export type ClassroomScreenBindingMaxAggregateOutputType = {
   credentialVersion: number | null
   activatedAt: Date | null
   lastUsedAt: Date | null
+  lastHeartbeatAt: Date | null
   createdByAccountId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -91,6 +93,8 @@ export type ClassroomScreenBindingCountAggregateOutputType = {
   credentialVersion: number
   activatedAt: number
   lastUsedAt: number
+  lastHeartbeatAt: number
+  runtimeStatus: number
   createdByAccountId: number
   createdAt: number
   updatedAt: number
@@ -123,6 +127,7 @@ export type ClassroomScreenBindingMinAggregateInputType = {
   credentialVersion?: true
   activatedAt?: true
   lastUsedAt?: true
+  lastHeartbeatAt?: true
   createdByAccountId?: true
   createdAt?: true
   updatedAt?: true
@@ -143,6 +148,7 @@ export type ClassroomScreenBindingMaxAggregateInputType = {
   credentialVersion?: true
   activatedAt?: true
   lastUsedAt?: true
+  lastHeartbeatAt?: true
   createdByAccountId?: true
   createdAt?: true
   updatedAt?: true
@@ -163,6 +169,8 @@ export type ClassroomScreenBindingCountAggregateInputType = {
   credentialVersion?: true
   activatedAt?: true
   lastUsedAt?: true
+  lastHeartbeatAt?: true
+  runtimeStatus?: true
   createdByAccountId?: true
   createdAt?: true
   updatedAt?: true
@@ -173,7 +181,7 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which ClassroomScreenBinding to aggregate.
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -185,7 +193,7 @@ export type ClassroomScreenBindingAggregateArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the start position
    */
-  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -242,10 +250,10 @@ export type GetClassroomScreenBindingAggregateType<T extends ClassroomScreenBind
 
 
 export type ClassroomScreenBindingGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   orderBy?: Prisma.ClassroomScreenBindingOrderByWithAggregationInput | Prisma.ClassroomScreenBindingOrderByWithAggregationInput[]
   by: Prisma.ClassroomScreenBindingScalarFieldEnum[] | Prisma.ClassroomScreenBindingScalarFieldEnum
-  having?: Prisma.ClassroomScreenBindingScalarWhereWithAggregatesInput
+  having?: Prisma.ClassroomScreenBindingScalarWhereWithAggregatesInpu
   take?: number
   skip?: number
   _count?: ClassroomScreenBindingCountAggregateInputType | true
@@ -270,6 +278,8 @@ export type ClassroomScreenBindingGroupByOutputType = {
   credentialVersion: number
   activatedAt: Date | null
   lastUsedAt: Date | null
+  lastHeartbeatAt: Date | null
+  runtimeStatus: runtime.JsonValue | null
   createdByAccountId: string
   createdAt: Date
   updatedAt: Date
@@ -313,6 +323,8 @@ export type ClassroomScreenBindingWhereInput = {
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  runtimeStatus?: Prisma.JsonNullableFilter<"ClassroomScreenBinding">
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -323,6 +335,8 @@ export type ClassroomScreenBindingWhereInput = {
   publicationRevisions?: Prisma.PublicationRevisionListRelationFilter
   notificationDeliveries?: Prisma.NotificationScreenDeliveryListRelationFilter
   attendanceDaysUpdated?: Prisma.ClassAttendanceDayListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  commands?: Prisma.ClassroomScreenCommandListRelationFilter
 }
 
 export type ClassroomScreenBindingOrderByWithRelationInput = {
@@ -340,23 +354,27 @@ export type ClassroomScreenBindingOrderByWithRelationInput = {
   credentialVersion?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastHeartbeatAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  runtimeStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  school?: Prisma.SchoolOrderByWithRelationInput
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
-  createdBy?: Prisma.AccountOrderByWithRelationInput
-  latestPublications?: Prisma.PublicationOrderByRelationAggregateInput
-  publicationRevisions?: Prisma.PublicationRevisionOrderByRelationAggregateInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryOrderByRelationAggregateInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayOrderByRelationAggregateInput
+  school?: Prisma.SchoolOrderByWithRelationInpu
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
+  createdBy?: Prisma.AccountOrderByWithRelationInpu
+  latestPublications?: Prisma.PublicationOrderByRelationAggregateInpu
+  publicationRevisions?: Prisma.PublicationRevisionOrderByRelationAggregateInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryOrderByRelationAggregateInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayOrderByRelationAggregateInpu
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInpu
+  commands?: Prisma.ClassroomScreenCommandOrderByRelationAggregateInpu
 }
 
 export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   tokenHash?: string
-  schoolId_deviceFingerprint?: Prisma.ClassroomScreenBindingSchoolIdDeviceFingerprintCompoundUniqueInput
-  schoolId_loginCode?: Prisma.ClassroomScreenBindingSchoolIdLoginCodeCompoundUniqueInput
+  schoolId_deviceFingerprint?: Prisma.ClassroomScreenBindingSchoolIdDeviceFingerprintCompoundUniqueInpu
+  schoolId_loginCode?: Prisma.ClassroomScreenBindingSchoolIdLoginCodeCompoundUniqueInpu
   AND?: Prisma.ClassroomScreenBindingWhereInput | Prisma.ClassroomScreenBindingWhereInput[]
   OR?: Prisma.ClassroomScreenBindingWhereInput[]
   NOT?: Prisma.ClassroomScreenBindingWhereInput | Prisma.ClassroomScreenBindingWhereInput[]
@@ -372,6 +390,8 @@ export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  runtimeStatus?: Prisma.JsonNullableFilter<"ClassroomScreenBinding">
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -382,6 +402,8 @@ export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   publicationRevisions?: Prisma.PublicationRevisionListRelationFilter
   notificationDeliveries?: Prisma.NotificationScreenDeliveryListRelationFilter
   attendanceDaysUpdated?: Prisma.ClassAttendanceDayListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  commands?: Prisma.ClassroomScreenCommandListRelationFilter
 }, "id" | "tokenHash" | "schoolId_deviceFingerprint" | "schoolId_loginCode">
 
 export type ClassroomScreenBindingOrderByWithAggregationInput = {
@@ -399,14 +421,16 @@ export type ClassroomScreenBindingOrderByWithAggregationInput = {
   credentialVersion?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastHeartbeatAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  runtimeStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.ClassroomScreenBindingCountOrderByAggregateInput
-  _avg?: Prisma.ClassroomScreenBindingAvgOrderByAggregateInput
-  _max?: Prisma.ClassroomScreenBindingMaxOrderByAggregateInput
-  _min?: Prisma.ClassroomScreenBindingMinOrderByAggregateInput
-  _sum?: Prisma.ClassroomScreenBindingSumOrderByAggregateInput
+  _count?: Prisma.ClassroomScreenBindingCountOrderByAggregateInpu
+  _avg?: Prisma.ClassroomScreenBindingAvgOrderByAggregateInpu
+  _max?: Prisma.ClassroomScreenBindingMaxOrderByAggregateInpu
+  _min?: Prisma.ClassroomScreenBindingMinOrderByAggregateInpu
+  _sum?: Prisma.ClassroomScreenBindingSumOrderByAggregateInpu
 }
 
 export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
@@ -427,6 +451,8 @@ export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
   credentialVersion?: Prisma.IntWithAggregatesFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
+  lastHeartbeatAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
+  runtimeStatus?: Prisma.JsonNullableWithAggregatesFilter<"ClassroomScreenBinding">
   createdByAccountId?: Prisma.StringWithAggregatesFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string
@@ -445,15 +471,19 @@ export type ClassroomScreenBindingCreateInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateInput = {
@@ -471,13 +501,17 @@ export type ClassroomScreenBindingUncheckedCreateInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUpdateInput = {
@@ -493,15 +527,19 @@ export type ClassroomScreenBindingUpdateInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateInput = {
@@ -519,13 +557,17 @@ export type ClassroomScreenBindingUncheckedUpdateInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingCreateManyInput = {
@@ -543,6 +585,8 @@ export type ClassroomScreenBindingCreateManyInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -561,6 +605,8 @@ export type ClassroomScreenBindingUpdateManyMutationInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -580,15 +626,17 @@ export type ClassroomScreenBindingUncheckedUpdateManyInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClassroomScreenBindingListRelationFilter = {
-  every?: Prisma.ClassroomScreenBindingWhereInput
-  some?: Prisma.ClassroomScreenBindingWhereInput
-  none?: Prisma.ClassroomScreenBindingWhereInput
+  every?: Prisma.ClassroomScreenBindingWhereInpu
+  some?: Prisma.ClassroomScreenBindingWhereInpu
+  none?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingOrderByRelationAggregateInput = {
@@ -625,6 +673,8 @@ export type ClassroomScreenBindingCountOrderByAggregateInput = {
   credentialVersion?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
+  lastHeartbeatAt?: Prisma.SortOrder
+  runtimeStatus?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -650,6 +700,7 @@ export type ClassroomScreenBindingMaxOrderByAggregateInput = {
   credentialVersion?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
+  lastHeartbeatAt?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -670,6 +721,7 @@ export type ClassroomScreenBindingMinOrderByAggregateInput = {
   credentialVersion?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
+  lastHeartbeatAt?: Prisma.SortOrder
   createdByAccountId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -681,8 +733,8 @@ export type ClassroomScreenBindingSumOrderByAggregateInput = {
 }
 
 export type ClassroomScreenBindingScalarRelationFilter = {
-  is?: Prisma.ClassroomScreenBindingWhereInput
-  isNot?: Prisma.ClassroomScreenBindingWhereInput
+  is?: Prisma.ClassroomScreenBindingWhereInpu
+  isNot?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingCreateNestedManyWithoutCreatedByInput = {
@@ -813,63 +865,93 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassN
 
 export type ClassroomScreenBindingCreateNestedOneWithoutLatestPublicationsInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutLatestPublicationsInput
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutLatestPublicationsInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 export type ClassroomScreenBindingUpdateOneWithoutLatestPublicationsNestedInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutLatestPublicationsInput
-  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutLatestPublicationsInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutLatestPublicationsInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutLatestPublicationsInpu
   disconnect?: Prisma.ClassroomScreenBindingWhereInput | boolean
   delete?: Prisma.ClassroomScreenBindingWhereInput | boolean
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUpdateWithoutLatestPublicationsInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput>
+}
+
+export type ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAuditLogsInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
+}
+
+export type ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAuditLogsInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutAuditLogsInpu
+  disconnect?: Prisma.ClassroomScreenBindingWhereInput | boolean
+  delete?: Prisma.ClassroomScreenBindingWhereInput | boolean
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUpdateWithoutAuditLogsInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type ClassroomScreenBindingCreateNestedOneWithoutCommandsInput = {
+  create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCommandsInput>
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutCommandsInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
+}
+
+export type ClassroomScreenBindingUpdateOneRequiredWithoutCommandsNestedInput = {
+  create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCommandsInput>
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutCommandsInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutCommandsInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutCommandsInput, Prisma.ClassroomScreenBindingUpdateWithoutCommandsInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutCommandsInput>
 }
 
 export type ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutNotificationDeliveriesInput
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutNotificationDeliveriesInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 export type ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutNotificationDeliveriesInput
-  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutNotificationDeliveriesInput
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutNotificationDeliveriesInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutNotificationDeliveriesInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesInput>
 }
 
 export type ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAttendanceDaysUpdatedInput
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAttendanceDaysUpdatedInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 export type ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAttendanceDaysUpdatedInput
-  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutAttendanceDaysUpdatedInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutAttendanceDaysUpdatedInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutAttendanceDaysUpdatedInpu
   disconnect?: Prisma.ClassroomScreenBindingWhereInput | boolean
   delete?: Prisma.ClassroomScreenBindingWhereInput | boolean
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
 }
 
 export type ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutPublicationRevisionsInput
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutPublicationRevisionsInpu
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 export type ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInput = {
   create?: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInput>
-  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutPublicationRevisionsInput
-  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutPublicationRevisionsInput
+  connectOrCreate?: Prisma.ClassroomScreenBindingCreateOrConnectWithoutPublicationRevisionsInpu
+  upsert?: Prisma.ClassroomScreenBindingUpsertWithoutPublicationRevisionsInpu
   disconnect?: Prisma.ClassroomScreenBindingWhereInput | boolean
   delete?: Prisma.ClassroomScreenBindingWhereInput | boolean
-  connect?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  connect?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClassroomScreenBindingUpdateToOneWithWhereWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput>, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInput>
 }
 
@@ -886,14 +968,18 @@ export type ClassroomScreenBindingCreateWithoutCreatedByInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput = {
@@ -911,16 +997,20 @@ export type ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutCreatedByInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCreatedByInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput>
 }
 
@@ -930,18 +1020,18 @@ export type ClassroomScreenBindingCreateManyCreatedByInputEnvelope = {
 }
 
 export type ClassroomScreenBindingUpsertWithWhereUniqueWithoutCreatedByInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutCreatedByInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCreatedByInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput>
 }
 
 export type ClassroomScreenBindingUpdateWithWhereUniqueWithoutCreatedByInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutCreatedByInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput>
 }
 
 export type ClassroomScreenBindingUpdateManyWithWhereWithoutCreatedByInput = {
-  where: Prisma.ClassroomScreenBindingScalarWhereInput
+  where: Prisma.ClassroomScreenBindingScalarWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateManyMutationInput, Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput>
 }
 
@@ -963,6 +1053,8 @@ export type ClassroomScreenBindingScalarWhereInput = {
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
+  runtimeStatus?: Prisma.JsonNullableFilter<"ClassroomScreenBinding">
   createdByAccountId?: Prisma.StringFilter<"ClassroomScreenBinding"> | string
   createdAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ClassroomScreenBinding"> | Date | string
@@ -981,14 +1073,18 @@ export type ClassroomScreenBindingCreateWithoutSchoolInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutSchoolInput = {
@@ -1005,17 +1101,21 @@ export type ClassroomScreenBindingUncheckedCreateWithoutSchoolInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutSchoolInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutSchoolInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutSchoolInput>
 }
 
@@ -1025,18 +1125,18 @@ export type ClassroomScreenBindingCreateManySchoolInputEnvelope = {
 }
 
 export type ClassroomScreenBindingUpsertWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutSchoolInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutSchoolInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutSchoolInput>
 }
 
 export type ClassroomScreenBindingUpdateWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutSchoolInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput>
 }
 
 export type ClassroomScreenBindingUpdateManyWithWhereWithoutSchoolInput = {
-  where: Prisma.ClassroomScreenBindingScalarWhereInput
+  where: Prisma.ClassroomScreenBindingScalarWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateManyMutationInput, Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput>
 }
 
@@ -1053,14 +1153,18 @@ export type ClassroomScreenBindingCreateWithoutAdministrativeClassInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput = {
@@ -1077,17 +1181,21 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAdministrativeClassInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -1097,18 +1205,18 @@ export type ClassroomScreenBindingCreateManyAdministrativeClassInputEnvelope = {
 }
 
 export type ClassroomScreenBindingUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAdministrativeClassInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAdministrativeClassInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type ClassroomScreenBindingUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAdministrativeClassInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type ClassroomScreenBindingUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.ClassroomScreenBindingScalarWhereInput
+  where: Prisma.ClassroomScreenBindingScalarWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateManyMutationInput, Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -1125,14 +1233,18 @@ export type ClassroomScreenBindingCreateWithoutLatestPublicationsInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput = {
@@ -1150,27 +1262,31 @@ export type ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput 
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutLatestPublicationsInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput>
 }
 
 export type ClassroomScreenBindingUpsertWithoutLatestPublicationsInput = {
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput>
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingUpdateToOneWithWhereWithoutLatestPublicationsInput = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutLatestPublicationsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput>
 }
 
@@ -1187,14 +1303,18 @@ export type ClassroomScreenBindingUpdateWithoutLatestPublicationsInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput = {
@@ -1212,12 +1332,264 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput 
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
+}
+
+export type ClassroomScreenBindingCreateWithoutAuditLogsInput = {
+  id?: string
+  deviceFingerprint?: string | null
+  name: string
+  loginCode?: string | null
+  pinHash?: string | null
+  tokenHash: string
+  isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
+  lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
+}
+
+export type ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput = {
+  id?: string
+  schoolId: string
+  administrativeClassId: string
+  deviceFingerprint?: string | null
+  name: string
+  loginCode?: string | null
+  pinHash?: string | null
+  tokenHash: string
+  isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
+  lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdByAccountId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
+}
+
+export type ClassroomScreenBindingCreateOrConnectWithoutAuditLogsInput = {
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
+  create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput>
+}
+
+export type ClassroomScreenBindingUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput>
+  where?: Prisma.ClassroomScreenBindingWhereInpu
+}
+
+export type ClassroomScreenBindingUpdateToOneWithWhereWithoutAuditLogsInput = {
+  where?: Prisma.ClassroomScreenBindingWhereInpu
+  data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAuditLogsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type ClassroomScreenBindingUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
+}
+
+export type ClassroomScreenBindingUncheckedUpdateWithoutAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
+}
+
+export type ClassroomScreenBindingCreateWithoutCommandsInput = {
+  id?: string
+  deviceFingerprint?: string | null
+  name: string
+  loginCode?: string | null
+  pinHash?: string | null
+  tokenHash: string
+  isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
+  lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+}
+
+export type ClassroomScreenBindingUncheckedCreateWithoutCommandsInput = {
+  id?: string
+  schoolId: string
+  administrativeClassId: string
+  deviceFingerprint?: string | null
+  name: string
+  loginCode?: string | null
+  pinHash?: string | null
+  tokenHash: string
+  isActive?: boolean
+  loginFailures?: number
+  lockedUntil?: Date | string | null
+  credentialVersion?: number
+  activatedAt?: Date | string | null
+  lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdByAccountId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+}
+
+export type ClassroomScreenBindingCreateOrConnectWithoutCommandsInput = {
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
+  create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCommandsInput>
+}
+
+export type ClassroomScreenBindingUpsertWithoutCommandsInput = {
+  update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutCommandsInput>
+  create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutCommandsInput>
+  where?: Prisma.ClassroomScreenBindingWhereInpu
+}
+
+export type ClassroomScreenBindingUpdateToOneWithWhereWithoutCommandsInput = {
+  where?: Prisma.ClassroomScreenBindingWhereInpu
+  data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutCommandsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutCommandsInput>
+}
+
+export type ClassroomScreenBindingUpdateWithoutCommandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+}
+
+export type ClassroomScreenBindingUncheckedUpdateWithoutCommandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceFingerprint?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  loginCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  loginFailures?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
 }
 
 export type ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput = {
@@ -1233,14 +1605,18 @@ export type ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesInput = {
@@ -1258,27 +1634,31 @@ export type ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesIn
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutNotificationDeliveriesInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesInput>
 }
 
 export type ClassroomScreenBindingUpsertWithoutNotificationDeliveriesInput = {
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesInput>
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingUpdateToOneWithWhereWithoutNotificationDeliveriesInput = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesInput>
 }
 
@@ -1295,14 +1675,18 @@ export type ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesInput = {
@@ -1320,12 +1704,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesIn
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput = {
@@ -1341,14 +1729,18 @@ export type ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInput = {
@@ -1366,27 +1758,31 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInp
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedCreateNestedManyWithoutScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutAttendanceDaysUpdatedInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInput>
 }
 
 export type ClassroomScreenBindingUpsertWithoutAttendanceDaysUpdatedInput = {
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInput>
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingUpdateToOneWithWhereWithoutAttendanceDaysUpdatedInput = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInput>
 }
 
@@ -1403,14 +1799,18 @@ export type ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInput = {
@@ -1428,12 +1828,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInp
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingCreateWithoutPublicationRevisionsInput = {
@@ -1449,14 +1853,18 @@ export type ClassroomScreenBindingCreateWithoutPublicationRevisionsInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInput
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInput
-  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInput
-  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInput
+  school: Prisma.SchoolCreateNestedOneWithoutClassroomScreensInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutClassroomScreensInpu
+  createdBy: Prisma.AccountCreateNestedOneWithoutClassroomScreensCreatedInpu
+  latestPublications?: Prisma.PublicationCreateNestedManyWithoutLatestScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInput = {
@@ -1474,27 +1882,31 @@ export type ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInpu
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInput
+  latestPublications?: Prisma.PublicationUncheckedCreateNestedManyWithoutLatestScreenBindingInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedCreateNestedManyWithoutScreenBindingInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutUpdatedByScreenInpu
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorScreenInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedCreateNestedManyWithoutScreenBindingInpu
 }
 
 export type ClassroomScreenBindingCreateOrConnectWithoutPublicationRevisionsInput = {
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInput>
 }
 
 export type ClassroomScreenBindingUpsertWithoutPublicationRevisionsInput = {
   update: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInput>
   create: Prisma.XOR<Prisma.ClassroomScreenBindingCreateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInput>
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 export type ClassroomScreenBindingUpdateToOneWithWhereWithoutPublicationRevisionsInput = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   data: Prisma.XOR<Prisma.ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput, Prisma.ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInput>
 }
 
@@ -1511,14 +1923,18 @@ export type ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInput = {
@@ -1536,12 +1952,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInpu
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingCreateManyCreatedByInput = {
@@ -1559,6 +1979,8 @@ export type ClassroomScreenBindingCreateManyCreatedByInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1576,14 +1998,18 @@ export type ClassroomScreenBindingUpdateWithoutCreatedByInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput = {
@@ -1601,12 +2027,16 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1624,6 +2054,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1642,6 +2074,8 @@ export type ClassroomScreenBindingCreateManySchoolInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1660,14 +2094,18 @@ export type ClassroomScreenBindingUpdateWithoutSchoolInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput = {
@@ -1684,13 +2122,17 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput = {
@@ -1707,6 +2149,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1726,6 +2170,8 @@ export type ClassroomScreenBindingCreateManyAdministrativeClassInput = {
   credentialVersion?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
+  lastHeartbeatAt?: Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1744,14 +2190,18 @@ export type ClassroomScreenBindingUpdateWithoutAdministrativeClassInput = {
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInput
-  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInput
-  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInput
+  school?: Prisma.SchoolUpdateOneRequiredWithoutClassroomScreensNestedInpu
+  createdBy?: Prisma.AccountUpdateOneRequiredWithoutClassroomScreensCreatedNestedInpu
+  latestPublications?: Prisma.PublicationUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput = {
@@ -1768,13 +2218,17 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInput
-  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInput
-  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInput
-  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInput
+  latestPublications?: Prisma.PublicationUncheckedUpdateManyWithoutLatestScreenBindingNestedInpu
+  publicationRevisions?: Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  notificationDeliveries?: Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingNestedInpu
+  attendanceDaysUpdated?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenNestedInpu
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenNestedInpu
+  commands?: Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingNestedInpu
 }
 
 export type ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassInput = {
@@ -1791,6 +2245,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassI
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runtimeStatus?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdByAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1806,6 +2262,8 @@ export type ClassroomScreenBindingCountOutputType = {
   publicationRevisions: number
   notificationDeliveries: number
   attendanceDaysUpdated: number
+  auditLogs: number
+  commands: number
 }
 
 export type ClassroomScreenBindingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1813,6 +2271,8 @@ export type ClassroomScreenBindingCountOutputTypeSelect<ExtArgs extends runtime.
   publicationRevisions?: boolean | ClassroomScreenBindingCountOutputTypeCountPublicationRevisionsArgs
   notificationDeliveries?: boolean | ClassroomScreenBindingCountOutputTypeCountNotificationDeliveriesArgs
   attendanceDaysUpdated?: boolean | ClassroomScreenBindingCountOutputTypeCountAttendanceDaysUpdatedArgs
+  auditLogs?: boolean | ClassroomScreenBindingCountOutputTypeCountAuditLogsArgs
+  commands?: boolean | ClassroomScreenBindingCountOutputTypeCountCommandsArgs
 }
 
 /**
@@ -1829,28 +2289,42 @@ export type ClassroomScreenBindingCountOutputTypeDefaultArgs<ExtArgs extends run
  * ClassroomScreenBindingCountOutputType without action
  */
 export type ClassroomScreenBindingCountOutputTypeCountLatestPublicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublicationWhereInput
+  where?: Prisma.PublicationWhereInpu
 }
 
 /**
  * ClassroomScreenBindingCountOutputType without action
  */
 export type ClassroomScreenBindingCountOutputTypeCountPublicationRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublicationRevisionWhereInput
+  where?: Prisma.PublicationRevisionWhereInpu
 }
 
 /**
  * ClassroomScreenBindingCountOutputType without action
  */
 export type ClassroomScreenBindingCountOutputTypeCountNotificationDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationScreenDeliveryWhereInput
+  where?: Prisma.NotificationScreenDeliveryWhereInpu
 }
 
 /**
  * ClassroomScreenBindingCountOutputType without action
  */
 export type ClassroomScreenBindingCountOutputTypeCountAttendanceDaysUpdatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassAttendanceDayWhereInput
+  where?: Prisma.ClassAttendanceDayWhereInpu
+}
+
+/**
+ * ClassroomScreenBindingCountOutputType without action
+ */
+export type ClassroomScreenBindingCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInpu
+}
+
+/**
+ * ClassroomScreenBindingCountOutputType without action
+ */
+export type ClassroomScreenBindingCountOutputTypeCountCommandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClassroomScreenCommandWhereInpu
 }
 
 
@@ -1869,6 +2343,8 @@ export type ClassroomScreenBindingSelect<ExtArgs extends runtime.Types.Extension
   credentialVersion?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
+  lastHeartbeatAt?: boolean
+  runtimeStatus?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1879,6 +2355,8 @@ export type ClassroomScreenBindingSelect<ExtArgs extends runtime.Types.Extension
   publicationRevisions?: boolean | Prisma.ClassroomScreenBinding$publicationRevisionsArgs<ExtArgs>
   notificationDeliveries?: boolean | Prisma.ClassroomScreenBinding$notificationDeliveriesArgs<ExtArgs>
   attendanceDaysUpdated?: boolean | Prisma.ClassroomScreenBinding$attendanceDaysUpdatedArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.ClassroomScreenBinding$auditLogsArgs<ExtArgs>
+  commands?: boolean | Prisma.ClassroomScreenBinding$commandsArgs<ExtArgs>
   _count?: boolean | Prisma.ClassroomScreenBindingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["classroomScreenBinding"]>
 
@@ -1897,6 +2375,8 @@ export type ClassroomScreenBindingSelectCreateManyAndReturn<ExtArgs extends runt
   credentialVersion?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
+  lastHeartbeatAt?: boolean
+  runtimeStatus?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1920,6 +2400,8 @@ export type ClassroomScreenBindingSelectUpdateManyAndReturn<ExtArgs extends runt
   credentialVersion?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
+  lastHeartbeatAt?: boolean
+  runtimeStatus?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1943,12 +2425,14 @@ export type ClassroomScreenBindingSelectScalar = {
   credentialVersion?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
+  lastHeartbeatAt?: boolean
+  runtimeStatus?: boolean
   createdByAccountId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "loginCode" | "pinHash" | "tokenHash" | "isActive" | "loginFailures" | "lockedUntil" | "credentialVersion" | "activatedAt" | "lastUsedAt" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
+export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "loginCode" | "pinHash" | "tokenHash" | "isActive" | "loginFailures" | "lockedUntil" | "credentialVersion" | "activatedAt" | "lastUsedAt" | "lastHeartbeatAt" | "runtimeStatus" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
 export type ClassroomScreenBindingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   school?: boolean | Prisma.SchoolDefaultArgs<ExtArgs>
   administrativeClass?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -1957,6 +2441,8 @@ export type ClassroomScreenBindingInclude<ExtArgs extends runtime.Types.Extensio
   publicationRevisions?: boolean | Prisma.ClassroomScreenBinding$publicationRevisionsArgs<ExtArgs>
   notificationDeliveries?: boolean | Prisma.ClassroomScreenBinding$notificationDeliveriesArgs<ExtArgs>
   attendanceDaysUpdated?: boolean | Prisma.ClassroomScreenBinding$attendanceDaysUpdatedArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.ClassroomScreenBinding$auditLogsArgs<ExtArgs>
+  commands?: boolean | Prisma.ClassroomScreenBinding$commandsArgs<ExtArgs>
   _count?: boolean | Prisma.ClassroomScreenBindingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClassroomScreenBindingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1980,6 +2466,8 @@ export type $ClassroomScreenBindingPayload<ExtArgs extends runtime.Types.Extensi
     publicationRevisions: Prisma.$PublicationRevisionPayload<ExtArgs>[]
     notificationDeliveries: Prisma.$NotificationScreenDeliveryPayload<ExtArgs>[]
     attendanceDaysUpdated: Prisma.$ClassAttendanceDayPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    commands: Prisma.$ClassroomScreenCommandPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1996,6 +2484,8 @@ export type $ClassroomScreenBindingPayload<ExtArgs extends runtime.Types.Extensi
     credentialVersion: number
     activatedAt: Date | null
     lastUsedAt: Date | null
+    lastHeartbeatAt: Date | null
+    runtimeStatus: runtime.JsonValue | null
     createdByAccountId: string
     createdAt: Date
     updatedAt: Date
@@ -2263,7 +2753,7 @@ export interface ClassroomScreenBindingDelegate<ExtArgs extends runtime.Types.Ex
    * // Count the number of ClassroomScreenBindings
    * const count = await prisma.classroomScreenBinding.count({
    *   where: {
-   *     // ... the filter for the ClassroomScreenBindings we want to count
+   *     // ... the filter for the ClassroomScreenBindings we want to coun
    *   }
    * })
   **/
@@ -2309,7 +2799,7 @@ export interface ClassroomScreenBindingDelegate<ExtArgs extends runtime.Types.Ex
    * Read more here: https://pris.ly/d/null-undefined
    * @param {ClassroomScreenBindingGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get count
+   * // Group by city, order by createdAt, get coun
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -2400,6 +2890,8 @@ export interface Prisma__ClassroomScreenBindingClient<T, Null = never, ExtArgs e
   publicationRevisions<T extends Prisma.ClassroomScreenBinding$publicationRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassroomScreenBinding$publicationRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PublicationRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationDeliveries<T extends Prisma.ClassroomScreenBinding$notificationDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassroomScreenBinding$notificationDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationScreenDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendanceDaysUpdated<T extends Prisma.ClassroomScreenBinding$attendanceDaysUpdatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassroomScreenBinding$attendanceDaysUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassAttendanceDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.ClassroomScreenBinding$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassroomScreenBinding$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  commands<T extends Prisma.ClassroomScreenBinding$commandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClassroomScreenBinding$commandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClassroomScreenCommandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2443,6 +2935,8 @@ export interface ClassroomScreenBindingFieldRefs {
   readonly credentialVersion: Prisma.FieldRef<"ClassroomScreenBinding", 'Int'>
   readonly activatedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly lastUsedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
+  readonly lastHeartbeatAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
+  readonly runtimeStatus: Prisma.FieldRef<"ClassroomScreenBinding", 'Json'>
   readonly createdByAccountId: Prisma.FieldRef<"ClassroomScreenBinding", 'String'>
   readonly createdAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
@@ -2469,7 +2963,7 @@ export type ClassroomScreenBindingFindUniqueArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter, which ClassroomScreenBinding to fetch.
    */
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 /**
@@ -2491,11 +2985,11 @@ export type ClassroomScreenBindingFindUniqueOrThrowArgs<ExtArgs extends runtime.
   /**
    * Filter, which ClassroomScreenBinding to fetch.
    */
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 /**
- * ClassroomScreenBinding findFirst
+ * ClassroomScreenBinding findFirs
  */
 export type ClassroomScreenBindingFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -2513,7 +3007,7 @@ export type ClassroomScreenBindingFindFirstArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which ClassroomScreenBinding to fetch.
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -2525,7 +3019,7 @@ export type ClassroomScreenBindingFindFirstArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the position for searching for ClassroomScreenBindings.
    */
-  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -2565,7 +3059,7 @@ export type ClassroomScreenBindingFindFirstOrThrowArgs<ExtArgs extends runtime.T
   /**
    * Filter, which ClassroomScreenBinding to fetch.
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -2577,7 +3071,7 @@ export type ClassroomScreenBindingFindFirstOrThrowArgs<ExtArgs extends runtime.T
    *
    * Sets the position for searching for ClassroomScreenBindings.
    */
-  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -2617,7 +3111,7 @@ export type ClassroomScreenBindingFindManyArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which ClassroomScreenBindings to fetch.
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -2629,7 +3123,7 @@ export type ClassroomScreenBindingFindManyArgs<ExtArgs extends runtime.Types.Ext
    *
    * Sets the position for listing ClassroomScreenBindings.
    */
-  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -2724,7 +3218,7 @@ export type ClassroomScreenBindingUpdateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Choose, which ClassroomScreenBinding to update.
    */
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 /**
@@ -2738,7 +3232,7 @@ export type ClassroomScreenBindingUpdateManyArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which ClassroomScreenBindings to update
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * Limit how many ClassroomScreenBindings to update.
    */
@@ -2764,7 +3258,7 @@ export type ClassroomScreenBindingUpdateManyAndReturnArgs<ExtArgs extends runtim
   /**
    * Filter which ClassroomScreenBindings to update
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * Limit how many ClassroomScreenBindings to update.
    */
@@ -2776,7 +3270,7 @@ export type ClassroomScreenBindingUpdateManyAndReturnArgs<ExtArgs extends runtim
 }
 
 /**
- * ClassroomScreenBinding upsert
+ * ClassroomScreenBinding upser
  */
 export type ClassroomScreenBindingUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -2794,7 +3288,7 @@ export type ClassroomScreenBindingUpsertArgs<ExtArgs extends runtime.Types.Exten
   /**
    * The filter to search for the ClassroomScreenBinding to update in case it exists.
    */
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
   /**
    * In case the ClassroomScreenBinding found by the `where` argument doesn't exist, create a new ClassroomScreenBinding with this data.
    */
@@ -2824,7 +3318,7 @@ export type ClassroomScreenBindingDeleteArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which ClassroomScreenBinding to delete.
    */
-  where: Prisma.ClassroomScreenBindingWhereUniqueInput
+  where: Prisma.ClassroomScreenBindingWhereUniqueInpu
 }
 
 /**
@@ -2834,7 +3328,7 @@ export type ClassroomScreenBindingDeleteManyArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which ClassroomScreenBindings to delete
    */
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   /**
    * Limit how many ClassroomScreenBindings to delete.
    */
@@ -2857,9 +3351,9 @@ export type ClassroomScreenBinding$latestPublicationsArgs<ExtArgs extends runtim
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.PublicationInclude<ExtArgs> | null
-  where?: Prisma.PublicationWhereInput
+  where?: Prisma.PublicationWhereInpu
   orderBy?: Prisma.PublicationOrderByWithRelationInput | Prisma.PublicationOrderByWithRelationInput[]
-  cursor?: Prisma.PublicationWhereUniqueInput
+  cursor?: Prisma.PublicationWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.PublicationScalarFieldEnum | Prisma.PublicationScalarFieldEnum[]
@@ -2881,9 +3375,9 @@ export type ClassroomScreenBinding$publicationRevisionsArgs<ExtArgs extends runt
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.PublicationRevisionInclude<ExtArgs> | null
-  where?: Prisma.PublicationRevisionWhereInput
+  where?: Prisma.PublicationRevisionWhereInpu
   orderBy?: Prisma.PublicationRevisionOrderByWithRelationInput | Prisma.PublicationRevisionOrderByWithRelationInput[]
-  cursor?: Prisma.PublicationRevisionWhereUniqueInput
+  cursor?: Prisma.PublicationRevisionWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.PublicationRevisionScalarFieldEnum | Prisma.PublicationRevisionScalarFieldEnum[]
@@ -2905,9 +3399,9 @@ export type ClassroomScreenBinding$notificationDeliveriesArgs<ExtArgs extends ru
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.NotificationScreenDeliveryInclude<ExtArgs> | null
-  where?: Prisma.NotificationScreenDeliveryWhereInput
+  where?: Prisma.NotificationScreenDeliveryWhereInpu
   orderBy?: Prisma.NotificationScreenDeliveryOrderByWithRelationInput | Prisma.NotificationScreenDeliveryOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScreenDeliveryScalarFieldEnum | Prisma.NotificationScreenDeliveryScalarFieldEnum[]
@@ -2929,12 +3423,60 @@ export type ClassroomScreenBinding$attendanceDaysUpdatedArgs<ExtArgs extends run
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassAttendanceDayInclude<ExtArgs> | null
-  where?: Prisma.ClassAttendanceDayWhereInput
+  where?: Prisma.ClassAttendanceDayWhereInpu
   orderBy?: Prisma.ClassAttendanceDayOrderByWithRelationInput | Prisma.ClassAttendanceDayOrderByWithRelationInput[]
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.ClassAttendanceDayScalarFieldEnum | Prisma.ClassAttendanceDayScalarFieldEnum[]
+}
+
+/**
+ * ClassroomScreenBinding.auditLogs
+ */
+export type ClassroomScreenBinding$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditLog
+   */
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditLog
+   */
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInpu
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInpu
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * ClassroomScreenBinding.commands
+ */
+export type ClassroomScreenBinding$commandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClassroomScreenCommand
+   */
+  select?: Prisma.ClassroomScreenCommandSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClassroomScreenCommand
+   */
+  omit?: Prisma.ClassroomScreenCommandOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClassroomScreenCommandInclude<ExtArgs> | null
+  where?: Prisma.ClassroomScreenCommandWhereInpu
+  orderBy?: Prisma.ClassroomScreenCommandOrderByWithRelationInput | Prisma.ClassroomScreenCommandOrderByWithRelationInput[]
+  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClassroomScreenCommandScalarFieldEnum | Prisma.ClassroomScreenCommandScalarFieldEnum[]
 }
 
 /**

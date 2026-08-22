@@ -1,6 +1,7 @@
 import {prisma} from "../utils/prisma.js";
 import {
     buildAdministrativeClassCourseOptions,
+    validateStudentCourseSelection,
     WORKSPACE_TYPES,
 } from "../domain/academicCatalog.js";
 
@@ -15,6 +16,17 @@ export async function listSchools() {
             allowOAuthTeacherLogin: true,
         },
     });
+}
+
+export async function validateAdministrativeClassStudentSelection(administrativeClassId, input) {
+    const options = await getAdministrativeClassCourseOptions(administrativeClassId);
+    if (!options) return null;
+    const validation = validateStudentCourseSelection(options, input);
+    return {
+        ...validation,
+        administrativeClass: options.administrativeClass,
+        confirmedAt: validation.valid ? new Date() : null,
+    };
 }
 
 export async function findCurrentTerm({schoolId, schoolCode}) {

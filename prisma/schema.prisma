@@ -43,6 +43,8 @@ model Account {
   teachingAssignments               TeachingAssignment[]
   gradeLeaderships                  GradeLeadership[]
   administrativeClassLeaderships    AdministrativeClassLeadership[]
+  auditLogs                         AuditLog[]                         @relation("AuditLogAccountActor")
+  issuedScreenCommands              ClassroomScreenCommand[]          @relation("ScreenCommandIssuer")
 
   @@unique([provider, providerId])
 }
@@ -252,6 +254,7 @@ model School {
   subjects         Subject[]
   members          SchoolMember[]
   classroomScreens ClassroomScreenBinding[]
+  auditLogs         AuditLog[]
 }
 
 /// 实例级首次配置状态。业务数据决定实际进度，本表只记录 OOBE 生命周期与版本。
@@ -569,6 +572,8 @@ model ClassroomScreenBinding {
   credentialVersion     Int       @default(1)
   activatedAt           DateTime? @db.Timestamptz(6)
   lastUsedAt            DateTime? @db.Timestamptz(6)
+  lastHeartbeatAt       DateTime? @db.Timestamptz(6)
+  runtimeStatus         Json?     @db.Json
   createdByAccountId    String    @db.VarChar(191)
   createdAt             DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
@@ -580,11 +585,65 @@ model ClassroomScreenBinding {
   publicationRevisions   PublicationRevision[]
   notificationDeliveries NotificationScreenDelivery[]
   attendanceDaysUpdated  ClassAttendanceDay[]         @relation("ClassAttendanceScreenUpdater")
+  auditLogs              AuditLog[]                    @relation("AuditLogScreenActor")
+  commands               ClassroomScreenCommand[]
 
   @@unique([schoolId, deviceFingerprint])
   @@unique([schoolId, loginCode])
   @@index([administrativeClassId, isActive])
   @@index([createdByAccountId])
+}
+
+/// 管理操作和大屏写操作的不可变审计摘要。敏感字段在写入前统一脱敏。
+model AuditLog {
+  id                   String    @id @default(cuid()) @db.VarChar(191)
+  schoolId             String?   @db.VarChar(191)
+  actorAccountId       String?   @db.VarChar(191)
+  actorScreenBindingId String?   @db.VarChar(191)
+  actorType            String    @db.VarChar(32)
+  action               String    @db.VarChar(96)
+  entityType           String?   @db.VarChar(64)
+  entityId             String?   @db.VarChar(191)
+  requestMethod        String?   @db.VarChar(16)
+  requestPath          String?   @db.VarChar(512)
+  statusCode           Int?
+  success              Boolean   @default(true)
+  summary              String?   @db.VarChar(512)
+  metadata             Json?     @db.Json
+  clientIp             String?   @db.VarChar(64)
+  userAgent            String?   @db.VarChar(512)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+
+  school      School?                  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  actorAccount Account?                @relation("AuditLogAccountActor", fields: [actorAccountId], references: [id], onDelete: SetNull)
+  actorScreen  ClassroomScreenBinding? @relation("AuditLogScreenActor", fields: [actorScreenBindingId], references: [id], onDelete: SetNull)
+
+  @@index([schoolId, createdAt])
+  @@index([actorAccountId, createdAt])
+  @@index([actorScreenBindingId, createdAt])
+  @@index([action, createdAt])
+}
+
+/// 管理员下发给大屏的轻量值守指令；大屏以心跳领取并回执。
+model ClassroomScreenCommand {
+  id                 String    @id @default(cuid()) @db.VarChar(191)
+  screenBindingId    String    @db.VarChar(191)
+  issuedByAccountId  String    @db.VarChar(191)
+  type               String    @db.VarChar(32)
+  status             String    @default("PENDING") @db.VarChar(24)
+  payload            Json?     @db.Json
+  result             Json?     @db.Json
+  deliveredAt        DateTime? @db.Timestamptz(6)
+  acknowledgedAt     DateTime? @db.Timestamptz(6)
+  expiresAt          DateTime  @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  screenBinding ClassroomScreenBinding @relation(fields: [screenBindingId], references: [id], onDelete: Cascade)
+  issuedBy      Account                @relation("ScreenCommandIssuer", fields: [issuedByAccountId], references: [id], onDelete: Restrict)
+
+  @@index([screenBindingId, status, expiresAt])
+  @@index([issuedByAccountId, createdAt])
 }
 
 /// 班级大屏对通知当前版本的接收与展示回执，不跟踪个人学生阅读状态。

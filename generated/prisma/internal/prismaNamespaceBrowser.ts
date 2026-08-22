@@ -75,11 +75,13 @@ export const ModelName = {
   Publication: 'Publication',
   PublicationTarget: 'PublicationTarget',
   ClassroomScreenBinding: 'ClassroomScreenBinding',
+  AuditLog: 'AuditLog',
+  ClassroomScreenCommand: 'ClassroomScreenCommand',
   NotificationScreenDelivery: 'NotificationScreenDelivery',
   AdministrativeClassStudent: 'AdministrativeClassStudent',
   ClassAttendanceDay: 'ClassAttendanceDay',
   PublicationRevision: 'PublicationRevision'
-} as const
+} as cons
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
 
@@ -117,7 +119,7 @@ export const AccountScalarFieldEnum = {
   localLockedUntil: 'localLockedUntil',
   localDisabled: 'localDisabled',
   lastLoginAt: 'lastLoginAt'
-} as const
+} as cons
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
@@ -128,7 +130,7 @@ export const AccountPreferenceScalarFieldEnum = {
   value: 'value',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AccountPreferenceScalarFieldEnum = (typeof AccountPreferenceScalarFieldEnum)[keyof typeof AccountPreferenceScalarFieldEnum]
 
@@ -142,7 +144,7 @@ export const AccountSessionScalarFieldEnum = {
   revokedAt: 'revokedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AccountSessionScalarFieldEnum = (typeof AccountSessionScalarFieldEnum)[keyof typeof AccountSessionScalarFieldEnum]
 
@@ -157,7 +159,7 @@ export const AppInstallScalarFieldEnum = {
   updatedAt: 'updatedAt',
   deviceType: 'deviceType',
   isReadOnly: 'isReadOnly'
-} as const
+} as cons
 
 export type AppInstallScalarFieldEnum = (typeof AppInstallScalarFieldEnum)[keyof typeof AppInstallScalarFieldEnum]
 
@@ -170,7 +172,7 @@ export const AutoAuthScalarFieldEnum = {
   isReadOnly: 'isReadOnly',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AutoAuthScalarFieldEnum = (typeof AutoAuthScalarFieldEnum)[keyof typeof AutoAuthScalarFieldEnum]
 
@@ -185,7 +187,7 @@ export const DeviceScalarFieldEnum = {
   password: 'password',
   passwordHint: 'passwordHint',
   namespace: 'namespace'
-} as const
+} as cons
 
 export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
 
@@ -197,7 +199,7 @@ export const KVStoreScalarFieldEnum = {
   creatorIp: 'creatorIp',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type KVStoreScalarFieldEnum = (typeof KVStoreScalarFieldEnum)[keyof typeof KVStoreScalarFieldEnum]
 
@@ -216,7 +218,7 @@ export const SchoolScalarFieldEnum = {
   homeroomMustTeach: 'homeroomMustTeach',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type SchoolScalarFieldEnum = (typeof SchoolScalarFieldEnum)[keyof typeof SchoolScalarFieldEnum]
 
@@ -229,7 +231,7 @@ export const InstanceSetupScalarFieldEnum = {
   completedByAccountId: 'completedByAccountId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type InstanceSetupScalarFieldEnum = (typeof InstanceSetupScalarFieldEnum)[keyof typeof InstanceSetupScalarFieldEnum]
 
@@ -240,7 +242,7 @@ export const SchoolMemberScalarFieldEnum = {
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type SchoolMemberScalarFieldEnum = (typeof SchoolMemberScalarFieldEnum)[keyof typeof SchoolMemberScalarFieldEnum]
 
@@ -256,7 +258,7 @@ export const AcademicTermScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AcademicTermScalarFieldEnum = (typeof AcademicTermScalarFieldEnum)[keyof typeof AcademicTermScalarFieldEnum]
 
@@ -269,7 +271,7 @@ export const GradeScalarFieldEnum = {
   sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type GradeScalarFieldEnum = (typeof GradeScalarFieldEnum)[keyof typeof GradeScalarFieldEnum]
 
@@ -283,7 +285,7 @@ export const SubjectScalarFieldEnum = {
   sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
 
@@ -301,7 +303,7 @@ export const WorkspaceScalarFieldEnum = {
   legacyDeviceId: 'legacyDeviceId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type WorkspaceScalarFieldEnum = (typeof WorkspaceScalarFieldEnum)[keyof typeof WorkspaceScalarFieldEnum]
 
@@ -310,7 +312,7 @@ export const WorkspaceSourceClassScalarFieldEnum = {
   workspaceId: 'workspaceId',
   administrativeClassId: 'administrativeClassId',
   createdAt: 'createdAt'
-} as const
+} as cons
 
 export type WorkspaceSourceClassScalarFieldEnum = (typeof WorkspaceSourceClassScalarFieldEnum)[keyof typeof WorkspaceSourceClassScalarFieldEnum]
 
@@ -322,7 +324,7 @@ export const AdministrativeClassSubjectScalarFieldEnum = {
   isCompulsory: 'isCompulsory',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AdministrativeClassSubjectScalarFieldEnum = (typeof AdministrativeClassSubjectScalarFieldEnum)[keyof typeof AdministrativeClassSubjectScalarFieldEnum]
 
@@ -333,7 +335,7 @@ export const WorkspaceMemberScalarFieldEnum = {
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type WorkspaceMemberScalarFieldEnum = (typeof WorkspaceMemberScalarFieldEnum)[keyof typeof WorkspaceMemberScalarFieldEnum]
 
@@ -347,7 +349,7 @@ export const TeachingAssignmentScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type TeachingAssignmentScalarFieldEnum = (typeof TeachingAssignmentScalarFieldEnum)[keyof typeof TeachingAssignmentScalarFieldEnum]
 
@@ -360,7 +362,7 @@ export const GradeLeadershipScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type GradeLeadershipScalarFieldEnum = (typeof GradeLeadershipScalarFieldEnum)[keyof typeof GradeLeadershipScalarFieldEnum]
 
@@ -373,7 +375,7 @@ export const AdministrativeClassLeadershipScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AdministrativeClassLeadershipScalarFieldEnum = (typeof AdministrativeClassLeadershipScalarFieldEnum)[keyof typeof AdministrativeClassLeadershipScalarFieldEnum]
 
@@ -389,7 +391,7 @@ export const WorkspaceMemberInviteScalarFieldEnum = {
   claimedAt: 'claimedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type WorkspaceMemberInviteScalarFieldEnum = (typeof WorkspaceMemberInviteScalarFieldEnum)[keyof typeof WorkspaceMemberInviteScalarFieldEnum]
 
@@ -417,7 +419,7 @@ export const PublicationScalarFieldEnum = {
   withdrawnAt: 'withdrawnAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type PublicationScalarFieldEnum = (typeof PublicationScalarFieldEnum)[keyof typeof PublicationScalarFieldEnum]
 
@@ -426,7 +428,7 @@ export const PublicationTargetScalarFieldEnum = {
   publicationId: 'publicationId',
   workspaceId: 'workspaceId',
   createdAt: 'createdAt'
-} as const
+} as cons
 
 export type PublicationTargetScalarFieldEnum = (typeof PublicationTargetScalarFieldEnum)[keyof typeof PublicationTargetScalarFieldEnum]
 
@@ -446,12 +448,55 @@ export const ClassroomScreenBindingScalarFieldEnum = {
   credentialVersion: 'credentialVersion',
   activatedAt: 'activatedAt',
   lastUsedAt: 'lastUsedAt',
+  lastHeartbeatAt: 'lastHeartbeatAt',
+  runtimeStatus: 'runtimeStatus',
   createdByAccountId: 'createdByAccountId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  schoolId: 'schoolId',
+  actorAccountId: 'actorAccountId',
+  actorScreenBindingId: 'actorScreenBindingId',
+  actorType: 'actorType',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  requestMethod: 'requestMethod',
+  requestPath: 'requestPath',
+  statusCode: 'statusCode',
+  success: 'success',
+  summary: 'summary',
+  metadata: 'metadata',
+  clientIp: 'clientIp',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as cons
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const ClassroomScreenCommandScalarFieldEnum = {
+  id: 'id',
+  screenBindingId: 'screenBindingId',
+  issuedByAccountId: 'issuedByAccountId',
+  type: 'type',
+  status: 'status',
+  payload: 'payload',
+  result: 'result',
+  deliveredAt: 'deliveredAt',
+  acknowledgedAt: 'acknowledgedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as cons
+
+export type ClassroomScreenCommandScalarFieldEnum = (typeof ClassroomScreenCommandScalarFieldEnum)[keyof typeof ClassroomScreenCommandScalarFieldEnum]
 
 
 export const NotificationScreenDeliveryScalarFieldEnum = {
@@ -462,7 +507,7 @@ export const NotificationScreenDeliveryScalarFieldEnum = {
   displayedAt: 'displayedAt',
   acknowledgedAt: 'acknowledgedAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type NotificationScreenDeliveryScalarFieldEnum = (typeof NotificationScreenDeliveryScalarFieldEnum)[keyof typeof NotificationScreenDeliveryScalarFieldEnum]
 
@@ -476,7 +521,7 @@ export const AdministrativeClassStudentScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type AdministrativeClassStudentScalarFieldEnum = (typeof AdministrativeClassStudentScalarFieldEnum)[keyof typeof AdministrativeClassStudentScalarFieldEnum]
 
@@ -489,7 +534,7 @@ export const ClassAttendanceDayScalarFieldEnum = {
   updatedByScreenBindingId: 'updatedByScreenBindingId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
-} as const
+} as cons
 
 export type ClassAttendanceDayScalarFieldEnum = (typeof ClassAttendanceDayScalarFieldEnum)[keyof typeof ClassAttendanceDayScalarFieldEnum]
 
@@ -509,7 +554,7 @@ export const PublicationRevisionScalarFieldEnum = {
   certifiedAt: 'certifiedAt',
   purgedAt: 'purgedAt',
   createdAt: 'createdAt'
-} as const
+} as cons
 
 export type PublicationRevisionScalarFieldEnum = (typeof PublicationRevisionScalarFieldEnum)[keyof typeof PublicationRevisionScalarFieldEnum]
 
@@ -517,7 +562,7 @@ export type PublicationRevisionScalarFieldEnum = (typeof PublicationRevisionScal
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
-} as const
+} as cons
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
@@ -525,14 +570,14 @@ export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 export const NullableJsonNullValueInput = {
   DbNull: DbNull,
   JsonNull: JsonNull
-} as const
+} as cons
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const JsonNullValueInput = {
   JsonNull: JsonNull
-} as const
+} as cons
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
@@ -540,7 +585,7 @@ export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNu
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-} as const
+} as cons
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
@@ -549,7 +594,7 @@ export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
   AnyNull: AnyNull
-} as const
+} as cons
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
@@ -557,7 +602,7 @@ export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof Json
 export const NullsOrder = {
   first: 'first',
   last: 'last'
-} as const
+} as cons
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

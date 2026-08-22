@@ -109,7 +109,7 @@ export type GradeAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Filter which Grade to aggregate.
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -121,7 +121,7 @@ export type GradeAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    *
    * Sets the start position
    */
-  cursor?: Prisma.GradeWhereUniqueInput
+  cursor?: Prisma.GradeWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -178,10 +178,10 @@ export type GetGradeAggregateType<T extends GradeAggregateArgs> = {
 
 
 export type GradeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   orderBy?: Prisma.GradeOrderByWithAggregationInput | Prisma.GradeOrderByWithAggregationInput[]
   by: Prisma.GradeScalarFieldEnum[] | Prisma.GradeScalarFieldEnum
-  having?: Prisma.GradeScalarWhereWithAggregatesInput
+  having?: Prisma.GradeScalarWhereWithAggregatesInpu
   take?: number
   skip?: number
   _count?: GradeCountAggregateInputType | true
@@ -245,14 +245,14 @@ export type GradeOrderByWithRelationInput = {
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  term?: Prisma.AcademicTermOrderByWithRelationInput
-  workspaces?: Prisma.WorkspaceOrderByRelationAggregateInput
-  leaderships?: Prisma.GradeLeadershipOrderByRelationAggregateInput
+  term?: Prisma.AcademicTermOrderByWithRelationInpu
+  workspaces?: Prisma.WorkspaceOrderByRelationAggregateInpu
+  leaderships?: Prisma.GradeLeadershipOrderByRelationAggregateInpu
 }
 
 export type GradeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  termId_code?: Prisma.GradeTermIdCodeCompoundUniqueInput
+  termId_code?: Prisma.GradeTermIdCodeCompoundUniqueInpu
   AND?: Prisma.GradeWhereInput | Prisma.GradeWhereInput[]
   OR?: Prisma.GradeWhereInput[]
   NOT?: Prisma.GradeWhereInput | Prisma.GradeWhereInput[]
@@ -275,11 +275,11 @@ export type GradeOrderByWithAggregationInput = {
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.GradeCountOrderByAggregateInput
-  _avg?: Prisma.GradeAvgOrderByAggregateInput
-  _max?: Prisma.GradeMaxOrderByAggregateInput
-  _min?: Prisma.GradeMinOrderByAggregateInput
-  _sum?: Prisma.GradeSumOrderByAggregateInput
+  _count?: Prisma.GradeCountOrderByAggregateInpu
+  _avg?: Prisma.GradeAvgOrderByAggregateInpu
+  _max?: Prisma.GradeMaxOrderByAggregateInpu
+  _min?: Prisma.GradeMinOrderByAggregateInpu
+  _sum?: Prisma.GradeSumOrderByAggregateInpu
 }
 
 export type GradeScalarWhereWithAggregatesInput = {
@@ -302,9 +302,9 @@ export type GradeCreateInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInput
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInput
-  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInpu
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInpu
+  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeUncheckedCreateInput = {
@@ -315,8 +315,8 @@ export type GradeUncheckedCreateInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInput
-  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInput
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInpu
+  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeUpdateInput = {
@@ -326,9 +326,9 @@ export type GradeUpdateInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInput
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInput
-  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInpu
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInpu
+  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeUncheckedUpdateInput = {
@@ -339,8 +339,8 @@ export type GradeUncheckedUpdateInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInput
-  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInput
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInpu
+  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeCreateManyInput = {
@@ -373,9 +373,9 @@ export type GradeUncheckedUpdateManyInput = {
 }
 
 export type GradeListRelationFilter = {
-  every?: Prisma.GradeWhereInput
-  some?: Prisma.GradeWhereInput
-  none?: Prisma.GradeWhereInput
+  every?: Prisma.GradeWhereInpu
+  some?: Prisma.GradeWhereInpu
+  none?: Prisma.GradeWhereInpu
 }
 
 export type GradeOrderByRelationAggregateInput = {
@@ -431,8 +431,8 @@ export type GradeNullableScalarRelationFilter = {
 }
 
 export type GradeScalarRelationFilter = {
-  is?: Prisma.GradeWhereInput
-  isNot?: Prisma.GradeWhereInput
+  is?: Prisma.GradeWhereInpu
+  isNot?: Prisma.GradeWhereInpu
 }
 
 export type GradeCreateNestedManyWithoutTermInput = {
@@ -479,31 +479,31 @@ export type GradeUncheckedUpdateManyWithoutTermNestedInput = {
 
 export type GradeCreateNestedOneWithoutWorkspacesInput = {
   create?: Prisma.XOR<Prisma.GradeCreateWithoutWorkspacesInput, Prisma.GradeUncheckedCreateWithoutWorkspacesInput>
-  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutWorkspacesInput
-  connect?: Prisma.GradeWhereUniqueInput
+  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutWorkspacesInpu
+  connect?: Prisma.GradeWhereUniqueInpu
 }
 
 export type GradeUpdateOneWithoutWorkspacesNestedInput = {
   create?: Prisma.XOR<Prisma.GradeCreateWithoutWorkspacesInput, Prisma.GradeUncheckedCreateWithoutWorkspacesInput>
-  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutWorkspacesInput
-  upsert?: Prisma.GradeUpsertWithoutWorkspacesInput
+  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutWorkspacesInpu
+  upsert?: Prisma.GradeUpsertWithoutWorkspacesInpu
   disconnect?: Prisma.GradeWhereInput | boolean
   delete?: Prisma.GradeWhereInput | boolean
-  connect?: Prisma.GradeWhereUniqueInput
+  connect?: Prisma.GradeWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.GradeUpdateToOneWithWhereWithoutWorkspacesInput, Prisma.GradeUpdateWithoutWorkspacesInput>, Prisma.GradeUncheckedUpdateWithoutWorkspacesInput>
 }
 
 export type GradeCreateNestedOneWithoutLeadershipsInput = {
   create?: Prisma.XOR<Prisma.GradeCreateWithoutLeadershipsInput, Prisma.GradeUncheckedCreateWithoutLeadershipsInput>
-  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutLeadershipsInput
-  connect?: Prisma.GradeWhereUniqueInput
+  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutLeadershipsInpu
+  connect?: Prisma.GradeWhereUniqueInpu
 }
 
 export type GradeUpdateOneRequiredWithoutLeadershipsNestedInput = {
   create?: Prisma.XOR<Prisma.GradeCreateWithoutLeadershipsInput, Prisma.GradeUncheckedCreateWithoutLeadershipsInput>
-  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutLeadershipsInput
-  upsert?: Prisma.GradeUpsertWithoutLeadershipsInput
-  connect?: Prisma.GradeWhereUniqueInput
+  connectOrCreate?: Prisma.GradeCreateOrConnectWithoutLeadershipsInpu
+  upsert?: Prisma.GradeUpsertWithoutLeadershipsInpu
+  connect?: Prisma.GradeWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.GradeUpdateToOneWithWhereWithoutLeadershipsInput, Prisma.GradeUpdateWithoutLeadershipsInput>, Prisma.GradeUncheckedUpdateWithoutLeadershipsInput>
 }
 
@@ -514,8 +514,8 @@ export type GradeCreateWithoutTermInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInput
-  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInput
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInpu
+  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeUncheckedCreateWithoutTermInput = {
@@ -525,12 +525,12 @@ export type GradeUncheckedCreateWithoutTermInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInput
-  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInput
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInpu
+  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeCreateOrConnectWithoutTermInput = {
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   create: Prisma.XOR<Prisma.GradeCreateWithoutTermInput, Prisma.GradeUncheckedCreateWithoutTermInput>
 }
 
@@ -540,18 +540,18 @@ export type GradeCreateManyTermInputEnvelope = {
 }
 
 export type GradeUpsertWithWhereUniqueWithoutTermInput = {
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   update: Prisma.XOR<Prisma.GradeUpdateWithoutTermInput, Prisma.GradeUncheckedUpdateWithoutTermInput>
   create: Prisma.XOR<Prisma.GradeCreateWithoutTermInput, Prisma.GradeUncheckedCreateWithoutTermInput>
 }
 
 export type GradeUpdateWithWhereUniqueWithoutTermInput = {
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   data: Prisma.XOR<Prisma.GradeUpdateWithoutTermInput, Prisma.GradeUncheckedUpdateWithoutTermInput>
 }
 
 export type GradeUpdateManyWithWhereWithoutTermInput = {
-  where: Prisma.GradeScalarWhereInput
+  where: Prisma.GradeScalarWhereInpu
   data: Prisma.XOR<Prisma.GradeUpdateManyMutationInput, Prisma.GradeUncheckedUpdateManyWithoutTermInput>
 }
 
@@ -575,8 +575,8 @@ export type GradeCreateWithoutWorkspacesInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInput
-  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInpu
+  leaderships?: Prisma.GradeLeadershipCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeUncheckedCreateWithoutWorkspacesInput = {
@@ -587,22 +587,22 @@ export type GradeUncheckedCreateWithoutWorkspacesInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInput
+  leaderships?: Prisma.GradeLeadershipUncheckedCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeCreateOrConnectWithoutWorkspacesInput = {
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   create: Prisma.XOR<Prisma.GradeCreateWithoutWorkspacesInput, Prisma.GradeUncheckedCreateWithoutWorkspacesInput>
 }
 
 export type GradeUpsertWithoutWorkspacesInput = {
   update: Prisma.XOR<Prisma.GradeUpdateWithoutWorkspacesInput, Prisma.GradeUncheckedUpdateWithoutWorkspacesInput>
   create: Prisma.XOR<Prisma.GradeCreateWithoutWorkspacesInput, Prisma.GradeUncheckedCreateWithoutWorkspacesInput>
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
 }
 
 export type GradeUpdateToOneWithWhereWithoutWorkspacesInput = {
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   data: Prisma.XOR<Prisma.GradeUpdateWithoutWorkspacesInput, Prisma.GradeUncheckedUpdateWithoutWorkspacesInput>
 }
 
@@ -613,8 +613,8 @@ export type GradeUpdateWithoutWorkspacesInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInput
-  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInpu
+  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeUncheckedUpdateWithoutWorkspacesInput = {
@@ -625,7 +625,7 @@ export type GradeUncheckedUpdateWithoutWorkspacesInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInput
+  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeCreateWithoutLeadershipsInput = {
@@ -635,8 +635,8 @@ export type GradeCreateWithoutLeadershipsInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInput
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutGradesInpu
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeUncheckedCreateWithoutLeadershipsInput = {
@@ -647,22 +647,22 @@ export type GradeUncheckedCreateWithoutLeadershipsInput = {
   sortOrder?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInput
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutGradeInpu
 }
 
 export type GradeCreateOrConnectWithoutLeadershipsInput = {
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   create: Prisma.XOR<Prisma.GradeCreateWithoutLeadershipsInput, Prisma.GradeUncheckedCreateWithoutLeadershipsInput>
 }
 
 export type GradeUpsertWithoutLeadershipsInput = {
   update: Prisma.XOR<Prisma.GradeUpdateWithoutLeadershipsInput, Prisma.GradeUncheckedUpdateWithoutLeadershipsInput>
   create: Prisma.XOR<Prisma.GradeCreateWithoutLeadershipsInput, Prisma.GradeUncheckedCreateWithoutLeadershipsInput>
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
 }
 
 export type GradeUpdateToOneWithWhereWithoutLeadershipsInput = {
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   data: Prisma.XOR<Prisma.GradeUpdateWithoutLeadershipsInput, Prisma.GradeUncheckedUpdateWithoutLeadershipsInput>
 }
 
@@ -673,8 +673,8 @@ export type GradeUpdateWithoutLeadershipsInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInput
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutGradesNestedInpu
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeUncheckedUpdateWithoutLeadershipsInput = {
@@ -685,7 +685,7 @@ export type GradeUncheckedUpdateWithoutLeadershipsInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInput
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeCreateManyTermInput = {
@@ -704,8 +704,8 @@ export type GradeUpdateWithoutTermInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInput
-  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInput
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutGradeNestedInpu
+  leaderships?: Prisma.GradeLeadershipUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeUncheckedUpdateWithoutTermInput = {
@@ -715,8 +715,8 @@ export type GradeUncheckedUpdateWithoutTermInput = {
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInput
-  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInput
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutGradeNestedInpu
+  leaderships?: Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeNestedInpu
 }
 
 export type GradeUncheckedUpdateManyWithoutTermInput = {
@@ -757,14 +757,14 @@ export type GradeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  * GradeCountOutputType without action
  */
 export type GradeCountOutputTypeCountWorkspacesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 /**
  * GradeCountOutputType without action
  */
 export type GradeCountOutputTypeCountLeadershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GradeLeadershipWhereInput
+  where?: Prisma.GradeLeadershipWhereInpu
 }
 
 
@@ -1107,7 +1107,7 @@ export interface GradeDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Count the number of Grades
    * const count = await prisma.grade.count({
    *   where: {
-   *     // ... the filter for the Grades we want to count
+   *     // ... the filter for the Grades we want to coun
    *   }
    * })
   **/
@@ -1153,7 +1153,7 @@ export interface GradeDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * Read more here: https://pris.ly/d/null-undefined
    * @param {GradeGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get count
+   * // Group by city, order by createdAt, get coun
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1299,7 +1299,7 @@ export type GradeFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Filter, which Grade to fetch.
    */
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
 }
 
 /**
@@ -1321,11 +1321,11 @@ export type GradeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter, which Grade to fetch.
    */
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
 }
 
 /**
- * Grade findFirst
+ * Grade findFirs
  */
 export type GradeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1343,7 +1343,7 @@ export type GradeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Filter, which Grade to fetch.
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1355,7 +1355,7 @@ export type GradeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
    *
    * Sets the position for searching for Grades.
    */
-  cursor?: Prisma.GradeWhereUniqueInput
+  cursor?: Prisma.GradeWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1395,7 +1395,7 @@ export type GradeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter, which Grade to fetch.
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1407,7 +1407,7 @@ export type GradeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the position for searching for Grades.
    */
-  cursor?: Prisma.GradeWhereUniqueInput
+  cursor?: Prisma.GradeWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1447,7 +1447,7 @@ export type GradeFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * Filter, which Grades to fetch.
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1459,7 +1459,7 @@ export type GradeFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    *
    * Sets the position for listing Grades.
    */
-  cursor?: Prisma.GradeWhereUniqueInput
+  cursor?: Prisma.GradeWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1554,7 +1554,7 @@ export type GradeUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   /**
    * Choose, which Grade to update.
    */
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
 }
 
 /**
@@ -1568,7 +1568,7 @@ export type GradeUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Filter which Grades to update
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * Limit how many Grades to update.
    */
@@ -1594,7 +1594,7 @@ export type GradeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which Grades to update
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * Limit how many Grades to update.
    */
@@ -1606,7 +1606,7 @@ export type GradeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * Grade upsert
+ * Grade upser
  */
 export type GradeUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1624,7 +1624,7 @@ export type GradeUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   /**
    * The filter to search for the Grade to update in case it exists.
    */
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
   /**
    * In case the Grade found by the `where` argument doesn't exist, create a new Grade with this data.
    */
@@ -1654,7 +1654,7 @@ export type GradeDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   /**
    * Filter which Grade to delete.
    */
-  where: Prisma.GradeWhereUniqueInput
+  where: Prisma.GradeWhereUniqueInpu
 }
 
 /**
@@ -1664,7 +1664,7 @@ export type GradeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Filter which Grades to delete
    */
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
   /**
    * Limit how many Grades to delete.
    */
@@ -1687,9 +1687,9 @@ export type Grade$workspacesArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   orderBy?: Prisma.WorkspaceOrderByWithRelationInput | Prisma.WorkspaceOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceWhereUniqueInput
+  cursor?: Prisma.WorkspaceWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceScalarFieldEnum | Prisma.WorkspaceScalarFieldEnum[]
@@ -1711,9 +1711,9 @@ export type Grade$leadershipsArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.GradeLeadershipInclude<ExtArgs> | null
-  where?: Prisma.GradeLeadershipWhereInput
+  where?: Prisma.GradeLeadershipWhereInpu
   orderBy?: Prisma.GradeLeadershipOrderByWithRelationInput | Prisma.GradeLeadershipOrderByWithRelationInput[]
-  cursor?: Prisma.GradeLeadershipWhereUniqueInput
+  cursor?: Prisma.GradeLeadershipWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.GradeLeadershipScalarFieldEnum | Prisma.GradeLeadershipScalarFieldEnum[]

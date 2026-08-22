@@ -9,6 +9,7 @@ import {
     validateScreenPin,
 } from "../domain/classroomScreenAccount.js";
 import {sanitizeHomeworkQuickDeadlines, sanitizeHomeworkQuickInputs} from "../domain/schoolHomeworkSettings.js";
+import {classroomScreenDutyState} from "../domain/classroomScreenDuty.js";
 
 const MAX_LOGIN_FAILURES = 5;
 const LOCK_MINUTES = 15;
@@ -422,10 +423,20 @@ export async function listClassroomScreens({managerAccountId, schoolId}) {
     await assertSchoolManager(managerAccountId, schoolId);
     const bindings = await prisma.classroomScreenBinding.findMany({
         where: {schoolId},
-        include: screenInclude,
+        include: {
+            ...screenInclude,
+            commands: {
+                orderBy: {createdAt: "desc"},
+                take: 3,
+                select: {id: true, type: true, status: true, createdAt: true, acknowledgedAt: true},
+            },
+        },
         orderBy: [{isActive: "desc"}, {name: "asc"}],
     });
-    return bindings.map(publicScreenBinding);
+    return bindings.map((binding) => ({
+        ...publicScreenBinding(binding),
+        dutyState: classroomScreenDutyState(binding),
+    }));
 }
 
 export async function setClassroomScreenActive({managerAccountId, schoolId, bindingId, isActive}) {

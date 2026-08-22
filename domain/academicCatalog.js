@@ -83,3 +83,57 @@ export function buildAdministrativeClassCourseOptions({
         subjects,
     };
 }
+
+export function validateStudentCourseSelection(courseOptions, input = {}) {
+    const candidateGroups = input.courseGroupIds && typeof input.courseGroupIds === "object"
+        ? input.courseGroupIds
+        : {};
+    const declined = new Set(Array.isArray(input.declinedSubjectIds)
+        ? input.declinedSubjectIds.filter((item) => typeof item === "string")
+        : []);
+    const normalized = {courseGroupIds: {}, declinedSubjectIds: []};
+    const issues = [];
+    const streamed = (courseOptions?.subjects || []).filter((item) => item.requiresCourseGroupSelection);
+    const streamedSubjectIds = new Set(streamed.map((item) => item.subject.id));
+
+    for (const [subjectId, groupId] of Object.entries(candidateGroups)) {
+        if (!streamedSubjectIds.has(subjectId) && groupId) {
+            issues.push({severity: "WARNING", code: "SUBJECT_NO_LONGER_STREAMED", subjectId, message: "该科目已不再走班，旧选择已移除"});
+        }
+    }
+    for (const subjectId of declined) {
+        if (!streamedSubjectIds.has(subjectId)) {
+            issues.push({severity: "WARNING", code: "DECLINED_SUBJECT_NO_LONGER_STREAMED", subjectId, message: "该科目的旧“不修读”标记已移除"});
+        }
+    }
+    for (const item of streamed) {
+        const subjectId = item.subject.id;
+        const groupId = candidateGroups[subjectId];
+        const group = (item.courseGroups || []).find((candidate) => candidate.id === groupId);
+        if (group && declined.has(subjectId)) {
+            issues.push({severity: "ERROR", code: "SELECTION_DECISION_CONFLICT", subjectId, message: `${item.subject.name}不能同时选择教学班和“不修读”`});
+            continue;
+        }
+        if (group) {
+            normalized.courseGroupIds[subjectId] = group.id;
+            continue;
+        }
+        if (groupId) {
+            issues.push({severity: "ERROR", code: "COURSE_GROUP_NOT_AVAILABLE", subjectId, message: `${item.subject.name}所选教学班不属于当前行政班`});
+            continue;
+        }
+        if (declined.has(subjectId) && !item.isCompulsory) {
+            normalized.declinedSubjectIds.push(subjectId);
+            continue;
+        }
+        issues.push({
+            severity: "ERROR",
+            code: item.isCompulsory ? "COMPULSORY_COURSE_GROUP_REQUIRED" : "SELECTION_DECISION_REQUIRED",
+            subjectId,
+            message: item.isCompulsory
+                ? `${item.subject.name}必须选择一个走班教学班`
+                : `请为${item.subject.name}选择教学班，或明确选择“不修读该科”`,
+        });
+    }
+    return {valid: !issues.some((item) => item.severity === "ERROR"), normalized, issues};
+}

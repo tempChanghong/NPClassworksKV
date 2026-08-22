@@ -139,7 +139,7 @@ export type WorkspaceAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which Workspace to aggregate.
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -151,7 +151,7 @@ export type WorkspaceAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    *
    * Sets the start position
    */
-  cursor?: Prisma.WorkspaceWhereUniqueInput
+  cursor?: Prisma.WorkspaceWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -208,10 +208,10 @@ export type GetWorkspaceAggregateType<T extends WorkspaceAggregateArgs> = {
 
 
 export type WorkspaceGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   orderBy?: Prisma.WorkspaceOrderByWithAggregationInput | Prisma.WorkspaceOrderByWithAggregationInput[]
   by: Prisma.WorkspaceScalarFieldEnum[] | Prisma.WorkspaceScalarFieldEnum
-  having?: Prisma.WorkspaceScalarWhereWithAggregatesInput
+  having?: Prisma.WorkspaceScalarWhereWithAggregatesInpu
   take?: number
   skip?: number
   _count?: WorkspaceCountAggregateInputType | true
@@ -302,27 +302,27 @@ export type WorkspaceOrderByWithRelationInput = {
   legacyDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  term?: Prisma.AcademicTermOrderByWithRelationInput
-  grade?: Prisma.GradeOrderByWithRelationInput
-  subject?: Prisma.SubjectOrderByWithRelationInput
-  legacyDevice?: Prisma.DeviceOrderByWithRelationInput
-  sourceClasses?: Prisma.WorkspaceSourceClassOrderByRelationAggregateInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassOrderByRelationAggregateInput
-  subjectRules?: Prisma.AdministrativeClassSubjectOrderByRelationAggregateInput
-  members?: Prisma.WorkspaceMemberOrderByRelationAggregateInput
-  teachingAssignments?: Prisma.TeachingAssignmentOrderByRelationAggregateInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteOrderByRelationAggregateInput
-  publicationTargets?: Prisma.PublicationTargetOrderByRelationAggregateInput
-  classroomScreens?: Prisma.ClassroomScreenBindingOrderByRelationAggregateInput
-  students?: Prisma.AdministrativeClassStudentOrderByRelationAggregateInput
-  attendanceDays?: Prisma.ClassAttendanceDayOrderByRelationAggregateInput
-  leaderships?: Prisma.AdministrativeClassLeadershipOrderByRelationAggregateInput
+  term?: Prisma.AcademicTermOrderByWithRelationInpu
+  grade?: Prisma.GradeOrderByWithRelationInpu
+  subject?: Prisma.SubjectOrderByWithRelationInpu
+  legacyDevice?: Prisma.DeviceOrderByWithRelationInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassOrderByRelationAggregateInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassOrderByRelationAggregateInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectOrderByRelationAggregateInpu
+  members?: Prisma.WorkspaceMemberOrderByRelationAggregateInpu
+  teachingAssignments?: Prisma.TeachingAssignmentOrderByRelationAggregateInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteOrderByRelationAggregateInpu
+  publicationTargets?: Prisma.PublicationTargetOrderByRelationAggregateInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingOrderByRelationAggregateInpu
+  students?: Prisma.AdministrativeClassStudentOrderByRelationAggregateInpu
+  attendanceDays?: Prisma.ClassAttendanceDayOrderByRelationAggregateInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipOrderByRelationAggregateInpu
 }
 
 export type WorkspaceWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   legacyDeviceId?: number
-  termId_code?: Prisma.WorkspaceTermIdCodeCompoundUniqueInput
+  termId_code?: Prisma.WorkspaceTermIdCodeCompoundUniqueInpu
   AND?: Prisma.WorkspaceWhereInput | Prisma.WorkspaceWhereInput[]
   OR?: Prisma.WorkspaceWhereInput[]
   NOT?: Prisma.WorkspaceWhereInput | Prisma.WorkspaceWhereInput[]
@@ -366,11 +366,11 @@ export type WorkspaceOrderByWithAggregationInput = {
   legacyDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.WorkspaceCountOrderByAggregateInput
-  _avg?: Prisma.WorkspaceAvgOrderByAggregateInput
-  _max?: Prisma.WorkspaceMaxOrderByAggregateInput
-  _min?: Prisma.WorkspaceMinOrderByAggregateInput
-  _sum?: Prisma.WorkspaceSumOrderByAggregateInput
+  _count?: Prisma.WorkspaceCountOrderByAggregateInpu
+  _avg?: Prisma.WorkspaceAvgOrderByAggregateInpu
+  _max?: Prisma.WorkspaceMaxOrderByAggregateInpu
+  _min?: Prisma.WorkspaceMinOrderByAggregateInpu
+  _sum?: Prisma.WorkspaceSumOrderByAggregateInpu
 }
 
 export type WorkspaceScalarWhereWithAggregatesInput = {
@@ -400,21 +400,21 @@ export type WorkspaceCreateInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateInput = {
@@ -430,17 +430,17 @@ export type WorkspaceUncheckedCreateInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUpdateInput = {
@@ -452,21 +452,21 @@ export type WorkspaceUpdateInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateInput = {
@@ -482,17 +482,17 @@ export type WorkspaceUncheckedUpdateInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateManyInput = {
@@ -542,9 +542,9 @@ export type WorkspaceNullableScalarRelationFilter = {
 }
 
 export type WorkspaceListRelationFilter = {
-  every?: Prisma.WorkspaceWhereInput
-  some?: Prisma.WorkspaceWhereInput
-  none?: Prisma.WorkspaceWhereInput
+  every?: Prisma.WorkspaceWhereInpu
+  some?: Prisma.WorkspaceWhereInpu
+  none?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceOrderByRelationAggregateInput = {
@@ -610,39 +610,39 @@ export type WorkspaceSumOrderByAggregateInput = {
 }
 
 export type WorkspaceScalarRelationFilter = {
-  is?: Prisma.WorkspaceWhereInput
-  isNot?: Prisma.WorkspaceWhereInput
+  is?: Prisma.WorkspaceWhereInpu
+  isNot?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceCreateNestedOneWithoutLegacyDeviceInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUncheckedCreateNestedOneWithoutLegacyDeviceInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneWithoutLegacyDeviceNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInput
-  upsert?: Prisma.WorkspaceUpsertWithoutLegacyDeviceInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutLegacyDeviceInpu
   disconnect?: Prisma.WorkspaceWhereInput | boolean
   delete?: Prisma.WorkspaceWhereInput | boolean
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutLegacyDeviceInput, Prisma.WorkspaceUpdateWithoutLegacyDeviceInput>, Prisma.WorkspaceUncheckedUpdateWithoutLegacyDeviceInput>
 }
 
 export type WorkspaceUncheckedUpdateOneWithoutLegacyDeviceNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInput
-  upsert?: Prisma.WorkspaceUpsertWithoutLegacyDeviceInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLegacyDeviceInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutLegacyDeviceInpu
   disconnect?: Prisma.WorkspaceWhereInput | boolean
   delete?: Prisma.WorkspaceWhereInput | boolean
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutLegacyDeviceInput, Prisma.WorkspaceUpdateWithoutLegacyDeviceInput>, Prisma.WorkspaceUncheckedUpdateWithoutLegacyDeviceInput>
 }
 
@@ -786,155 +786,155 @@ export type NullableIntFieldUpdateOperationsInput = {
 
 export type WorkspaceCreateNestedOneWithoutSourceClassesInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedCreateWithoutSourceClassesInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourceClassesInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourceClassesInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceCreateNestedOneWithoutSourcedCourseGroupsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourcedCourseGroupsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourcedCourseGroupsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutSourceClassesNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedCreateWithoutSourceClassesInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourceClassesInput
-  upsert?: Prisma.WorkspaceUpsertWithoutSourceClassesInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourceClassesInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutSourceClassesInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutSourceClassesInput, Prisma.WorkspaceUpdateWithoutSourceClassesInput>, Prisma.WorkspaceUncheckedUpdateWithoutSourceClassesInput>
 }
 
 export type WorkspaceUpdateOneRequiredWithoutSourcedCourseGroupsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourcedCourseGroupsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutSourcedCourseGroupsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSourcedCourseGroupsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutSourcedCourseGroupsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUpdateWithoutSourcedCourseGroupsInput>, Prisma.WorkspaceUncheckedUpdateWithoutSourcedCourseGroupsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutSubjectRulesInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectRulesInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSubjectRulesInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSubjectRulesInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutSubjectRulesNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectRulesInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSubjectRulesInput
-  upsert?: Prisma.WorkspaceUpsertWithoutSubjectRulesInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutSubjectRulesInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutSubjectRulesInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutSubjectRulesInput, Prisma.WorkspaceUpdateWithoutSubjectRulesInput>, Prisma.WorkspaceUncheckedUpdateWithoutSubjectRulesInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutMembersInput, Prisma.WorkspaceUncheckedCreateWithoutMembersInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutMembersInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutMembersInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutMembersNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutMembersInput, Prisma.WorkspaceUncheckedCreateWithoutMembersInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutMembersInput
-  upsert?: Prisma.WorkspaceUpsertWithoutMembersInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutMembersInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutMembersInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutMembersInput, Prisma.WorkspaceUpdateWithoutMembersInput>, Prisma.WorkspaceUncheckedUpdateWithoutMembersInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutTeachingAssignmentsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTeachingAssignmentsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTeachingAssignmentsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTeachingAssignmentsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutTeachingAssignmentsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutTeachingAssignmentsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutTeachingAssignmentsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutTeachingAssignmentsInput, Prisma.WorkspaceUpdateWithoutTeachingAssignmentsInput>, Prisma.WorkspaceUncheckedUpdateWithoutTeachingAssignmentsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutLeadershipsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedCreateWithoutLeadershipsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLeadershipsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLeadershipsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutLeadershipsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedCreateWithoutLeadershipsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLeadershipsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutLeadershipsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutLeadershipsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutLeadershipsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutLeadershipsInput, Prisma.WorkspaceUpdateWithoutLeadershipsInput>, Prisma.WorkspaceUncheckedUpdateWithoutLeadershipsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutPendingInvitationsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedCreateWithoutPendingInvitationsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPendingInvitationsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPendingInvitationsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutPendingInvitationsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedCreateWithoutPendingInvitationsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPendingInvitationsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutPendingInvitationsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPendingInvitationsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutPendingInvitationsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutPendingInvitationsInput, Prisma.WorkspaceUpdateWithoutPendingInvitationsInput>, Prisma.WorkspaceUncheckedUpdateWithoutPendingInvitationsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutPublicationTargetsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedCreateWithoutPublicationTargetsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPublicationTargetsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPublicationTargetsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutPublicationTargetsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedCreateWithoutPublicationTargetsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPublicationTargetsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutPublicationTargetsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutPublicationTargetsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutPublicationTargetsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutPublicationTargetsInput, Prisma.WorkspaceUpdateWithoutPublicationTargetsInput>, Prisma.WorkspaceUncheckedUpdateWithoutPublicationTargetsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutClassroomScreensInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedCreateWithoutClassroomScreensInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutClassroomScreensInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutClassroomScreensInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutClassroomScreensNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedCreateWithoutClassroomScreensInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutClassroomScreensInput
-  upsert?: Prisma.WorkspaceUpsertWithoutClassroomScreensInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutClassroomScreensInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutClassroomScreensInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutClassroomScreensInput, Prisma.WorkspaceUpdateWithoutClassroomScreensInput>, Prisma.WorkspaceUncheckedUpdateWithoutClassroomScreensInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutStudentsInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutStudentsInput, Prisma.WorkspaceUncheckedCreateWithoutStudentsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutStudentsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutStudentsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutStudentsNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutStudentsInput, Prisma.WorkspaceUncheckedCreateWithoutStudentsInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutStudentsInput
-  upsert?: Prisma.WorkspaceUpsertWithoutStudentsInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutStudentsInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutStudentsInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutStudentsInput, Prisma.WorkspaceUpdateWithoutStudentsInput>, Prisma.WorkspaceUncheckedUpdateWithoutStudentsInput>
 }
 
 export type WorkspaceCreateNestedOneWithoutAttendanceDaysInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedCreateWithoutAttendanceDaysInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutAttendanceDaysInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutAttendanceDaysInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
 }
 
 export type WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInput = {
   create?: Prisma.XOR<Prisma.WorkspaceCreateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedCreateWithoutAttendanceDaysInput>
-  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutAttendanceDaysInput
-  upsert?: Prisma.WorkspaceUpsertWithoutAttendanceDaysInput
-  connect?: Prisma.WorkspaceWhereUniqueInput
+  connectOrCreate?: Prisma.WorkspaceCreateOrConnectWithoutAttendanceDaysInpu
+  upsert?: Prisma.WorkspaceUpsertWithoutAttendanceDaysInpu
+  connect?: Prisma.WorkspaceWhereUniqueInpu
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkspaceUpdateToOneWithWhereWithoutAttendanceDaysInput, Prisma.WorkspaceUpdateWithoutAttendanceDaysInput>, Prisma.WorkspaceUncheckedUpdateWithoutAttendanceDaysInput>
 }
 
@@ -947,20 +947,20 @@ export type WorkspaceCreateWithoutLegacyDeviceInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutLegacyDeviceInput = {
@@ -975,32 +975,32 @@ export type WorkspaceUncheckedCreateWithoutLegacyDeviceInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutLegacyDeviceInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
 }
 
 export type WorkspaceUpsertWithoutLegacyDeviceInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedUpdateWithoutLegacyDeviceInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedCreateWithoutLegacyDeviceInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutLegacyDeviceInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutLegacyDeviceInput, Prisma.WorkspaceUncheckedUpdateWithoutLegacyDeviceInput>
 }
 
@@ -1013,20 +1013,20 @@ export type WorkspaceUpdateWithoutLegacyDeviceInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutLegacyDeviceInput = {
@@ -1041,17 +1041,17 @@ export type WorkspaceUncheckedUpdateWithoutLegacyDeviceInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutTermInput = {
@@ -1063,20 +1063,20 @@ export type WorkspaceCreateWithoutTermInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutTermInput = {
@@ -1091,21 +1091,21 @@ export type WorkspaceUncheckedCreateWithoutTermInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutTermInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTermInput, Prisma.WorkspaceUncheckedCreateWithoutTermInput>
 }
 
@@ -1115,18 +1115,18 @@ export type WorkspaceCreateManyTermInputEnvelope = {
 }
 
 export type WorkspaceUpsertWithWhereUniqueWithoutTermInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTermInput, Prisma.WorkspaceUncheckedUpdateWithoutTermInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTermInput, Prisma.WorkspaceUncheckedCreateWithoutTermInput>
 }
 
 export type WorkspaceUpdateWithWhereUniqueWithoutTermInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTermInput, Prisma.WorkspaceUncheckedUpdateWithoutTermInput>
 }
 
 export type WorkspaceUpdateManyWithWhereWithoutTermInput = {
-  where: Prisma.WorkspaceScalarWhereInput
+  where: Prisma.WorkspaceScalarWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateManyMutationInput, Prisma.WorkspaceUncheckedUpdateManyWithoutTermInput>
 }
 
@@ -1157,20 +1157,20 @@ export type WorkspaceCreateWithoutGradeInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutGradeInput = {
@@ -1185,21 +1185,21 @@ export type WorkspaceUncheckedCreateWithoutGradeInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutGradeInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutGradeInput, Prisma.WorkspaceUncheckedCreateWithoutGradeInput>
 }
 
@@ -1209,18 +1209,18 @@ export type WorkspaceCreateManyGradeInputEnvelope = {
 }
 
 export type WorkspaceUpsertWithWhereUniqueWithoutGradeInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutGradeInput, Prisma.WorkspaceUncheckedUpdateWithoutGradeInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutGradeInput, Prisma.WorkspaceUncheckedCreateWithoutGradeInput>
 }
 
 export type WorkspaceUpdateWithWhereUniqueWithoutGradeInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutGradeInput, Prisma.WorkspaceUncheckedUpdateWithoutGradeInput>
 }
 
 export type WorkspaceUpdateManyWithWhereWithoutGradeInput = {
-  where: Prisma.WorkspaceScalarWhereInput
+  where: Prisma.WorkspaceScalarWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateManyMutationInput, Prisma.WorkspaceUncheckedUpdateManyWithoutGradeInput>
 }
 
@@ -1233,20 +1233,20 @@ export type WorkspaceCreateWithoutSubjectInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutSubjectInput = {
@@ -1261,21 +1261,21 @@ export type WorkspaceUncheckedCreateWithoutSubjectInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutSubjectInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectInput>
 }
 
@@ -1285,18 +1285,18 @@ export type WorkspaceCreateManySubjectInputEnvelope = {
 }
 
 export type WorkspaceUpsertWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSubjectInput, Prisma.WorkspaceUncheckedUpdateWithoutSubjectInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectInput>
 }
 
 export type WorkspaceUpdateWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSubjectInput, Prisma.WorkspaceUncheckedUpdateWithoutSubjectInput>
 }
 
 export type WorkspaceUpdateManyWithWhereWithoutSubjectInput = {
-  where: Prisma.WorkspaceScalarWhereInput
+  where: Prisma.WorkspaceScalarWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateManyMutationInput, Prisma.WorkspaceUncheckedUpdateManyWithoutSubjectInput>
 }
 
@@ -1309,20 +1309,20 @@ export type WorkspaceCreateWithoutSourceClassesInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutSourceClassesInput = {
@@ -1338,20 +1338,20 @@ export type WorkspaceUncheckedCreateWithoutSourceClassesInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutSourceClassesInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedCreateWithoutSourceClassesInput>
 }
 
@@ -1364,20 +1364,20 @@ export type WorkspaceCreateWithoutSourcedCourseGroupsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput = {
@@ -1393,31 +1393,31 @@ export type WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutSourcedCourseGroupsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput>
 }
 
 export type WorkspaceUpsertWithoutSourceClassesInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedUpdateWithoutSourceClassesInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedCreateWithoutSourceClassesInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutSourceClassesInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSourceClassesInput, Prisma.WorkspaceUncheckedUpdateWithoutSourceClassesInput>
 }
 
@@ -1430,20 +1430,20 @@ export type WorkspaceUpdateWithoutSourceClassesInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutSourceClassesInput = {
@@ -1459,26 +1459,26 @@ export type WorkspaceUncheckedUpdateWithoutSourceClassesInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUpsertWithoutSourcedCourseGroupsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedUpdateWithoutSourcedCourseGroupsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedCreateWithoutSourcedCourseGroupsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutSourcedCourseGroupsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSourcedCourseGroupsInput, Prisma.WorkspaceUncheckedUpdateWithoutSourcedCourseGroupsInput>
 }
 
@@ -1491,20 +1491,20 @@ export type WorkspaceUpdateWithoutSourcedCourseGroupsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutSourcedCourseGroupsInput = {
@@ -1520,16 +1520,16 @@ export type WorkspaceUncheckedUpdateWithoutSourcedCourseGroupsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutSubjectRulesInput = {
@@ -1541,20 +1541,20 @@ export type WorkspaceCreateWithoutSubjectRulesInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutSubjectRulesInput = {
@@ -1570,31 +1570,31 @@ export type WorkspaceUncheckedCreateWithoutSubjectRulesInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutSubjectRulesInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectRulesInput>
 }
 
 export type WorkspaceUpsertWithoutSubjectRulesInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedUpdateWithoutSubjectRulesInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedCreateWithoutSubjectRulesInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutSubjectRulesInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutSubjectRulesInput, Prisma.WorkspaceUncheckedUpdateWithoutSubjectRulesInput>
 }
 
@@ -1607,20 +1607,20 @@ export type WorkspaceUpdateWithoutSubjectRulesInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutSubjectRulesInput = {
@@ -1636,16 +1636,16 @@ export type WorkspaceUncheckedUpdateWithoutSubjectRulesInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutMembersInput = {
@@ -1657,20 +1657,20 @@ export type WorkspaceCreateWithoutMembersInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutMembersInput = {
@@ -1686,31 +1686,31 @@ export type WorkspaceUncheckedCreateWithoutMembersInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutMembersInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutMembersInput, Prisma.WorkspaceUncheckedCreateWithoutMembersInput>
 }
 
 export type WorkspaceUpsertWithoutMembersInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutMembersInput, Prisma.WorkspaceUncheckedUpdateWithoutMembersInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutMembersInput, Prisma.WorkspaceUncheckedCreateWithoutMembersInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutMembersInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutMembersInput, Prisma.WorkspaceUncheckedUpdateWithoutMembersInput>
 }
 
@@ -1723,20 +1723,20 @@ export type WorkspaceUpdateWithoutMembersInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutMembersInput = {
@@ -1752,16 +1752,16 @@ export type WorkspaceUncheckedUpdateWithoutMembersInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutTeachingAssignmentsInput = {
@@ -1773,20 +1773,20 @@ export type WorkspaceCreateWithoutTeachingAssignmentsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput = {
@@ -1802,31 +1802,31 @@ export type WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutTeachingAssignmentsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput>
 }
 
 export type WorkspaceUpsertWithoutTeachingAssignmentsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedUpdateWithoutTeachingAssignmentsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedCreateWithoutTeachingAssignmentsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutTeachingAssignmentsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutTeachingAssignmentsInput, Prisma.WorkspaceUncheckedUpdateWithoutTeachingAssignmentsInput>
 }
 
@@ -1839,20 +1839,20 @@ export type WorkspaceUpdateWithoutTeachingAssignmentsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutTeachingAssignmentsInput = {
@@ -1868,16 +1868,16 @@ export type WorkspaceUncheckedUpdateWithoutTeachingAssignmentsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutLeadershipsInput = {
@@ -1889,20 +1889,20 @@ export type WorkspaceCreateWithoutLeadershipsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutLeadershipsInput = {
@@ -1918,31 +1918,31 @@ export type WorkspaceUncheckedCreateWithoutLeadershipsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutLeadershipsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedCreateWithoutLeadershipsInput>
 }
 
 export type WorkspaceUpsertWithoutLeadershipsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedUpdateWithoutLeadershipsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedCreateWithoutLeadershipsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutLeadershipsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutLeadershipsInput, Prisma.WorkspaceUncheckedUpdateWithoutLeadershipsInput>
 }
 
@@ -1955,20 +1955,20 @@ export type WorkspaceUpdateWithoutLeadershipsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutLeadershipsInput = {
@@ -1984,16 +1984,16 @@ export type WorkspaceUncheckedUpdateWithoutLeadershipsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutPendingInvitationsInput = {
@@ -2005,20 +2005,20 @@ export type WorkspaceCreateWithoutPendingInvitationsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutPendingInvitationsInput = {
@@ -2034,31 +2034,31 @@ export type WorkspaceUncheckedCreateWithoutPendingInvitationsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutPendingInvitationsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedCreateWithoutPendingInvitationsInput>
 }
 
 export type WorkspaceUpsertWithoutPendingInvitationsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedUpdateWithoutPendingInvitationsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedCreateWithoutPendingInvitationsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutPendingInvitationsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutPendingInvitationsInput, Prisma.WorkspaceUncheckedUpdateWithoutPendingInvitationsInput>
 }
 
@@ -2071,20 +2071,20 @@ export type WorkspaceUpdateWithoutPendingInvitationsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutPendingInvitationsInput = {
@@ -2100,16 +2100,16 @@ export type WorkspaceUncheckedUpdateWithoutPendingInvitationsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutPublicationTargetsInput = {
@@ -2121,20 +2121,20 @@ export type WorkspaceCreateWithoutPublicationTargetsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutPublicationTargetsInput = {
@@ -2150,31 +2150,31 @@ export type WorkspaceUncheckedCreateWithoutPublicationTargetsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutPublicationTargetsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedCreateWithoutPublicationTargetsInput>
 }
 
 export type WorkspaceUpsertWithoutPublicationTargetsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedUpdateWithoutPublicationTargetsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedCreateWithoutPublicationTargetsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutPublicationTargetsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutPublicationTargetsInput, Prisma.WorkspaceUncheckedUpdateWithoutPublicationTargetsInput>
 }
 
@@ -2187,20 +2187,20 @@ export type WorkspaceUpdateWithoutPublicationTargetsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutPublicationTargetsInput = {
@@ -2216,16 +2216,16 @@ export type WorkspaceUncheckedUpdateWithoutPublicationTargetsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutClassroomScreensInput = {
@@ -2237,20 +2237,20 @@ export type WorkspaceCreateWithoutClassroomScreensInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutClassroomScreensInput = {
@@ -2266,31 +2266,31 @@ export type WorkspaceUncheckedCreateWithoutClassroomScreensInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutClassroomScreensInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedCreateWithoutClassroomScreensInput>
 }
 
 export type WorkspaceUpsertWithoutClassroomScreensInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedUpdateWithoutClassroomScreensInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedCreateWithoutClassroomScreensInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutClassroomScreensInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutClassroomScreensInput, Prisma.WorkspaceUncheckedUpdateWithoutClassroomScreensInput>
 }
 
@@ -2303,20 +2303,20 @@ export type WorkspaceUpdateWithoutClassroomScreensInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutClassroomScreensInput = {
@@ -2332,16 +2332,16 @@ export type WorkspaceUncheckedUpdateWithoutClassroomScreensInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutStudentsInput = {
@@ -2353,20 +2353,20 @@ export type WorkspaceCreateWithoutStudentsInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutStudentsInput = {
@@ -2382,31 +2382,31 @@ export type WorkspaceUncheckedCreateWithoutStudentsInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutStudentsInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutStudentsInput, Prisma.WorkspaceUncheckedCreateWithoutStudentsInput>
 }
 
 export type WorkspaceUpsertWithoutStudentsInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutStudentsInput, Prisma.WorkspaceUncheckedUpdateWithoutStudentsInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutStudentsInput, Prisma.WorkspaceUncheckedCreateWithoutStudentsInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutStudentsInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutStudentsInput, Prisma.WorkspaceUncheckedUpdateWithoutStudentsInput>
 }
 
@@ -2419,20 +2419,20 @@ export type WorkspaceUpdateWithoutStudentsInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutStudentsInput = {
@@ -2448,16 +2448,16 @@ export type WorkspaceUncheckedUpdateWithoutStudentsInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateWithoutAttendanceDaysInput = {
@@ -2469,20 +2469,20 @@ export type WorkspaceCreateWithoutAttendanceDaysInput = {
   isStudentSelectable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInput
-  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInput
-  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInput
-  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInput
-  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInput
+  term: Prisma.AcademicTermCreateNestedOneWithoutWorkspacesInpu
+  grade?: Prisma.GradeCreateNestedOneWithoutWorkspacesInpu
+  subject?: Prisma.SubjectCreateNestedOneWithoutWorkspacesInpu
+  legacyDevice?: Prisma.DeviceCreateNestedOneWithoutLegacyWorkspaceInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceUncheckedCreateWithoutAttendanceDaysInput = {
@@ -2498,31 +2498,31 @@ export type WorkspaceUncheckedCreateWithoutAttendanceDaysInput = {
   legacyDeviceId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutWorkspaceInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  members?: Prisma.WorkspaceMemberUncheckedCreateNestedManyWithoutWorkspaceInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedCreateNestedManyWithoutWorkspaceInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedCreateNestedManyWithoutWorkspaceInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedCreateNestedManyWithoutWorkspaceInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedCreateNestedManyWithoutAdministrativeClassInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedCreateNestedManyWithoutAdministrativeClassInpu
 }
 
 export type WorkspaceCreateOrConnectWithoutAttendanceDaysInput = {
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedCreateWithoutAttendanceDaysInput>
 }
 
 export type WorkspaceUpsertWithoutAttendanceDaysInput = {
   update: Prisma.XOR<Prisma.WorkspaceUpdateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedUpdateWithoutAttendanceDaysInput>
   create: Prisma.XOR<Prisma.WorkspaceCreateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedCreateWithoutAttendanceDaysInput>
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
 }
 
 export type WorkspaceUpdateToOneWithWhereWithoutAttendanceDaysInput = {
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   data: Prisma.XOR<Prisma.WorkspaceUpdateWithoutAttendanceDaysInput, Prisma.WorkspaceUncheckedUpdateWithoutAttendanceDaysInput>
 }
 
@@ -2535,20 +2535,20 @@ export type WorkspaceUpdateWithoutAttendanceDaysInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutAttendanceDaysInput = {
@@ -2564,16 +2564,16 @@ export type WorkspaceUncheckedUpdateWithoutAttendanceDaysInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceCreateManyTermInput = {
@@ -2599,20 +2599,20 @@ export type WorkspaceUpdateWithoutTermInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutTermInput = {
@@ -2627,17 +2627,17 @@ export type WorkspaceUncheckedUpdateWithoutTermInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateManyWithoutTermInput = {
@@ -2677,20 +2677,20 @@ export type WorkspaceUpdateWithoutGradeInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  subject?: Prisma.SubjectUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutGradeInput = {
@@ -2705,17 +2705,17 @@ export type WorkspaceUncheckedUpdateWithoutGradeInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateManyWithoutGradeInput = {
@@ -2755,20 +2755,20 @@ export type WorkspaceUpdateWithoutSubjectInput = {
   isStudentSelectable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput
-  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInput
-  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInput
-  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInput
+  term?: Prisma.AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInpu
+  grade?: Prisma.GradeUpdateOneWithoutWorkspacesNestedInpu
+  legacyDevice?: Prisma.DeviceUpdateOneWithoutLegacyWorkspaceNestedInpu
+  sourceClasses?: Prisma.WorkspaceSourceClassUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateWithoutSubjectInput = {
@@ -2783,17 +2783,17 @@ export type WorkspaceUncheckedUpdateWithoutSubjectInput = {
   legacyDeviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInput
-  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInput
-  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInput
-  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInput
-  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInput
-  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInput
-  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInput
+  sourceClasses?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  sourcedCourseGroups?: Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  subjectRules?: Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  members?: Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  teachingAssignments?: Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  pendingInvitations?: Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  publicationTargets?: Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceNestedInpu
+  classroomScreens?: Prisma.ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  students?: Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  attendanceDays?: Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
+  leaderships?: Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassNestedInpu
 }
 
 export type WorkspaceUncheckedUpdateManyWithoutSubjectInput = {
@@ -2857,77 +2857,77 @@ export type WorkspaceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountSourceClassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceSourceClassWhereInput
+  where?: Prisma.WorkspaceSourceClassWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountSourcedCourseGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceSourceClassWhereInput
+  where?: Prisma.WorkspaceSourceClassWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountSubjectRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassSubjectWhereInput
+  where?: Prisma.AdministrativeClassSubjectWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceMemberWhereInput
+  where?: Prisma.WorkspaceMemberWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountTeachingAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TeachingAssignmentWhereInput
+  where?: Prisma.TeachingAssignmentWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountPendingInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceMemberInviteWhereInput
+  where?: Prisma.WorkspaceMemberInviteWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountPublicationTargetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublicationTargetWhereInput
+  where?: Prisma.PublicationTargetWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountClassroomScreensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountStudentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassStudentWhereInput
+  where?: Prisma.AdministrativeClassStudentWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountAttendanceDaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassAttendanceDayWhereInput
+  where?: Prisma.ClassAttendanceDayWhereInpu
 }
 
 /**
  * WorkspaceCountOutputType without action
  */
 export type WorkspaceCountOutputTypeCountLeadershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassLeadershipWhereInput
+  where?: Prisma.AdministrativeClassLeadershipWhereInpu
 }
 
 
@@ -3343,7 +3343,7 @@ export interface WorkspaceDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    * // Count the number of Workspaces
    * const count = await prisma.workspace.count({
    *   where: {
-   *     // ... the filter for the Workspaces we want to count
+   *     // ... the filter for the Workspaces we want to coun
    *   }
    * })
   **/
@@ -3389,7 +3389,7 @@ export interface WorkspaceDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    * Read more here: https://pris.ly/d/null-undefined
    * @param {WorkspaceGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get count
+   * // Group by city, order by createdAt, get coun
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -3552,7 +3552,7 @@ export type WorkspaceFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter, which Workspace to fetch.
    */
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
 }
 
 /**
@@ -3574,11 +3574,11 @@ export type WorkspaceFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which Workspace to fetch.
    */
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
 }
 
 /**
- * Workspace findFirst
+ * Workspace findFirs
  */
 export type WorkspaceFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -3596,7 +3596,7 @@ export type WorkspaceFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter, which Workspace to fetch.
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -3608,7 +3608,7 @@ export type WorkspaceFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    *
    * Sets the position for searching for Workspaces.
    */
-  cursor?: Prisma.WorkspaceWhereUniqueInput
+  cursor?: Prisma.WorkspaceWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -3648,7 +3648,7 @@ export type WorkspaceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which Workspace to fetch.
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -3660,7 +3660,7 @@ export type WorkspaceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    *
    * Sets the position for searching for Workspaces.
    */
-  cursor?: Prisma.WorkspaceWhereUniqueInput
+  cursor?: Prisma.WorkspaceWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -3700,7 +3700,7 @@ export type WorkspaceFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter, which Workspaces to fetch.
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -3712,7 +3712,7 @@ export type WorkspaceFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    *
    * Sets the position for listing Workspaces.
    */
-  cursor?: Prisma.WorkspaceWhereUniqueInput
+  cursor?: Prisma.WorkspaceWhereUniqueInpu
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -3807,7 +3807,7 @@ export type WorkspaceUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Choose, which Workspace to update.
    */
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
 }
 
 /**
@@ -3821,7 +3821,7 @@ export type WorkspaceUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter which Workspaces to update
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * Limit how many Workspaces to update.
    */
@@ -3847,7 +3847,7 @@ export type WorkspaceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which Workspaces to update
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * Limit how many Workspaces to update.
    */
@@ -3859,7 +3859,7 @@ export type WorkspaceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * Workspace upsert
+ * Workspace upser
  */
 export type WorkspaceUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -3877,7 +3877,7 @@ export type WorkspaceUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * The filter to search for the Workspace to update in case it exists.
    */
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
   /**
    * In case the Workspace found by the `where` argument doesn't exist, create a new Workspace with this data.
    */
@@ -3907,7 +3907,7 @@ export type WorkspaceDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Filter which Workspace to delete.
    */
-  where: Prisma.WorkspaceWhereUniqueInput
+  where: Prisma.WorkspaceWhereUniqueInpu
 }
 
 /**
@@ -3917,7 +3917,7 @@ export type WorkspaceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter which Workspaces to delete
    */
-  where?: Prisma.WorkspaceWhereInput
+  where?: Prisma.WorkspaceWhereInpu
   /**
    * Limit how many Workspaces to delete.
    */
@@ -3940,26 +3940,26 @@ export type Workspace$gradeArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.GradeInclude<ExtArgs> | null
-  where?: Prisma.GradeWhereInput
+  where?: Prisma.GradeWhereInpu
 }
 
 /**
- * Workspace.subject
+ * Workspace.subjec
  */
 export type Workspace$subjectArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Subject
+   * Select specific fields to fetch from the Subjec
    */
   select?: Prisma.SubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Subject
+   * Omit specific fields from the Subjec
    */
   omit?: Prisma.SubjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.SubjectInclude<ExtArgs> | null
-  where?: Prisma.SubjectWhereInput
+  where?: Prisma.SubjectWhereInpu
 }
 
 /**
@@ -3978,7 +3978,7 @@ export type Workspace$legacyDeviceArgs<ExtArgs extends runtime.Types.Extensions.
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.DeviceInclude<ExtArgs> | null
-  where?: Prisma.DeviceWhereInput
+  where?: Prisma.DeviceWhereInpu
 }
 
 /**
@@ -3997,9 +3997,9 @@ export type Workspace$sourceClassesArgs<ExtArgs extends runtime.Types.Extensions
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceSourceClassInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceSourceClassWhereInput
+  where?: Prisma.WorkspaceSourceClassWhereInpu
   orderBy?: Prisma.WorkspaceSourceClassOrderByWithRelationInput | Prisma.WorkspaceSourceClassOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceSourceClassScalarFieldEnum | Prisma.WorkspaceSourceClassScalarFieldEnum[]
@@ -4021,9 +4021,9 @@ export type Workspace$sourcedCourseGroupsArgs<ExtArgs extends runtime.Types.Exte
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceSourceClassInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceSourceClassWhereInput
+  where?: Prisma.WorkspaceSourceClassWhereInpu
   orderBy?: Prisma.WorkspaceSourceClassOrderByWithRelationInput | Prisma.WorkspaceSourceClassOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceSourceClassScalarFieldEnum | Prisma.WorkspaceSourceClassScalarFieldEnum[]
@@ -4034,20 +4034,20 @@ export type Workspace$sourcedCourseGroupsArgs<ExtArgs extends runtime.Types.Exte
  */
 export type Workspace$subjectRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubject
+   * Select specific fields to fetch from the AdministrativeClassSubjec
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubject
+   * Omit specific fields from the AdministrativeClassSubjec
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AdministrativeClassSubjectInclude<ExtArgs> | null
-  where?: Prisma.AdministrativeClassSubjectWhereInput
+  where?: Prisma.AdministrativeClassSubjectWhereInpu
   orderBy?: Prisma.AdministrativeClassSubjectOrderByWithRelationInput | Prisma.AdministrativeClassSubjectOrderByWithRelationInput[]
-  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInput
+  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.AdministrativeClassSubjectScalarFieldEnum | Prisma.AdministrativeClassSubjectScalarFieldEnum[]
@@ -4069,9 +4069,9 @@ export type Workspace$membersArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceMemberInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceMemberWhereInput
+  where?: Prisma.WorkspaceMemberWhereInpu
   orderBy?: Prisma.WorkspaceMemberOrderByWithRelationInput | Prisma.WorkspaceMemberOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceMemberScalarFieldEnum | Prisma.WorkspaceMemberScalarFieldEnum[]
@@ -4082,20 +4082,20 @@ export type Workspace$membersArgs<ExtArgs extends runtime.Types.Extensions.Inter
  */
 export type Workspace$teachingAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignment
+   * Select specific fields to fetch from the TeachingAssignmen
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignment
+   * Omit specific fields from the TeachingAssignmen
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.TeachingAssignmentInclude<ExtArgs> | null
-  where?: Prisma.TeachingAssignmentWhereInput
+  where?: Prisma.TeachingAssignmentWhereInpu
   orderBy?: Prisma.TeachingAssignmentOrderByWithRelationInput | Prisma.TeachingAssignmentOrderByWithRelationInput[]
-  cursor?: Prisma.TeachingAssignmentWhereUniqueInput
+  cursor?: Prisma.TeachingAssignmentWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.TeachingAssignmentScalarFieldEnum | Prisma.TeachingAssignmentScalarFieldEnum[]
@@ -4117,9 +4117,9 @@ export type Workspace$pendingInvitationsArgs<ExtArgs extends runtime.Types.Exten
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceMemberInviteInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceMemberInviteWhereInput
+  where?: Prisma.WorkspaceMemberInviteWhereInpu
   orderBy?: Prisma.WorkspaceMemberInviteOrderByWithRelationInput | Prisma.WorkspaceMemberInviteOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInput
+  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceMemberInviteScalarFieldEnum | Prisma.WorkspaceMemberInviteScalarFieldEnum[]
@@ -4130,20 +4130,20 @@ export type Workspace$pendingInvitationsArgs<ExtArgs extends runtime.Types.Exten
  */
 export type Workspace$publicationTargetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarget
+   * Select specific fields to fetch from the PublicationTarge
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarget
+   * Omit specific fields from the PublicationTarge
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.PublicationTargetInclude<ExtArgs> | null
-  where?: Prisma.PublicationTargetWhereInput
+  where?: Prisma.PublicationTargetWhereInpu
   orderBy?: Prisma.PublicationTargetOrderByWithRelationInput | Prisma.PublicationTargetOrderByWithRelationInput[]
-  cursor?: Prisma.PublicationTargetWhereUniqueInput
+  cursor?: Prisma.PublicationTargetWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.PublicationTargetScalarFieldEnum | Prisma.PublicationTargetScalarFieldEnum[]
@@ -4165,9 +4165,9 @@ export type Workspace$classroomScreensArgs<ExtArgs extends runtime.Types.Extensi
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassroomScreenBindingInclude<ExtArgs> | null
-  where?: Prisma.ClassroomScreenBindingWhereInput
+  where?: Prisma.ClassroomScreenBindingWhereInpu
   orderBy?: Prisma.ClassroomScreenBindingOrderByWithRelationInput | Prisma.ClassroomScreenBindingOrderByWithRelationInput[]
-  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInput
+  cursor?: Prisma.ClassroomScreenBindingWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.ClassroomScreenBindingScalarFieldEnum | Prisma.ClassroomScreenBindingScalarFieldEnum[]
@@ -4178,20 +4178,20 @@ export type Workspace$classroomScreensArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type Workspace$studentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStudent
+   * Select specific fields to fetch from the AdministrativeClassStuden
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStudent
+   * Omit specific fields from the AdministrativeClassStuden
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AdministrativeClassStudentInclude<ExtArgs> | null
-  where?: Prisma.AdministrativeClassStudentWhereInput
+  where?: Prisma.AdministrativeClassStudentWhereInpu
   orderBy?: Prisma.AdministrativeClassStudentOrderByWithRelationInput | Prisma.AdministrativeClassStudentOrderByWithRelationInput[]
-  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInput
+  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.AdministrativeClassStudentScalarFieldEnum | Prisma.AdministrativeClassStudentScalarFieldEnum[]
@@ -4213,9 +4213,9 @@ export type Workspace$attendanceDaysArgs<ExtArgs extends runtime.Types.Extension
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassAttendanceDayInclude<ExtArgs> | null
-  where?: Prisma.ClassAttendanceDayWhereInput
+  where?: Prisma.ClassAttendanceDayWhereInpu
   orderBy?: Prisma.ClassAttendanceDayOrderByWithRelationInput | Prisma.ClassAttendanceDayOrderByWithRelationInput[]
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.ClassAttendanceDayScalarFieldEnum | Prisma.ClassAttendanceDayScalarFieldEnum[]
@@ -4237,9 +4237,9 @@ export type Workspace$leadershipsArgs<ExtArgs extends runtime.Types.Extensions.I
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AdministrativeClassLeadershipInclude<ExtArgs> | null
-  where?: Prisma.AdministrativeClassLeadershipWhereInput
+  where?: Prisma.AdministrativeClassLeadershipWhereInpu
   orderBy?: Prisma.AdministrativeClassLeadershipOrderByWithRelationInput | Prisma.AdministrativeClassLeadershipOrderByWithRelationInput[]
-  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInput
+  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
   take?: number
   skip?: number
   distinct?: Prisma.AdministrativeClassLeadershipScalarFieldEnum | Prisma.AdministrativeClassLeadershipScalarFieldEnum[]
