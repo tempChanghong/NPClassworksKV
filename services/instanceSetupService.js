@@ -13,9 +13,10 @@ import {authorizationError} from "./academicAuthorizationService.js";
 import {importLocalTeachers, publicLocalAccount} from "./localAccountService.js";
 import {importOrganization} from "./organizationAdminService.js";
 import {createClassroomScreenAccount} from "./classroomScreenService.js";
+import {importStaffConfiguration} from "./staffConfigurationImportService.js";
 
 const SETUP_ID = "default";
-const SETUP_VERSION = 1;
+const SETUP_VERSION = 2;
 const AUTH_MODES = new Set(["LOCAL_PIN", "SHARED_PASSWORD", "OAUTH_EMAIL"]);
 const BCRYPT_ROUNDS = Math.min(14, Math.max(10, Number(process.env.LOCAL_AUTH_BCRYPT_ROUNDS) || 10));
 const DUMMY_HASH = "$2b$12$C6UzMDM.H6dfI/f/IKcEe.5l4KJg7jL7vY4PZwXH0mD7tZKX8zXn2";
@@ -205,6 +206,17 @@ export async function importInstanceSetupTeachers(document, dryRun = false) {
         document,
         dryRun,
         requireWorkspaces: false,
+    });
+}
+
+export async function importInstanceSetupStaffConfiguration(document, dryRun = false) {
+    const {membership, school, term} = await requireSetupContext();
+    return importStaffConfiguration({
+        managerAccountId: membership.accountId,
+        schoolId: school.id,
+        termId: term.id,
+        document,
+        dryRun,
     });
 }
 

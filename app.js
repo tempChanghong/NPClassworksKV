@@ -54,9 +54,9 @@ const __dirname = dirname(__filename);
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+// 组织与教师批量配置会携带较大的 JSON 文档；保留明确上限，避免使用 Express 默认的 100 KB。
+app.use(bodyParser.json({limit: "2mb"}));
 app.use(logger("dev"));
-app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 // app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));

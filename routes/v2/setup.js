@@ -9,6 +9,7 @@ import {
     getInstanceSetupContext,
     getInstanceSetupStatus,
     importInstanceSetupOrganization,
+    importInstanceSetupStaffConfiguration,
     importInstanceSetupTeachers,
     initializeInstanceCore,
     verifyInstanceSetupLogin,
@@ -16,6 +17,10 @@ import {
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
+    "utf8",
+));
+const staffConfigurationTemplate = JSON.parse(readFileSync(
+    new URL("../../config/examples/teacher-configuration.example.json", import.meta.url),
     "utf8",
 ));
 
@@ -49,6 +54,10 @@ router.get("/organization/template", setupTokenAuth, (req, res) => {
     return res.json(errors.createSuccessResponse(organizationTemplate));
 });
 
+router.get("/staff-configuration/template", setupTokenAuth, (req, res) => {
+    return res.json(errors.createSuccessResponse(staffConfigurationTemplate));
+});
+
 router.post("/organization/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
     const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
     const result = await importInstanceSetupOrganization(req.body?.organization || req.body, dryRun);
@@ -71,6 +80,20 @@ router.post("/teachers/import", setupTokenAuth, errors.catchAsync(async (req, re
             success: false,
             code: "LOCAL_TEACHER_IMPORT_VALIDATION_FAILED",
             message: "教师账号与任课空间校验失败",
+            data: result,
+        });
+    }
+    return res.status(result.imported ? 201 : 200).json(errors.createSuccessResponse(result));
+}));
+
+router.post("/staff-configuration/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
+    const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
+    const result = await importInstanceSetupStaffConfiguration(req.body?.staffConfiguration || req.body, dryRun);
+    if (!result.valid) {
+        return res.status(422).json({
+            success: false,
+            code: "STAFF_CONFIGURATION_VALIDATION_FAILED",
+            message: "教师账号、任课与职责配置校验失败",
             data: result,
         });
     }

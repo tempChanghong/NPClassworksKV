@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "schoolCode": "NEWFIRES-SCHOOL",
+  "term": {
+    "academicYear": 2026,
+    "semester": 1
+  },
+  "teachers": [
+    {
+      "username": "wang.physics",
+      "name": "王老师",
+      "credential": {"mode": "GENERATE_PIN"},
+      "teachingAssignments": [
+        {"workspaceCode": "G2-C1", "subjectCode": "PHY", "position": "PRIMARY"},
+        {"workspaceCode": "G2-PHY-A1", "subjectCode": "PHY", "position": "PRIMARY"}
+      ],
+      "responsibilities": {
+        "gradeLeaderships": [
+          {"gradeCode": "G2", "position": "PRIMARY"}
+        ],
+        "classLeaderships": [
+          {"classCode": "G2-C1", "position": "HEAD_TEACHER"}
+        ]
+      }
+    },
+    {
+      "username": "li.chinese",
+      "name": "李老师",
+      "credential": {"mode": "GENERATE_PIN"},
+      "teachingAssignments": [
+        {"workspaceCode": "G2-C1", "subjectCode": "CHN", "position": "PRIMARY"}
+      ],
+      "responsibilities": {
+        "gradeLeaderships": [],
+        "classLeaderships": []
+      }
+    }
+  ]
+}
