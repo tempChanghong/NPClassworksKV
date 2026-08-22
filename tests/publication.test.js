@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+    DEFAULT_NOTICE_LIFETIME_MS,
     earliestPublicationTransition,
     validatePublicationSnapshot,
 } from "../domain/publication.js";
@@ -112,6 +113,47 @@ test("notices may target mixed administrative classes and course groups without 
     });
 
     assert.equal(result.valid, true);
+});
+
+test("notices without an explicit expiry default to three days after publication", () => {
+    const classOne = adminClass("g2-c1", "高二1班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
+    const publishAt = "2026-08-09T08:15:30.000Z";
+    const result = validatePublicationSnapshot({
+        input: {
+            type: "NOTICE",
+            title: "临时通知",
+            status: "PUBLISHED",
+            publishAt,
+            targetWorkspaceIds: [classOne.id],
+        },
+        workspaces: [classOne],
+    });
+
+    assert.equal(result.valid, true);
+    assert.equal(
+        result.normalized.expiresAt.getTime(),
+        new Date(publishAt).getTime() + DEFAULT_NOTICE_LIFETIME_MS,
+    );
+    assert.equal(result.normalized.expiresAt.toISOString(), "2026-08-12T08:15:30.000Z");
+});
+
+test("an explicit notice expiry overrides the three-day default", () => {
+    const classOne = adminClass("g2-c1", "高二1班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
+    const expiresAt = "2026-08-20T12:00:00.000Z";
+    const result = validatePublicationSnapshot({
+        input: {
+            type: "NOTICE",
+            title: "长期通知",
+            status: "PUBLISHED",
+            publishAt: "2026-08-09T08:00:00.000Z",
+            expiresAt,
+            targetWorkspaceIds: [classOne.id],
+        },
+        workspaces: [classOne],
+    });
+
+    assert.equal(result.valid, true);
+    assert.equal(result.normalized.expiresAt.toISOString(), expiresAt);
 });
 
 test("targets from different terms are rejected", () => {

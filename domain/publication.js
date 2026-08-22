@@ -20,6 +20,8 @@ export const PUBLICATION_PRIORITIES = Object.freeze({
     URGENT: "URGENT",
 });
 
+export const DEFAULT_NOTICE_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
+
 export function earliestPublicationTransition(...values) {
     const timestamps = values
         .filter(Boolean)
@@ -181,7 +183,10 @@ export function validatePublicationSnapshot({input, workspaces}) {
         ? parseBoardDate(input?.boardDate, errors, {required: true})
         : null;
     const dueAt = parseDate(input?.dueAt, "dueAt", errors);
-    const expiresAt = parseDate(input?.expiresAt, "expiresAt", errors);
+    const requestedExpiresAt = parseDate(input?.expiresAt, "expiresAt", errors);
+    const expiresAt = type === PUBLICATION_TYPES.NOTICE && publishAt && !requestedExpiresAt
+        ? new Date(publishAt.getTime() + DEFAULT_NOTICE_LIFETIME_MS)
+        : requestedExpiresAt;
     if (publishAt && dueAt && dueAt < publishAt) {
         errors.push({path: "dueAt", code: "DUE_BEFORE_PUBLISH", message: "作业截止时间不能早于发布时间"});
     }
