@@ -26,7 +26,7 @@ export function localProviderId(schoolCode, username) {
     return `${normalizeSchoolCode(schoolCode)}:${normalizeLocalUsername(username)}`;
 }
 
-export function validateLocalTeacherImport(input, teacherAuthMode) {
+export function validateLocalTeacherImport(input, teacherAuthMode, {requireWorkspaces = true} = {}) {
     const errors = [];
     const warnings = [];
     const mode = String(teacherAuthMode || "").toUpperCase();
@@ -75,8 +75,14 @@ export function validateLocalTeacherImport(input, teacherAuthMode) {
         if (!WORKSPACE_ROLES.has(role)) {
             errors.push({path: `assignments[${index}].role`, code: "INVALID_WORKSPACE_ROLE", message: "无效的教学空间角色"});
         }
-        if (workspaceCodes.length === 0) {
+        if (workspaceCodes.length === 0 && requireWorkspaces) {
             errors.push({path: `assignments[${index}].workspaceCodes`, code: "WORKSPACES_REQUIRED", message: "至少选择一个教学空间"});
+        } else if (workspaceCodes.length === 0) {
+            warnings.push({
+                path: `assignments[${index}].workspaceCodes`,
+                code: "TEACHER_WITHOUT_WORKSPACE",
+                message: `${name || username || `第${index + 1}位教师`} 尚未分配任课班级，可在学校后台稍后补充`,
+            });
         }
 
         for (const code of workspaceCodes) {

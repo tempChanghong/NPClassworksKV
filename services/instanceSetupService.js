@@ -18,6 +18,7 @@ const SETUP_ID = "default";
 const SETUP_VERSION = 1;
 const AUTH_MODES = new Set(["LOCAL_PIN", "SHARED_PASSWORD", "OAUTH_EMAIL"]);
 const BCRYPT_ROUNDS = Math.min(14, Math.max(10, Number(process.env.LOCAL_AUTH_BCRYPT_ROUNDS) || 10));
+const DUMMY_HASH = "$2b$12$C6UzMDM.H6dfI/f/IKcEe.5l4KJg7jL7vY4PZwXH0mD7tZKX8zXn2";
 const DEFAULT_SUBJECTS = [
     {code: "CHINESE", name: "语文", category: "CORE", sortOrder: 10},
     {code: "MATH", name: "数学", category: "CORE", sortOrder: 20},
@@ -77,12 +78,13 @@ function runtimeChecks() {
 }
 
 async function loadSetupSnapshot(client = prisma) {
-    const [setup, schoolCount, localAccountCount, ownerCount, activeTermCount, gradeCount, subjectCount,
+    const [setup, schoolCount, localAccountCount, managerAccountCount, ownerCount, activeTermCount, gradeCount, subjectCount,
         workspaceCount, teacherMembershipCount, screenCount] =
         await Promise.all([
             client.instanceSetup.findUnique({where: {id: SETUP_ID}}),
             client.school.count(),
             client.account.count({where: {provider: "school-local"}}),
+            client.schoolMember.count({where: {role: {in: ["OWNER", "ADMIN"]}}}),
             client.schoolMember.count({where: {role: "OWNER"}}),
             client.academicTerm.count({where: {status: "ACTIVE"}}),
             client.grade.count(),
@@ -99,7 +101,8 @@ async function loadSetupSnapshot(client = prisma) {
         state,
         completed,
         legacyCompleted,
-        counts: {schools: schoolCount, localAccounts: localAccountCount, owners: ownerCount,
+        counts: {schools: schoolCount, localAccounts: localAccountCount,
+            teacherAccounts: Math.max(0, localAccountCount - managerAccountCount), owners: ownerCount,
             activeTerms: activeTermCount, grades: gradeCount, subjects: subjectCount,
             workspaces: workspaceCount, teacherMemberships: teacherMembershipCount, screens: screenCount},
     };
@@ -112,7 +115,7 @@ export async function getInstanceSetupStatus() {
         {id: "runtime", title: "服务与密钥", complete: checks.every((item) => item.ok || item.severity !== "ERROR")},
         {id: "core", title: "管理员、学校与学期", complete: snapshot.counts.owners > 0 && snapshot.counts.activeTerms > 0},
         {id: "organization", title: "组织与班级（可稍后处理）", complete: snapshot.counts.grades > 0 && snapshot.counts.workspaces > 0, optional: true},
-        {id: "teachers", title: "首批教师（可稍后处理）", complete: snapshot.counts.teacherMemberships > 0, optional: true},
+        {id: "teachers", title: "首批教师（可稍后处理）", complete: snapshot.counts.teacherAccounts > 0, optional: true},
         {id: "screens", title: "班级大屏（可稍后处理）", complete: snapshot.counts.screens > 0, optional: true},
         {id: "complete", title: "完成初始化", complete: snapshot.completed},
     ];
@@ -201,6 +204,7 @@ export async function importInstanceSetupTeachers(document, dryRun = false) {
         termId: term.id,
         document,
         dryRun,
+        requireWorkspaces: false,
     });
 }
 
@@ -214,6 +218,76 @@ export async function createInstanceSetupScreen(input) {
         pin: input?.pin,
         name: input?.name,
     });
+}
+
+export async function verifyInstanceSetupLogin(input = {}) {
+    const {school} = await requireSetupContext();
+    const kind = String(input.kind || "").trim().toUpperCase();
+    const schoolCode = normalizeSchoolCode(input.schoolCode);
+    if (schoolCode !== school.code) {
+        throw setupError("学校代码、账号或凭据不正确", "SETUP_LOGIN_TEST_FAILED", 401);
+    }
+
+    if (kind === "SCREEN") {
+        const loginCode = String(input.username || "").trim().toUpperCase();
+        const binding = await prisma.classroomScreenBinding.findUnique({
+            where: {schoolId_loginCode: {schoolId: school.id, loginCode}},
+            include: {administrativeClass: {include: {term: true}}},
+        });
+        const matches = await bcrypt.compare(String(input.password || ""), binding?.pinHash || DUMMY_HASH);
+        if (!binding || !binding.isActive || !matches) {
+            throw setupError("学校代码、大屏账号或 PIN 不正确", "SETUP_LOGIN_TEST_FAILED", 401);
+        }
+        if (!binding.administrativeClass?.isActive || binding.administrativeClass.term?.status !== "ACTIVE") {
+            throw setupError("大屏绑定的班级或学期未启用", "SETUP_SCREEN_INACTIVE", 409);
+        }
+        return {
+            kind,
+            account: binding.loginCode,
+            name: binding.name,
+            target: binding.administrativeClass.name,
+        };
+    }
+
+    if (!new Set(["OWNER", "TEACHER"]).has(kind)) {
+        throw setupError("请选择需要测试的账号类型", "SETUP_LOGIN_TEST_KIND_INVALID", 422);
+    }
+    const username = normalizeLocalUsername(input.username);
+    const account = await prisma.account.findUnique({
+        where: {
+            provider_providerId: {
+                provider: "school-local",
+                providerId: localProviderId(school.code, username),
+            },
+        },
+    });
+    const schoolMembership = account
+        ? await prisma.schoolMember.findUnique({
+            where: {schoolId_accountId: {schoolId: school.id, accountId: account.id}},
+        })
+        : null;
+    const isManager = new Set(["OWNER", "ADMIN"]).has(schoolMembership?.role);
+    const expectedKind = kind === "OWNER" ? isManager : !isManager;
+    let hash = account?.localPasswordHash || DUMMY_HASH;
+    if (kind === "TEACHER") {
+        if (school.teacherAuthMode === "OAUTH_EMAIL") {
+            await bcrypt.compare(String(input.password || ""), hash);
+            throw setupError("当前教师只使用 OAuth 登录，无法测试本地凭据", "SETUP_LOCAL_TEACHER_LOGIN_DISABLED", 409);
+        }
+        if (school.teacherAuthMode === "SHARED_PASSWORD") {
+            hash = school.teacherSharedPasswordHash || DUMMY_HASH;
+        }
+    }
+    const matches = await bcrypt.compare(String(input.password || ""), hash);
+    if (!account || account.localDisabled || !expectedKind || !matches) {
+        throw setupError("学校代码、账号或凭据不正确", "SETUP_LOGIN_TEST_FAILED", 401);
+    }
+    return {
+        kind,
+        account: account.localUsername,
+        name: account.name,
+        role: schoolMembership?.role || "TEACHER",
+    };
 }
 
 function normalizeCoreInput(input = {}) {

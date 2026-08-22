@@ -11,6 +11,7 @@ import {
     importInstanceSetupOrganization,
     importInstanceSetupTeachers,
     initializeInstanceCore,
+    verifyInstanceSetupLogin,
 } from "../../services/instanceSetupService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
@@ -80,6 +81,13 @@ router.post("/screens", setupTokenAuth, errors.catchAsync(async (req, res) => {
     return res.status(201).json(errors.createSuccessResponse(
         await createInstanceSetupScreen(req.body || {}),
         "首个大屏账号已创建",
+    ));
+}));
+
+router.post("/verify-login", localAuthLimiter, setupTokenAuth, errors.catchAsync(async (req, res) => {
+    return res.json(errors.createSuccessResponse(
+        await verifyInstanceSetupLogin(req.body || {}),
+        "登录凭据验证通过，未签发令牌或绑定设备",
     ));
 }));
 

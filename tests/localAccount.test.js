@@ -53,6 +53,16 @@ test("shared password mode keeps individual teacher identity without requiring a
     assert.equal(validateSharedTeacherPassword("short"), false);
 });
 
+test("setup may create a teacher identity before teaching spaces are known", () => {
+    const result = validateLocalTeacherImport({
+        assignments: [{username: "zhangls", name: "张老师", pin: "260103", workspaceCodes: []}],
+    }, "LOCAL_PIN", {requireWorkspaces: false});
+    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.summary.teachers, 1);
+    assert.equal(result.summary.memberships, 0);
+    assert.ok(result.warnings.some((warning) => warning.code === "TEACHER_WITHOUT_WORKSPACE"));
+});
+
 test("OAuth schools reject local teacher provisioning", () => {
     const result = validateLocalTeacherImport({
         assignments: [{username: "lils", name: "李老师", workspaceCodes: ["G2-C2"]}],

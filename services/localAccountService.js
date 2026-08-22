@@ -134,11 +134,11 @@ export async function loginLocalAccount({schoolCode, username, password}) {
     return {account: publicLocalAccount(updated), ...tokens};
 }
 
-export async function importLocalTeachers({managerAccountId, schoolId, termId, document, dryRun = false}) {
+export async function importLocalTeachers({managerAccountId, schoolId, termId, document, dryRun = false, requireWorkspaces = true}) {
     await assertSchoolManager(managerAccountId, schoolId);
     const school = await prisma.school.findUnique({where: {id: schoolId}});
     if (!school) throw authorizationError("学校不存在", "SCHOOL_NOT_FOUND", 404);
-    const validation = validateLocalTeacherImport(document, school.teacherAuthMode);
+    const validation = validateLocalTeacherImport(document, school.teacherAuthMode, {requireWorkspaces});
     if (!validation.valid) return {...validation, imported: false, dryRun};
 
     const term = termId
