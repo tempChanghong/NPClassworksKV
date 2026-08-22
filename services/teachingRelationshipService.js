@@ -12,6 +12,7 @@ const accountSelect = {
     email: true,
     localUsername: true,
     localDisabled: true,
+    lastLoginAt: true,
     avatarUrl: true,
 };
 

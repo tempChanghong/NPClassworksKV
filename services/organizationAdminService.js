@@ -259,12 +259,14 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
     const source = await prisma.academicTerm.findUnique({
         where: {id: sourceTermId},
         include: {
-            grades: true,
+            grades: {include: {leaderships: {where: {isActive: true}}}},
             workspaces: {
                 include: {
                     subjectRules: true,
                     sourceClasses: true,
                     members: true,
+                    teachingAssignments: {where: {isActive: true}},
+                    leaderships: {where: {isActive: true}},
                     pendingInvitations: {where: {claimedAt: null}},
                 },
             },
@@ -296,6 +298,14 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
         throw authorizationError("目标学期已经存在", "TARGET_TERM_EXISTS", 409, {termId: existing.id});
     }
 
+    const transitionMode = target?.transitionMode === true;
+    const carry = {
+        workspaceMembers: target?.carryWorkspaceMembers !== false,
+        teachingAssignments: transitionMode ? target?.carryTeachingAssignments !== false : true,
+        leaderships: transitionMode ? target?.carryLeaderships !== false : true,
+        pendingInvitations: transitionMode ? target?.carryPendingInvitations === true : true,
+    };
+
     return prisma.$transaction(async (tx) => {
         const newTerm = await tx.academicTerm.create({
             data: {
@@ -320,6 +330,16 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
                 },
             });
             gradeIdMap.set(grade.id, cloned.id);
+            if (carry.leaderships && grade.leaderships.length > 0) {
+                await tx.gradeLeadership.createMany({
+                    data: grade.leaderships.map((leadership) => ({
+                        gradeId: cloned.id,
+                        accountId: leadership.accountId,
+                        position: leadership.position,
+                        isActive: leadership.isActive,
+                    })),
+                });
+            }
         }
 
         const workspaceIdMap = new Map();
@@ -359,7 +379,7 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
                     })),
                 });
             }
-            if (workspace.members.length > 0) {
+            if (carry.workspaceMembers && workspace.members.length > 0) {
                 await tx.workspaceMember.createMany({
                     data: workspace.members.map((member) => ({
                         workspaceId: clonedWorkspaceId,
@@ -368,7 +388,28 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
                     })),
                 });
             }
-            if (workspace.pendingInvitations.length > 0) {
+            if (carry.teachingAssignments && workspace.teachingAssignments.length > 0) {
+                await tx.teachingAssignment.createMany({
+                    data: workspace.teachingAssignments.map((assignment) => ({
+                        workspaceId: clonedWorkspaceId,
+                        subjectId: assignment.subjectId,
+                        accountId: assignment.accountId,
+                        position: assignment.position,
+                        isActive: assignment.isActive,
+                    })),
+                });
+            }
+            if (carry.leaderships && workspace.type === "ADMIN_CLASS" && workspace.leaderships.length > 0) {
+                await tx.administrativeClassLeadership.createMany({
+                    data: workspace.leaderships.map((leadership) => ({
+                        administrativeClassId: clonedWorkspaceId,
+                        accountId: leadership.accountId,
+                        position: leadership.position,
+                        isActive: leadership.isActive,
+                    })),
+                });
+            }
+            if (carry.pendingInvitations && workspace.pendingInvitations.length > 0) {
                 await tx.workspaceMemberInvite.createMany({
                     data: workspace.pendingInvitations.map((invitation) => ({
                         workspaceId: clonedWorkspaceId,
@@ -388,9 +429,18 @@ export async function cloneAcademicTerm({accountId, sourceTermId, target}) {
             grades: gradeIdMap.size,
             workspaces: workspaceIdMap.size,
             pendingInvitations: source.workspaces.reduce(
-                (total, workspace) => total + workspace.pendingInvitations.length,
+                (total, workspace) => total + (carry.pendingInvitations ? workspace.pendingInvitations.length : 0),
                 0,
             ),
+            teachingAssignments: source.workspaces.reduce(
+                (total, workspace) => total + (carry.teachingAssignments ? workspace.teachingAssignments.length : 0),
+                0,
+            ),
+            leaderships: carry.leaderships
+                ? source.grades.reduce((sum, grade) => sum + grade.leaderships.length, 0) +
+                    source.workspaces.reduce((sum, workspace) => sum + workspace.leaderships.length, 0)
+                : 0,
+            carry,
         };
     }, {timeout: 30000});
 }

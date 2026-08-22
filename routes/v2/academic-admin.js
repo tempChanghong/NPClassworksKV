@@ -60,6 +60,13 @@ import {
     upsertClassLeadership,
     upsertGradeLeadership,
 } from "../../services/staffResponsibilityService.js";
+import {getSchoolManagementOverview} from "../../services/schoolManagementOverviewService.js";
+import {
+    activateAcademicTermTransition,
+    createAcademicTermTransition,
+    getAcademicTermReadiness,
+    previewAcademicTermTransition,
+} from "../../services/academicTermTransitionService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -171,6 +178,15 @@ router.get("/schools/:schoolId/teaching-relationships", errors.catchAsync(async 
 
 router.get("/schools/:schoolId/staff-responsibilities", errors.catchAsync(async (req, res) => {
     const overview = await getStaffResponsibilityOverview({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.query.termId,
+    });
+    return res.json(errors.createSuccessResponse(overview));
+}));
+
+router.get("/schools/:schoolId/management-overview", errors.catchAsync(async (req, res) => {
+    const overview = await getSchoolManagementOverview({
         managerAccountId: res.locals.account.id,
         schoolId: req.params.schoolId,
         termId: req.query.termId,
@@ -428,6 +444,15 @@ router.delete(
 );
 
 router.post("/terms/:termId/status", errors.catchAsync(async (req, res) => {
+    if (req.body?.status === "ACTIVE") {
+        const result = await activateAcademicTermTransition({
+            accountId: res.locals.account.id,
+            termId: req.params.termId,
+            force: req.body?.force === true,
+            rebindScreens: req.body?.rebindScreens !== false,
+        });
+        return res.json(errors.createSuccessResponse(result.term, "学期已通过启用检查并完成切换"));
+    }
     const term = await setAcademicTermStatus({
         accountId: res.locals.account.id,
         termId: req.params.termId,
@@ -443,6 +468,42 @@ router.post("/terms/:termId/clone", errors.catchAsync(async (req, res) => {
         target: req.body,
     });
     return res.status(201).json(errors.createSuccessResponse(term, "学期结构复制成功"));
+}));
+
+router.post("/terms/:termId/transition/preview", errors.catchAsync(async (req, res) => {
+    const preview = await previewAcademicTermTransition({
+        accountId: res.locals.account.id,
+        sourceTermId: req.params.termId,
+        target: req.body,
+    });
+    return res.json(errors.createSuccessResponse(preview));
+}));
+
+router.post("/terms/:termId/transition", errors.catchAsync(async (req, res) => {
+    const term = await createAcademicTermTransition({
+        accountId: res.locals.account.id,
+        sourceTermId: req.params.termId,
+        target: req.body,
+    });
+    return res.status(201).json(errors.createSuccessResponse(term, "新学期草稿已建立"));
+}));
+
+router.get("/terms/:termId/transition-readiness", errors.catchAsync(async (req, res) => {
+    const readiness = await getAcademicTermReadiness({
+        accountId: res.locals.account.id,
+        termId: req.params.termId,
+    });
+    return res.json(errors.createSuccessResponse(readiness));
+}));
+
+router.post("/terms/:termId/activate", errors.catchAsync(async (req, res) => {
+    const result = await activateAcademicTermTransition({
+        accountId: res.locals.account.id,
+        termId: req.params.termId,
+        force: req.body?.force === true,
+        rebindScreens: req.body?.rebindScreens !== false,
+    });
+    return res.json(errors.createSuccessResponse(result, "学期已启用"));
 }));
 
 router.get("/schools/:schoolId/members", errors.catchAsync(async (req, res) => {
