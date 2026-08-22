@@ -8,6 +8,7 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import errorHandler from "./middleware/errorHandler.js";
 import errors from "./utils/errors.js";
+import packageJson from "./package.json" with {type: "json"};
 
 import kvRouter from "./routes/kv-token.js";
 import appsRouter from "./routes/apps.js";
@@ -89,6 +90,9 @@ app.get("/check", (req, res) => {
     res.json({
         status: "success",
         message: "Classworks KV is running",
+        version: packageJson.version,
+        codename: packageJson.codename,
+        codenameZh: packageJson.codenameZh,
         time: new Date().getTime(),
     });
 });
@@ -101,6 +105,9 @@ app.get("/ready", async (req, res) => {
         res.json({
             status: "success",
             message: "Classworks KV is ready",
+            version: packageJson.version,
+            codename: packageJson.codename,
+            codenameZh: packageJson.codenameZh,
             time: new Date().getTime(),
         });
     } catch (error) {
