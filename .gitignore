@@ -148,3 +148,5 @@ prisma/database/data
 data/
 deploy/.env.production
 deploy/.env.debug
+deploy/backups/
+deploy/runtime/

@@ -59,7 +59,7 @@ pnpm run debug:db:status
 ```bash
 pnpm run deploy:init
 pnpm run deploy:check
-docker compose up -d --build
+docker compose --env-file deploy/.env.production up -d --build
 ```
 
 服务就绪后打开前端 `/setup`。向导会检查关键环境、验证一次性初始化密钥，并在同一事务中创建首位管理员、学校和启用学期。随后可以继续预检并导入行政班/走班结构、创建首批教师及其任课空间、建立班级大屏账号，也可以跳过任意可选步骤，稍后在学校后台补充。安装中途关闭页面后，重新输入初始化密钥即可从现有数据继续。
@@ -67,6 +67,35 @@ docker compose up -d --build
 首次部署前应配置强随机密钥、生产域名和一次性管理员初始化密钥。`BOOTSTRAP_SETUP_KEY` 只用于换取15分钟的初始化会话和 OWNER 恢复，不是日常登录密码。不要把 `.env`、OAuth Client Secret、JWT 密钥或数据库密码提交到仓库。
 
 部署容器会在服务启动前执行 Prisma migrations。更多阶段设计和联调说明见 [`docs`](./docs)。
+
+## 备份、恢复与升级
+
+生产脚本统一读取 `deploy/.env.production`，备份默认写入不纳入 Git 的 `deploy/backups`。每日备份默认保留14天，可通过 `BACKUP_RETENTION_DAYS` 调整。
+
+```bash
+# 手动备份；输出最终 .dump 路径，并同时生成 SHA-256 与元数据
+bash deploy/backup.sh
+
+# 安装每天 03:30 执行的 systemd 计时器
+sudo bash deploy/install-backup-timer.sh
+
+# 恢复前会再备份一次当前数据库；--yes 用于确认替换数据
+bash deploy/restore.sh deploy/backups/npclassworks_xxx.dump --yes
+```
+
+升级脚本要求前后端仓库同级放置且工作区干净。它会先备份数据库、保留当前前后端镜像，再构建和启动新版本。传入相同 Git 标签时，两个仓库都会切换到该标签；不传标签则部署当前已检出的代码。
+
+```bash
+bash deploy/upgrade.sh v1.0.1
+
+# 仅回退前后端代码与镜像，不改变升级后的数据库
+bash deploy/rollback.sh
+
+# 同时恢复升级前数据库；会替换当前数据库，必须显式确认
+bash deploy/rollback.sh --restore-database --yes
+```
+
+数据库迁移不保证向下兼容。如果升级包含破坏性迁移，应使用带数据库恢复的完整回滚。定时器状态和日志可用 `systemctl status npclassworks-backup.timer`、`journalctl -u npclassworks-backup.service` 查看。
 
 ## 健康检查
 

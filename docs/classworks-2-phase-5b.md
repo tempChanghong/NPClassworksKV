@@ -66,7 +66,7 @@ docker compose --env-file deploy/.env.production logs --tail=200 backend caddy
 
 持久数据保存在 Docker 命名卷 `postgres-data`，证书保存在 `caddy-data`。删除容器不会删除命名卷；不要使用 `docker compose down -v`，否则会删除数据库和证书数据。
 
-更新前先备份 PostgreSQL，再拉取两个仓库并重新执行 `build`、`up -d`。上线初期建议保留云厂商磁盘快照，并定期把 `pg_dump` 备份复制到服务器之外。
+仓库现已提供生产运维脚本：`bash deploy/backup.sh` 创建带 SHA-256 校验的 PostgreSQL 压缩备份，`sudo bash deploy/install-backup-timer.sh` 安装每日备份，`bash deploy/upgrade.sh <版本标签>` 在升级前自动备份并保留上一组镜像。应用回滚使用 `bash deploy/rollback.sh`；涉及不兼容数据库迁移时使用 `bash deploy/rollback.sh --restore-database --yes`。上线初期仍建议保留云厂商磁盘快照，并定期把 `deploy/backups` 复制到服务器之外。
 
 ## 健康与关闭
 

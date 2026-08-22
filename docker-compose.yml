@@ -18,6 +18,7 @@ services:
       start_period: 10s
 
   backend:
+    image: npclassworks-backend:current
     build:
       context: .
       dockerfile: Dockerfile
@@ -56,6 +57,7 @@ services:
         condition: service_healthy
 
   frontend:
+    image: npclassworks-frontend:current
     build:
       context: ../NPClassworks
       dockerfile: Dockerfile
