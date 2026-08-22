@@ -17,6 +17,7 @@ import { onlineDevicesGauge } from "./metrics.js";
 import DeviceDetector from "node-device-detector";
 import ClientHints from "node-device-detector/client-hints.js";
 import { prisma } from "./prisma.js";
+import {isLegacyClassworksEnabled} from "./legacyClassworks.js";
 
 // Socket.IO 单例实例
 let io = null;
@@ -112,48 +113,9 @@ export function initSocket(server) {
         socket.data.deviceUuids = new Set();
         socket.data.workspaceIds = new Set();
 
-        // 仅允许通过 query.token/apptoken 加入
-        const qToken = socket.handshake?.query?.token || socket.handshake?.query?.apptoken;
-        if (qToken && typeof qToken === "string") {
-            joinByToken(socket, qToken).catch(() => {
-            });
+        if (isLegacyClassworksEnabled()) {
+            registerLegacySocketHandlers(socket);
         }
-
-        // 客户端使用 KV token 加入房间
-        socket.on("join-token", (payload) => {
-            const token = payload?.token || payload?.apptoken;
-            if (typeof token === "string" && token.length > 0) {
-                joinByToken(socket, token).catch(() => {
-                });
-            }
-        });
-
-        // 客户端使用 token 离开房间
-        socket.on("leave-token", async (payload) => {
-            try {
-                const token = payload?.token || payload?.apptoken;
-                if (typeof token !== "string" || token.length === 0) return;
-                const appInstall = await prisma.appInstall.findUnique({
-                    where: { token },
-                    include: { device: { select: { uuid: true } } },
-                });
-                const uuid = appInstall?.device?.uuid;
-                if (uuid) {
-                    leaveDeviceRoom(socket, uuid);
-                    // 移除 token 连接跟踪
-                    removeTokenConnection(token, socket.id);
-                    if (socket.data.tokens) socket.data.tokens.delete(token);
-                }
-            } catch {
-                // ignore
-            }
-        });
-
-        // 离开所有已加入的设备房间
-        socket.on("leave-all", () => {
-            const uuids = Array.from(socket.data.deviceUuids || []);
-            uuids.forEach((u) => leaveDeviceRoom(socket, u));
-        });
 
         // Classworks 2.0 学生端按本机选择的班级订阅公开失效事件。
         // 房间仅传递 publication id/revision，不传递正文或草稿内容。
@@ -199,7 +161,58 @@ export function initSocket(server) {
             }
         });
 
-        // 获取事件历史记录
+        // Classworks 1 event history and arbitrary event forwarding are
+        // registered only by registerLegacySocketHandlers().
+
+        socket.on("disconnect", () => {
+            const uuids = Array.from(socket.data.deviceUuids || []);
+            uuids.forEach((u) => removeOnline(u, socket.id));
+
+            const tokens = Array.from(socket.data.tokens || []);
+            tokens.forEach((token) => removeTokenConnection(token, socket.id));
+        });
+    });
+
+    return io;
+}
+
+function registerLegacySocketHandlers(socket) {
+        const qToken = socket.handshake?.query?.token || socket.handshake?.query?.apptoken;
+        if (qToken && typeof qToken === "string") {
+            joinByToken(socket, qToken).catch(() => {});
+        }
+
+        socket.on("join-token", (payload) => {
+            const token = payload?.token || payload?.apptoken;
+            if (typeof token === "string" && token.length > 0) {
+                joinByToken(socket, token).catch(() => {});
+            }
+        });
+
+        socket.on("leave-token", async (payload) => {
+            try {
+                const token = payload?.token || payload?.apptoken;
+                if (typeof token !== "string" || token.length === 0) return;
+                const appInstall = await prisma.appInstall.findUnique({
+                    where: {token},
+                    include: {device: {select: {uuid: true}}},
+                });
+                const uuid = appInstall?.device?.uuid;
+                if (uuid) {
+                    leaveDeviceRoom(socket, uuid);
+                    removeTokenConnection(token, socket.id);
+                    if (socket.data.tokens) socket.data.tokens.delete(token);
+                }
+            } catch {
+                // Ignore stale legacy tokens.
+            }
+        });
+
+        socket.on("leave-all", () => {
+            const uuids = Array.from(socket.data.deviceUuids || []);
+            uuids.forEach((uuid) => leaveDeviceRoom(socket, uuid));
+        });
+
         socket.on("get-event-history", (data) => {
             try {
                 const { limit = 50, offset = 0 } = data || {};
@@ -324,27 +337,6 @@ export function initSocket(server) {
             }
         });
 
-        socket.on("disconnect", () => {
-            const uuids = Array.from(socket.data.deviceUuids || []);
-            uuids.forEach((u) => removeOnline(u, socket.id));
-
-            // 清理 token 连接跟踪
-            const tokens = Array.from(socket.data.tokens || []);
-            tokens.forEach((token) => removeTokenConnection(token, socket.id));
-
-            // 清理socket相关缓存
-            if (socket.data.currentToken) {
-                // 如果这是该token的最后一个连接,考虑清理缓存
-                const tokenSet = onlineTokens.get(socket.data.currentToken);
-                if (!tokenSet || tokenSet.size === 0) {
-                    // 可以选择保留缓存一段时间,这里暂时保留
-                    // tokenInfoCache.delete(socket.data.currentToken);
-                }
-            }
-        });
-    });
-
-    return io;
 }
 
 /** 返回 Socket.IO 实例 */

@@ -24,6 +24,7 @@ import classroomScreensRouter from "./routes/v2/classroom-screens.js";
 import setupRouter from "./routes/v2/setup.js";
 import {register} from "./utils/metrics.js";
 import {prisma} from "./utils/prisma.js";
+import {isLegacyClassworksEnabled} from "./utils/legacyClassworks.js";
 import cors from "cors";
 
 var app = express();
@@ -141,20 +142,16 @@ app.get("/metrics", async (req, res) => {
     }
 });
 
-// Mount the Apps router with API rate limiting
-app.use("/apps", appsRouter);
-
-// Mount the Auto Auth router with API rate limiting
-app.use("/auto-auth", autoAuthRouter);
-
-// Mount the Device router with API rate limiting
-app.use("/devices", deviceRouter);
-
-// Mount the KV store router
-app.use("/kv", kvRouter);
-
-// Mount the Device Authorization router with API rate limiting
-app.use("/auth", deviceAuthRouter);
+// Classworks 1 UUID/KV APIs are disabled by default in production. They remain
+// available in development and can be explicitly re-enabled for a real legacy
+// migration with ENABLE_LEGACY_CLASSWORKS_API=true.
+if (isLegacyClassworksEnabled()) {
+    app.use("/apps", appsRouter);
+    app.use("/auto-auth", autoAuthRouter);
+    app.use("/devices", deviceRouter);
+    app.use("/kv", kvRouter);
+    app.use("/auth", deviceAuthRouter);
+}
 
 // Mount the Accounts router with API rate limiting
 app.use("/accounts", accountsRouter);

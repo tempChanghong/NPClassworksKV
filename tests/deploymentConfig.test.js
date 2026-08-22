@@ -5,6 +5,7 @@ import test from "node:test";
 const compose = fs.readFileSync(new URL("../docker-compose.yml", import.meta.url), "utf8");
 const caddy = fs.readFileSync(new URL("../deploy/Caddyfile", import.meta.url), "utf8");
 const dockerfile = fs.readFileSync(new URL("../Dockerfile", import.meta.url), "utf8");
+const productionEnvExample = fs.readFileSync(new URL("../deploy/.env.production.example", import.meta.url), "utf8");
 const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("the production stack keeps PostgreSQL private and exposes only Caddy", () => {
@@ -45,6 +46,12 @@ test("the production stack supplies the one-time local bootstrap key", () => {
     assert.match(compose, /BOOTSTRAP_SETUP_KEY: \$\{BOOTSTRAP_SETUP_KEY:\?/);
     assert.match(compose, /ALLOW_OAUTH_BOOTSTRAP: \$\{ALLOW_OAUTH_BOOTSTRAP:-false\}/);
     assert.match(compose, /REFRESH_TOKEN_EXPIRES_IN: \$\{REFRESH_TOKEN_EXPIRES_IN:-30d\}/);
+});
+
+test("the production stack seals Classworks 1 HTTP, Socket and frontend routes", () => {
+    assert.match(compose, /ENABLE_LEGACY_CLASSWORKS_API:\s*\$\{ENABLE_LEGACY_CLASSWORKS_API:-false\}/);
+    assert.match(compose, /VITE_ENABLE_LEGACY_CLASSWORKS:\s*["']?false["']?/);
+    assert.match(productionEnvExample, /ENABLE_LEGACY_CLASSWORKS_API=false/);
 });
 
 test("production images have stable local tags for application rollback", () => {
