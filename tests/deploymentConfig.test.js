@@ -31,7 +31,7 @@ test("shared-host deployment never occupies public HTTP ports", () => {
     assert.match(sharedCaddy, /CLASSWORKS_API_DOMAIN:api\.newfires\.top/);
     assert.match(sharedCompose, /BASE_URL: \$\{VITE_DEFAULT_KV_SERVER/);
     assert.match(sharedCompose, /CORS_ALLOWED_ORIGINS:/);
-    assert.match(sharedCompose, /VITE_DEFAULT_KV_SERVER: \$\{VITE_DEFAULT_KV_SERVER:-}/);
+    assert.match(sharedCompose, /VITE_DEFAULT_KV_SERVER: \$\{VITE_DEFAULT_KV_SERVER:-https:\/\/api\.newfires\.top}/);
     const deployLibrary = read("../deploy/lib.sh");
     const upgrade = read("../deploy/upgrade.sh");
     const rollback = read("../deploy/rollback.sh");

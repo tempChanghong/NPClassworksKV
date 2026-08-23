@@ -62,7 +62,7 @@ services:
       context: ../NPClassworks
       dockerfile: Dockerfile
       args:
-        VITE_DEFAULT_KV_SERVER: ${VITE_DEFAULT_KV_SERVER:-}
+        VITE_DEFAULT_KV_SERVER: ${VITE_DEFAULT_KV_SERVER:-https://api.newfires.top}
         VITE_ENABLE_ANALYTICS: "false"
     restart: unless-stopped
 
