@@ -1,0 +1,19 @@
+name: npclassworks-integration
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${INTEGRATION_POSTGRES_USER:-npclassworks_test}
+      POSTGRES_PASSWORD: ${INTEGRATION_POSTGRES_PASSWORD:-npclassworks_test_only}
+      POSTGRES_DB: ${INTEGRATION_POSTGRES_DB:-npclassworks_test}
+    ports:
+      - "127.0.0.1:${INTEGRATION_POSTGRES_PORT:-55433}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+      start_period: 3s

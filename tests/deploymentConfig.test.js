@@ -6,6 +6,7 @@ const compose = fs.readFileSync(new URL("../docker-compose.yml", import.meta.url
 const caddy = fs.readFileSync(new URL("../deploy/Caddyfile", import.meta.url), "utf8");
 const dockerfile = fs.readFileSync(new URL("../Dockerfile", import.meta.url), "utf8");
 const productionEnvExample = fs.readFileSync(new URL("../deploy/.env.production.example", import.meta.url), "utf8");
+const packageJson = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
 const read = (path) => fs.readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("the production stack keeps PostgreSQL private and exposes only Caddy", () => {
@@ -52,6 +53,21 @@ test("the production stack seals Classworks 1 HTTP, Socket and frontend routes",
     assert.match(compose, /ENABLE_LEGACY_CLASSWORKS_API:\s*\$\{ENABLE_LEGACY_CLASSWORKS_API:-false\}/);
     assert.match(compose, /VITE_ENABLE_LEGACY_CLASSWORKS:\s*["']?false["']?/);
     assert.match(productionEnvExample, /ENABLE_LEGACY_CLASSWORKS_API=false/);
+});
+
+test("release verification runs isolated real PostgreSQL integration tests", () => {
+    const integrationCompose = read("../docker-compose.integration.yml");
+    const integrationRunner = read("../scripts/run-database-tests.js");
+    assert.equal(packageJson.scripts["test:database"], "node scripts/run-database-tests.js");
+    assert.match(integrationCompose, /postgres:17-alpine/);
+    assert.match(integrationCompose, /tmpfs:/);
+    assert.match(integrationRunner, /prisma[\s\S]*migrate[\s\S]*deploy/);
+    assert.match(integrationRunner, /RUN_DATABASE_TESTS:\s*"true"/);
+    assert.match(integrationRunner, /down[\s\S]*--volumes[\s\S]*--remove-orphans/);
+});
+
+test("production frontend analytics remain opt-in", () => {
+    assert.match(compose, /VITE_ENABLE_ANALYTICS:\s*["']?false["']?/);
 });
 
 test("production images have stable local tags for application rollback", () => {

@@ -10,6 +10,8 @@
     "dev": "NODE_ENV=development nodemon node .bin/www",
     "get-token": "node ./cli/get-token.js",
     "test": "node --test",
+    "test:database": "node scripts/run-database-tests.js",
+    "test:release": "node --test && node scripts/run-database-tests.js",
     "test:phase1": "node --test tests/academicCatalog.test.js",
     "test:phase2": "node --test tests/organizationImport.test.js",
     "test:phase3": "node --test tests/publication.test.js",

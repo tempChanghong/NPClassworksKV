@@ -308,6 +308,12 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         });
         assert.equal(copiedAgain.createdCount, 0);
         assert.equal(copiedAgain.skippedCount, 1);
+        const copiedPublication = copiedBoard.created[0];
+        await publicationService.certifyPublication({
+            accountId: teacherLogin.account.id,
+            publicationId: copiedPublication.id,
+            expectedRevision: copiedPublication.revision,
+        });
         screenPublication = await publicationService.updateScreenPublication({
             screenBinding: authenticatedScreen,
             publicationId: screenPublication.id,

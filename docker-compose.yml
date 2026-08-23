@@ -67,6 +67,7 @@ services:
         VITE_DEFAULT_AUTH_SERVER: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
         VITE_DEFAULT_SERVER_PROVIDER: kv-server
         VITE_ENABLE_LEGACY_CLASSWORKS: "false"
+        VITE_ENABLE_ANALYTICS: "false"
     restart: unless-stopped
 
   caddy:
