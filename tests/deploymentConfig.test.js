@@ -3,7 +3,9 @@ import fs from "node:fs";
 import test from "node:test";
 
 const compose = fs.readFileSync(new URL("../docker-compose.yml", import.meta.url), "utf8");
+const sharedCompose = fs.readFileSync(new URL("../docker-compose.shared.yml", import.meta.url), "utf8");
 const caddy = fs.readFileSync(new URL("../deploy/Caddyfile", import.meta.url), "utf8");
+const sharedCaddy = fs.readFileSync(new URL("../deploy/Caddyfile.shared.example", import.meta.url), "utf8");
 const dockerfile = fs.readFileSync(new URL("../Dockerfile", import.meta.url), "utf8");
 const productionEnvExample = fs.readFileSync(new URL("../deploy/.env.production.example", import.meta.url), "utf8");
 const packageJson = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
@@ -14,6 +16,26 @@ test("the production stack keeps PostgreSQL private and exposes only Caddy", () 
     assert.match(compose, /postgres:[\s\S]*image: postgres:17-alpine/);
     assert.doesNotMatch(postgresService, /ports:/);
     assert.match(compose, /caddy:[\s\S]*"80:80"[\s\S]*"443:443"/);
+});
+
+test("shared-host deployment never occupies public HTTP ports", () => {
+    assert.doesNotMatch(sharedCompose, /\n\s+caddy:/);
+    assert.doesNotMatch(sharedCompose, /["']?(?:0\.0\.0\.0:)?(?:80|443):(?:80|443)/);
+    assert.match(sharedCompose, /127\.0\.0\.1:\$\{SHARED_BACKEND_PORT:-13000}:3000/);
+    assert.match(sharedCompose, /127\.0\.0\.1:\$\{SHARED_FRONTEND_PORT:-13080}:80/);
+    const postgresService = sharedCompose.slice(sharedCompose.indexOf("  postgres:"), sharedCompose.indexOf("  backend:"));
+    assert.doesNotMatch(postgresService, /ports:/);
+    assert.match(sharedCaddy, /reverse_proxy 127\.0\.0\.1:13000/);
+    assert.match(sharedCaddy, /reverse_proxy 127\.0\.0\.1:13080/);
+    const deployLibrary = read("../deploy/lib.sh");
+    const upgrade = read("../deploy/upgrade.sh");
+    const rollback = read("../deploy/rollback.sh");
+    assert.match(deployLibrary, /DEPLOY_MODE="\$\{DEPLOY_MODE:-standalone}"/);
+    assert.match(deployLibrary, /shared\) COMPOSE_FILE="\$REPO_ROOT\/docker-compose\.shared\.yml"/);
+    assert.match(upgrade, /compose_application_up -d/);
+    assert.match(rollback, /compose_application_up -d --no-build --force-recreate/);
+    assert.doesNotMatch(upgrade, /compose up -d postgres backend frontend caddy/);
+    assert.doesNotMatch(rollback, /compose up .*backend frontend caddy/);
 });
 
 test("Caddy sends every backend namespace and readiness route to Node", () => {

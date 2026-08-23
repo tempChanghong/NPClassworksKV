@@ -62,7 +62,7 @@ fi
 log "构建并启动新版本"
 node "$REPO_ROOT/scripts/check-production-env.js" "$ENV_FILE"
 compose build --pull backend frontend
-compose up -d postgres backend frontend caddy
+compose_application_up -d
 if ! wait_for_backend 45; then
   die "升级后端未能就绪。可运行：bash deploy/rollback.sh"
 fi

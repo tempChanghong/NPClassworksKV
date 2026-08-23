@@ -1,0 +1,75 @@
+name: npclassworks
+
+# 共享服务器模式：不启动项目内置 Caddy，不占用宿主机 80/443。
+# 宿主机现有网关通过 127.0.0.1 的高位端口访问前端和后端。
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-classworks}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?请在 deploy/.env.production 中设置 POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-classworks}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    image: npclassworks-backend:current
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    stop_grace_period: 20s
+    ports:
+      - "127.0.0.1:${SHARED_BACKEND_PORT:-13000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      TRUST_PROXY: 1
+      DATABASE_URL: postgresql://${POSTGRES_USER:-classworks}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-classworks}
+      BASE_URL: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+      FRONTEND_URL: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+      JWT_ALG: ${JWT_ALG:-HS256}
+      JWT_SECRET: ${JWT_SECRET:?请设置 JWT_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:?请设置 REFRESH_TOKEN_SECRET}
+      ACCESS_TOKEN_EXPIRES_IN: ${ACCESS_TOKEN_EXPIRES_IN:-15m}
+      REFRESH_TOKEN_EXPIRES_IN: ${REFRESH_TOKEN_EXPIRES_IN:-30d}
+      METRICS_TOKEN: ${METRICS_TOKEN:?请设置 METRICS_TOKEN}
+      BOOTSTRAP_SETUP_KEY: ${BOOTSTRAP_SETUP_KEY:?请设置 BOOTSTRAP_SETUP_KEY}
+      ALLOW_OAUTH_BOOTSTRAP: ${ALLOW_OAUTH_BOOTSTRAP:-false}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      ZEROCAT_CLIENT_ID: ${ZEROCAT_CLIENT_ID:-}
+      ZEROCAT_CLIENT_SECRET: ${ZEROCAT_CLIENT_SECRET:-}
+      STCN_CLIENT_ID: ${STCN_CLIENT_ID:-}
+      STCN_CLIENT_SECRET: ${STCN_CLIENT_SECRET:-}
+      HLY_CLIENT_ID: ${HLY_CLIENT_ID:-}
+      HLY_CLIENT_SECRET: ${HLY_CLIENT_SECRET:-}
+      DLASS_CLIENT_ID: ${DLASS_CLIENT_ID:-}
+      DLASS_CLIENT_SECRET: ${DLASS_CLIENT_SECRET:-}
+      AXIOM_TOKEN: ${AXIOM_TOKEN:-}
+      AXIOM_DATASET: ${AXIOM_DATASET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    image: npclassworks-frontend:current
+    build:
+      context: ../NPClassworks
+      dockerfile: Dockerfile
+      args:
+        VITE_DEFAULT_KV_SERVER: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+        VITE_ENABLE_ANALYTICS: "false"
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SHARED_FRONTEND_PORT:-13080}:80"
+
+volumes:
+  postgres-data:

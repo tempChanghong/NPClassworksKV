@@ -8,6 +8,7 @@ FRONTEND_ROOT="$(cd "$REPO_ROOT/../NPClassworks" 2>/dev/null && pwd || true)"
 ENV_FILE="${ENV_FILE:-$DEPLOY_DIR/.env.production}"
 BACKUP_DIR="${BACKUP_DIR:-$DEPLOY_DIR/backups}"
 RUNTIME_DIR="${RUNTIME_DIR:-$DEPLOY_DIR/runtime}"
+COMPOSE_FILE="$REPO_ROOT/docker-compose.yml"
 
 log() {
   printf '[NPClassworks] %s\n' "$*" >&2
@@ -31,11 +32,25 @@ load_production_env() {
   POSTGRES_USER="${POSTGRES_USER:-classworks}"
   POSTGRES_DB="${POSTGRES_DB:-classworks}"
   BACKUP_RETENTION_DAYS="${BACKUP_RETENTION_DAYS:-14}"
+  DEPLOY_MODE="${DEPLOY_MODE:-standalone}"
+  case "$DEPLOY_MODE" in
+    standalone) COMPOSE_FILE="$REPO_ROOT/docker-compose.yml" ;;
+    shared) COMPOSE_FILE="$REPO_ROOT/docker-compose.shared.yml" ;;
+    *) die "DEPLOY_MODE 只能是 standalone 或 shared" ;;
+  esac
   [[ -n "${POSTGRES_PASSWORD:-}" ]] || die "POSTGRES_PASSWORD 未配置"
 }
 
 compose() {
-  docker compose --project-directory "$REPO_ROOT" --env-file "$ENV_FILE" -f "$REPO_ROOT/docker-compose.yml" "$@"
+  docker compose --project-directory "$REPO_ROOT" --env-file "$ENV_FILE" -f "$COMPOSE_FILE" "$@"
+}
+
+compose_application_up() {
+  if [[ "$DEPLOY_MODE" == "shared" ]]; then
+    compose up "$@" postgres backend frontend
+  else
+    compose up "$@" postgres backend frontend caddy
+  fi
 }
 
 ensure_directories() {

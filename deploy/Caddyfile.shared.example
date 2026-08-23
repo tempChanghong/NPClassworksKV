@@ -1,0 +1,30 @@
+# 将本段合并到宿主机现有 Caddy 配置；不要再启动项目内置 caddy 容器。
+{$CLASSWORKS_DOMAIN:cs.newfires.top} {
+    encode zstd gzip
+
+    @retired {
+        path /kv /kv/* /apps /apps/* /devices /devices/* /auth /auth/* /auto-auth /auto-auth/* /accounts/devices /accounts/devices/* /accounts/device/*
+    }
+    handle @retired {
+        respond "Classworks 1 API has been retired" 410
+    }
+
+    @backend {
+        path /api /api/* /accounts /accounts/* /socket.io /socket.io/* /check /ready /metrics
+    }
+    handle @backend {
+        reverse_proxy 127.0.0.1:13000
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:13080
+    }
+
+    header {
+        -Server
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), geolocation=(), payment=()"
+    }
+}

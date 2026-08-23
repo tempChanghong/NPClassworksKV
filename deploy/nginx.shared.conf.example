@@ -1,0 +1,33 @@
+# 合并到宿主机现有 Nginx 的 http 配置中。TLS 证书路径由服务器管理员配置。
+server {
+    listen 443 ssl http2;
+    server_name cs.newfires.top;
+
+    # ssl_certificate /path/to/fullchain.pem;
+    # ssl_certificate_key /path/to/privkey.pem;
+
+    location ~ ^/(api|accounts|socket\.io)(/|$) {
+        proxy_pass http://127.0.0.1:13000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    location ~ ^/(check|ready|metrics)$ {
+        proxy_pass http://127.0.0.1:13000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:13080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

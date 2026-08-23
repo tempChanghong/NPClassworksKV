@@ -46,7 +46,7 @@ fi
 
 git -C "$REPO_ROOT" checkout --detach "$PREVIOUS_BACKEND_REF"
 git -C "$FRONTEND_ROOT" checkout --detach "$PREVIOUS_FRONTEND_REF"
-compose up -d --no-build --force-recreate backend frontend caddy
+compose_application_up -d --no-build --force-recreate
 wait_for_backend 45 || die "应用镜像已回退，但后端未能就绪；数据库可能需要一起回滚"
 
 log "回滚完成"
