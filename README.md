@@ -31,6 +31,8 @@ NPClassworksKV 是 [NPClassworks](https://github.com/tempChanghong/NPClassworks)
 - PostgreSQL + Prisma 数据层和数据库迁移
 - Socket.IO 房间同步、限流、健康检查和可观测性接口
 
+Classworks 1 的 UUID/KV、应用安装、旧设备授权和 token Socket 通道已经退役；对应 HTTP 路径由生产网关返回 410。为保证全新安装、升级和回滚一致，历史 Prisma 迁移和遗留表结构暂不删除。
+
 ## 本地调试
 
 环境要求：Node.js 22+、pnpm 10+、Docker。

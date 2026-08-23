@@ -21,6 +21,16 @@ import {
 
 const router = Router();
 
+// UUID device-account binding belonged to Classworks 1. Keep the historical
+// database relation for migration compatibility, but make its HTTP surface
+// unreachable while the shared C2 account router is retained.
+router.use((req, res, next) => {
+    if (req.path === "/devices" || req.path.startsWith("/devices/") || req.path.startsWith("/device/")) {
+        return res.status(410).json({success: false, message: "Classworks 1 device API has been retired"});
+    }
+    next();
+});
+
 // 存储OAuth state，防止CSRF攻击（生产环境应使用Redis等）
 const oauthStates = new Map();
 
@@ -498,19 +508,7 @@ router.get("/profile", jwtAuth, async (req, res, next) => {
     try {
         const accountContext = res.locals.account;
 
-        const account = await prisma.account.findUnique({
-            where: {id: accountContext.id},
-            include: {
-                devices: {
-                    select: {
-                        id: true,
-                        uuid: true,
-                        name: true,
-                        createdAt: true,
-                    },
-                },
-            },
-        });
+        const account = await prisma.account.findUnique({where: {id: accountContext.id}});
 
         // 组装 provider 展示信息
         const pconf = (account?.provider && oauthProviders[account.provider]) || {};
@@ -537,7 +535,6 @@ router.get("/profile", jwtAuth, async (req, res, next) => {
                 username: account.localUsername,
                 name: account.name,
                 avatarUrl: account.avatarUrl,
-                devices: account.devices,
                 createdAt: account.createdAt,
             },
         });

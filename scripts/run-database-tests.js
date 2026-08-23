@@ -33,6 +33,7 @@ try {
     run(process.execPath, [prismaCli, "migrate", "deploy"], testEnv);
     run(process.execPath, [
         "--test",
+        "--test-concurrency=1",
         "tests/operationalDatabase.integration.test.js",
         "tests/workspaceAssignmentDatabase.integration.test.js",
     ], testEnv);

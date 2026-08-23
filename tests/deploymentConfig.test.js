@@ -20,11 +20,6 @@ test("Caddy sends every backend namespace and readiness route to Node", () => {
     for (const path of [
         "/api/*",
         "/accounts/*",
-        "/kv/*",
-        "/apps/*",
-        "/devices/*",
-        "/auth/*",
-        "/auto-auth/*",
         "/socket.io/*",
         "/check",
         "/ready",
@@ -49,16 +44,33 @@ test("the production stack supplies the one-time local bootstrap key", () => {
     assert.match(compose, /REFRESH_TOKEN_EXPIRES_IN: \$\{REFRESH_TOKEN_EXPIRES_IN:-30d\}/);
 });
 
-test("the production stack seals Classworks 1 HTTP, Socket and frontend routes", () => {
-    assert.match(compose, /ENABLE_LEGACY_CLASSWORKS_API:\s*\$\{ENABLE_LEGACY_CLASSWORKS_API:-false\}/);
-    assert.match(compose, /VITE_ENABLE_LEGACY_CLASSWORKS:\s*["']?false["']?/);
-    assert.match(productionEnvExample, /ENABLE_LEGACY_CLASSWORKS_API=false/);
+test("Classworks 1 HTTP and Socket implementations are physically retired", () => {
+    const app = read("../app.js");
+    const accounts = read("../routes/accounts.js");
+    const socket = read("../utils/socket.js");
+    for (const path of [
+        "../routes/kv-token.js",
+        "../routes/apps.js",
+        "../routes/device.js",
+        "../routes/device-auth.js",
+        "../routes/auto-auth.js",
+    ]) {
+        assert.equal(fs.existsSync(new URL(path, import.meta.url)), false, path);
+    }
+    assert.doesNotMatch(app, /ENABLE_LEGACY_CLASSWORKS_API|kvRouter|appsRouter|deviceRouter/);
+    assert.doesNotMatch(socket, /join-token|send-event|deviceUuids|appInstall/);
+    assert.match(accounts, /router\.use\([\s\S]*req\.path\.startsWith\("\/devices\/"\)[\s\S]*status\(410\)/);
+    assert.ok(accounts.indexOf("router.use(") < accounts.indexOf('router.post("/devices/bind"'));
+    assert.match(caddy, /@retired[\s\S]*\/kv \/kv\/\*[\s\S]*respond .* 410/);
+    assert.doesNotMatch(compose, /VITE_ENABLE_LEGACY_CLASSWORKS|ENABLE_LEGACY_CLASSWORKS_API/);
+    assert.doesNotMatch(productionEnvExample, /ENABLE_LEGACY_CLASSWORKS_API/);
 });
 
 test("release verification runs isolated real PostgreSQL integration tests", () => {
     const integrationCompose = read("../docker-compose.integration.yml");
     const integrationRunner = read("../scripts/run-database-tests.js");
     assert.equal(packageJson.scripts["test:database"], "node scripts/run-database-tests.js");
+    assert.match(integrationRunner, /--test-concurrency=1/);
     assert.match(integrationCompose, /postgres:17-alpine/);
     assert.match(integrationCompose, /tmpfs:/);
     assert.match(integrationRunner, /prisma[\s\S]*migrate[\s\S]*deploy/);
@@ -73,7 +85,8 @@ test("production frontend analytics remain opt-in", () => {
 test("production images have stable local tags for application rollback", () => {
     assert.match(compose, /backend:[\s\S]*image: npclassworks-backend:current/);
     assert.match(compose, /frontend:[\s\S]*image: npclassworks-frontend:current/);
-    assert.match(compose, /VITE_DEFAULT_SERVER_PROVIDER: kv-server/);
+    assert.match(compose, /VITE_DEFAULT_KV_SERVER:/);
+    assert.doesNotMatch(compose, /VITE_DEFAULT_AUTH_SERVER|VITE_DEFAULT_SERVER_PROVIDER/);
 });
 
 test("database operations create verified backups and require explicit restore confirmation", () => {

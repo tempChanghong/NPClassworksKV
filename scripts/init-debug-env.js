@@ -45,7 +45,6 @@ const backendEnv = [
 
 const frontendEnv = [
     "VITE_DEFAULT_KV_SERVER=http://localhost:3031",
-    "VITE_DEFAULT_AUTH_SERVER=http://localhost:3031",
     "VITE_SERVER_URL=http://localhost:3031",
     "",
 ].join("\n");

@@ -10,12 +10,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import errors from "./utils/errors.js";
 import packageJson from "./package.json" with {type: "json"};
 
-import kvRouter from "./routes/kv-token.js";
-import appsRouter from "./routes/apps.js";
-import deviceRouter from "./routes/device.js";
-import deviceAuthRouter from "./routes/device-auth.js";
 import accountsRouter from "./routes/accounts.js";
-import autoAuthRouter from "./routes/auto-auth.js";
 import academicCatalogRouter from "./routes/v2/academic-catalog.js";
 import academicAdminRouter from "./routes/v2/academic-admin.js";
 import academicMeRouter from "./routes/v2/academic-me.js";
@@ -24,7 +19,6 @@ import classroomScreensRouter from "./routes/v2/classroom-screens.js";
 import setupRouter from "./routes/v2/setup.js";
 import {register} from "./utils/metrics.js";
 import {prisma} from "./utils/prisma.js";
-import {isLegacyClassworksEnabled} from "./utils/legacyClassworks.js";
 import cors from "cors";
 
 var app = express();
@@ -40,7 +34,7 @@ app.use(
         exposedHeaders: ["ratelimit-policy", "retry-after", "ratelimit", "X-New-Access-Token", "X-Token-Refreshed", "ETag"], // 告诉浏览器这些响应头可以暴露
         maxAge: 86400, // 设置OPTIONS请求的结果缓存24小时(86400秒)，减少预检请求
         credentials: true, // 允许跨域请求携带凭证
-        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "X-App-Token", "X-Site-Key", "X-Classworks-Screen-Token", "X-Classworks-Setup-Token", "If-Match"], // 允许的请求头
+        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "X-Classworks-Screen-Token", "X-Classworks-Setup-Token", "If-Match"], // 允许的请求头
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // 允许的HTTP方法
         withCredentials: true, // 允许携带cookie等凭证信息
     })
@@ -142,22 +136,10 @@ app.get("/metrics", async (req, res) => {
     }
 });
 
-// Classworks 1 UUID/KV APIs are disabled by default in production. They remain
-// available in development and can be explicitly re-enabled for a real legacy
-// migration with ENABLE_LEGACY_CLASSWORKS_API=true.
-if (isLegacyClassworksEnabled()) {
-    app.use("/apps", appsRouter);
-    app.use("/auto-auth", autoAuthRouter);
-    app.use("/devices", deviceRouter);
-    app.use("/kv", kvRouter);
-    app.use("/auth", deviceAuthRouter);
-}
-
 // Mount the Accounts router with API rate limiting
 app.use("/accounts", accountsRouter);
 
-// Classworks 2.0 public academic catalog. Phase 1 is read-only and does not
-// change any of the existing UUID/KV flows.
+// NPClassworks academic and publication APIs.
 app.use("/api/v2/catalog", academicCatalogRouter);
 app.use("/api/v2/setup", setupRouter);
 app.use("/api/v2/admin", academicAdminRouter);
