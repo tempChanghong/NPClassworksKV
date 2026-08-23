@@ -6,6 +6,7 @@
  */
 import {Server} from "socket.io";
 import {prisma} from "./prisma.js";
+import {getAllowedOrigins} from "./corsConfig.js";
 
 let io = null;
 
@@ -14,9 +15,9 @@ export function initSocket(server) {
 
     io = new Server(server, {
         cors: {
-            origin: "*",
+            origin: getAllowedOrigins(),
             methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-            allowedHeaders: ["*"],
+            allowedHeaders: ["Authorization", "Content-Type", "X-Classworks-Screen-Token"],
             credentials: false,
         },
         transports: ["polling", "websocket"],

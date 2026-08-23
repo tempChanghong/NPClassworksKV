@@ -13,12 +13,14 @@ if (!fs.existsSync(envPath)) {
 
 const parsed = dotenv.parse(fs.readFileSync(envPath));
 const domain = parsed.CLASSWORKS_DOMAIN || "cs.newfires.top";
+const frontendUrl = `https://${domain}`;
+const backendUrl = parsed.VITE_DEFAULT_KV_SERVER || frontendUrl;
 const environment = {
     ...parsed,
     NODE_ENV: "production",
     DATABASE_URL: `postgresql://${parsed.POSTGRES_USER || "classworks"}:${parsed.POSTGRES_PASSWORD || ""}@postgres:5432/${parsed.POSTGRES_DB || "classworks"}`,
-    BASE_URL: `https://${domain}`,
-    FRONTEND_URL: `https://${domain}`,
+    BASE_URL: backendUrl,
+    FRONTEND_URL: frontendUrl,
 };
 
 const errors = collectProductionConfigErrors(environment);

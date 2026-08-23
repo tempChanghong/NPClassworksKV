@@ -22,6 +22,21 @@ test("a complete same-origin production environment is accepted", () => {
     assert.deepEqual(collectProductionConfigErrors(validProductionEnvironment()), []);
 });
 
+test("a split frontend and API production environment is accepted", () => {
+    const env = validProductionEnvironment();
+    env.BASE_URL = "https://api.newfires.top";
+    env.FRONTEND_URL = "https://newfires.top";
+    env.CORS_ALLOWED_ORIGINS = "https://newfires.top";
+    assert.deepEqual(collectProductionConfigErrors(env), []);
+});
+
+test("production rejects wildcard, insecure and path-based CORS origins", () => {
+    const env = validProductionEnvironment();
+    env.CORS_ALLOWED_ORIGINS = "*,http://newfires.top,https://newfires.top/path";
+    const errors = collectProductionConfigErrors(env);
+    assert.equal(errors.filter((error) => error.includes("CORS_ALLOWED_ORIGINS")).length, 3);
+});
+
 test("production rejects placeholder secrets and insecure public URLs", () => {
     const env = validProductionEnvironment();
     env.BASE_URL = "http://cs.newfires.top/api";

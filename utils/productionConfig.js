@@ -34,6 +34,21 @@ function validateHttpsUrl(errors, env, key) {
     }
 }
 
+function validateCorsOrigins(errors, env) {
+    const raw = env.CORS_ALLOWED_ORIGINS || env.FRONTEND_URL || "";
+    for (const item of raw.split(",")) {
+        const origin = item.trim();
+        try {
+            const url = new URL(origin);
+            if (url.protocol !== "https:" || url.origin !== origin) {
+                errors.push(`CORS_ALLOWED_ORIGINS 包含无效的 HTTPS 来源：${origin}`);
+            }
+        } catch {
+            errors.push(`CORS_ALLOWED_ORIGINS 包含无效来源：${origin}`);
+        }
+    }
+}
+
 function validateSecret(errors, env, key) {
     const value = env[key];
     if (!isConfigured(value)) {
@@ -56,6 +71,7 @@ export function collectProductionConfigErrors(env = process.env) {
 
     validateHttpsUrl(errors, env, "BASE_URL");
     validateHttpsUrl(errors, env, "FRONTEND_URL");
+    validateCorsOrigins(errors, env);
     validateSecret(errors, env, "METRICS_TOKEN");
     validateSecret(errors, env, "BOOTSTRAP_SETUP_KEY");
 

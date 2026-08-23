@@ -27,6 +27,11 @@ test("shared-host deployment never occupies public HTTP ports", () => {
     assert.doesNotMatch(postgresService, /ports:/);
     assert.match(sharedCaddy, /reverse_proxy 127\.0\.0\.1:13000/);
     assert.match(sharedCaddy, /reverse_proxy 127\.0\.0\.1:13080/);
+    assert.match(sharedCaddy, /CLASSWORKS_DOMAIN:newfires\.top/);
+    assert.match(sharedCaddy, /CLASSWORKS_API_DOMAIN:api\.newfires\.top/);
+    assert.match(sharedCompose, /BASE_URL: \$\{VITE_DEFAULT_KV_SERVER/);
+    assert.match(sharedCompose, /CORS_ALLOWED_ORIGINS:/);
+    assert.match(sharedCompose, /VITE_DEFAULT_KV_SERVER: \$\{VITE_DEFAULT_KV_SERVER:-}/);
     const deployLibrary = read("../deploy/lib.sh");
     const upgrade = read("../deploy/upgrade.sh");
     const rollback = read("../deploy/rollback.sh");

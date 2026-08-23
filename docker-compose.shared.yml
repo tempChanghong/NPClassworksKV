@@ -33,8 +33,9 @@ services:
       PORT: 3000
       TRUST_PROXY: 1
       DATABASE_URL: postgresql://${POSTGRES_USER:-classworks}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-classworks}
-      BASE_URL: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+      BASE_URL: ${VITE_DEFAULT_KV_SERVER:-https://${CLASSWORKS_DOMAIN:-cs.newfires.top}}
       FRONTEND_URL: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://${CLASSWORKS_DOMAIN:-cs.newfires.top}}
       JWT_ALG: ${JWT_ALG:-HS256}
       JWT_SECRET: ${JWT_SECRET:?请设置 JWT_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:?请设置 REFRESH_TOKEN_SECRET}
@@ -65,7 +66,7 @@ services:
       context: ../NPClassworks
       dockerfile: Dockerfile
       args:
-        VITE_DEFAULT_KV_SERVER: https://${CLASSWORKS_DOMAIN:-cs.newfires.top}
+        VITE_DEFAULT_KV_SERVER: ${VITE_DEFAULT_KV_SERVER:-}
         VITE_ENABLE_ANALYTICS: "false"
     restart: unless-stopped
     ports:
