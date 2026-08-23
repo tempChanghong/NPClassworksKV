@@ -29,7 +29,6 @@ import {
     updateManagedLocalAccount,
 } from "../../services/localAccountService.js";
 import {
-    bindClassroomScreen,
     configureClassroomScreenAccount,
     createClassroomScreenAccount,
     listClassroomScreens,
@@ -357,17 +356,6 @@ router.put("/schools/:schoolId/homework-settings", errors.catchAsync(async (req,
         quickInputs: req.body?.quickInputs,
     });
     return res.json(errors.createSuccessResponse(settings, "作业快捷设置已更新"));
-}));
-
-router.post("/schools/:schoolId/classroom-screens/bind", errors.catchAsync(async (req, res) => {
-    const result = await bindClassroomScreen({
-        managerAccountId: res.locals.account.id,
-        schoolId: req.params.schoolId,
-        administrativeClassId: req.body?.administrativeClassId,
-        deviceFingerprint: req.body?.deviceFingerprint,
-        name: req.body?.name,
-    });
-    return res.status(201).json(errors.createSuccessResponse(result, "当前浏览器已绑定为班级大屏"));
 }));
 
 router.post("/schools/:schoolId/classroom-screen-accounts", errors.catchAsync(async (req, res) => {

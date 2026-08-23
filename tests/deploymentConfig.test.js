@@ -48,6 +48,7 @@ test("Classworks 1 HTTP and Socket implementations are physically retired", () =
     const app = read("../app.js");
     const accounts = read("../routes/accounts.js");
     const socket = read("../utils/socket.js");
+    const backendHome = read("../views/index.ejs");
     for (const path of [
         "../routes/kv-token.js",
         "../routes/apps.js",
@@ -64,6 +65,16 @@ test("Classworks 1 HTTP and Socket implementations are physically retired", () =
     assert.match(caddy, /@retired[\s\S]*\/kv \/kv\/\*[\s\S]*respond .* 410/);
     assert.doesNotMatch(compose, /VITE_ENABLE_LEGACY_CLASSWORKS|ENABLE_LEGACY_CLASSWORKS_API/);
     assert.doesNotMatch(productionEnvExample, /ENABLE_LEGACY_CLASSWORKS_API/);
+    assert.doesNotMatch(backendHome, /kv\.houlang\.cloud|window\.open|location\s*=/);
+    assert.match(backendHome, /NPClassworks 服务端/);
+});
+
+test("classroom screens can only be provisioned through managed screen accounts", () => {
+    const academicAdmin = read("../routes/v2/academic-admin.js");
+    assert.doesNotMatch(academicAdmin, /classroom-screens\/bind/);
+    assert.doesNotMatch(academicAdmin, /bindClassroomScreen/);
+    assert.match(academicAdmin, /classroom-screen-accounts/);
+    assert.match(academicAdmin, /configureClassroomScreenAccount/);
 });
 
 test("release verification runs isolated real PostgreSQL integration tests", () => {
