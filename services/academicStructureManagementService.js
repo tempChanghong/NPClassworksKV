@@ -7,7 +7,9 @@ import {
     validateAdministrativeClassFields,
     validateCourseGroupFields,
     validateGradeFields,
+    validateSubjectFields,
 } from "../domain/academicStructureManagement.js";
+import {updateVersionedRecord} from "./optimisticConcurrencyService.js";
 
 const managedWorkspaceInclude = {
     grade: {select: {id: true, code: true, name: true}},
@@ -117,7 +119,7 @@ export async function createManagedGrade({managerAccountId, schoolId, termId, co
     return prisma.grade.create({data: {termId, ...input}});
 }
 
-export async function updateManagedGrade({managerAccountId, schoolId, gradeId, code, name, sortOrder}) {
+export async function updateManagedGrade({managerAccountId, schoolId, gradeId, code, name, sortOrder, expectedUpdatedAt}) {
     await assertSchoolManager(managerAccountId, schoolId);
     const existing = await prisma.grade.findFirst({where: {id: gradeId, term: {schoolId}}});
     if (!existing) throw structureError("年级不存在或不属于该学校", "GRADE_NOT_FOUND", 404);
@@ -132,7 +134,45 @@ export async function updateManagedGrade({managerAccountId, schoolId, gradeId, c
         where: {termId: existing.termId, code: input.code, NOT: {id: existing.id}},
     });
     if (duplicate) throw structureError("该年级代码已存在", "GRADE_CODE_EXISTS", 409);
-    return prisma.grade.update({where: {id: existing.id}, data: input});
+    return updateVersionedRecord({
+        client: prisma, model: "grade", id: existing.id, expectedUpdatedAt, data: input,
+    });
+}
+
+export async function createManagedSubject({managerAccountId, schoolId, code, name, category = "OTHER", sortOrder = 0}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    const input = {
+        code: normalizeWorkspaceCode(code),
+        name: typeof name === "string" ? name.trim() : "",
+        category: String(category || "OTHER").trim().toUpperCase(),
+        sortOrder: Number(sortOrder),
+    };
+    const validationErrors = validateSubjectFields(input);
+    if (validationErrors.length) throw structureError("学科配置无效", "SUBJECT_INVALID", 422, {errors: validationErrors});
+    const duplicate = await prisma.subject.findUnique({where: {schoolId_code: {schoolId, code: input.code}}});
+    if (duplicate) throw structureError("该学科代码已存在", "SUBJECT_CODE_EXISTS", 409);
+    return prisma.subject.create({data: {schoolId, ...input}});
+}
+
+export async function updateManagedSubject({
+    managerAccountId, schoolId, subjectId, code, name, category, sortOrder, expectedUpdatedAt,
+}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    const existing = await prisma.subject.findFirst({where: {id: subjectId, schoolId}});
+    if (!existing) throw structureError("学科不存在或不属于该学校", "SUBJECT_NOT_FOUND", 404);
+    const input = {
+        code: code === undefined ? existing.code : normalizeWorkspaceCode(code),
+        name: name === undefined ? existing.name : String(name).trim(),
+        category: category === undefined ? existing.category : String(category).trim().toUpperCase(),
+        sortOrder: sortOrder === undefined ? existing.sortOrder : Number(sortOrder),
+    };
+    const validationErrors = validateSubjectFields(input);
+    if (validationErrors.length) throw structureError("学科配置无效", "SUBJECT_INVALID", 422, {errors: validationErrors});
+    const duplicate = await prisma.subject.findFirst({where: {schoolId, code: input.code, NOT: {id: existing.id}}});
+    if (duplicate) throw structureError("该学科代码已存在", "SUBJECT_CODE_EXISTS", 409);
+    return updateVersionedRecord({
+        client: prisma, model: "subject", id: existing.id, expectedUpdatedAt, data: input,
+    });
 }
 
 export async function createManagedAdministrativeClass({
@@ -174,6 +214,96 @@ export async function createManagedAdministrativeClass({
     });
 }
 
+export async function createManagedAdministrativeClassesBatch({managerAccountId, schoolId, termId, classes}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    await requireManagedTerm(prisma, schoolId, termId);
+    if (!Array.isArray(classes) || classes.length < 1 || classes.length > 100) {
+        throw structureError("批量行政班数量必须为1至100个", "ADMIN_CLASS_BATCH_INVALID");
+    }
+    const normalized = classes.map((item) => ({
+        gradeId: item?.gradeId,
+        code: normalizeWorkspaceCode(item?.code),
+        name: typeof item?.name === "string" ? item.name.trim() : "",
+        isStudentSelectable: item?.isStudentSelectable !== false,
+    }));
+    const validationErrors = normalized.flatMap((item, index) =>
+        validateAdministrativeClassFields(item).map((message) => `第${index + 1}个班级：${message}`));
+    const duplicateCodes = normalized.map((item) => item.code)
+        .filter((code, index, all) => all.indexOf(code) !== index);
+    if (duplicateCodes.length) validationErrors.push(`批次内代码重复：${[...new Set(duplicateCodes)].join("、")}`);
+    if (validationErrors.length) {
+        throw structureError("批量行政班配置无效", "ADMIN_CLASS_BATCH_INVALID", 422, {errors: validationErrors});
+    }
+    const gradeIds = [...new Set(normalized.map((item) => item.gradeId))];
+    const [gradeCount, existingWorkspaces] = await Promise.all([
+        prisma.grade.count({where: {id: {in: gradeIds}, termId}}),
+        prisma.workspace.findMany({where: {termId, code: {in: normalized.map((item) => item.code)}}, select: {code: true}}),
+    ]);
+    if (gradeCount !== gradeIds.length) throw structureError("部分年级不存在或不属于该学期", "GRADE_INVALID", 404);
+    if (existingWorkspaces.length) {
+        throw structureError(
+            `教学空间代码已存在：${existingWorkspaces.map((item) => item.code).join("、")}`,
+            "WORKSPACE_CODE_EXISTS",
+            409,
+        );
+    }
+    return prisma.$transaction(async (tx) => {
+        const created = [];
+        for (const item of normalized) {
+            created.push(await tx.workspace.create({
+                data: {termId, ...item, type: "ADMIN_CLASS"},
+                include: managedWorkspaceInclude,
+            }));
+        }
+        return {count: created.length, classes: created};
+    }, {timeout: 30000});
+}
+
+export async function getWorkspaceChangeImpact({managerAccountId, schoolId, workspaceId}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    const workspace = await prisma.workspace.findFirst({
+        where: {id: workspaceId, term: {schoolId}},
+        select: {id: true, code: true, name: true, type: true, isActive: true},
+    });
+    if (!workspace) throw structureError("教学空间不存在或不属于该学校", "WORKSPACE_NOT_FOUND", 404);
+    const now = new Date();
+    const [workspaceMembers, teachingAssignments, pendingInvitations, publicationHistory, activePublications,
+        screenBindings, students, leaderships, sourceLinks] = await Promise.all([
+        prisma.workspaceMember.count({where: {workspaceId}}),
+        prisma.teachingAssignment.count({where: {workspaceId, isActive: true}}),
+        prisma.workspaceMemberInvite.count({where: {workspaceId, claimedAt: null}}),
+        prisma.publicationTarget.count({where: {workspaceId}}),
+        prisma.publicationTarget.count({where: {
+            workspaceId,
+            publication: {status: "PUBLISHED", OR: [{expiresAt: null}, {expiresAt: {gt: now}}]},
+        }}),
+        workspace.type === "ADMIN_CLASS"
+            ? prisma.classroomScreenBinding.count({where: {administrativeClassId: workspaceId, isActive: true}})
+            : 0,
+        workspace.type === "ADMIN_CLASS"
+            ? prisma.administrativeClassStudent.count({where: {administrativeClassId: workspaceId}})
+            : 0,
+        workspace.type === "ADMIN_CLASS"
+            ? prisma.administrativeClassLeadership.count({where: {administrativeClassId: workspaceId, isActive: true}})
+            : 0,
+        workspace.type === "ADMIN_CLASS"
+            ? prisma.workspaceSourceClass.count({where: {administrativeClassId: workspaceId}})
+            : prisma.workspaceSourceClass.count({where: {workspaceId}}),
+    ]);
+    const counts = {workspaceMembers, teachingAssignments, pendingInvitations, publicationHistory,
+        activePublications, screenBindings, students, leaderships, sourceLinks};
+    const warnings = [];
+    if (activePublications) warnings.push(`仍有 ${activePublications} 条正在生效的作业或通知`);
+    if (screenBindings) warnings.push(`仍绑定 ${screenBindings} 台启用中的班级大屏`);
+    if (students) warnings.push(`仍有 ${students} 条学生行政班归属记录`);
+    if (teachingAssignments || workspaceMembers) warnings.push(`仍关联教师访问或任课关系`);
+    if (leaderships) warnings.push(`仍有 ${leaderships} 条班主任职责记录`);
+    if (sourceLinks) warnings.push(workspace.type === "ADMIN_CLASS"
+        ? `仍被 ${sourceLinks} 个走班教学班作为来源`
+        : `仍关联 ${sourceLinks} 个来源行政班`);
+    return {workspace, counts, warnings, requiresConfirmation: warnings.length > 0};
+}
+
 export async function updateManagedAdministrativeClass({
     managerAccountId,
     schoolId,
@@ -182,12 +312,20 @@ export async function updateManagedAdministrativeClass({
     name,
     isStudentSelectable,
     isActive,
+    confirmImpact = false,
+    expectedUpdatedAt,
 }) {
     await assertSchoolManager(managerAccountId, schoolId);
     const existing = await prisma.workspace.findFirst({
         where: {id: administrativeClassId, type: "ADMIN_CLASS", term: {schoolId}},
     });
     if (!existing) throw structureError("行政班不存在或不属于该学校", "ADMIN_CLASS_NOT_FOUND", 404);
+    if (existing.isActive && isActive === false && !confirmImpact) {
+        const impact = await getWorkspaceChangeImpact({managerAccountId, schoolId, workspaceId: existing.id});
+        if (impact.requiresConfirmation) {
+            throw structureError("停用行政班前需要确认影响", "ORGANIZATION_CHANGE_CONFIRMATION_REQUIRED", 409, impact);
+        }
+    }
     const input = {
         code: code === undefined ? existing.code : normalizeWorkspaceCode(code),
         name: name === undefined ? existing.name : String(name).trim(),
@@ -201,8 +339,11 @@ export async function updateManagedAdministrativeClass({
         where: {termId: existing.termId, code: input.code, NOT: {id: existing.id}},
     });
     if (duplicate) throw structureError("该教学空间代码已存在", "WORKSPACE_CODE_EXISTS", 409);
-    await prisma.workspace.update({
-        where: {id: existing.id},
+    await updateVersionedRecord({
+        client: prisma,
+        model: "workspace",
+        id: existing.id,
+        expectedUpdatedAt,
         data: {
             code: input.code,
             name: input.name,
@@ -219,6 +360,7 @@ export async function replaceAdministrativeClassSubjectRules({
     administrativeClassId,
     subjectRules,
     removeConflictingSources = false,
+    expectedUpdatedAt,
 }) {
     await assertSchoolManager(managerAccountId, schoolId);
     const normalized = normalizeSubjectRules(subjectRules);
@@ -249,6 +391,13 @@ export async function replaceAdministrativeClassSubjectRules({
         );
     }
     await prisma.$transaction(async (tx) => {
+        await updateVersionedRecord({
+            client: tx,
+            model: "workspace",
+            id: administrativeClass.id,
+            expectedUpdatedAt,
+            data: {updatedAt: new Date()},
+        });
         if (conflictingSources.length) {
             await tx.workspaceSourceClass.deleteMany({
                 where: {
@@ -323,6 +472,8 @@ export async function updateManagedCourseGroup({
     sourceClassIds,
     isStudentSelectable,
     isActive,
+    confirmImpact = false,
+    expectedUpdatedAt,
 }) {
     await assertSchoolManager(managerAccountId, schoolId);
     const existing = await prisma.workspace.findFirst({
@@ -330,6 +481,12 @@ export async function updateManagedCourseGroup({
         include: {sourceClasses: true, _count: {select: {publicationTargets: true}}},
     });
     if (!existing) throw structureError("走班教学班不存在", "COURSE_GROUP_NOT_FOUND", 404);
+    if (existing.isActive && isActive === false && !confirmImpact) {
+        const impact = await getWorkspaceChangeImpact({managerAccountId, schoolId, workspaceId: existing.id});
+        if (impact.requiresConfirmation) {
+            throw structureError("停用走班教学班前需要确认影响", "ORGANIZATION_CHANGE_CONFIRMATION_REQUIRED", 409, impact);
+        }
+    }
     const next = {
         code: code === undefined ? existing.code : normalizeWorkspaceCode(code),
         name: name === undefined ? existing.name : String(name).trim(),
@@ -357,8 +514,11 @@ export async function updateManagedCourseGroup({
         sourceClassIds: next.sourceClassIds,
     });
     return prisma.$transaction(async (tx) => {
-        await tx.workspace.update({
-            where: {id: existing.id},
+        await updateVersionedRecord({
+            client: tx,
+            model: "workspace",
+            id: existing.id,
+            expectedUpdatedAt,
             data: {
                 code: next.code,
                 name: next.name,

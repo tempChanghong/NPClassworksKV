@@ -37,14 +37,22 @@ import {
 } from "../../services/classroomScreenService.js";
 import {
     createManagedAdministrativeClass,
+    createManagedAdministrativeClassesBatch,
     createManagedCourseGroup,
     createManagedGrade,
+    createManagedSubject,
+    getWorkspaceChangeImpact,
     getManagedAcademicStructure,
     replaceAdministrativeClassSubjectRules,
     updateManagedAdministrativeClass,
     updateManagedCourseGroup,
     updateManagedGrade,
+    updateManagedSubject,
 } from "../../services/academicStructureManagementService.js";
+import {
+    getManagedSchoolProfile,
+    updateManagedSchoolProfile,
+} from "../../services/schoolProfileManagementService.js";
 import {
     getSchoolHomeworkSettings,
     updateSchoolHomeworkSettings,
@@ -175,6 +183,53 @@ router.get("/schools/:schoolId/academic-structure", errors.catchAsync(async (req
     return res.json(errors.createSuccessResponse(structure));
 }));
 
+router.get("/schools/:schoolId/profile", errors.catchAsync(async (req, res) => {
+    const profile = await getManagedSchoolProfile({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+    });
+    return res.json(errors.createSuccessResponse(profile));
+}));
+
+router.patch("/schools/:schoolId/profile", errors.catchAsync(async (req, res) => {
+    const profile = await updateManagedSchoolProfile({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        name: req.body?.name,
+        teacherAuthMode: req.body?.teacherAuthMode,
+        allowOAuthTeacherLogin: req.body?.allowOAuthTeacherLogin,
+        sharedPassword: req.body?.sharedPassword,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
+    });
+    return res.json(errors.createSuccessResponse(profile, "学校基础设置已更新"));
+}));
+
+router.post("/schools/:schoolId/subjects", errors.catchAsync(async (req, res) => {
+    const subject = await createManagedSubject({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        code: req.body?.code,
+        name: req.body?.name,
+        category: req.body?.category,
+        sortOrder: req.body?.sortOrder,
+    });
+    return res.status(201).json(errors.createSuccessResponse(subject, "学科已创建"));
+}));
+
+router.patch("/schools/:schoolId/subjects/:subjectId", errors.catchAsync(async (req, res) => {
+    const subject = await updateManagedSubject({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        subjectId: req.params.subjectId,
+        code: req.body?.code,
+        name: req.body?.name,
+        category: req.body?.category,
+        sortOrder: req.body?.sortOrder,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
+    });
+    return res.json(errors.createSuccessResponse(subject, "学科已更新"));
+}));
+
 router.post("/schools/:schoolId/grades", errors.catchAsync(async (req, res) => {
     const grade = await createManagedGrade({
         managerAccountId: res.locals.account.id,
@@ -195,6 +250,7 @@ router.patch("/schools/:schoolId/grades/:gradeId", errors.catchAsync(async (req,
         code: req.body?.code,
         name: req.body?.name,
         sortOrder: req.body?.sortOrder,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
     });
     return res.json(errors.createSuccessResponse(grade, "年级已更新"));
 }));
@@ -212,6 +268,16 @@ router.post("/schools/:schoolId/administrative-classes", errors.catchAsync(async
     return res.status(201).json(errors.createSuccessResponse(administrativeClass, "行政班已创建"));
 }));
 
+router.post("/schools/:schoolId/administrative-classes/batch", errors.catchAsync(async (req, res) => {
+    const result = await createManagedAdministrativeClassesBatch({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.body?.termId,
+        classes: req.body?.classes,
+    });
+    return res.status(201).json(errors.createSuccessResponse(result, `已创建 ${result.count} 个行政班`));
+}));
+
 router.patch("/schools/:schoolId/administrative-classes/:classId", errors.catchAsync(async (req, res) => {
     const administrativeClass = await updateManagedAdministrativeClass({
         managerAccountId: res.locals.account.id,
@@ -221,8 +287,19 @@ router.patch("/schools/:schoolId/administrative-classes/:classId", errors.catchA
         name: req.body?.name,
         isStudentSelectable: req.body?.isStudentSelectable,
         isActive: req.body?.isActive,
+        confirmImpact: req.body?.confirmImpact === true,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
     });
     return res.json(errors.createSuccessResponse(administrativeClass, "行政班已更新"));
+}));
+
+router.get("/schools/:schoolId/workspaces/:workspaceId/change-impact", errors.catchAsync(async (req, res) => {
+    const impact = await getWorkspaceChangeImpact({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        workspaceId: req.params.workspaceId,
+    });
+    return res.json(errors.createSuccessResponse(impact));
 }));
 
 router.get("/schools/:schoolId/teaching-relationships", errors.catchAsync(async (req, res) => {
@@ -332,6 +409,7 @@ router.put("/schools/:schoolId/administrative-classes/:classId/subject-rules", e
         administrativeClassId: req.params.classId,
         subjectRules: req.body?.subjectRules,
         removeConflictingSources: req.body?.removeConflictingSources === true,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
     });
     return res.json(errors.createSuccessResponse(administrativeClass, "行政班授课规则已更新"));
 }));
@@ -362,6 +440,8 @@ router.patch("/schools/:schoolId/course-groups/:courseGroupId", errors.catchAsyn
         sourceClassIds: req.body?.sourceClassIds,
         isStudentSelectable: req.body?.isStudentSelectable,
         isActive: req.body?.isActive,
+        confirmImpact: req.body?.confirmImpact === true,
+        expectedUpdatedAt: req.body?.expectedUpdatedAt,
     });
     return res.json(errors.createSuccessResponse(courseGroup, "走班教学班已更新"));
 }));

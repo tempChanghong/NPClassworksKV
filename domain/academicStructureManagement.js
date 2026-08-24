@@ -1,4 +1,5 @@
 const DELIVERY_MODES = new Set(["ADMIN_CLASS", "COURSE_GROUP"]);
+const SUBJECT_CATEGORIES = new Set(["CORE", "ELECTIVE", "OTHER"]);
 
 function cleanText(value) {
     return typeof value === "string" ? value.trim() : "";
@@ -69,5 +70,17 @@ export function validateAdministrativeClassFields({code, name, gradeId}) {
     const cleanName = cleanText(name);
     if (!cleanName || cleanName.length > 191) errors.push("行政班名称不能为空且不能超过191个字符");
     if (!cleanText(gradeId)) errors.push("必须选择所属年级");
+    return errors;
+}
+
+export function validateSubjectFields({code, name, category, sortOrder}) {
+    const errors = [];
+    if (!validateWorkspaceCode(code)) errors.push("学科代码需为2至64位字母、数字、点、横线或下划线");
+    const cleanName = cleanText(name);
+    if (!cleanName || cleanName.length > 191) errors.push("学科名称不能为空且不能超过191个字符");
+    if (!SUBJECT_CATEGORIES.has(cleanText(category).toUpperCase())) errors.push("学科分类无效");
+    if (!Number.isInteger(Number(sortOrder)) || Number(sortOrder) < -10000 || Number(sortOrder) > 10000) {
+        errors.push("学科排序必须是 -10000 至 10000 之间的整数");
+    }
     return errors;
 }

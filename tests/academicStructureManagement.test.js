@@ -7,6 +7,7 @@ import {
     validateAdministrativeClassFields,
     validateCourseGroupFields,
     validateGradeFields,
+    validateSubjectFields,
 } from "../domain/academicStructureManagement.js";
 
 test("subject rules allow any administrative-class and walking-class combination", () => {
@@ -50,4 +51,9 @@ test("grade and administrative class fields support visual management", () => {
     assert.deepEqual(validateAdministrativeClassFields({code: "G2-C01", name: "高二1班", gradeId: "grade-2"}), []);
     assert.ok(validateGradeFields({code: "?", name: "", sortOrder: 1.5}).length >= 2);
     assert.ok(validateAdministrativeClassFields({code: "!", name: "", gradeId: ""}).length >= 2);
+});
+
+test("subject fields support safe visual editing", () => {
+    assert.deepEqual(validateSubjectFields({code: "IT", name: "信息技术", category: "OTHER", sortOrder: 100}), []);
+    assert.ok(validateSubjectFields({code: "?", name: "", category: "UNKNOWN", sortOrder: 1.2}).length >= 3);
 });
