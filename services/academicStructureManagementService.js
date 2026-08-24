@@ -4,7 +4,9 @@ import {
     normalizeSourceClassIds,
     normalizeSubjectRules,
     normalizeWorkspaceCode,
+    validateAdministrativeClassFields,
     validateCourseGroupFields,
+    validateGradeFields,
 } from "../domain/academicStructureManagement.js";
 
 const managedWorkspaceInclude = {
@@ -98,6 +100,117 @@ export async function getManagedAcademicStructure({managerAccountId, schoolId, t
         administrativeClasses: workspaces.filter((item) => item.type === "ADMIN_CLASS"),
         courseGroups: workspaces.filter((item) => item.type === "COURSE_GROUP"),
     };
+}
+
+export async function createManagedGrade({managerAccountId, schoolId, termId, code, name, sortOrder = 0}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    await requireManagedTerm(prisma, schoolId, termId);
+    const input = {
+        code: normalizeWorkspaceCode(code),
+        name: typeof name === "string" ? name.trim() : "",
+        sortOrder: Number(sortOrder),
+    };
+    const validationErrors = validateGradeFields(input);
+    if (validationErrors.length) throw structureError("年级配置无效", "GRADE_INVALID", 422, {errors: validationErrors});
+    const duplicate = await prisma.grade.findUnique({where: {termId_code: {termId, code: input.code}}});
+    if (duplicate) throw structureError("该年级代码已存在", "GRADE_CODE_EXISTS", 409);
+    return prisma.grade.create({data: {termId, ...input}});
+}
+
+export async function updateManagedGrade({managerAccountId, schoolId, gradeId, code, name, sortOrder}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    const existing = await prisma.grade.findFirst({where: {id: gradeId, term: {schoolId}}});
+    if (!existing) throw structureError("年级不存在或不属于该学校", "GRADE_NOT_FOUND", 404);
+    const input = {
+        code: code === undefined ? existing.code : normalizeWorkspaceCode(code),
+        name: name === undefined ? existing.name : String(name).trim(),
+        sortOrder: sortOrder === undefined ? existing.sortOrder : Number(sortOrder),
+    };
+    const validationErrors = validateGradeFields(input);
+    if (validationErrors.length) throw structureError("年级配置无效", "GRADE_INVALID", 422, {errors: validationErrors});
+    const duplicate = await prisma.grade.findFirst({
+        where: {termId: existing.termId, code: input.code, NOT: {id: existing.id}},
+    });
+    if (duplicate) throw structureError("该年级代码已存在", "GRADE_CODE_EXISTS", 409);
+    return prisma.grade.update({where: {id: existing.id}, data: input});
+}
+
+export async function createManagedAdministrativeClass({
+    managerAccountId,
+    schoolId,
+    termId,
+    gradeId,
+    code,
+    name,
+    isStudentSelectable = true,
+}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    await requireManagedTerm(prisma, schoolId, termId);
+    const input = {
+        code: normalizeWorkspaceCode(code),
+        name: typeof name === "string" ? name.trim() : "",
+        gradeId,
+    };
+    const validationErrors = validateAdministrativeClassFields(input);
+    if (validationErrors.length) {
+        throw structureError("行政班配置无效", "ADMIN_CLASS_INVALID", 422, {errors: validationErrors});
+    }
+    const [grade, duplicate] = await Promise.all([
+        prisma.grade.findFirst({where: {id: gradeId, termId}}),
+        prisma.workspace.findUnique({where: {termId_code: {termId, code: input.code}}}),
+    ]);
+    if (!grade) throw structureError("年级不存在或不属于该学期", "GRADE_INVALID", 404);
+    if (duplicate) throw structureError("该教学空间代码已存在", "WORKSPACE_CODE_EXISTS", 409);
+    return prisma.workspace.create({
+        data: {
+            termId,
+            gradeId,
+            code: input.code,
+            name: input.name,
+            type: "ADMIN_CLASS",
+            isStudentSelectable: Boolean(isStudentSelectable),
+        },
+        include: managedWorkspaceInclude,
+    });
+}
+
+export async function updateManagedAdministrativeClass({
+    managerAccountId,
+    schoolId,
+    administrativeClassId,
+    code,
+    name,
+    isStudentSelectable,
+    isActive,
+}) {
+    await assertSchoolManager(managerAccountId, schoolId);
+    const existing = await prisma.workspace.findFirst({
+        where: {id: administrativeClassId, type: "ADMIN_CLASS", term: {schoolId}},
+    });
+    if (!existing) throw structureError("行政班不存在或不属于该学校", "ADMIN_CLASS_NOT_FOUND", 404);
+    const input = {
+        code: code === undefined ? existing.code : normalizeWorkspaceCode(code),
+        name: name === undefined ? existing.name : String(name).trim(),
+        gradeId: existing.gradeId,
+    };
+    const validationErrors = validateAdministrativeClassFields(input);
+    if (validationErrors.length) {
+        throw structureError("行政班配置无效", "ADMIN_CLASS_INVALID", 422, {errors: validationErrors});
+    }
+    const duplicate = await prisma.workspace.findFirst({
+        where: {termId: existing.termId, code: input.code, NOT: {id: existing.id}},
+    });
+    if (duplicate) throw structureError("该教学空间代码已存在", "WORKSPACE_CODE_EXISTS", 409);
+    await prisma.workspace.update({
+        where: {id: existing.id},
+        data: {
+            code: input.code,
+            name: input.name,
+            ...(isStudentSelectable === undefined ? {} : {isStudentSelectable: Boolean(isStudentSelectable)}),
+            ...(isActive === undefined ? {} : {isActive: Boolean(isActive)}),
+        },
+    });
+    return requireAdministrativeClass(prisma, schoolId, existing.id);
 }
 
 export async function replaceAdministrativeClassSubjectRules({

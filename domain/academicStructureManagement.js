@@ -52,3 +52,22 @@ export function validateCourseGroupFields({code, name, subjectId, sourceClassIds
     return errors;
 }
 
+export function validateGradeFields({code, name, sortOrder}) {
+    const errors = [];
+    if (!validateWorkspaceCode(code)) errors.push("年级代码需为2至64位字母、数字、点、横线或下划线");
+    const cleanName = cleanText(name);
+    if (!cleanName || cleanName.length > 191) errors.push("年级名称不能为空且不能超过191个字符");
+    if (!Number.isInteger(Number(sortOrder)) || Number(sortOrder) < -10000 || Number(sortOrder) > 10000) {
+        errors.push("年级排序必须是 -10000 至 10000 之间的整数");
+    }
+    return errors;
+}
+
+export function validateAdministrativeClassFields({code, name, gradeId}) {
+    const errors = [];
+    if (!validateWorkspaceCode(code)) errors.push("行政班代码需为2至64位字母、数字、点、横线或下划线");
+    const cleanName = cleanText(name);
+    if (!cleanName || cleanName.length > 191) errors.push("行政班名称不能为空且不能超过191个字符");
+    if (!cleanText(gradeId)) errors.push("必须选择所属年级");
+    return errors;
+}

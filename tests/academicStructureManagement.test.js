@@ -4,7 +4,9 @@ import {
     normalizeSourceClassIds,
     normalizeSubjectRules,
     normalizeWorkspaceCode,
+    validateAdministrativeClassFields,
     validateCourseGroupFields,
+    validateGradeFields,
 } from "../domain/academicStructureManagement.js";
 
 test("subject rules allow any administrative-class and walking-class combination", () => {
@@ -43,3 +45,9 @@ test("course group sources are unique and workspace codes are normalized", () =>
     }), []);
 });
 
+test("grade and administrative class fields support visual management", () => {
+    assert.deepEqual(validateGradeFields({code: "G2", name: "高二", sortOrder: 20}), []);
+    assert.deepEqual(validateAdministrativeClassFields({code: "G2-C01", name: "高二1班", gradeId: "grade-2"}), []);
+    assert.ok(validateGradeFields({code: "?", name: "", sortOrder: 1.5}).length >= 2);
+    assert.ok(validateAdministrativeClassFields({code: "!", name: "", gradeId: ""}).length >= 2);
+});

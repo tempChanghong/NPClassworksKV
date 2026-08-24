@@ -36,10 +36,14 @@ import {
     updateClassroomScreenAccount,
 } from "../../services/classroomScreenService.js";
 import {
+    createManagedAdministrativeClass,
     createManagedCourseGroup,
+    createManagedGrade,
     getManagedAcademicStructure,
     replaceAdministrativeClassSubjectRules,
+    updateManagedAdministrativeClass,
     updateManagedCourseGroup,
+    updateManagedGrade,
 } from "../../services/academicStructureManagementService.js";
 import {
     getSchoolHomeworkSettings,
@@ -169,6 +173,56 @@ router.get("/schools/:schoolId/academic-structure", errors.catchAsync(async (req
         termId: req.query.termId,
     });
     return res.json(errors.createSuccessResponse(structure));
+}));
+
+router.post("/schools/:schoolId/grades", errors.catchAsync(async (req, res) => {
+    const grade = await createManagedGrade({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.body?.termId,
+        code: req.body?.code,
+        name: req.body?.name,
+        sortOrder: req.body?.sortOrder,
+    });
+    return res.status(201).json(errors.createSuccessResponse(grade, "年级已创建"));
+}));
+
+router.patch("/schools/:schoolId/grades/:gradeId", errors.catchAsync(async (req, res) => {
+    const grade = await updateManagedGrade({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        gradeId: req.params.gradeId,
+        code: req.body?.code,
+        name: req.body?.name,
+        sortOrder: req.body?.sortOrder,
+    });
+    return res.json(errors.createSuccessResponse(grade, "年级已更新"));
+}));
+
+router.post("/schools/:schoolId/administrative-classes", errors.catchAsync(async (req, res) => {
+    const administrativeClass = await createManagedAdministrativeClass({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        termId: req.body?.termId,
+        gradeId: req.body?.gradeId,
+        code: req.body?.code,
+        name: req.body?.name,
+        isStudentSelectable: req.body?.isStudentSelectable,
+    });
+    return res.status(201).json(errors.createSuccessResponse(administrativeClass, "行政班已创建"));
+}));
+
+router.patch("/schools/:schoolId/administrative-classes/:classId", errors.catchAsync(async (req, res) => {
+    const administrativeClass = await updateManagedAdministrativeClass({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        administrativeClassId: req.params.classId,
+        code: req.body?.code,
+        name: req.body?.name,
+        isStudentSelectable: req.body?.isStudentSelectable,
+        isActive: req.body?.isActive,
+    });
+    return res.json(errors.createSuccessResponse(administrativeClass, "行政班已更新"));
 }));
 
 router.get("/schools/:schoolId/teaching-relationships", errors.catchAsync(async (req, res) => {
