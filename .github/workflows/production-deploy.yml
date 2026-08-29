@@ -1,0 +1,62 @@
+name: Deploy production server
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npclassworks-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/npclassworks
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/npclassworks ~/.ssh/known_hosts
+      - name: Upgrade NPClassworks
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_BACKEND_DIR: ${{ vars.DEPLOY_BACKEND_DIR }}
+        run: |
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_USER"
+          test -n "$DEPLOY_BACKEND_DIR"
+          deploy_port="${DEPLOY_PORT:-22}"
+          printf -v quoted_dir '%q' "$DEPLOY_BACKEND_DIR"
+          remote_command="cd -- $quoted_dir"
+          remote_command+=' && if [ ! -f deploy/ci-deploy.sh ]; then test -z "$(git status --porcelain)" && GIT_TERMINAL_PROMPT=0 git fetch --tags --prune && git checkout --detach origin/main; fi'
+          remote_command+=' && bash deploy/ci-deploy.sh'
+          ssh -i ~/.ssh/npclassworks -p "$deploy_port" \
+            -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "$remote_command"

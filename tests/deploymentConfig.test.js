@@ -150,3 +150,18 @@ test("upgrade retains previous images and database while rollback is explicit", 
     assert.match(timer, /OnCalendar=\*-\*-\* 03:30:00/);
     assert.match(timer, /Persistent=true/);
 });
+
+test("push deployment fetches both repositories, serializes upgrades and uses strict SSH", () => {
+    const upgrade = read("../deploy/upgrade.sh");
+    const ciDeploy = read("../deploy/ci-deploy.sh");
+    const workflow = read("../.github/workflows/production-deploy.yml");
+    assert.match(upgrade, /--backend-ref/);
+    assert.match(upgrade, /--frontend-ref/);
+    assert.match(upgrade, /flock -w 900 9/);
+    assert.match(ciDeploy, /--backend-ref origin\/main/);
+    assert.match(ciDeploy, /--frontend-ref origin\/main/);
+    assert.match(ciDeploy, /--rollback-on-failure/);
+    assert.match(workflow, /push:[\s\S]*branches: \["main"\]/);
+    assert.match(workflow, /StrictHostKeyChecking=yes/);
+    assert.match(workflow, /needs: verify/);
+});

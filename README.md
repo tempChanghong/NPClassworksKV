@@ -118,6 +118,8 @@ bash deploy/rollback.sh --restore-database --yes
 
 数据库迁移不保证向下兼容。如果升级包含破坏性迁移，应使用带数据库恢复的完整回滚。定时器状态和日志可用 `systemctl status npclassworks-backup.timer`、`journalctl -u npclassworks-backup.service` 查看。
 
+推送 `main` 后自动拉取、构建、健康检查和失败回滚的配置见 [`docs/automatic-deployment.md`](./docs/automatic-deployment.md)。`restart: unless-stopped` 本身不会更新镜像。
+
 ## 健康检查
 
 - `GET /check`：进程存活检查
