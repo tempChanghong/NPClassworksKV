@@ -95,19 +95,20 @@ test("rejects duplicate workspace codes across administrative classes and course
     assert.ok(result.errors.some((error) => error.code === "DUPLICATE_WORKSPACE_CODE"));
 });
 
-test("the eight-class rollout template preserves fixed and walking-class subjects", () => {
+test("the seven-class rollout template preserves the current fixed and walking-class plan", () => {
     const document = JSON.parse(readFileSync(
         new URL("../config/examples/newfires-high-school-organization.example.json", import.meta.url),
         "utf8",
     ));
     const result = validateOrganizationImport(document);
     assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.equal(result.summary.administrativeClasses, 8);
+    assert.equal(result.summary.administrativeClasses, 7);
     assert.equal(result.summary.courseGroups, 12);
 
     const classOne = result.normalized.administrativeClasses.find((item) => item.code === "G2-C1");
     const classTwo = result.normalized.administrativeClasses.find((item) => item.code === "G2-C2");
-    for (const administrativeClass of [classOne, classTwo]) {
+    const classFour = result.normalized.administrativeClasses.find((item) => item.code === "G2-C4");
+    for (const administrativeClass of [classOne, classFour]) {
         for (const subjectCode of ["PHY", "CHE", "BIO"]) {
             assert.equal(
                 administrativeClass.subjectRules.find((rule) => rule.subjectCode === subjectCode)?.deliveryMode,
@@ -115,7 +116,25 @@ test("the eight-class rollout template preserves fixed and walking-class subject
             );
         }
     }
+    assert.equal(classTwo.subjectRules.find((rule) => rule.subjectCode === "POL")?.deliveryMode, "ADMIN_CLASS");
+    assert.equal(classTwo.subjectRules.find((rule) => rule.subjectCode === "PHY")?.deliveryMode, "COURSE_GROUP");
     const classThree = result.normalized.administrativeClasses.find((item) => item.code === "G2-C3");
-    assert.equal(classThree.subjectRules.find((rule) => rule.subjectCode === "HIS")?.deliveryMode, "ADMIN_CLASS");
-    assert.equal(classThree.subjectRules.find((rule) => rule.subjectCode === "PHY")?.deliveryMode, "COURSE_GROUP");
+    assert.equal(classThree.subjectRules.find((rule) => rule.subjectCode === "PHY")?.deliveryMode, "ADMIN_CLASS");
+    assert.equal(classThree.subjectRules.find((rule) => rule.subjectCode === "CHE")?.deliveryMode, "ADMIN_CLASS");
+    assert.equal(classThree.subjectRules.find((rule) => rule.subjectCode === "BIO")?.deliveryMode, "COURSE_GROUP");
+
+    const fixedSubjects = new Map([
+        ["G2-C5", "CHE"],
+        ["G2-C6", "BIO"],
+        ["G2-C7", "GEO"],
+    ]);
+    for (const [classCode, fixedSubject] of fixedSubjects) {
+        const administrativeClass = result.normalized.administrativeClasses.find((item) => item.code === classCode);
+        const fixedElectives = administrativeClass.subjectRules.filter((rule) =>
+            ["PHY", "CHE", "BIO", "HIS", "GEO", "POL"].includes(rule.subjectCode) &&
+            rule.deliveryMode === "ADMIN_CLASS",
+        );
+        assert.deepEqual(fixedElectives.map((rule) => rule.subjectCode), [fixedSubject]);
+    }
+    assert.equal(result.normalized.administrativeClasses.some((item) => item.code === "G2-C8"), false);
 });
