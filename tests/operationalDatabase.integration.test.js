@@ -52,6 +52,22 @@ test("audit log and classroom screen duty commands work against PostgreSQL", {sk
         });
         const audit = await auditService.listAuditLogs({managerAccountId: account.id, schoolId: school.id});
         assert.equal(audit.items[0].metadata.pin, "[REDACTED]");
+        const filteredAudit = await auditService.listAuditLogs({
+            managerAccountId: account.id,
+            schoolId: school.id,
+            action: "INTEGRATION_TEST",
+            actorType: "ACCOUNT",
+            success: "true",
+            from: new Date(Date.now() - 60_000).toISOString(),
+            to: new Date(Date.now() + 60_000).toISOString(),
+        });
+        assert.equal(filteredAudit.items.length, 1);
+        const failedAudit = await auditService.listAuditLogs({
+            managerAccountId: account.id,
+            schoolId: school.id,
+            success: "false",
+        });
+        assert.equal(failedAudit.items.length, 0);
 
         const command = await dutyService.issueClassroomScreenCommand({
             managerAccountId: account.id,

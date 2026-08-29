@@ -468,6 +468,9 @@ router.get("/schools/:schoolId/audit-logs", errors.catchAsync(async (req, res) =
         schoolId: req.params.schoolId,
         action: req.query.action,
         actorType: req.query.actorType,
+        success: req.query.success,
+        from: req.query.from,
+        to: req.query.to,
         cursor: req.query.cursor,
         limit: req.query.limit,
     });

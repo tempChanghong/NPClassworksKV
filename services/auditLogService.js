@@ -185,14 +185,26 @@ export function createAuditMiddleware({actorType, actorResolver}) {
     };
 }
 
-export async function listAuditLogs({managerAccountId, schoolId, action, actorType, cursor, limit = 50}) {
+export async function listAuditLogs({managerAccountId, schoolId, action, actorType, success, from, to, cursor, limit = 50}) {
     await assertSchoolManager(managerAccountId, schoolId);
     const take = Math.min(100, Math.max(1, Number(limit) || 50));
+    const successFilter = success === true || success === "true"
+        ? true
+        : success === false || success === "false"
+            ? false
+            : undefined;
+    const fromDate = from && !Number.isNaN(Date.parse(from)) ? new Date(from) : null;
+    const toDate = to && !Number.isNaN(Date.parse(to)) ? new Date(to) : null;
     const items = await prisma.auditLog.findMany({
         where: {
             schoolId,
             ...(action ? {action} : {}),
             ...(actorType ? {actorType} : {}),
+            ...(successFilter === undefined ? {} : {success: successFilter}),
+            ...(fromDate || toDate ? {createdAt: {
+                ...(fromDate ? {gte: fromDate} : {}),
+                ...(toDate ? {lte: toDate} : {}),
+            }} : {}),
         },
         include: {
             actorAccount: {select: {id: true, name: true, localUsername: true, email: true}},
