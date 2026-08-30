@@ -151,7 +151,7 @@ test("upgrade retains previous images and database while rollback is explicit", 
     assert.match(timer, /Persistent=true/);
 });
 
-test("push deployment fetches both repositories, serializes upgrades and uses strict SSH", () => {
+test("push deployment fetches both repositories and uses the signed deployment agent without SSH credentials", () => {
     const upgrade = read("../deploy/upgrade.sh");
     const ciDeploy = read("../deploy/ci-deploy.sh");
     const workflow = read("../.github/workflows/production-deploy.yml");
@@ -162,6 +162,9 @@ test("push deployment fetches both repositories, serializes upgrades and uses st
     assert.match(ciDeploy, /--frontend-ref origin\/main/);
     assert.match(ciDeploy, /--rollback-on-failure/);
     assert.match(workflow, /push:[\s\S]*branches: \["main"\]/);
-    assert.match(workflow, /StrictHostKeyChecking=yes/);
+    assert.match(workflow, /DEPLOY_AGENT_URL/);
+    assert.match(workflow, /X-NP-Deploy-Signature/);
+    assert.match(workflow, /createHmac\("sha256"/);
+    assert.doesNotMatch(workflow, /DEPLOY_SSH_KEY|StrictHostKeyChecking|\bssh\s/);
     assert.match(workflow, /needs: verify/);
 });

@@ -1,0 +1,23 @@
+[Unit]
+Description=NPClassworks authenticated deployment agent
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+SupplementaryGroups=docker
+WorkingDirectory=/opt/npclassworks/NPClassworksKV
+EnvironmentFile=/etc/npclassworks-deploy-agent.env
+ExecStart=/usr/bin/node /opt/npclassworks/NPClassworksKV/deploy/agent/server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

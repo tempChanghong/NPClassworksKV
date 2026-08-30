@@ -437,27 +437,14 @@ git -C ../NPClassworks status --short
 
 先保证手动升级成功，再配置 GitHub Actions。完整项目约束见 [Git 推送后自动部署](./automatic-deployment.md)。
 
-在管理员的 Windows PowerShell 中生成一把只用于部署的密钥：
+现在的自动部署不要求服务器所有者交付 SSH 密码或私钥。由服务器所有者安装仓库提供的 Node.js 部署代理并接入现有 HTTPS 网关，然后只交付一份独立的部署密钥。
 
-```powershell
-ssh-keygen -t ed25519 -C "npclassworks-github-actions" -f "$env:USERPROFILE\.ssh\npclassworks_actions"
-Get-Content "$env:USERPROFILE\.ssh\npclassworks_actions.pub" | ssh deploy@服务器公网IP "umask 077; mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
-```
+在**前端和后端两个 GitHub 仓库**的 `Settings → Environments → New environment` 中创建 `production` Environment，并配置：
 
-测试私钥能否登录：
+- `DEPLOY_AGENT_URL`：部署代理的 HTTPS 地址，末尾不加 `/`；
+- `DEPLOY_AGENT_SECRET`：服务器所有者生成的独立随机密钥。
 
-```powershell
-ssh -i "$env:USERPROFILE\.ssh\npclassworks_actions" deploy@服务器公网IP
-```
-
-然后在**前端和后端两个 GitHub 仓库**的 `Settings → Environments → New environment` 中创建 `production` Environment，并配置：
-
-- `DEPLOY_HOST`、`DEPLOY_PORT`、`DEPLOY_USER`；
-- `DEPLOY_SSH_KEY`：`npclassworks_actions` 私钥文件的完整内容，不是 `.pub`；
-- `DEPLOY_KNOWN_HOSTS`：服务器 SSH 主机密钥的 known_hosts 行，必须先与服务器或云控制台显示的指纹人工核对；
-- `DEPLOY_BACKEND_DIR=/opt/npclassworks/NPClassworksKV`。
-
-前三项和两个密钥放在 Environment secrets；`DEPLOY_BACKEND_DIR` 放在 Environment variables。私钥不得上传到仓库、网盘公开链接或聊天群。
+部署代理只能触发固定升级脚本，不能通过请求执行任意命令或更改目录。服务器所有者的安装步骤、Caddy 示例与故障排查见[Git 推送后自动部署](./automatic-deployment.md)。部署密钥不得上传到仓库、网盘公开链接或聊天群。
 
 建议首次在 Actions 页面手动运行并观察全流程，成功后再依赖 push 自动部署。GitHub Environment 可限制部署分支、保存环境 Secret，并可加入人工批准规则：<https://docs.github.com/en/actions/concepts/workflows-and-actions/deployment-environments>。
 

@@ -24,6 +24,7 @@
     "deploy:restore": "bash deploy/restore.sh",
     "deploy:upgrade": "bash deploy/upgrade.sh",
     "deploy:rollback": "bash deploy/rollback.sh",
+    "deploy:agent": "node deploy/agent/server.js",
     "debug:init": "node scripts/init-debug-env.js",
     "debug:db:up": "docker compose --env-file deploy/.env.debug -f docker-compose.debug.yml up -d",
     "debug:db:down": "docker compose --env-file deploy/.env.debug -f docker-compose.debug.yml down",

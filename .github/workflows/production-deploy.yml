@@ -32,31 +32,40 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Configure SSH
+      - name: Request authenticated upgrade
         env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_AGENT_URL: ${{ secrets.DEPLOY_AGENT_URL }}
+          DEPLOY_AGENT_SECRET: ${{ secrets.DEPLOY_AGENT_SECRET }}
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/npclassworks
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/npclassworks ~/.ssh/known_hosts
-      - name: Upgrade NPClassworks
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_BACKEND_DIR: ${{ vars.DEPLOY_BACKEND_DIR }}
-        run: |
-          test -n "$DEPLOY_HOST"
-          test -n "$DEPLOY_USER"
-          test -n "$DEPLOY_BACKEND_DIR"
-          deploy_port="${DEPLOY_PORT:-22}"
-          printf -v quoted_dir '%q' "$DEPLOY_BACKEND_DIR"
-          remote_command="cd -- $quoted_dir"
-          remote_command+=' && if [ ! -f deploy/ci-deploy.sh ]; then test -z "$(git status --porcelain)" && GIT_TERMINAL_PROMPT=0 git fetch --tags --prune && git checkout --detach origin/main; fi'
-          remote_command+=' && bash deploy/ci-deploy.sh'
-          ssh -i ~/.ssh/npclassworks -p "$deploy_port" \
-            -o BatchMode=yes -o StrictHostKeyChecking=yes \
-            "$DEPLOY_USER@$DEPLOY_HOST" \
-            "$remote_command"
+          test -n "$DEPLOY_AGENT_URL"
+          test -n "$DEPLOY_AGENT_SECRET"
+          body="$(jq -nc \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg commit "$GITHUB_SHA" \
+            --arg runId "$GITHUB_RUN_ID" \
+            '{action:"upgrade", repository:$repository, commit:$commit, runId:$runId}')"
+          timestamp="$(date +%s)"
+          nonce="$(openssl rand -hex 24)"
+          signature="$(DEPLOY_BODY="$body" DEPLOY_TIMESTAMP="$timestamp" DEPLOY_NONCE="$nonce" node <<'NODE'
+          const crypto = require("node:crypto");
+          const body = process.env.DEPLOY_BODY;
+          const bodyHash = crypto.createHash("sha256").update(body).digest("hex");
+          process.stdout.write(crypto.createHmac("sha256", process.env.DEPLOY_AGENT_SECRET)
+            .update(`${process.env.DEPLOY_TIMESTAMP}\n${process.env.DEPLOY_NONCE}\n${bodyHash}`)
+            .digest("hex"));
+          NODE
+          )"
+          response_file="$(mktemp)"
+          http_code="$(curl --silent --show-error \
+            --output "$response_file" \
+            --write-out '%{http_code}' \
+            --max-time 7200 \
+            --request POST "$DEPLOY_AGENT_URL/v1/deploy" \
+            --header 'Content-Type: application/json' \
+            --header "X-NP-Deploy-Timestamp: $timestamp" \
+            --header "X-NP-Deploy-Nonce: $nonce" \
+            --header "X-NP-Deploy-Signature: sha256=$signature" \
+            --data-binary "$body")"
+          cat "$response_file"
+          test "$http_code" -ge 200
+          test "$http_code" -lt 300
