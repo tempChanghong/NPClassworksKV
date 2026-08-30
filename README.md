@@ -56,6 +56,8 @@ pnpm run debug:db:status
 
 ## 生产部署
 
+第一次购买服务器、配置域名和安装 Docker，请从 [`docs/beginner-deployment-guide.md`](./docs/beginner-deployment-guide.md) 开始；已有服务器与网关的维护者可直接阅读本节和共享模式示例。
+
 仓库同时提供两种 Compose 模式：
 
 - `docker-compose.yml`：独占服务器模式，包含 Caddy，会占用宿主机 80/443；
@@ -81,7 +83,7 @@ pnpm run deploy:shared:config
 pnpm run deploy:shared:up
 ```
 
-默认前端为 `127.0.0.1:13080`，后端为 `127.0.0.1:13000`。示例使用 `newfires.top` 承载前端、`api.newfires.top` 承载后端。把 [`deploy/Caddyfile.shared.example`](./deploy/Caddyfile.shared.example) 或 [`deploy/nginx.shared.conf.example`](./deploy/nginx.shared.conf.example) 合并到服务器现有网关配置；不要再启动项目内置 Caddy。
+默认前端为 `127.0.0.1:13080`，后端为 `127.0.0.1:13000`。共享模式并不要求前后端分域：同源部署可把 [`deploy/Caddyfile.shared-same-origin.example`](./deploy/Caddyfile.shared-same-origin.example) 合并到现有 Caddy；分域部署可参考 [`deploy/Caddyfile.shared.example`](./deploy/Caddyfile.shared.example) 或 [`deploy/nginx.shared.conf.example`](./deploy/nginx.shared.conf.example)。两种方式都不要再启动项目内置 Caddy。
 
 服务就绪后打开前端 `/setup`。向导会检查关键环境、验证一次性初始化密钥，并在同一事务中创建首位管理员、学校和启用学期。随后可以继续预检并导入行政班/走班结构、创建首批教师及其任课空间、建立班级大屏账号，也可以跳过任意可选步骤，稍后在学校后台补充。安装中途关闭页面后，重新输入初始化密钥即可从现有数据继续。
 
