@@ -1,4 +1,4 @@
-const SENSITIVE_KEYS = /(?:password|pin|token|secret|authorization|cookie|hash|setupKey)/i;
+const SENSITIVE_KEYS = /(?:password|passphrase|pin|token|secret|authorization|cookie|hash|setupKey)/i;
 
 export function sanitizeAuditValue(value, depth = 0) {
     if (depth > 5) return "[TRUNCATED]";

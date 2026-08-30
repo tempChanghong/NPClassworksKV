@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {Router, raw} from "express";
 import {readFileSync} from "node:fs";
 import errors from "../../utils/errors.js";
 import {localAuthLimiter} from "../../middleware/rateLimiter.js";
@@ -14,6 +14,11 @@ import {
     initializeInstanceCore,
     verifyInstanceSetupLogin,
 } from "../../services/instanceSetupService.js";
+import {
+    importSchoolMigrationPackage,
+    MAX_PACKAGE_BYTES,
+    previewSchoolMigrationImport,
+} from "../../services/schoolMigrationService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -26,6 +31,10 @@ const staffConfigurationTemplate = JSON.parse(readFileSync(
 
 const router = Router();
 const BULK_IMPORT_TIMEOUT_MS = 150000;
+const migrationUpload = raw({
+    type: "application/vnd.npclassworks.transfer+json",
+    limit: MAX_PACKAGE_BYTES,
+});
 
 function bulkImportTimeout(req, res, next) {
     req.setTimeout(BULK_IMPORT_TIMEOUT_MS);
@@ -64,6 +73,22 @@ router.get("/organization/template", setupTokenAuth, (req, res) => {
 router.get("/staff-configuration/template", setupTokenAuth, (req, res) => {
     return res.json(errors.createSuccessResponse(staffConfigurationTemplate));
 });
+
+router.post("/migration/preview", localAuthLimiter, setupTokenAuth, bulkImportTimeout, migrationUpload, errors.catchAsync(async (req, res) => {
+    const result = await previewSchoolMigrationImport({
+        packageBuffer: req.body,
+        passphrase: req.get("X-NPClassworks-Migration-Passphrase"),
+    });
+    return res.json(errors.createSuccessResponse(result, "迁移包预检通过"));
+}));
+
+router.post("/migration/import", localAuthLimiter, setupTokenAuth, bulkImportTimeout, migrationUpload, errors.catchAsync(async (req, res) => {
+    const result = await importSchoolMigrationPackage({
+        packageBuffer: req.body,
+        passphrase: req.get("X-NPClassworks-Migration-Passphrase"),
+    });
+    return res.status(201).json(errors.createSuccessResponse(result, "学校数据迁移完成"));
+}));
 
 router.post("/organization/import", setupTokenAuth, errors.catchAsync(async (req, res) => {
     const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;

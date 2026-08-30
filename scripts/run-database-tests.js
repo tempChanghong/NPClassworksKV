@@ -35,6 +35,7 @@ try {
         "--test",
         "--test-concurrency=1",
         "tests/operationalDatabase.integration.test.js",
+        "tests/schoolMigrationDatabase.integration.test.js",
         "tests/workspaceAssignmentDatabase.integration.test.js",
     ], testEnv);
     console.log("真实 PostgreSQL 集成测试通过。");

@@ -70,6 +70,12 @@ test("audit metadata recursively redacts credentials", () => {
     });
 });
 
+test("audit metadata never records a migration passphrase", () => {
+    const result = sanitizeAuditValue({passphrase: "migration-secret", confirmationSchoolCode: "SCHOOL"});
+    assert.equal(result.passphrase, "[REDACTED]");
+    assert.equal(result.confirmationSchoolCode, "SCHOOL");
+});
+
 test("screen duty distinguishes online, degraded and offline devices", () => {
     const now = Date.now();
     const base = {

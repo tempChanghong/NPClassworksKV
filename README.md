@@ -93,6 +93,8 @@ pnpm run deploy:shared:up
 
 ## 备份、恢复与升级
 
+学校管理员通过网页将单校业务数据迁入空白新实例的流程见 [`docs/school-server-migration.md`](./docs/school-server-migration.md)。该加密迁移包不会包含服务器环境密钥，并且不能替代部署人员的整库灾难恢复备份。
+
 生产脚本统一读取 `deploy/.env.production`，备份默认写入不纳入 Git 的 `deploy/backups`。每日备份默认保留14天，可通过 `BACKUP_RETENTION_DAYS` 调整。
 
 ```bash

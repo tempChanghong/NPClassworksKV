@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {readFileSync} from "node:fs";
 import {jwtAuth} from "../../middleware/jwt-auth.js";
+import {localAuthLimiter} from "../../middleware/rateLimiter.js";
 import errors from "../../utils/errors.js";
 import {
     cloneAcademicTerm,
@@ -80,6 +81,10 @@ import {
 } from "../../services/academicTermTransitionService.js";
 import {createAuditMiddleware, listAuditLogs} from "../../services/auditLogService.js";
 import {issueClassroomScreenCommand} from "../../services/classroomScreenDutyService.js";
+import {
+    createSchoolMigrationPackage,
+    getSchoolMigrationReadiness,
+} from "../../services/schoolMigrationService.js";
 
 const organizationTemplate = JSON.parse(readFileSync(
     new URL("../../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -97,6 +102,32 @@ router.use(createAuditMiddleware({
 router.get("/organization/template", (req, res) => {
     return res.json(errors.createSuccessResponse(organizationTemplate));
 });
+
+router.get("/schools/:schoolId/migration/readiness", errors.catchAsync(async (req, res) => {
+    const readiness = await getSchoolMigrationReadiness({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+    });
+    return res.json(errors.createSuccessResponse(readiness));
+}));
+
+router.post("/schools/:schoolId/migration/export", localAuthLimiter, errors.catchAsync(async (req, res) => {
+    req.setTimeout(180000);
+    res.setTimeout(180000);
+    const result = await createSchoolMigrationPackage({
+        managerAccountId: res.locals.account.id,
+        schoolId: req.params.schoolId,
+        currentPin: req.body?.currentPin,
+        confirmationSchoolCode: req.body?.confirmationSchoolCode,
+        passphrase: req.body?.passphrase,
+    });
+    res.set({
+        "Content-Type": "application/vnd.npclassworks.transfer+json",
+        "Content-Disposition": `attachment; filename="${result.filename}"`,
+        "X-NPClassworks-Migration-Id": result.manifest.migrationId,
+    });
+    return res.send(result.buffer);
+}));
 
 router.post("/organization/import", errors.catchAsync(async (req, res) => {
     const dryRun = req.query.dryRun === "true" || req.body?.dryRun === true;
