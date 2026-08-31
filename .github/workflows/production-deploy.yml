@@ -59,13 +59,60 @@ jobs:
           http_code="$(curl --silent --show-error \
             --output "$response_file" \
             --write-out '%{http_code}' \
-            --max-time 7200 \
+            --max-time 30 \
             --request POST "$DEPLOY_AGENT_URL/v1/deploy" \
             --header 'Content-Type: application/json' \
             --header "X-NP-Deploy-Timestamp: $timestamp" \
             --header "X-NP-Deploy-Nonce: $nonce" \
             --header "X-NP-Deploy-Signature: sha256=$signature" \
             --data-binary "$body")"
-          cat "$response_file"
-          test "$http_code" -ge 200
-          test "$http_code" -lt 300
+          if [ "$http_code" -eq 200 ] && [ "$(jq -r '.ok // false' "$response_file")" = "true" ]; then
+            cat "$response_file"
+            exit 0
+          fi
+          if [ "$http_code" -ne 202 ]; then
+            cat "$response_file"
+            exit 1
+          fi
+          job_id="$(jq -er '.jobId' "$response_file")"
+          status_path="$(jq -er '.statusPath' "$response_file")"
+          status_token="$(jq -er '.statusToken' "$response_file")"
+          echo "Deployment accepted: $job_id"
+
+          for attempt in $(seq 1 1440); do
+            if status_code="$(curl --silent --show-error \
+              --output "$response_file" \
+              --write-out '%{http_code}' \
+              --max-time 30 \
+              --request GET "$DEPLOY_AGENT_URL$status_path" \
+              --header "X-NP-Deploy-Status-Token: $status_token")"; then
+              if [ "$status_code" -ge 200 ] && [ "$status_code" -lt 300 ]; then
+                state="$(jq -r '.state // empty' "$response_file")"
+                case "$state" in
+                  succeeded)
+                    cat "$response_file"
+                    exit 0
+                    ;;
+                  failed)
+                    cat "$response_file"
+                    exit 1
+                    ;;
+                  queued|running)
+                    echo "Deployment $job_id: $state"
+                    ;;
+                  *)
+                    cat "$response_file"
+                    exit 1
+                    ;;
+                esac
+              else
+                echo "Status request returned HTTP $status_code; retrying"
+              fi
+            else
+              echo "Status request failed; retrying"
+            fi
+            sleep 5
+          done
+
+          echo "Deployment status timed out after 2 hours"
+          exit 1

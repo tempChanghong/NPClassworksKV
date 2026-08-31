@@ -59,7 +59,7 @@ deploy-np.example.com {
 
 公网只开放网关的 `80/443`，不要开放 `19090`。部署 URL 必须使用有效 HTTPS，不能把密钥发送到明文 HTTP 地址。
 
-如果代理放在 Cloudflare 等会限制长请求的平台之后，应关闭该部署子域名的代理，或确认允许最长约30分钟的响应；DNS 仍可指向现有网关。升级在 HTTP 连接意外断开后仍会继续，但 GitHub Actions 会显示失败，需要通过服务器日志确认结果。
+部署请求会在进入队列后立即返回任务 ID，GitHub Actions 随后使用一次性状态令牌短轮询结果。因此 OpenResty、Caddy 或 Cloudflare 不需要维持数分钟的长连接，也不需要把 `proxy_read_timeout` 调到数小时。部署子域名仍应允许普通 HTTPS 请求，并把 `/v1/deploy/jobs/*` 转发给同一个代理。
 
 ## 3. 配置两个 GitHub 仓库
 
@@ -83,7 +83,7 @@ cd /opt/npclassworks/NPClassworksKV
 bash deploy/ci-deploy.sh
 ```
 
-然后在 GitHub Actions 手动运行 **Deploy production server**。Action 会先执行测试，再发送升级请求并等待结果。成功后，前端或后端的 `main` 有新推送都会触发一次完整升级。
+然后在 GitHub Actions 手动运行 **Deploy production server**。Action 会先执行测试，再提交升级任务并每5秒查询一次状态。成功后，前端或后端的 `main` 有新推送都会触发一次完整升级。
 
 需要验证整条自动部署链路而又不想改变程序功能时，可以只修改本页说明并推送一次；仍应完整观察测试、签名请求、服务器升级和健康检查结果。
 
@@ -93,6 +93,7 @@ bash deploy/ci-deploy.sh
 - `DEPLOY_TIMESTAMP_INVALID`：服务器时间不准，检查 NTP；
 - `DEPLOY_QUEUE_FULL`：短时间内推送过多，等待当前任务完成；
 - `DEPLOY_FAILED`：查看响应末尾日志和 systemd journal；
-- HTTP 502/504：检查共享网关超时设置以及部署代理是否运行。
+- 提交任务时 HTTP 502/504：检查共享网关是否把 `/v1/deploy` 正确转发到代理；正常提交会在数秒内返回 `202 DEPLOY_ACCEPTED`；
+- 状态查询反复失败：检查网关是否同时转发 `/v1/deploy/jobs/*`，以及部署代理进程是否在任务期间被重启。
 
 生产仓库存在未提交修改时，原升级脚本仍会安全退出，不会覆盖这些文件。

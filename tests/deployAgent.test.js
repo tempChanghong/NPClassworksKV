@@ -52,6 +52,23 @@ async function signedRequest(baseUrl, input, nonce) {
     });
 }
 
+async function deploymentStatus(baseUrl, accepted, token = accepted.statusToken) {
+    return fetch(`${baseUrl}${accepted.statusPath}`, {
+        headers: {"X-NP-Deploy-Status-Token": token},
+    });
+}
+
+async function waitForDeployment(baseUrl, accepted) {
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+        const response = await deploymentStatus(baseUrl, accepted);
+        assert.equal(response.status, 200);
+        const status = await response.json();
+        if (["succeeded", "failed"].includes(status.state)) return status;
+        await new Promise((resolve) => setTimeout(resolve, 5));
+    }
+    throw new Error("部署测试任务未完成");
+}
+
 test("HTTP 代理只执行固定 upgrade 动作，不接受命令和目录", async (t) => {
     const calls = [];
     const server = createDeployAgent({
@@ -79,8 +96,38 @@ test("HTTP 代理只执行固定 upgrade 动作，不接受命令和目录", asy
         commit: "abc123",
         runId: "42",
     }, "accepted_upgrade_123456");
-    assert.equal(accepted.status, 200);
-    assert.equal((await accepted.json()).code, "DEPLOY_COMPLETED");
+    assert.equal(accepted.status, 202);
+    const acceptedJob = await accepted.json();
+    assert.equal(acceptedJob.code, "DEPLOY_ACCEPTED");
+    assert.match(acceptedJob.jobId, /^[0-9a-f-]{36}$/);
+    assert.equal((await deploymentStatus(baseUrl, acceptedJob, "wrong-token")).status, 404);
+    const completed = await waitForDeployment(baseUrl, acceptedJob);
+    assert.equal(completed.code, "DEPLOY_COMPLETED");
+    assert.equal(completed.state, "succeeded");
     assert.equal(calls.length, 1);
 });
 
+test("部署请求立即返回并通过状态接口报告最终失败", async (t) => {
+    let finishDeployment;
+    const server = createDeployAgent({
+        secret,
+        runDeployment: (request, jobId) => new Promise((resolve) => {
+            finishDeployment = () => resolve({ok: false, code: "DEPLOY_FAILED", jobId, exitCode: 1});
+        }),
+    });
+    await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+    t.after(() => new Promise((resolve) => server.close(resolve)));
+    const baseUrl = `http://127.0.0.1:${server.address().port}`;
+
+    const response = await signedRequest(baseUrl, {action: "upgrade"}, "async_upgrade_1234567890");
+    assert.equal(response.status, 202);
+    const accepted = await response.json();
+    const runningResponse = await deploymentStatus(baseUrl, accepted);
+    const running = await runningResponse.json();
+    assert.equal(running.state, "running");
+
+    finishDeployment();
+    const failed = await waitForDeployment(baseUrl, accepted);
+    assert.equal(failed.state, "failed");
+    assert.equal(failed.code, "DEPLOY_FAILED");
+});
