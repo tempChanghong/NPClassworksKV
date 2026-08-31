@@ -85,6 +85,8 @@ bash deploy/ci-deploy.sh
 
 然后在 GitHub Actions 手动运行 **Deploy production server**。Action 会先执行测试，再发送升级请求并等待结果。成功后，前端或后端的 `main` 有新推送都会触发一次完整升级。
 
+需要验证整条自动部署链路而又不想改变程序功能时，可以只修改本页说明并推送一次；仍应完整观察测试、签名请求、服务器升级和健康检查结果。
+
 如果返回：
 
 - `DEPLOY_SIGNATURE_INVALID`：两边密钥不一致，或者请求被修改；
