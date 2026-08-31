@@ -13,6 +13,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         localAccountService,
         workspaceService,
         schoolMembershipService,
+        staffResponsibilityService,
         publicationService,
         classroomScreenService,
         classroomToolsService,
@@ -24,6 +25,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         import("../services/localAccountService.js"),
         import("../services/workspaceMembershipService.js"),
         import("../services/schoolMembershipService.js"),
+        import("../services/staffResponsibilityService.js"),
         import("../services/publicationService.js"),
         import("../services/classroomScreenService.js"),
         import("../services/classroomToolsService.js"),
@@ -91,6 +93,19 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.equal(adminTeachingWorkspaces.length, 20);
         assert.ok(adminTeachingWorkspaces.every((item) =>
             item.role === "OWNER" && item.schoolManagerDerived === true));
+        const responsibilityOverview = await staffResponsibilityService.getStaffResponsibilityOverview({
+            managerAccountId: ownerLogin.account.id,
+            schoolId: imported.result.school.id,
+            termId: imported.result.term.id,
+        });
+        assert.equal(
+            responsibilityOverview.people.find((item) => item.account.id === ownerLogin.account.id)?.schoolRole,
+            "OWNER",
+        );
+        assert.equal(
+            responsibilityOverview.people.find((item) => item.account.id === secondAdmin.account.id)?.schoolRole,
+            "ADMIN",
+        );
         assert.equal((await localAccountService.listSchoolLocalAccounts({
             managerAccountId: ownerLogin.account.id,
             schoolId: imported.result.school.id,

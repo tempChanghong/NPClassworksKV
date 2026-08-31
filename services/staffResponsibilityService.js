@@ -53,7 +53,7 @@ export async function getStaffResponsibilityOverview({managerAccountId, schoolId
     ]);
     if (!school || !term) throw staffError("学校或学期不存在", "STAFF_SCOPE_NOT_FOUND", 404);
 
-    const [teacherAccounts, grades, administrativeClasses, teachingAssignments] = await Promise.all([
+    const [teacherAccounts, grades, administrativeClasses, teachingAssignments, schoolMemberships] = await Promise.all([
         prisma.account.findMany({
             where: {
                 OR: [
@@ -96,7 +96,12 @@ export async function getStaffResponsibilityOverview({managerAccountId, schoolId
             },
             orderBy: [{subject: {sortOrder: "asc"}}, {workspace: {code: "asc"}}],
         }),
+        prisma.schoolMember.findMany({
+            where: {schoolId},
+            select: {accountId: true, role: true},
+        }),
     ]);
+    const schoolRoleByAccountId = new Map(schoolMemberships.map((item) => [item.accountId, item.role]));
     const gradesWithAssignments = grades.map((grade) => ({
         ...grade,
         teachingAssignments: teachingAssignments.filter((item) => item.workspace.gradeId === grade.id),
@@ -108,6 +113,7 @@ export async function getStaffResponsibilityOverview({managerAccountId, schoolId
     });
     const people = teacherAccounts.map((account) => ({
         account,
+        schoolRole: schoolRoleByAccountId.get(account.id) || null,
         gradeLeaderships: grades.flatMap((grade) => grade.leaderships
             .filter((item) => item.accountId === account.id)
             .map((item) => ({...item, grade: {id: grade.id, code: grade.code, name: grade.name}}))),
