@@ -77,6 +77,20 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             role: "ADMIN",
         });
         assert.equal(secondAdmin.role, "ADMIN");
+        const [ownerTeachingWorkspaces, adminTeachingWorkspaces] = await Promise.all([
+            workspaceService.listMyWorkspaces({
+                accountId: ownerLogin.account.id,
+                termId: imported.result.term.id,
+            }),
+            workspaceService.listMyWorkspaces({
+                accountId: secondAdmin.account.id,
+                termId: imported.result.term.id,
+            }),
+        ]);
+        assert.equal(ownerTeachingWorkspaces.length, 20);
+        assert.equal(adminTeachingWorkspaces.length, 20);
+        assert.ok(adminTeachingWorkspaces.every((item) =>
+            item.role === "OWNER" && item.schoolManagerDerived === true));
         assert.equal((await localAccountService.listSchoolLocalAccounts({
             managerAccountId: ownerLogin.account.id,
             schoolId: imported.result.school.id,

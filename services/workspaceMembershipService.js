@@ -96,6 +96,17 @@ export async function listMyWorkspaces({accountId, termId}) {
     ]);
 
     const managedSchoolIds = new Set(schoolManagerMemberships.map((membership) => membership.schoolId));
+    const managedWorkspaces = managedSchoolIds.size ? await prisma.workspace.findMany({
+        where: {
+            isActive: true,
+            term: {
+                schoolId: {in: [...managedSchoolIds]},
+                ...(termId ? {id: termId} : {status: "ACTIVE"}),
+            },
+        },
+        include: myWorkspaceInclude,
+        orderBy: {name: "asc"},
+    }) : [];
     const permittedMemberships = memberships.filter((membership) => {
         const school = membership.workspace.term.school;
         if (managedSchoolIds.has(school.id)) return true;
@@ -105,15 +116,30 @@ export async function listMyWorkspaces({accountId, termId}) {
 
     const writableSet = new Set(responsibilityAccess.writableIds);
     const readableSet = new Set(responsibilityAccess.readableIds);
-    const membershipResults = permittedMemberships.map((membership) => ({
-        role: writableSet.has(membership.workspace.id) && membership.role === "VIEWER"
-            ? "TEACHER"
-            : membership.role,
-        joinedAt: membership.createdAt,
-        ...(readableSet.has(membership.workspace.id) ? {responsibilityDerived: true} : {}),
-        workspace: membership.workspace,
-    }));
+    const membershipResults = permittedMemberships.map((membership) => {
+        const schoolManagerDerived = managedSchoolIds.has(membership.workspace.term.school.id);
+        return {
+            role: schoolManagerDerived
+                ? "OWNER"
+                : (writableSet.has(membership.workspace.id) && membership.role === "VIEWER"
+                    ? "TEACHER"
+                    : membership.role),
+            joinedAt: membership.createdAt,
+            ...(schoolManagerDerived ? {schoolManagerDerived: true} : {}),
+            ...(readableSet.has(membership.workspace.id) ? {responsibilityDerived: true} : {}),
+            workspace: membership.workspace,
+        };
+    });
     const existingIds = new Set(membershipResults.map((item) => item.workspace.id));
+    const managedResults = managedWorkspaces
+        .filter((workspace) => !existingIds.has(workspace.id))
+        .map((workspace) => ({
+            role: "OWNER",
+            joinedAt: null,
+            schoolManagerDerived: true,
+            workspace,
+        }));
+    for (const item of managedResults) existingIds.add(item.workspace.id);
     const responsibilityIds = responsibilityAccess.readableIds.filter((id) => !existingIds.has(id));
     const responsibilityWorkspaces = responsibilityIds.length ? await prisma.workspace.findMany({
         where: {id: {in: responsibilityIds}},
@@ -122,11 +148,12 @@ export async function listMyWorkspaces({accountId, termId}) {
     }) : [];
     return [
         ...membershipResults,
+        ...managedResults,
         ...responsibilityWorkspaces.map((workspace) => ({
             role: writableSet.has(workspace.id) ? "TEACHER" : "VIEWER",
             joinedAt: null,
             responsibilityDerived: true,
             workspace,
         })),
-    ];
+    ].sort((left, right) => left.workspace.name.localeCompare(right.workspace.name, "zh-CN"));
 }
