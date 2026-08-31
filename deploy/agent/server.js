@@ -10,8 +10,6 @@ const MAX_BODY_BYTES = 16 * 1024;
 const MAX_CLOCK_SKEW_SECONDS = 5 * 60;
 const NONCE_TTL_MS = 10 * 60 * 1000;
 const MAX_CAPTURE_BYTES = 64 * 1024;
-const JOB_HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
-const MAX_JOB_HISTORY = 100;
 const ALLOWED_BODY_KEYS = new Set(["action", "repository", "commit", "runId"]);
 
 function json(res, statusCode, payload) {
@@ -28,14 +26,6 @@ function json(res, statusCode, payload) {
 function safeEqualHex(left, right) {
     if (!/^[a-f0-9]{64}$/i.test(left || "") || !/^[a-f0-9]{64}$/i.test(right || "")) return false;
     return crypto.timingSafeEqual(Buffer.from(left, "hex"), Buffer.from(right, "hex"));
-}
-
-function safeEqualToken(left, right) {
-    const leftBuffer = Buffer.from(String(left || ""));
-    const rightBuffer = Buffer.from(String(right || ""));
-    return leftBuffer.length > 0 &&
-        leftBuffer.length === rightBuffer.length &&
-        crypto.timingSafeEqual(leftBuffer, rightBuffer);
 }
 
 export function signDeployRequest({secret, timestamp, nonce, body}) {
@@ -162,77 +152,27 @@ function createDeploymentRunner({repositoryDirectory, scriptPath, timeoutMs, log
 export function createDeployAgent({secret, runDeployment, maxQueue = 3, now = () => Date.now()}) {
     const authenticate = createRequestAuthenticator({secret, now});
     const queue = [];
-    const jobs = new Map();
     let activeJob = null;
-
-    function cleanupJobs() {
-        const cutoff = now() - JOB_HISTORY_TTL_MS;
-        for (const [jobId, job] of jobs) {
-            if (job.finishedAt && new Date(job.finishedAt).getTime() < cutoff) jobs.delete(jobId);
-        }
-        if (jobs.size <= MAX_JOB_HISTORY) return;
-        const completed = [...jobs.values()]
-            .filter((job) => job.finishedAt)
-            .sort((left, right) => new Date(left.finishedAt) - new Date(right.finishedAt));
-        for (const job of completed.slice(0, jobs.size - MAX_JOB_HISTORY)) jobs.delete(job.jobId);
-    }
-
-    function jobStatus(job) {
-        if (job.result) {
-            return {
-                ...job.result,
-                state: job.result.ok ? "succeeded" : "failed",
-                createdAt: job.createdAt,
-            };
-        }
-        return {
-            ok: true,
-            code: job.state === "running" ? "DEPLOY_RUNNING" : "DEPLOY_QUEUED",
-            jobId: job.jobId,
-            state: job.state,
-            createdAt: job.createdAt,
-            startedAt: job.startedAt || null,
-            queuePosition: job.state === "queued"
-                ? Math.max(1, queue.findIndex((item) => item.jobId === job.jobId) + 1)
-                : 0,
-        };
-    }
 
     async function drainQueue() {
         if (activeJob || queue.length === 0) return;
         activeJob = queue.shift();
-        activeJob.state = "running";
-        activeJob.startedAt = new Date(now()).toISOString();
         let result;
         try {
             result = await runDeployment(activeJob.request, activeJob.jobId);
         } catch (error) {
             result = {ok: false, code: "DEPLOY_AGENT_INTERNAL_ERROR", jobId: activeJob.jobId, error: error.message};
         }
-        activeJob.result = result;
-        activeJob.finishedAt = result.finishedAt || new Date(now()).toISOString();
-        for (const response of activeJob.responses) {
-            if (!response.destroyed) json(response, result.ok ? 200 : 500, result);
+        for (const res of activeJob.responses) {
+            if (!res.destroyed) json(res, result.ok ? 200 : 500, result);
         }
         activeJob = null;
-        cleanupJobs();
         void drainQueue();
     }
 
     const server = http.createServer((req, res) => {
         if (req.method === "GET" && req.url === "/healthz") {
             return json(res, 200, {ok: true, busy: Boolean(activeJob), queued: queue.length});
-        }
-        const statusMatch = req.method === "GET"
-            ? req.url?.match(/^\/v1\/deploy\/jobs\/([0-9a-f-]{36})$/i)
-            : null;
-        if (statusMatch) {
-            cleanupJobs();
-            const job = jobs.get(statusMatch[1]);
-            if (!job || !safeEqualToken(req.headers["x-np-deploy-status-token"], job.statusToken)) {
-                return json(res, 404, {ok: false, code: "DEPLOY_JOB_NOT_FOUND"});
-            }
-            return json(res, 200, jobStatus(job));
         }
         if (req.method !== "POST" || req.url !== "/v1/deploy") {
             req.resume();
@@ -265,33 +205,8 @@ export function createDeployAgent({secret, runDeployment, maxQueue = 3, now = ()
             if (queue.length >= maxQueue) {
                 return json(res, 429, {ok: false, code: "DEPLOY_QUEUE_FULL"});
             }
-            const job = {
-                jobId: crypto.randomUUID(),
-                statusToken: crypto.randomBytes(32).toString("hex"),
-                request,
-                state: "queued",
-                createdAt: new Date(now()).toISOString(),
-                startedAt: null,
-                finishedAt: null,
-                result: null,
-                responses: [],
-            };
-            jobs.set(job.jobId, job);
+            const job = {jobId: crypto.randomUUID(), request, responses: [res]};
             queue.push(job);
-            if (req.headers["x-np-deploy-async"] === "1") {
-                json(res, 202, {
-                    ok: true,
-                    code: "DEPLOY_ACCEPTED",
-                    jobId: job.jobId,
-                    state: job.state,
-                    statusPath: `/v1/deploy/jobs/${job.jobId}`,
-                    statusToken: job.statusToken,
-                });
-            } else {
-                // 兼容尚未升级的工作流：旧客户端没有轮询能力，只能等待
-                // 最终 200/500。显式选择异步协议的新客户端不会走到这里。
-                job.responses.push(res);
-            }
             void drainQueue();
         });
     });

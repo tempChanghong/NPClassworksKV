@@ -164,8 +164,6 @@ test("push deployment fetches both repositories and uses the signed deployment a
     assert.match(workflow, /push:[\s\S]*branches: \["main"\]/);
     assert.match(workflow, /DEPLOY_AGENT_URL/);
     assert.match(workflow, /X-NP-Deploy-Signature/);
-    assert.match(workflow, /X-NP-Deploy-Async:\s*1/);
-    assert.match(workflow, /X-NP-Deploy-Status-Token/);
     assert.match(workflow, /createHmac\("sha256"/);
     assert.doesNotMatch(workflow, /DEPLOY_SSH_KEY|StrictHostKeyChecking|\bssh\s/);
     assert.match(workflow, /needs: verify/);
