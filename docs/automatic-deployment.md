@@ -59,7 +59,7 @@ deploy-np.example.com {
 
 公网只开放网关的 `80/443`，不要开放 `19090`。部署 URL 必须使用有效 HTTPS，不能把密钥发送到明文 HTTP 地址。
 
-部署请求会在进入队列后立即返回任务 ID，GitHub Actions 随后使用一次性状态令牌短轮询结果。因此 OpenResty、Caddy 或 Cloudflare 不需要维持数分钟的长连接，也不需要把 `proxy_read_timeout` 调到数小时。部署子域名仍应允许普通 HTTPS 请求，并把 `/v1/deploy/jobs/*` 转发给同一个代理。
+新版工作流会通过 `X-NP-Deploy-Async: 1` 显式选择异步协议：部署请求进入队列后立即返回任务 ID，GitHub Actions 随后使用一次性状态令牌短轮询结果。因此 OpenResty、Caddy 或 Cloudflare 不需要维持数分钟的长连接，也不需要把 `proxy_read_timeout` 调到数小时。部署子域名仍应允许普通 HTTPS 请求，并把 `/v1/deploy/jobs/*` 转发给同一个代理。未携带该标记的旧工作流仍会等待最终 `200/500`，便于前后端和服务器分批升级。
 
 ## 3. 配置两个 GitHub 仓库
 

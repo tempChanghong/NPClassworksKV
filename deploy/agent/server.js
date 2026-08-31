@@ -211,6 +211,9 @@ export function createDeployAgent({secret, runDeployment, maxQueue = 3, now = ()
         }
         activeJob.result = result;
         activeJob.finishedAt = result.finishedAt || new Date(now()).toISOString();
+        for (const response of activeJob.responses) {
+            if (!response.destroyed) json(response, result.ok ? 200 : 500, result);
+        }
         activeJob = null;
         cleanupJobs();
         void drainQueue();
@@ -271,17 +274,24 @@ export function createDeployAgent({secret, runDeployment, maxQueue = 3, now = ()
                 startedAt: null,
                 finishedAt: null,
                 result: null,
+                responses: [],
             };
             jobs.set(job.jobId, job);
             queue.push(job);
-            json(res, 202, {
-                ok: true,
-                code: "DEPLOY_ACCEPTED",
-                jobId: job.jobId,
-                state: job.state,
-                statusPath: `/v1/deploy/jobs/${job.jobId}`,
-                statusToken: job.statusToken,
-            });
+            if (req.headers["x-np-deploy-async"] === "1") {
+                json(res, 202, {
+                    ok: true,
+                    code: "DEPLOY_ACCEPTED",
+                    jobId: job.jobId,
+                    state: job.state,
+                    statusPath: `/v1/deploy/jobs/${job.jobId}`,
+                    statusToken: job.statusToken,
+                });
+            } else {
+                // 兼容尚未升级的工作流：旧客户端没有轮询能力，只能等待
+                // 最终 200/500。显式选择异步协议的新客户端不会走到这里。
+                job.responses.push(res);
+            }
             void drainQueue();
         });
     });

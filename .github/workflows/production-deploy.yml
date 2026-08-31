@@ -65,6 +65,7 @@ jobs:
             --header "X-NP-Deploy-Timestamp: $timestamp" \
             --header "X-NP-Deploy-Nonce: $nonce" \
             --header "X-NP-Deploy-Signature: sha256=$signature" \
+            --header 'X-NP-Deploy-Async: 1' \
             --data-binary "$body")"
           if [ "$http_code" -eq 200 ] && [ "$(jq -r '.ok // false' "$response_file")" = "true" ]; then
             cat "$response_file"
