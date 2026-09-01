@@ -4,6 +4,24 @@ export const ACTION_REQUIRED_REASONS = Object.freeze({
     OTHER_UNCERTIFIED: "OTHER_UNCERTIFIED",
 });
 
+export function isPublicationWithinActionScope(publication, {
+    fullWorkspaceIds = [],
+    teachingAssignments = [],
+} = {}) {
+    const targetWorkspaceIds = (publication.targets || [])
+        .map((target) => target.workspaceId)
+        .filter(Boolean);
+    if (!targetWorkspaceIds.length) return false;
+    const fullyManaged = new Set(fullWorkspaceIds);
+    const assignedForSubject = new Set(
+        teachingAssignments
+            .filter((assignment) => assignment.subjectId === publication.subjectId)
+            .map((assignment) => assignment.workspaceId),
+    );
+    return targetWorkspaceIds.every((workspaceId) =>
+        fullyManaged.has(workspaceId) || assignedForSubject.has(workspaceId));
+}
+
 const DIFF_FIELDS = Object.freeze([
     ["title", "标题"],
     ["content", "作业内容"],

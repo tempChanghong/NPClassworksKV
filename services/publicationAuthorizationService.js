@@ -1,6 +1,7 @@
 import {prisma} from "../utils/prisma.js";
 import {authorizationError} from "./academicAuthorizationService.js";
 import {getResponsibilityAccessForWorkspaces} from "./staffAuthorizationService.js";
+import {isPublicationWithinActionScope} from "../domain/publicationActionCenter.js";
 
 const WORKSPACE_WRITE_ROLES = new Set(["OWNER", "TEACHER", "ASSISTANT"]);
 const SCHOOL_WRITE_ROLES = new Set(["OWNER", "ADMIN"]);
@@ -117,12 +118,36 @@ export async function assertCanManagePublication(accountId, publication, client 
 
 export async function assertCanCertifyPublication(accountId, publication, client = prisma) {
     const workspaces = publication.targets.map((target) => target.workspace);
-    const writableIds = await getWritableWorkspaceIds(accountId, workspaces, client);
-    if (writableIds.length === workspaces.length) return;
+    const scope = await getPublicationCertificationScope(accountId, workspaces, client);
+    if (isPublicationWithinActionScope(publication, scope)) return;
     throw authorizationError(
-        "只能确认自己负责教学空间中的内容",
+        "只能确认自己任教学科或管理职责范围内的内容",
         "PUBLICATION_CERTIFY_FORBIDDEN",
     );
+}
+
+export async function getPublicationCertificationScope(accountId, workspaces, client = prisma) {
+    if (!workspaces.length) return {fullWorkspaceIds: [], teachingAssignments: []};
+    const access = await loadAccessMaps(accountId, workspaces, client);
+    const workspaceIds = workspaces.map((workspace) => workspace.id);
+    const teachingAssignments = await client.teachingAssignment.findMany({
+        where: {accountId, workspaceId: {in: workspaceIds}, isActive: true},
+        select: {workspaceId: true, subjectId: true},
+    });
+    const fullWorkspaceIds = workspaces
+        .filter((workspace) => {
+            const schoolId = workspace.term.schoolId;
+            return SCHOOL_WRITE_ROLES.has(access.schoolRoles.get(schoolId)) || (
+                access.permittedSchoolIds.has(schoolId) &&
+                access.responsibilityAccess.writableIds.has(workspace.id)
+            );
+        })
+        .map((workspace) => workspace.id);
+    const permittedTeachingAssignments = teachingAssignments.filter((assignment) => {
+        const workspace = workspaces.find((item) => item.id === assignment.workspaceId);
+        return workspace && access.permittedSchoolIds.has(workspace.term.schoolId);
+    });
+    return {fullWorkspaceIds, teachingAssignments: permittedTeachingAssignments};
 }
 
 export async function assertCanReadPublication(accountId, publication, client = prisma) {

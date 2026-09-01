@@ -18,6 +18,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         classroomScreenService,
         classroomToolsService,
         revisionCleanupService,
+        teachingRelationshipService,
     ] = await Promise.all([
         import("../utils/prisma.js"),
         import("../services/organizationAdminService.js"),
@@ -30,6 +31,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         import("../services/classroomScreenService.js"),
         import("../services/classroomToolsService.js"),
         import("../services/publicationRevisionCleanupService.js"),
+        import("../services/teachingRelationshipService.js"),
     ]);
     const organization = JSON.parse(readFileSync(
         new URL("../config/examples/newfires-high-school-organization.example.json", import.meta.url),
@@ -179,6 +181,27 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 },
             },
         });
+        const chinese = await prisma.subject.findUnique({
+            where: {
+                schoolId_code: {
+                    schoolId: imported.result.school.id,
+                    code: "CHN",
+                },
+            },
+        });
+        const physicsA1Workspace = await prisma.workspace.findUnique({
+            where: {termId_code: {termId: imported.result.term.id, code: "G2-PHY-A1"}},
+        });
+        await teachingRelationshipService.upsertTeachingAssignmentBatch({
+            managerAccountId: ownerLogin.account.id,
+            schoolId: imported.result.school.id,
+            input: {
+                accountId: teacherLogin.account.id,
+                subjectId: physics.id,
+                workspaceIds: [classOneWorkspace.id, physicsA1Workspace.id],
+                position: "PRIMARY",
+            },
+        });
         const emptyFeed = await publicationService.listPublishedFeed({
             workspaceIds: [classOneWorkspace.id],
         });
@@ -218,11 +241,45 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             publicationId: teacherPublication.id,
         })).length, 1);
 
+        const classOneScreen = await classroomScreenService.bindClassroomScreen({
+            managerAccountId: ownerLogin.account.id,
+            schoolId: imported.result.school.id,
+            administrativeClassId: classOneWorkspace.id,
+            deviceFingerprint: "phase6-class-one-screen",
+            name: "高二1班测试一体机",
+        });
+        const authenticatedClassOneScreen = await classroomScreenService.authenticateClassroomScreen(
+            classOneScreen.token,
+        );
+        const chineseScreenPublication = await publicationService.createScreenPublication({
+            screenBinding: authenticatedClassOneScreen,
+            input: {
+                subjectId: chinese.id,
+                content: "语文教师以外的任课教师不应看到此项",
+                boardDate: new Date().toISOString().slice(0, 10),
+                publishAt: new Date(Date.now() - 1000).toISOString(),
+                targetWorkspaceIds: [classOneWorkspace.id],
+            },
+        });
+        assert.equal((await publicationService.listActionRequiredPublications({
+            accountId: teacherLogin.account.id,
+        })).summary.total, 0);
+        await assert.rejects(
+            publicationService.certifyPublication({
+                accountId: teacherLogin.account.id,
+                publicationId: chineseScreenPublication.id,
+                expectedRevision: chineseScreenPublication.revision,
+            }),
+            (error) => error.code === "PUBLICATION_CERTIFY_FORBIDDEN",
+        );
+        await publicationService.certifyPublication({
+            accountId: ownerLogin.account.id,
+            publicationId: chineseScreenPublication.id,
+            expectedRevision: chineseScreenPublication.revision,
+        });
+
         const classThreeWorkspace = await prisma.workspace.findUnique({
             where: {termId_code: {termId: imported.result.term.id, code: "G2-C3"}},
-        });
-        const physicsA1Workspace = await prisma.workspace.findUnique({
-            where: {termId_code: {termId: imported.result.term.id, code: "G2-PHY-A1"}},
         });
         const classFourWorkspace = await prisma.workspace.findUnique({
             where: {termId_code: {termId: imported.result.term.id, code: "G2-C4"}},

@@ -4,6 +4,7 @@ import {
     ACTION_REQUIRED_REASONS,
     classifyActionRequiredPublication,
     compareActionRequiredItems,
+    isPublicationWithinActionScope,
     summarizePublicationChanges,
 } from "../domain/publicationActionCenter.js";
 
@@ -74,4 +75,34 @@ test("changed-after-certification sorts before ordinary screen entries", () => {
     const created = {reason: ACTION_REQUIRED_REASONS.CREATED_BY_SCREEN, overdue: true, dueSoon: false,
         publication: {priority: "URGENT", updatedAt: "2026-08-18T01:00:00.000Z"}};
     assert.ok(compareActionRequiredItems(changed, created) < 0);
+});
+
+test("an ordinary subject teacher only handles the assigned subject in a shared administrative class", () => {
+    const scope = {
+        fullWorkspaceIds: [],
+        teachingAssignments: [{workspaceId: "class-1", subjectId: "chinese"}],
+    };
+    assert.equal(isPublicationWithinActionScope(publication({subjectId: "chinese"}), scope), true);
+    assert.equal(isPublicationWithinActionScope(publication({subjectId: "physics"}), scope), false);
+});
+
+test("class and grade responsibilities retain full-subject action scope", () => {
+    const scope = {
+        fullWorkspaceIds: ["class-1"],
+        teachingAssignments: [],
+    };
+    assert.equal(isPublicationWithinActionScope(publication({subjectId: "physics"}), scope), true);
+    assert.equal(isPublicationWithinActionScope(publication({subjectId: "chinese"}), scope), true);
+});
+
+test("multi-target actions require responsibility for every target", () => {
+    const scope = {
+        fullWorkspaceIds: [],
+        teachingAssignments: [{workspaceId: "class-1", subjectId: "chinese"}],
+    };
+    const item = publication({
+        subjectId: "chinese",
+        targets: [{workspaceId: "class-1"}, {workspaceId: "class-2"}],
+    });
+    assert.equal(isPublicationWithinActionScope(item, scope), false);
 });

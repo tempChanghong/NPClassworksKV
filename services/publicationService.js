@@ -13,6 +13,7 @@ import {
     assertCanReadPublication,
     assertCanReadWorkspace,
     assertCanWriteWorkspaces,
+    getPublicationCertificationScope,
     getWritableWorkspaceIds,
     loadPublicationWorkspaces,
     publicationWorkspaceInclude,
@@ -28,6 +29,7 @@ import {
     ACTION_REQUIRED_REASONS,
     classifyActionRequiredPublication,
     compareActionRequiredItems,
+    isPublicationWithinActionScope,
 } from "../domain/publicationActionCenter.js";
 import {findDuplicateAssignmentCandidates} from "../domain/publicationDuplicate.js";
 
@@ -350,11 +352,11 @@ export async function listPublications({accountId, workspaceId, status, type, li
     return {items, total, limit: safeLimit, skip: safeSkip};
 }
 
-async function getActionCenterWorkspaceIds(accountId) {
-    const [workspaceMemberships, schoolMemberships, responsibilityAccess] = await Promise.all([
-        prisma.workspaceMember.findMany({
-            where: {accountId, role: {in: ["OWNER", "TEACHER", "ASSISTANT"]}},
-            select: {workspaceId: true},
+async function getActionCenterScope(accountId) {
+    const [teachingAssignments, schoolMemberships, responsibilityAccess] = await Promise.all([
+        prisma.teachingAssignment.findMany({
+            where: {accountId, isActive: true, workspace: {isActive: true}},
+            select: {workspaceId: true, subjectId: true},
         }),
         prisma.schoolMember.findMany({
             where: {accountId, role: {in: ["OWNER", "ADMIN"]}},
@@ -370,13 +372,14 @@ async function getActionCenterWorkspaceIds(accountId) {
         })
         : [];
     const candidateIds = [...new Set([
-        ...workspaceMemberships.map((membership) => membership.workspaceId),
+        ...teachingAssignments.map((assignment) => assignment.workspaceId),
         ...schoolWorkspaces.map((workspace) => workspace.id),
         ...responsibilityAccess.writableIds,
     ])];
-    if (!candidateIds.length) return [];
+    if (!candidateIds.length) return {candidateWorkspaceIds: [], fullWorkspaceIds: [], teachingAssignments: []};
     const workspaces = await loadPublicationWorkspaces(candidateIds);
-    return getWritableWorkspaceIds(accountId, workspaces);
+    const certificationScope = await getPublicationCertificationScope(accountId, workspaces);
+    return {candidateWorkspaceIds: candidateIds, ...certificationScope};
 }
 
 export async function listActionRequiredPublications({
@@ -391,8 +394,8 @@ export async function listActionRequiredPublications({
 }) {
     const safeLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
     const safeSkip = Math.max(Number(skip) || 0, 0);
-    const writableWorkspaceIds = await getActionCenterWorkspaceIds(accountId);
-    if (!writableWorkspaceIds.length) {
+    const actionScope = await getActionCenterScope(accountId);
+    if (!actionScope.candidateWorkspaceIds.length) {
         return {
             items: [],
             total: 0,
@@ -407,7 +410,7 @@ export async function listActionRequiredPublications({
     if (workspaceId) targetSome.workspaceId = workspaceId;
     if (schoolId) targetSome.workspace = {term: {schoolId}};
     const targetFilter = {
-        every: {workspaceId: {in: writableWorkspaceIds}},
+        every: {workspaceId: {in: actionScope.candidateWorkspaceIds}},
         some: targetSome,
     };
     const publications = await prisma.publication.findMany({
@@ -435,6 +438,7 @@ export async function listActionRequiredPublications({
         },
     });
     const allItems = publications
+        .filter((publication) => isPublicationWithinActionScope(publication, actionScope))
         .map((publication) => classifyActionRequiredPublication(publication, {now}))
         .sort(compareActionRequiredItems);
     const summary = {
