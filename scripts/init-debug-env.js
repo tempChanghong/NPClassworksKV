@@ -38,7 +38,7 @@ const backendEnv = [
     `BOOTSTRAP_SETUP_KEY=${secret()}`,
     "ALLOW_OAUTH_BOOTSTRAP=false",
     "ACCESS_TOKEN_EXPIRES_IN=15m",
-    "REFRESH_TOKEN_EXPIRES_IN=30d",
+    "REFRESH_TOKEN_EXPIRES_IN=180d",
     "LOCAL_AUTH_BCRYPT_ROUNDS=10",
     "",
 ].join("\n");

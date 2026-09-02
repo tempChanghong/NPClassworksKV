@@ -56,4 +56,8 @@ if (errors.length > 0) {
     process.exit(1);
 }
 
+if ((parsed.REFRESH_TOKEN_EXPIRES_IN || "180d") !== "180d") {
+    console.warn(`提示：当前 REFRESH_TOKEN_EXPIRES_IN=${parsed.REFRESH_TOKEN_EXPIRES_IN}；NPClassworks 推荐教师会话使用 180d。`);
+}
+
 console.log(`生产环境检查通过：https://${domain}`);

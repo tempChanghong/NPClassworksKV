@@ -13,7 +13,7 @@ import {
     loginLocalAccount,
     recoverLocalOwner,
 } from "../services/localAccountService.js";
-import {localAuthLimiter} from "../middleware/rateLimiter.js";
+import {localAuthLimiter, localLoginSourceLimiter} from "../middleware/rateLimiter.js";
 import {
     getTeacherTargetPreferences,
     saveTeacherTargetPreferences,
@@ -71,7 +71,7 @@ router.post("/local/bootstrap", localAuthLimiter, async (req, res, next) => {
     }
 });
 
-router.post("/local/login", localAuthLimiter, async (req, res, next) => {
+router.post("/local/login", localAuthLimiter, localLoginSourceLimiter, async (req, res, next) => {
     try {
         const result = await loginLocalAccount({
             schoolCode: req.body?.schoolCode,

@@ -68,7 +68,7 @@
 ```bash
 # Access Token配置
 ACCESS_TOKEN_EXPIRES_IN=15m          # 访问令牌过期时间
-REFRESH_TOKEN_EXPIRES_IN=7d          # 刷新令牌过期时间
+REFRESH_TOKEN_EXPIRES_IN=180d        # 刷新令牌过期时间
 
 # 密钥配置
 JWT_SECRET=your-access-token-secret   # Access Token密钥
@@ -93,7 +93,7 @@ npx prisma migrate dev --name add_refresh_token_system
 ```bash
 # 添加新的环境变量到 .env 文件
 echo "ACCESS_TOKEN_EXPIRES_IN=15m" >> .env
-echo "REFRESH_TOKEN_EXPIRES_IN=7d" >> .env
+echo "REFRESH_TOKEN_EXPIRES_IN=180d" >> .env
 echo "REFRESH_TOKEN_SECRET=your-refresh-token-secret-change-this" >> .env
 ```
 

@@ -68,15 +68,41 @@ export const authLimiter = rateLimit({
     skipFailedRequests: false, // 失败的认证计入限制
 });
 
-// 校园网络通常由大量设备共用一个公网 IP。教师短账号登录以“账号连续失败锁定”
-// 为主，这里仅拦截明显的全局撞库，避免五次误输把整所学校锁住。
+// 校园网络通常由大量设备共用一个公网 IP。这里仅拦截明显的全局撞库，
+// 日常输错由下方“设备 + 账号”限流处理，避免少量误输影响整个学校。
 export const localAuthLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 60,
+    limit: 300,
     standardHeaders: "draft-7",
     legacyHeaders: false,
-    message: "本网络登录失败次数过多，请稍后再试",
+    message: {success: false, code: "LOCAL_AUTH_NETWORK_RATE_LIMITED", message: "本网络登录请求异常频繁，请稍后再试"},
     keyGenerator: getClientIp,
+    skipSuccessfulRequests: true,
+    skipFailedRequests: false,
+});
+
+function normalizeLocalAuthKeyPart(value, fallback) {
+    const normalized = String(value || "").trim().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 64);
+    return normalized || fallback;
+}
+
+export function getLocalLoginSourceKey(req) {
+    const deviceId = normalizeLocalAuthKeyPart(req.headers?.["x-classworks-device-id"], "");
+    const source = deviceId || `ip-${getClientIp(req)}`;
+    const schoolCode = normalizeLocalAuthKeyPart(req.body?.schoolCode, "unknown-school");
+    const username = normalizeLocalAuthKeyPart(req.body?.username, "unknown-account");
+    return `local-login:${source}:${schoolCode}:${username}`;
+}
+
+// 登录失败限制只作用于“本设备 + 本账号”。它不会把账号写成全局锁定状态，
+// 因此恶意用户无法通过故意输错让教师在其他设备或网络上无法登录。
+export const localLoginSourceLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 8,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: {success: false, code: "LOCAL_LOGIN_SOURCE_RATE_LIMITED", message: "此设备对该账号的尝试过于频繁，请15分钟后再试"},
+    keyGenerator: getLocalLoginSourceKey,
     skipSuccessfulRequests: true,
     skipFailedRequests: false,
 });

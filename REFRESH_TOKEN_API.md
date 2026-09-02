@@ -16,7 +16,7 @@ ClassworksKV现在支持标准的Refresh Token认证系统，提供更安全的�
 ```bash
 # Access Token配置
 ACCESS_TOKEN_EXPIRES_IN=15m          # Access Token过期时间
-REFRESH_TOKEN_EXPIRES_IN=7d          # Refresh Token过期时间
+REFRESH_TOKEN_EXPIRES_IN=180d        # Refresh Token过期时间
 
 # 密钥配置（HS256算法）
 JWT_SECRET=your-access-token-secret

@@ -34,7 +34,7 @@ export function createHttpCorsOptions(env = process.env) {
         exposedHeaders: ["ratelimit-policy", "retry-after", "ratelimit", "X-New-Access-Token", "X-Token-Refreshed", "ETag", "Content-Disposition", "X-NPClassworks-Migration-Id"],
         maxAge: 86400,
         credentials: true,
-        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "X-Classworks-Screen-Token", "X-Classworks-Setup-Token", "X-NPClassworks-Migration-Passphrase", "If-Match"],
+        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "X-Classworks-Device-ID", "X-Classworks-Screen-Token", "X-Classworks-Setup-Token", "X-NPClassworks-Migration-Passphrase", "If-Match"],
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     };
 }

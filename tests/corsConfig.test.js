@@ -37,6 +37,7 @@ test("HTTP preflight uses the same origin decision", async () => {
     });
     assert.equal(await decide("https://newfires.top"), true);
     assert.equal(await decide("https://evil.example"), false);
+    assert.ok(options.allowedHeaders.includes("X-Classworks-Device-ID"));
     assert.ok(options.allowedHeaders.includes("X-NPClassworks-Migration-Passphrase"));
     assert.ok(options.exposedHeaders.includes("Content-Disposition"));
 });

@@ -68,7 +68,9 @@ test("the backend image deploys migrations before accepting traffic", () => {
 test("the production stack supplies the one-time local bootstrap key", () => {
     assert.match(compose, /BOOTSTRAP_SETUP_KEY: \$\{BOOTSTRAP_SETUP_KEY:\?/);
     assert.match(compose, /ALLOW_OAUTH_BOOTSTRAP: \$\{ALLOW_OAUTH_BOOTSTRAP:-false\}/);
-    assert.match(compose, /REFRESH_TOKEN_EXPIRES_IN: \$\{REFRESH_TOKEN_EXPIRES_IN:-30d\}/);
+    assert.match(compose, /REFRESH_TOKEN_EXPIRES_IN: \$\{REFRESH_TOKEN_EXPIRES_IN:-180d\}/);
+    assert.match(productionEnvExample, /REFRESH_TOKEN_EXPIRES_IN=180d/);
+    assert.match(read("../scripts/check-production-env.js"), /REFRESH_TOKEN_EXPIRES_IN[\s\S]*180d/);
 });
 
 test("Classworks 1 HTTP and Socket implementations are physically retired", () => {

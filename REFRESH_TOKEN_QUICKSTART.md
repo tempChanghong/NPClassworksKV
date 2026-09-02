@@ -7,7 +7,7 @@
 ```bash
 # 添加到 .env 文件
 ACCESS_TOKEN_EXPIRES_IN=15m
-REFRESH_TOKEN_EXPIRES_IN=7d
+REFRESH_TOKEN_EXPIRES_IN=180d
 REFRESH_TOKEN_SECRET=your-refresh-token-secret-change-this
 ```
 

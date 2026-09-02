@@ -13,8 +13,6 @@ import {
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 
 const LOCAL_PROVIDER = "school-local";
-const MAX_FAILURES = 5;
-const LOCK_MINUTES = 15;
 const BCRYPT_ROUNDS = Math.min(14, Math.max(10, Number(process.env.LOCAL_AUTH_BCRYPT_ROUNDS) || 10));
 const DUMMY_HASH = "$2b$12$C6UzMDM.H6dfI/f/IKcEe.5l4KJg7jL7vY4PZwXH0mD7tZKX8zXn2";
 
@@ -27,20 +25,6 @@ function safeSecretEquals(actual, expected) {
 
 function loginError(message = "学校代码、教师账号或口令不正确", code = "LOCAL_LOGIN_FAILED", statusCode = 401) {
     return authorizationError(message, code, statusCode);
-}
-
-async function registerFailure(account) {
-    if (!account) return;
-    const failures = account.localLoginFailures + 1;
-    await prisma.account.update({
-        where: {id: account.id},
-        data: {
-            localLoginFailures: failures >= MAX_FAILURES ? 0 : failures,
-            localLockedUntil: failures >= MAX_FAILURES
-                ? new Date(Date.now() + LOCK_MINUTES * 60 * 1000)
-                : account.localLockedUntil,
-        },
-    });
 }
 
 export async function getLocalAuthStatus() {
@@ -99,10 +83,6 @@ export async function loginLocalAccount({schoolCode, username, password}) {
     });
 
     if (account?.localDisabled) throw loginError("该教师账号已停用", "LOCAL_ACCOUNT_DISABLED", 403);
-    if (account?.localLockedUntil && account.localLockedUntil > new Date()) {
-        throw loginError("错误次数过多，请15分钟后重试或联系管理员重置 PIN", "LOCAL_ACCOUNT_LOCKED", 429);
-    }
-
     const school = await prisma.school.findUnique({where: {code: normalizedSchoolCode}});
     const membership = account && school
         ? await prisma.schoolMember.findUnique({where: {schoolId_accountId: {schoolId: school.id, accountId: account.id}}})
@@ -122,7 +102,6 @@ export async function loginLocalAccount({schoolCode, username, password}) {
 
     const passwordMatches = await bcrypt.compare(String(password || ""), hash);
     if (!account || !passwordMatches) {
-        await registerFailure(account);
         throw loginError();
     }
 
@@ -288,7 +267,8 @@ export async function listSchoolLocalAccounts({managerAccountId, schoolId}) {
         name: account.name,
         schoolRole: account.schoolMemberships[0]?.role || null,
         disabled: account.localDisabled,
-        lockedUntil: account.localLockedUntil,
+        // 兼容旧客户端保留字段，但登录保护已改为设备与账号组合限流。
+        lockedUntil: null,
         lastLoginAt: account.lastLoginAt,
         createdAt: account.createdAt,
         workspaces: account.workspaceMemberships.map((membership) => ({

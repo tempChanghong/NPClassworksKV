@@ -8,7 +8,7 @@
 
 ### 环境配置
 - [ ] 添加 `ACCESS_TOKEN_EXPIRES_IN=15m`
-- [ ] 添加 `REFRESH_TOKEN_EXPIRES_IN=7d`
+- [ ] 添加 `REFRESH_TOKEN_EXPIRES_IN=180d`
 - [ ] 添加 `REFRESH_TOKEN_SECRET=your-refresh-token-secret`
 - [ ] （可选）配置RSA密钥对
 
