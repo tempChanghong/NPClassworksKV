@@ -311,6 +311,52 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.ok(screenTargets.workspaces.some((workspace) => workspace.id === physicsA1Workspace.id));
         assert.ok(!screenTargets.workspaces.some((workspace) => workspace.id === classOneWorkspace.id));
         assert.ok(!screenTargets.workspaces.some((workspace) => workspace.id === unrelatedPhysicsWorkspace.id));
+
+        const multiClassPublication = await publicationService.createPublication({
+            accountId: ownerLogin.account.id,
+            input: {
+                type: "ASSIGNMENT",
+                status: "PUBLISHED",
+                priority: "NORMAL",
+                subjectId: chinese.id,
+                title: "多班统一布置",
+                content: "老师发布的原始内容",
+                boardDate: new Date().toISOString().slice(0, 10),
+                publishAt: new Date(Date.now() - 1000).toISOString(),
+                targetWorkspaceIds: [classThreeWorkspace.id, classFourWorkspace.id],
+            },
+        });
+        assert.equal((await publicationService.getScreenPublication({
+            screenBinding: authenticatedScreen,
+            publicationId: multiClassPublication.id,
+        })).id, multiClassPublication.id);
+        const localClassPublication = await publicationService.updateScreenPublication({
+            screenBinding: authenticatedScreen,
+            publicationId: multiClassPublication.id,
+            expectedRevision: multiClassPublication.revision,
+            input: {
+                content: "高二3班修正后的内容",
+                targetWorkspaceIds: [classThreeWorkspace.id],
+            },
+        });
+        assert.notEqual(localClassPublication.id, multiClassPublication.id);
+        assert.equal(localClassPublication.revision, 2);
+        assert.equal(localClassPublication.content, "高二3班修正后的内容");
+        assert.equal(localClassPublication.isCertified, false);
+        assert.deepEqual(localClassPublication.targets.map((target) => target.workspaceId), [classThreeWorkspace.id]);
+        assert.equal((await publicationService.listScreenPublicationRevisions({
+            screenBinding: authenticatedScreen,
+            publicationId: localClassPublication.id,
+        })).length, 2);
+        const remainingClassPublication = await publicationService.getPublication({
+            accountId: ownerLogin.account.id,
+            publicationId: multiClassPublication.id,
+        });
+        assert.equal(remainingClassPublication.revision, 2);
+        assert.equal(remainingClassPublication.content, "老师发布的原始内容");
+        assert.equal(remainingClassPublication.isCertified, true);
+        assert.deepEqual(remainingClassPublication.targets.map((target) => target.workspaceId), [classFourWorkspace.id]);
+
         const screenFeed = await publicationService.listPublishedFeed({
             workspaceIds: screenTargets.workspaces.map((workspace) => workspace.id),
         });

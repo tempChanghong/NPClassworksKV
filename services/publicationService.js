@@ -725,6 +725,30 @@ function assertScreenCanWriteWorkspaces(screenBinding, workspaces) {
     throw publicationError("该教学班不在本大屏的录入范围内", "SCREEN_TARGET_FORBIDDEN", 403);
 }
 
+function assertScreenCanAccessPublication(screenBinding, publication) {
+    if (publication.targets.some((target) => (
+        isClassroomScreenWorkspaceAllowed(screenBinding, target.workspace)
+    ))) return;
+    throw publicationError("该作业不属于本大屏可管理的班级", "SCREEN_TARGET_FORBIDDEN", 403);
+}
+
+function currentPublicationInput(publication, targetWorkspaceIds) {
+    return {
+        type: publication.type,
+        status: publication.status,
+        priority: publication.priority,
+        subjectId: publication.subjectId,
+        title: publication.title,
+        content: publication.content,
+        contentJson: publication.contentJson,
+        boardDate: publication.boardDate,
+        publishAt: publication.publishAt,
+        dueAt: publication.dueAt,
+        expiresAt: publication.expiresAt,
+        targetWorkspaceIds,
+    };
+}
+
 export async function createScreenPublication({screenBinding, input}) {
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
     const workspaces = await loadPublicationWorkspaces(targetIds);
@@ -851,6 +875,7 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
     if (existing.type !== PUBLICATION_TYPES.ASSIGNMENT || existing.status === PUBLICATION_STATUSES.WITHDRAWN) {
         throw publicationError("大屏只能修改当前生效的作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
     }
+    assertScreenCanAccessPublication(screenBinding, existing);
     const targetWorkspaceIds = hasOwn(input, "targetWorkspaceIds")
         ? input.targetWorkspaceIds
         : existing.targets.map((target) => target.workspaceId);
@@ -878,7 +903,111 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
     await assertNoDuplicateAssignment({normalized, input, excludePublicationId: publicationId});
 
-    const publication = await prisma.$transaction(async (tx) => {
+    const existingTargetIds = existing.targets.map((target) => target.workspaceId);
+    const splitsMultiTargetPublication = existingTargetIds.length > 1;
+    let localBaseline = null;
+    let remainingNormalized = null;
+    if (splitsMultiTargetPublication) {
+        const localWorkspaceId = normalized.targetWorkspaceIds[0];
+        if (!existingTargetIds.includes(localWorkspaceId)) {
+            throw publicationError(
+                "多班作业只能修改当前已收到的本班副本",
+                "SCREEN_TARGET_CHANGE_FORBIDDEN",
+                403,
+            );
+        }
+        const baselineValidation = validatePublicationSnapshot({
+            input: currentPublicationInput(existing, [localWorkspaceId]),
+            workspaces,
+        });
+        if (!baselineValidation.valid) throw validationError(baselineValidation);
+        localBaseline = baselineValidation.normalized;
+
+        const remainingTargetIds = existingTargetIds.filter((id) => id !== localWorkspaceId);
+        const remainingWorkspaces = await loadPublicationWorkspaces(remainingTargetIds);
+        const remainingValidation = validatePublicationSnapshot({
+            input: currentPublicationInput(existing, remainingTargetIds),
+            workspaces: remainingWorkspaces,
+        });
+        if (!remainingValidation.valid) throw validationError(remainingValidation);
+        remainingNormalized = remainingValidation.normalized;
+    }
+
+    const transactionResult = await prisma.$transaction(async (tx) => {
+        if (splitsMultiTargetPublication) {
+            const originalUpdate = await tx.publication.updateMany({
+                where: {id: publicationId, revision: expectedRevision},
+                data: {revision: {increment: 1}},
+            });
+            if (originalUpdate.count !== 1) {
+                const latest = await tx.publication.findUnique({
+                    where: {id: publicationId},
+                    select: {revision: true, updatedAt: true},
+                });
+                throw publicationError("作业已被其他人修改，请刷新后比较版本", "PUBLICATION_REVISION_CONFLICT", 409, latest);
+            }
+
+            const localWorkspaceId = normalized.targetWorkspaceIds[0];
+            await tx.publicationTarget.delete({
+                where: {publicationId_workspaceId: {publicationId, workspaceId: localWorkspaceId}},
+            });
+            await tx.publicationRevision.create({
+                data: revisionData({
+                    publicationId,
+                    revision: expectedRevision + 1,
+                    normalized: remainingNormalized,
+                    action: "UPDATED",
+                    actorType: "CLASSROOM_SCREEN",
+                    screenBindingId: screenBinding.id,
+                    isCertified: existing.isCertified,
+                    certifiedByAccountId: existing.certifiedByAccountId,
+                    certifiedAt: existing.certifiedAt,
+                }),
+            });
+
+            const fork = await tx.publication.create({
+                data: {
+                    authorAccountId: existing.authorAccountId,
+                    ...toPublicationData(normalized),
+                    revision: 2,
+                    isCertified: false,
+                    certifiedByAccountId: null,
+                    certifiedAt: null,
+                    latestActorType: "CLASSROOM_SCREEN",
+                    latestScreenBindingId: screenBinding.id,
+                    targets: {create: {workspaceId: localWorkspaceId}},
+                },
+            });
+            await tx.publicationRevision.create({
+                data: revisionData({
+                    publicationId: fork.id,
+                    revision: 1,
+                    normalized: localBaseline,
+                    action: "CREATED",
+                    actorType: existing.authorAccountId ? "ACCOUNT" : existing.latestActorType,
+                    editorAccountId: existing.authorAccountId,
+                    screenBindingId: existing.authorAccountId ? null : existing.latestScreenBindingId,
+                    isCertified: existing.isCertified,
+                    certifiedByAccountId: existing.certifiedByAccountId,
+                    certifiedAt: existing.certifiedAt,
+                }),
+            });
+            await tx.publicationRevision.create({
+                data: revisionData({
+                    publicationId: fork.id,
+                    revision: 2,
+                    normalized,
+                    action: "UPDATED",
+                    actorType: "CLASSROOM_SCREEN",
+                    screenBindingId: screenBinding.id,
+                }),
+            });
+            return {
+                publication: await tx.publication.findUnique({where: {id: fork.id}, include: publicationInclude}),
+                original: await tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude}),
+            };
+        }
+
         const result = await tx.publication.updateMany({
             where: {id: publicationId, revision: expectedRevision},
             data: {
@@ -914,9 +1043,18 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
                 screenBindingId: screenBinding.id,
             }),
         });
-        return tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude});
+        return {
+            publication: await tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude}),
+            original: null,
+        };
     });
+    const publication = transactionResult.publication;
     const oldTargetIds = existing.targets.map((target) => target.workspaceId);
+    if (transactionResult.original) {
+        emitPublicationEvent("publication.updated", transactionResult.original, oldTargetIds);
+        emitPublicationEvent("publication.created", publication, normalized.targetWorkspaceIds);
+        return publication;
+    }
     emitPublicationEvent(
         "publication.updated",
         publication,
@@ -927,10 +1065,7 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
 
 export async function listScreenPublicationRevisions({screenBinding, publicationId}) {
     const publication = await getPublicationOrThrow(publicationId);
-    assertScreenCanWriteWorkspaces(
-        screenBinding,
-        publication.targets.map((target) => target.workspace),
-    );
+    assertScreenCanAccessPublication(screenBinding, publication);
     return prisma.publicationRevision.findMany({
         where: {publicationId},
         orderBy: {revision: "desc"},
@@ -947,10 +1082,7 @@ export async function getScreenPublication({screenBinding, publicationId}) {
     if (publication.type !== PUBLICATION_TYPES.ASSIGNMENT || publication.status === PUBLICATION_STATUSES.WITHDRAWN) {
         throw publicationError("大屏只能读取当前可编辑的作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
     }
-    assertScreenCanWriteWorkspaces(
-        screenBinding,
-        publication.targets.map((target) => target.workspace),
-    );
+    assertScreenCanAccessPublication(screenBinding, publication);
     return publication;
 }
 
