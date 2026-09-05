@@ -91,8 +91,12 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 termId: imported.result.term.id,
             }),
         ]);
-        assert.equal(ownerTeachingWorkspaces.length, 20);
-        assert.equal(adminTeachingWorkspaces.length, 20);
+        const expectedWorkspaceIds = (await prisma.workspace.findMany({
+            where: {termId: imported.result.term.id, isActive: true}, select: {id: true},
+        })).map(item => item.id).sort();
+        assert.ok(expectedWorkspaceIds.length > 0);
+        assert.deepEqual(ownerTeachingWorkspaces.map(item => item.workspace.id).sort(), expectedWorkspaceIds);
+        assert.deepEqual(adminTeachingWorkspaces.map(item => item.workspace.id).sort(), expectedWorkspaceIds);
         assert.ok(adminTeachingWorkspaces.every((item) =>
             item.role === "OWNER" && item.schoolManagerDerived === true));
         const responsibilityOverview = await staffResponsibilityService.getStaffResponsibilityOverview({
@@ -278,8 +282,14 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             expectedRevision: chineseScreenPublication.revision,
         });
 
-        const classThreeWorkspace = await prisma.workspace.findUnique({
-            where: {termId_code: {termId: imported.result.term.id, code: "G2-C3"}},
+        // Choose a real walking-physics source class from the imported fixture.
+        // The example now teaches physics in G2-C3's administrative class.
+        const walkingClassCode = organization.courseGroups.find(group => group.code === "G2-PHY-A1")
+            .sourceClasses.find(code => code !== "G2-C1" && code !== "G2-C4"
+                && organization.administrativeClasses.find(item => item.code === code)?.subjectRules.PHY === "COURSE_GROUP");
+        assert.ok(walkingClassCode);
+        const walkingClassWorkspace = await prisma.workspace.findUnique({
+            where: {termId_code: {termId: imported.result.term.id, code: walkingClassCode}},
         });
         const classFourWorkspace = await prisma.workspace.findUnique({
             where: {termId_code: {termId: imported.result.term.id, code: "G2-C4"}},
@@ -287,7 +297,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         const unrelatedPhysicsWorkspace = await prisma.workspace.create({
             data: {
                 termId: imported.result.term.id,
-                gradeId: classThreeWorkspace.gradeId,
+                gradeId: walkingClassWorkspace.gradeId,
                 subjectId: physics.id,
                 code: "G2-PHY-UNRELATED",
                 name: "物理无关测试班",
@@ -300,14 +310,14 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         const {binding, token} = await classroomScreenService.bindClassroomScreen({
             managerAccountId: ownerLogin.account.id,
             schoolId: imported.result.school.id,
-            administrativeClassId: classThreeWorkspace.id,
+            administrativeClassId: walkingClassWorkspace.id,
             deviceFingerprint: "phase6-integration-screen",
-            name: "高二3班一体机",
+            name: "走班测试一体机",
         });
         assert.ok(token.length >= 32);
         const authenticatedScreen = await classroomScreenService.authenticateClassroomScreen(token);
         const screenTargets = await classroomScreenService.listClassroomScreenTargets(authenticatedScreen);
-        assert.ok(screenTargets.workspaces.some((workspace) => workspace.id === classThreeWorkspace.id));
+        assert.ok(screenTargets.workspaces.some((workspace) => workspace.id === walkingClassWorkspace.id));
         assert.ok(screenTargets.workspaces.some((workspace) => workspace.id === physicsA1Workspace.id));
         assert.ok(!screenTargets.workspaces.some((workspace) => workspace.id === classOneWorkspace.id));
         assert.ok(!screenTargets.workspaces.some((workspace) => workspace.id === unrelatedPhysicsWorkspace.id));
@@ -323,7 +333,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 content: "老师发布的原始内容",
                 boardDate: new Date().toISOString().slice(0, 10),
                 publishAt: new Date(Date.now() - 1000).toISOString(),
-                targetWorkspaceIds: [classThreeWorkspace.id, classFourWorkspace.id],
+                targetWorkspaceIds: [walkingClassWorkspace.id, classFourWorkspace.id],
             },
         });
         assert.equal((await publicationService.getScreenPublication({
@@ -336,14 +346,14 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             expectedRevision: multiClassPublication.revision,
             input: {
                 content: "高二3班修正后的内容",
-                targetWorkspaceIds: [classThreeWorkspace.id],
+                targetWorkspaceIds: [walkingClassWorkspace.id],
             },
         });
         assert.notEqual(localClassPublication.id, multiClassPublication.id);
         assert.equal(localClassPublication.revision, 2);
         assert.equal(localClassPublication.content, "高二3班修正后的内容");
         assert.equal(localClassPublication.isCertified, false);
-        assert.deepEqual(localClassPublication.targets.map((target) => target.workspaceId), [classThreeWorkspace.id]);
+        assert.deepEqual(localClassPublication.targets.map((target) => target.workspaceId), [walkingClassWorkspace.id]);
         assert.equal((await publicationService.listScreenPublicationRevisions({
             screenBinding: authenticatedScreen,
             publicationId: localClassPublication.id,
@@ -360,7 +370,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         const screenFeed = await publicationService.listPublishedFeed({
             workspaceIds: screenTargets.workspaces.map((workspace) => workspace.id),
         });
-        assert.ok(screenFeed.workspaceIds.includes(classThreeWorkspace.id));
+        assert.ok(screenFeed.workspaceIds.includes(walkingClassWorkspace.id));
         assert.ok(screenFeed.workspaceIds.includes(physicsA1Workspace.id));
         assert.ok(!screenFeed.workspaceIds.includes(unrelatedPhysicsWorkspace.id));
         await assert.rejects(
@@ -432,15 +442,18 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             sourceBoardDate: new Date().toISOString().slice(0, 10),
             targetBoardDate: "2099-01-01",
         });
-        assert.equal(copiedBoard.createdCount, 1);
+        // Both the earlier class-local assignment and the physics assignment are copied.
+        assert.equal(copiedBoard.createdCount, 2);
+        assert.deepEqual(copiedBoard.created.map(item => item.subjectId).sort(), [chinese.id, physics.id].sort());
         const copiedAgain = await publicationService.copyScreenBoardDate({
             screenBinding: authenticatedScreen,
             sourceBoardDate: new Date().toISOString().slice(0, 10),
             targetBoardDate: "2099-01-01",
         });
         assert.equal(copiedAgain.createdCount, 0);
-        assert.equal(copiedAgain.skippedCount, 1);
-        const copiedPublication = copiedBoard.created[0];
+        assert.equal(copiedAgain.skippedCount, 2);
+        const copiedPublication = copiedBoard.created.find(item => item.subjectId === physics.id);
+        assert.ok(copiedPublication);
         await publicationService.certifyPublication({
             accountId: teacherLogin.account.id,
             publicationId: copiedPublication.id,
@@ -636,7 +649,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 endsAt: "2028-01-31",
             },
         });
-        assert.equal(clonedTerm.workspaces, 20);
+        assert.equal(clonedTerm.workspaces, expectedWorkspaceIds.length);
         assert.equal(clonedTerm.pendingInvitations, 1);
         assert.equal((await workspaceService.listMyWorkspaces({
             accountId: teacherLogin.account.id,

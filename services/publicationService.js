@@ -758,6 +758,18 @@ function currentPublicationInput(publication, targetWorkspaceIds) {
     };
 }
 
+async function lockScreenPublicationSession(tx, binding) {
+    // Hold this row until the publication and revision commit. Disabling or rotating
+    // the binding must either commit before this check, or wait for this upload.
+    const [current] = await tx.$queryRaw`SELECT "id", "isActive", "tokenHash", "credentialVersion", "administrativeClassId"
+        FROM "ClassroomScreenBinding" WHERE "id" = ${binding.id} FOR SHARE`;
+    if (!current?.isActive || !binding.tokenHash || current.tokenHash !== binding.tokenHash
+        || current.credentialVersion !== binding.credentialVersion
+        || current.administrativeClassId !== binding.administrativeClassId) {
+        throw authorizationError("大屏绑定已失效，请联系管理员重新绑定", "SCREEN_TOKEN_INVALID", 401);
+    }
+}
+
 export async function createScreenPublication({screenBinding, input}) {
     const request = screenPublicationRequest(input);
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
@@ -773,6 +785,9 @@ export async function createScreenPublication({screenBinding, input}) {
             // Cross-process serialization; the lock and publication/revision commit are atomic.
             const lockKey = JSON.stringify([screenBinding.id, request.id]);
             await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtextextended(${lockKey}, 0))`;
+        }
+        await lockScreenPublicationSession(tx, screenBinding);
+        if (request) {
             const existing = await tx.publication.findFirst({
                 where: {creationScreenBindingId: screenBinding.id, creationRequestId: request.id},
                 include: publicationInclude,
