@@ -40,6 +40,7 @@ try {
         "tests/workspaceAssignmentDatabase.integration.test.js",
         "tests/publicationIdempotencyDatabase.integration.test.js",
         "tests/sessionRevocationDatabase.integration.test.js",
+        "tests/publicationRevisionCleanupDatabase.integration.test.js",
     ], testEnv);
     console.log("真实 PostgreSQL 集成测试通过。");
 } finally {

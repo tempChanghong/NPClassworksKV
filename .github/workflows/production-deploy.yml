@@ -26,6 +26,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
+      - name: Run isolated PostgreSQL integration tests
+        timeout-minutes: 15
+        run: pnpm test:database
 
   deploy:
     needs: verify
