@@ -1,3 +1,4 @@
+import {lockClassroomScreenWrite} from "./screenWriteAuthorization.js";
 import {prisma} from "../utils/prisma.js";
 import {authorizationError} from "./academicAuthorizationService.js";
 
@@ -143,24 +144,27 @@ export async function saveClassAttendance({screenBinding, date, attendance}) {
         select: {id: true},
     });
     const normalized = normalizeAttendance(attendance, new Set(students.map((student) => student.id)));
-    const result = await prisma.classAttendanceDay.upsert({
-        where: {
-            administrativeClassId_attendanceDate: {
+    const result = await prisma.$transaction(async (tx) => {
+        await lockClassroomScreenWrite(tx, screenBinding);
+        return tx.classAttendanceDay.upsert({
+            where: {
+                administrativeClassId_attendanceDate: {
+                    administrativeClassId: screenBinding.administrativeClassId,
+                    attendanceDate,
+                },
+            },
+            create: {
                 administrativeClassId: screenBinding.administrativeClassId,
                 attendanceDate,
+                attendance: normalized,
+                updatedByScreenBindingId: screenBinding.id,
             },
-        },
-        create: {
-            administrativeClassId: screenBinding.administrativeClassId,
-            attendanceDate,
-            attendance: normalized,
-            updatedByScreenBindingId: screenBinding.id,
-        },
-        update: {
-            attendance: normalized,
-            updatedByAccountId: null,
-            updatedByScreenBindingId: screenBinding.id,
-        },
+            update: {
+                attendance: normalized,
+                updatedByAccountId: null,
+                updatedByScreenBindingId: screenBinding.id,
+            },
+        });
     });
     return {date, ...normalized, updatedAt: result.updatedAt};
 }

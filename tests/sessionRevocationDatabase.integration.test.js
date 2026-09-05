@@ -73,7 +73,7 @@ test("persisted revocation and concurrent queued uploads use real HTTP and Postg
         const input = {clientRequestId: randomUUID(), subjectId: subject.id, content: "离线待上传作业",
             targetWorkspaceIds: [workspace.id], boardDate: "2099-01-01", publishAt: "2099-01-01T08:00:00.000Z", allowDuplicate: true};
         return {
-            school, accounts, binding, token, input, ownerHeaders, adminHeaders, screenHeaders, management, profile,
+            school, accounts, binding, workspace, subject, term, token, input, ownerHeaders, adminHeaders, screenHeaders, management, profile,
             upload: (data = input) => request("/api/v2/classroom-screens/publications", screenHeaders, "POST", data),
             revoke: operation => operation === "disable"
                 ? request(management, ownerHeaders, "PATCH", {isActive: false})
@@ -87,7 +87,9 @@ test("persisted revocation and concurrent queued uploads use real HTTP and Postg
                 await prisma.auditLog.deleteMany({where: {schoolId: school.id}});
                 await prisma.classroomScreenBinding.deleteMany({where: {schoolId: school.id}});
                 await prisma.administrativeClassSubject.deleteMany({where: {subjectId: subject.id}});
-                await prisma.workspace.delete({where: {id: workspace.id}});
+                await prisma.classAttendanceDay.deleteMany({where: {administrativeClass: {termId: term.id}}});
+                await prisma.administrativeClassStudent.deleteMany({where: {administrativeClass: {termId: term.id}}});
+                await prisma.workspace.deleteMany({where: {termId: term.id}});
                 await prisma.subject.delete({where: {id: subject.id}});
                 await prisma.academicTerm.delete({where: {id: term.id}});
                 await prisma.schoolMember.deleteMany({where: {schoolId: school.id}});
@@ -211,6 +213,104 @@ test("persisted revocation and concurrent queued uploads use real HTTP and Postg
                 await f.cleanup();
             }
         });
+    }
+
+    async function prepareWrite(f, kind) {
+        if (kind.startsWith("attendance")) {
+            const student = await prisma.administrativeClassStudent.create({data: {administrativeClassId: f.workspace.id, name: "测试学生"}});
+            const endpoint = "/api/v2/classroom-screens/attendance/2099-01-01";
+            if (kind === "attendance-update") {
+                assert.equal((await request(endpoint, f.screenHeaders, "PUT", {absent: [], late: [], excluded: []})).status, 200);
+            }
+            return {
+                send: () => request(endpoint, f.screenHeaders, "PUT", {absent: [student.id], late: [], excluded: []}),
+                snapshot: () => prisma.classAttendanceDay.findMany({where: {administrativeClassId: f.workspace.id}}),
+                beforeGate: 'LOCK TABLE "AdministrativeClassStudent" IN ACCESS EXCLUSIVE MODE',
+                beforeQuery: /FROM.*"AdministrativeClassStudent"/s,
+                writeGate: 'LOCK TABLE "ClassAttendanceDay" IN SHARE MODE',
+                writeQuery: /(?:INSERT INTO|UPDATE).*"ClassAttendanceDay"/s,
+                assertSuccess: async () => {
+                    const days = await prisma.classAttendanceDay.findMany({where: {administrativeClassId: f.workspace.id}});
+                    assert.equal(days.length, 1);
+                    assert.deepEqual(days[0].attendance.absent, [student.id]);
+                },
+            };
+        }
+        const baseline = await f.upload();
+        assert.equal(baseline.status, 201);
+        const publication = baseline.body.data;
+        const endpoint = `/api/v2/classroom-screens/publications/${publication.id}`;
+        if (kind === "restore") {
+            assert.equal((await request(endpoint, {...f.screenHeaders, "If-Match": '"1"'}, "PATCH", {content: "第二版"})).status, 200);
+        }
+        if (kind === "edit-split") {
+            const second = await prisma.workspace.create({data: {termId: f.term.id, code: "C2", name: "另一班", type: "ADMIN_CLASS", subjectRules: {create: {subjectId: f.subject.id, deliveryMode: "ADMIN_CLASS"}}}});
+            await prisma.publicationTarget.create({data: {publicationId: publication.id, workspaceId: second.id}});
+        }
+        return {
+            send: () => kind === "restore"
+                ? request(endpoint + "/restore", {...f.screenHeaders, "If-Match": '"2"'}, "POST", {sourceRevision: 1})
+                : request(endpoint, {...f.screenHeaders, "If-Match": '"1"'}, "PATCH", {content: "修改后", targetWorkspaceIds: [f.workspace.id]}),
+            snapshot: () => prisma.publication.findMany({where: {subjectId: f.subject.id}, orderBy: {id: "asc"},
+                include: {targets: {orderBy: {workspaceId: "asc"}}, revisions: {orderBy: {revision: "asc"}}}}),
+            beforeGate: kind === "restore" ? 'LOCK TABLE "PublicationRevision" IN ACCESS EXCLUSIVE MODE' : 'LOCK TABLE "Subject" IN ACCESS EXCLUSIVE MODE',
+            beforeQuery: kind === "restore" ? /FROM.*"PublicationRevision"/s : /FROM.*"Subject"/s,
+            writeGate: 'LOCK TABLE "Publication" IN SHARE MODE',
+            writeQuery: /UPDATE.*"Publication"/s,
+            assertSuccess: async () => {
+                const rows = await prisma.publication.findMany({where: {subjectId: f.subject.id}});
+                assert.equal(rows.length, kind === "edit-split" ? 2 : 1);
+                assert.ok(rows.some(row => row.content === (kind === "restore" ? f.input.content : "修改后")));
+                assert.ok(rows.some(row => row.revision > 1));
+            },
+        };
+    }
+
+    for (const operation of ["disable", "reset"]) {
+        for (const kind of ["edit", "edit-split", "restore", "attendance-create", "attendance-update"]) {
+            await t.test(`${operation} before authenticated ${kind} rejects all business writes`, async () => {
+                const f = await fixture();
+                let blocker, write;
+                try {
+                    const action = await prepareWrite(f, kind);
+                    const before = await action.snapshot();
+                    blocker = await gate(action.beforeGate);
+                    write = action.send();
+                    await waitBlockedBy(blocker.pid, action.beforeQuery);
+                    assert.equal((await f.revoke(operation)).status, 200);
+                    await blocker.release();
+                    const response = await write;
+                    assert.equal(response.status, 401, `stale ${kind}: ${JSON.stringify(response)}`);
+                    assert.equal(response.body.code, "SCREEN_TOKEN_INVALID");
+                    assert.deepEqual(await action.snapshot(), before);
+                } finally {
+                    await blocker?.release();
+                    if (write) await write.catch(() => {});
+                    await f.cleanup();
+                }
+            });
+            await t.test(`authorized ${kind} commits before waiting ${operation}`, async () => {
+                const f = await fixture();
+                let blocker, write, revoke;
+                try {
+                    const action = await prepareWrite(f, kind);
+                    blocker = await gate(action.writeGate);
+                    write = action.send();
+                    const writer = await waitBlockedBy(blocker.pid, action.writeQuery);
+                    revoke = f.revoke(operation);
+                    await waitBlockedBy(writer.pid, /UPDATE.*"ClassroomScreenBinding"/s);
+                    await blocker.release();
+                    assert.equal((await write).status, 200);
+                    assert.equal((await revoke).status, 200);
+                    await action.assertSuccess();
+                    assert.equal((await action.send()).status, 401);
+                } finally {
+                    await blocker?.release();
+                    await Promise.allSettled([write, revoke].filter(Boolean));
+                    await f.cleanup();
+                }
+            });
+        }
     }
 
     for (const operation of ["demote", "remove"]) {
