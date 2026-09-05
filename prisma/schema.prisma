@@ -505,6 +505,9 @@ model WorkspaceMemberInvite {
 /// Classworks 2.0 的统一作业/通知发布记录。
 model Publication {
   id                    String               @id @default(cuid()) @db.VarChar(191)
+  creationScreenBindingId String?             @db.VarChar(191)
+  creationRequestId       String?             @db.VarChar(100)
+  creationRequestHash     String?             @db.VarChar(64)
   authorAccountId       String?              @db.VarChar(191)
   type                  PublicationType
   subjectId             String?              @db.VarChar(191)
@@ -536,6 +539,7 @@ model Publication {
   screenDeliveries    NotificationScreenDelivery[]
 
   @@index([authorAccountId, updatedAt])
+  @@unique([creationScreenBindingId, creationRequestId])
   @@index([status, publishAt])
   @@index([status, boardDate, publishAt])
   @@index([subjectId, status])

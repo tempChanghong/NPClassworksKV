@@ -32,6 +32,7 @@ import {
     isPublicationWithinActionScope,
 } from "../domain/publicationActionCenter.js";
 import {findDuplicateAssignmentCandidates} from "../domain/publicationDuplicate.js";
+import {screenPublicationRequest} from "../domain/publicationRequest.js";
 
 const publicationInclude = {
     author: {select: {id: true, name: true, email: true, avatarUrl: true}},
@@ -189,14 +190,14 @@ async function getPublicationOrThrow(id, client = prisma) {
     return publication;
 }
 
-async function assertNoDuplicateAssignment({normalized, input, excludePublicationId = null}) {
+async function assertNoDuplicateAssignment({normalized, input, excludePublicationId = null, client = prisma}) {
     if (
         input?.allowDuplicate === true
         || normalized.type !== PUBLICATION_TYPES.ASSIGNMENT
         || normalized.status !== PUBLICATION_STATUSES.PUBLISHED
     ) return;
 
-    const candidates = await prisma.publication.findMany({
+    const candidates = await client.publication.findMany({
         where: {
             type: PUBLICATION_TYPES.ASSIGNMENT,
             status: PUBLICATION_STATUSES.PUBLISHED,
@@ -750,6 +751,7 @@ function currentPublicationInput(publication, targetWorkspaceIds) {
 }
 
 export async function createScreenPublication({screenBinding, input}) {
+    const request = screenPublicationRequest(input);
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
     const workspaces = await loadPublicationWorkspaces(targetIds);
     assertScreenCanWriteWorkspaces(screenBinding, workspaces);
@@ -758,12 +760,32 @@ export async function createScreenPublication({screenBinding, input}) {
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
-    await assertNoDuplicateAssignment({normalized, input});
-
-    const publication = await prisma.$transaction(async (tx) => {
+    const {publication, replayed} = await prisma.$transaction(async (tx) => {
+        if (request) {
+            // Cross-process serialization; the lock and publication/revision commit are atomic.
+            const lockKey = JSON.stringify([screenBinding.id, request.id]);
+            await tx.$queryRaw`SELECT 1 FROM pg_advisory_xact_lock(hashtextextended(${lockKey}, 0))`;
+            const existing = await tx.publication.findFirst({
+                where: {creationScreenBindingId: screenBinding.id, creationRequestId: request.id},
+                include: publicationInclude,
+            });
+            if (existing) {
+                if (existing.creationRequestHash !== request.hash) {
+                    throw publicationError("同一提交标识不能用于不同作业内容", "PUBLICATION_REQUEST_CONFLICT", 409);
+                }
+                assertScreenCanAccessPublication(screenBinding, existing);
+                return {publication: existing, replayed: true};
+            }
+        }
+        await assertNoDuplicateAssignment({normalized, input, client: tx});
         const created = await tx.publication.create({
             data: {
                 authorAccountId: null,
+                ...(request ? {
+                    creationScreenBindingId: screenBinding.id,
+                    creationRequestId: request.id,
+                    creationRequestHash: request.hash,
+                } : {}),
                 ...toPublicationData(normalized),
                 isCertified: false,
                 certifiedByAccountId: null,
@@ -785,9 +807,9 @@ export async function createScreenPublication({screenBinding, input}) {
                 screenBindingId: screenBinding.id,
             }),
         });
-        return tx.publication.findUnique({where: {id: created.id}, include: publicationInclude});
+        return {publication: await tx.publication.findUnique({where: {id: created.id}, include: publicationInclude}), replayed: false};
     });
-    emitPublicationEvent("publication.created", publication, normalized.targetWorkspaceIds);
+    if (!replayed) emitPublicationEvent("publication.created", publication, normalized.targetWorkspaceIds);
     return publication;
 }
 
