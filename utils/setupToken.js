@@ -38,6 +38,9 @@ export function createSetupToken(now = Date.now()) {
 }
 
 export function verifySetupToken(token, now = Date.now()) {
+    if (!process.env.BOOTSTRAP_SETUP_KEY) {
+        throw authorizationError("服务器未配置初始化密钥", "SETUP_KEY_NOT_CONFIGURED", 503);
+    }
     const [body, providedSignature, extra] = String(token || "").split(".");
     if (!body || !providedSignature || extra || !safeEqual(providedSignature, signature(body))) {
         throw authorizationError("初始化会话无效", "SETUP_TOKEN_INVALID", 401);

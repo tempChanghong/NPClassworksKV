@@ -1,3 +1,4 @@
+import {lockSchoolManagement, assertOwnerTargetChange} from "./schoolOwnerPolicy.js";
 import bcrypt from "bcrypt";
 import crypto from "node:crypto";
 import {prisma} from "../utils/prisma.js";
@@ -156,6 +157,7 @@ export async function importLocalTeachers({managerAccountId, schoolId, termId, d
     if (dryRun) return preview;
 
     const result = await prisma.$transaction(async (tx) => {
+        const manager = await lockSchoolManagement(tx, managerAccountId, schoolId);
         let createdAccounts = 0;
         let memberships = 0;
         for (const assignment of validation.normalized.assignments) {
@@ -163,6 +165,7 @@ export async function importLocalTeachers({managerAccountId, schoolId, termId, d
             const existing = await tx.account.findUnique({
                 where: {provider_providerId: {provider: LOCAL_PROVIDER, providerId}},
             });
+            await assertOwnerTargetChange(tx, {manager, schoolId, accountId: existing?.id});
             const passwordHash = assignment.pin
                 ? await bcrypt.hash(assignment.pin, BCRYPT_ROUNDS)
                 : existing?.localPasswordHash || null;
@@ -301,6 +304,9 @@ export async function createLocalAdministrator({managerAccountId, schoolId, user
     const providerId = localProviderId(school.code, normalizedUsername);
     const passwordHash = await bcrypt.hash(pin, BCRYPT_ROUNDS);
     return prisma.$transaction(async (tx) => {
+        const manager = await lockSchoolManagement(tx, managerAccountId, schoolId);
+        const existing = await tx.account.findUnique({where: {provider_providerId: {provider: LOCAL_PROVIDER, providerId}}});
+        await assertOwnerTargetChange(tx, {manager, schoolId, accountId: existing?.id, nextRole: normalizedRole});
         const account = await tx.account.upsert({
             where: {provider_providerId: {provider: LOCAL_PROVIDER, providerId}},
             update: {

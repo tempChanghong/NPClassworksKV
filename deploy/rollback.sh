@@ -49,4 +49,11 @@ git -C "$FRONTEND_ROOT" checkout --detach "$PREVIOUS_FRONTEND_REF"
 compose_application_up -d --no-build --force-recreate
 wait_for_backend 45 || die "应用镜像已回退，但后端未能就绪；数据库可能需要一起回滚"
 
+if [[ -n "${PREVIOUS_RELEASE_FILE:-}" && -f "$PREVIOUS_RELEASE_FILE" ]]; then
+  cp "$PREVIOUS_RELEASE_FILE" "$RUNTIME_DIR/deployed-release.json.tmp"
+  mv "$RUNTIME_DIR/deployed-release.json.tmp" "$RUNTIME_DIR/deployed-release.json"
+else
+  # Legacy deployments have no manifest; do not advertise the new pair.
+  rm -f "$RUNTIME_DIR/deployed-release.json"
+fi
 log "回滚完成"

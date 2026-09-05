@@ -35,6 +35,7 @@ fi
 require_command docker
 require_command git
 require_command flock
+require_command node
 load_production_env
 ensure_directories
 [[ -n "$FRONTEND_ROOT" ]] || die "找不到同级 NPClassworks 前端仓库"
@@ -47,6 +48,15 @@ flock -w 900 9 || die "等待其他升级完成超时，请检查部署进程"
 previous_backend_ref="$(current_ref "$REPO_ROOT")"
 previous_frontend_ref="$(current_ref "$FRONTEND_ROOT")"
 timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+# Resolve both moving refs under the lock, before backup or checkout.
+if [[ "$fetch_tags" == true && ( -n "$backend_ref" || -n "$frontend_ref" ) ]]; then
+  git -C "$REPO_ROOT" fetch --tags --prune
+  git -C "$FRONTEND_ROOT" fetch --tags --prune
+fi
+release_plan="$RUNTIME_DIR/release-$timestamp-$$.json"
+node "$DEPLOY_DIR/release-plan.js" "$REPO_ROOT" "$FRONTEND_ROOT" "${backend_ref:-HEAD}" "${frontend_ref:-HEAD}" "$release_plan"
+backend_ref="$(node -e 'console.log(require(process.argv[1]).backend.commit)' "$release_plan")"
+frontend_ref="$(node -e 'console.log(require(process.argv[1]).frontend.commit)' "$release_plan")"
 backend_rollback_tag="npclassworks-backend:rollback-$timestamp"
 frontend_rollback_tag="npclassworks-frontend:rollback-$timestamp"
 state_file="$RUNTIME_DIR/rollback-state.env"
@@ -64,24 +74,18 @@ write_state_value "$state_file" PREVIOUS_BACKEND_REF "$previous_backend_ref"
 write_state_value "$state_file" PREVIOUS_FRONTEND_REF "$previous_frontend_ref"
 write_state_value "$state_file" BACKEND_ROLLBACK_TAG "$backend_rollback_tag"
 write_state_value "$state_file" FRONTEND_ROLLBACK_TAG "$frontend_rollback_tag"
+previous_release="$RUNTIME_DIR/previous-release-$timestamp-$$.json"
+if [[ -f "$RUNTIME_DIR/deployed-release.json" ]]; then
+  cp "$RUNTIME_DIR/deployed-release.json" "$previous_release"
+  write_state_value "$state_file" PREVIOUS_RELEASE_FILE "$previous_release"
+fi
 chmod 600 "$state_file" 2>/dev/null || true
 
-if [[ -n "$backend_ref" || -n "$frontend_ref" ]]; then
-  if [[ "$fetch_tags" == true ]]; then
-    git -C "$REPO_ROOT" fetch --tags --prune
-    git -C "$FRONTEND_ROOT" fetch --tags --prune
-  fi
-  if [[ -n "$backend_ref" ]]; then
-    git -C "$REPO_ROOT" rev-parse --verify "$backend_ref^{commit}" >/dev/null || die "后端仓库不存在版本：$backend_ref"
-    git -C "$REPO_ROOT" checkout --detach "$backend_ref"
-  fi
-  if [[ -n "$frontend_ref" ]]; then
-    git -C "$FRONTEND_ROOT" rev-parse --verify "$frontend_ref^{commit}" >/dev/null || die "前端仓库不存在版本：$frontend_ref"
-    git -C "$FRONTEND_ROOT" checkout --detach "$frontend_ref"
-  fi
-fi
-
-log "构建并启动新版本"
+git -C "$REPO_ROOT" checkout --detach "$backend_ref"
+git -C "$FRONTEND_ROOT" checkout --detach "$frontend_ref"
+[[ "$(current_ref "$REPO_ROOT")" == "$backend_ref" ]] || die "后端版本与部署计划不一致"
+[[ "$(current_ref "$FRONTEND_ROOT")" == "$frontend_ref" ]] || die "前端版本与部署计划不一致"
+log "构建并启动固定版本 backend=$backend_ref frontend=$frontend_ref"
 node "$REPO_ROOT/scripts/check-production-env.js" "$ENV_FILE"
 compose build --pull backend frontend
 compose_application_up -d
@@ -94,6 +98,9 @@ if ! wait_for_backend 45; then
   die "升级后端未能就绪。可运行：bash deploy/rollback.sh"
 fi
 
-log "升级完成。升级前备份：$backup_file"
+# Publish only after health checks pass. Failed plans remain for diagnosis.
+cp "$release_plan" "$RUNTIME_DIR/deployed-release.json.tmp"
+mv "$RUNTIME_DIR/deployed-release.json.tmp" "$RUNTIME_DIR/deployed-release.json"
+log "升级完成。版本记录：$RUNTIME_DIR/deployed-release.json；升级前备份：$backup_file"
 log "如需回滚应用：bash deploy/rollback.sh"
 log "如需连数据库回滚：bash deploy/rollback.sh --restore-database --yes"

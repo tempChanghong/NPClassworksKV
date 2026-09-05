@@ -15,6 +15,7 @@ import {
     assertCanWriteWorkspaces,
     getPublicationCertificationScope,
     getWritableWorkspaceIds,
+    getReadableWorkspaceIds,
     loadPublicationWorkspaces,
     publicationWorkspaceInclude,
 } from "./publicationAuthorizationService.js";
@@ -330,11 +331,18 @@ export async function listPublications({accountId, workspaceId, status, type, li
             ...managedWorkspaces.map((workspace) => workspace.id),
             ...responsibilityAccess.readableIds,
         ])];
+        const candidateWorkspaces = readableWorkspaceIds.length
+            ? await loadPublicationWorkspaces(readableWorkspaceIds) : [];
+        const [permittedReadableIds, permittedWritableIds] = await Promise.all([
+            getReadableWorkspaceIds(accountId, readableWorkspaceIds),
+            getWritableWorkspaceIds(accountId, candidateWorkspaces),
+        ]);
         where.OR = [
             {authorAccountId: accountId},
-            ...(readableWorkspaceIds.length
-                ? [{targets: {some: {workspaceId: {in: readableWorkspaceIds}}}}]
-                : []),
+            ...(permittedWritableIds.length
+                ? [{targets: {some: {workspaceId: {in: permittedWritableIds}}}}] : []),
+            ...(permittedReadableIds.length
+                ? [{status: PUBLICATION_STATUSES.PUBLISHED, targets: {some: {workspaceId: {in: permittedReadableIds}}}}] : []),
         ];
     }
     if (status) where.status = status;
@@ -1087,6 +1095,9 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
 
 export async function listScreenPublicationRevisions({screenBinding, publicationId}) {
     const publication = await getPublicationOrThrow(publicationId);
+    if (publication.type !== PUBLICATION_TYPES.ASSIGNMENT) {
+        throw publicationError("大屏只能查看作业历史", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
+    }
     assertScreenCanAccessPublication(screenBinding, publication);
     return prisma.publicationRevision.findMany({
         where: {publicationId},
@@ -1118,6 +1129,9 @@ export async function restoreScreenPublicationRevision({
         throw publicationError("需要提供有效的 revision 或 If-Match", "PUBLICATION_REVISION_REQUIRED", 428);
     }
     const existing = await getPublicationOrThrow(publicationId);
+    if (existing.type !== PUBLICATION_TYPES.ASSIGNMENT) {
+        throw publicationError("大屏只能恢复作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
+    }
     assertScreenCanWriteWorkspaces(
         screenBinding,
         existing.targets.map((target) => target.workspace),
@@ -1126,6 +1140,9 @@ export async function restoreScreenPublicationRevision({
         where: {publicationId_revision: {publicationId, revision: Number(sourceRevision)}},
     });
     if (!source) throw publicationError("历史版本不存在", "PUBLICATION_REVISION_NOT_FOUND", 404);
+    if (source.snapshot?.type !== PUBLICATION_TYPES.ASSIGNMENT) {
+        throw publicationError("大屏只能恢复作业历史", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
+    }
     if (source.snapshot?.status === PUBLICATION_STATUSES.WITHDRAWN) {
         throw publicationError("撤回记录不能恢复", "WITHDRAWN_REVISION_NOT_RESTORABLE", 409);
     }
