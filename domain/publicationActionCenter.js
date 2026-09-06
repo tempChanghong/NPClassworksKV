@@ -123,5 +123,7 @@ export function compareActionRequiredItems(left, right) {
     const priorityDifference = (PRIORITY_ORDER[left.publication.priority] ?? 3)
         - (PRIORITY_ORDER[right.publication.priority] ?? 3);
     if (priorityDifference) return priorityDifference;
-    return new Date(left.publication.updatedAt).getTime() - new Date(right.publication.updatedAt).getTime();
+    const updatedDifference = new Date(left.publication.updatedAt).getTime() - new Date(right.publication.updatedAt).getTime();
+    if (updatedDifference) return updatedDifference;
+    return left.publication.id === right.publication.id ? 0 : left.publication.id < right.publication.id ? -1 : 1;
 }

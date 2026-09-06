@@ -1,3 +1,4 @@
+import {queryActionRequiredPage} from "./publicationActionQuery.js";
 import {lockClassroomScreenWrite} from "./screenWriteAuthorization.js";
 import {prisma} from "../utils/prisma.js";
 import {Prisma} from "../generated/prisma/client.ts";
@@ -28,10 +29,7 @@ import {
     resolveClassroomScreenWorkspaces,
 } from "./classroomScreenService.js";
 import {
-    ACTION_REQUIRED_REASONS,
     classifyActionRequiredPublication,
-    compareActionRequiredItems,
-    isPublicationWithinActionScope,
 } from "../domain/publicationActionCenter.js";
 import {findDuplicateAssignmentCandidates} from "../domain/publicationDuplicate.js";
 import {screenPublicationRequest} from "../domain/publicationRequest.js";
@@ -402,8 +400,8 @@ export async function listActionRequiredPublications({
     skip = 0,
     now = new Date(),
 }) {
-    const safeLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
-    const safeSkip = Math.max(Number(skip) || 0, 0);
+    const safeLimit = Math.min(Math.max(Math.trunc(Number(limit)) || 20, 1), 100);
+    const safeSkip = Math.min(Math.max(Math.trunc(Number(skip)) || 0, 0), 2147483647);
     const actionScope = await getActionCenterScope(accountId);
     if (!actionScope.candidateWorkspaceIds.length) {
         return {
@@ -416,64 +414,28 @@ export async function listActionRequiredPublications({
         };
     }
 
-    const targetSome = {};
-    if (workspaceId) targetSome.workspaceId = workspaceId;
-    if (schoolId) targetSome.workspace = {term: {schoolId}};
-    const targetFilter = {
-        every: {workspaceId: {in: actionScope.candidateWorkspaceIds}},
-        some: targetSome,
-    };
-    const publications = await prisma.publication.findMany({
-        where: {
-            status: PUBLICATION_STATUSES.PUBLISHED,
-            isCertified: false,
-            publishAt: {lte: now},
-            ...(subjectId ? {subjectId} : {}),
-            targets: targetFilter,
-        },
-        include: {
-            ...publicationInclude,
-            revisions: {
-                where: {isCertified: true, purgedAt: null},
-                orderBy: {revision: "desc"},
-                take: 1,
-                select: {
-                    id: true,
-                    revision: true,
-                    snapshot: true,
-                    certifiedAt: true,
-                    certifiedBy: {select: {id: true, name: true}},
+    return prisma.$transaction(async tx => {
+        const {ids, filteredTotal, ...summary} = await queryActionRequiredPage(tx, {
+            scope: actionScope, schoolId, workspaceId, subjectId, reason, limit: safeLimit, skip: safeSkip, now,
+        });
+        const publications = ids.length ? await tx.publication.findMany({
+            where: {id: {in: ids}},
+            include: {
+                ...publicationInclude,
+                revisions: {
+                    where: {isCertified: true, purgedAt: null},
+                    orderBy: {revision: "desc"},
+                    take: 1,
+                    select: {id: true, revision: true, snapshot: true, certifiedAt: true, certifiedBy: {select: {id: true, name: true}}},
                 },
             },
-        },
-    });
-    const allItems = publications
-        .filter((publication) => isPublicationWithinActionScope(publication, actionScope))
-        .map((publication) => classifyActionRequiredPublication(publication, {now}))
-        .sort(compareActionRequiredItems);
-    const summary = {
-        total: allItems.length,
-        changedAfterCertified: allItems.filter(
-            (item) => item.reason === ACTION_REQUIRED_REASONS.CHANGED_AFTER_CERTIFICATION,
-        ).length,
-        createdByScreen: allItems.filter(
-            (item) => item.reason === ACTION_REQUIRED_REASONS.CREATED_BY_SCREEN,
-        ).length,
-        other: allItems.filter(
-            (item) => item.reason === ACTION_REQUIRED_REASONS.OTHER_UNCERTIFIED,
-        ).length,
-        dueSoon: allItems.filter((item) => item.dueSoon).length,
-        overdue: allItems.filter((item) => item.overdue).length,
-    };
-    const filteredItems = reason ? allItems.filter((item) => item.reason === reason) : allItems;
-    return {
-        items: filteredItems.slice(safeSkip, safeSkip + safeLimit),
-        total: filteredItems.length,
-        limit: safeLimit,
-        skip: safeSkip,
-        summary,
-        generatedAt: now,
-    };
+        }) : [];
+        const byId = new Map(publications.map(publication => [publication.id, publication]));
+        return {
+            items: ids.map(id => classifyActionRequiredPublication(byId.get(id), {now})),
+            total: filteredTotal, limit: safeLimit, skip: safeSkip, summary, generatedAt: now,
+        };
+    }, {isolationLevel: "RepeatableRead", maxWait: 10000, timeout: 15000});
 }
 
 function shanghaiBoardDate(now = new Date()) {
