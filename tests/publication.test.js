@@ -224,3 +224,16 @@ test("the feed chooses the earliest scheduled publish or expiry boundary", () =>
     );
     assert.equal(earliestPublicationTransition(null, undefined), null);
 });
+
+
+test("no-homework metadata survives normal publication validation and can be explicitly cleared", () => {
+    const workspaces = [adminClass("class", "一班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS)];
+    const input = {...assignment(["class"]), title: "今日无作业", content: "本日该科目无作业。", dueAt: null,
+        contentJson: {kind: "NO_HOMEWORK", version: 1}};
+    const result = validatePublicationSnapshot({input, workspaces});
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.normalized.contentJson, input.contentJson);
+    const changed = validatePublicationSnapshot({input: {...input, content: "补充练习", contentJson: null}, workspaces});
+    assert.equal(changed.valid, true);
+    assert.equal(changed.normalized.contentJson, null);
+});

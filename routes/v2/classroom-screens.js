@@ -109,6 +109,8 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
     const result = await listPublishedFeed({
         workspaceIds: workspaces.map((workspace) => workspace.id),
         boardDate: req.query.boardDate,
+        weekStart: req.query.weekStart,
+        weekView: req.query.weekView,
         limit: req.query.limit,
         skip: req.query.skip,
     });

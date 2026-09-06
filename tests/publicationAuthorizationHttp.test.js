@@ -114,3 +114,37 @@ test("history pagination keeps route authorization and validates cursor paramete
     blocked.targets = [{workspaceId: "other-school", workspace: {id: "other-school", type: "ADMIN_CLASS"}}];
     assert.equal((await fetch(url, {headers})).status, 403);
 });
+
+
+test("weekly HTTP feeds keep classroom token scope and pass bounded date filters to storage", async t => {
+    let query;
+    const mock = {method(object, name, value) {
+        const original = object[name]; object[name] = value; t.after(() => { object[name] = original; });
+    }};
+    mock.method(prisma.publication, "findMany", async args => { query = args; return []; });
+    mock.method(prisma.publication, "count", async () => 0);
+    mock.method(prisma.publication, "findFirst", async () => null);
+    const suffix = "?weekStart=2026-09-07&weekView=due&limit=2&skip=3";
+    const screenUrl = origin + "/api/v2/classroom-screens/feed" + suffix + "&workspaceIds=group";
+    assert.equal((await fetch(screenUrl)).status, 401);
+    const screen = await fetch(screenUrl, {headers: {"X-Classworks-Screen-Token": "screen-token"}});
+    assert.equal(screen.status, 200);
+    const body = (await screen.json()).data;
+    assert.equal(body.weekStart, "2026-09-07"); assert.equal(body.weekView, "due");
+    assert.deepEqual(query.where.targets.some.workspaceId.in, ["class-a"]);
+    assert.equal(query.where.status, "PUBLISHED");
+    assert.ok(query.where.publishAt.lte instanceof Date);
+    assert.deepEqual(query.where.OR, [{type: "ASSIGNMENT", dueAt: {
+        gte: new Date("2026-09-06T16:00:00Z"), lt: new Date("2026-09-13T16:00:00Z"),
+    }}]);
+    assert.equal(query.take, 2); assert.equal(query.skip, 3);
+    assert.deepEqual(query.orderBy.at(-1), {id: "asc"});
+    const publicUrl = origin + "/api/v2/publications/feed?workspaceIds=group&weekStart=2026-09-07&weekView=board";
+    assert.equal((await fetch(publicUrl)).status, 200);
+    assert.deepEqual(query.where.targets.some.workspaceId.in, ["group"]);
+    assert.deepEqual(query.where.OR, [{type: "ASSIGNMENT", boardDate: {
+        gte: new Date("2026-09-07T00:00:00Z"), lt: new Date("2026-09-14T00:00:00Z"),
+    }}]);
+    assert.equal((await fetch(publicUrl.replace("2026-09-07", "2026-02-30"))).status, 422);
+    assert.equal((await fetch(publicUrl.replace("weekView=board", "weekView=bad"))).status, 422);
+});

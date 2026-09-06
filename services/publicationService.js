@@ -1,3 +1,4 @@
+import {publicationWeekWindow} from "../domain/publicationWeek.js";
 import {queryActionRequiredPage} from "./publicationActionQuery.js";
 import {lockClassroomScreenWrite} from "./screenWriteAuthorization.js";
 import {prisma} from "../utils/prisma.js";
@@ -458,7 +459,8 @@ function normalizeBoardDate(value, {defaultToday = false} = {}) {
     return parsed;
 }
 
-export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, skip = 0, now = new Date()}) {
+export async function listPublishedFeed({workspaceIds, boardDate, weekStart, weekView, limit = 50, skip = 0, now = new Date()}) {
+    const week = publicationWeekWindow(weekStart, weekView);
     const targetIds = [...new Set((workspaceIds || []).filter(Boolean))];
     if (targetIds.length === 0) {
         throw publicationError("至少需要选择一个教学空间", "PUBLICATION_TARGET_REQUIRED", 400);
@@ -484,7 +486,7 @@ export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, sk
     const safeLimit = Math.min(Math.max(Number(limit) || 50, 1), 100);
     const safeSkip = Math.max(Number(skip) || 0, 0);
     const selectedBoardDate = normalizeBoardDate(boardDate, {defaultToday: true});
-    const visibleForBoardDate = [
+    const visibleForBoardDate = week ? [week.where] : [
         {type: PUBLICATION_TYPES.ASSIGNMENT, boardDate: selectedBoardDate},
         {
             type: PUBLICATION_TYPES.NOTICE,
@@ -500,7 +502,7 @@ export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, sk
     const [items, total, nextScheduled, nextExpiry] = await Promise.all([
         prisma.publication.findMany({
             where,
-            orderBy: [{publishAt: "desc"}, {updatedAt: "desc"}],
+            orderBy: [{publishAt: "desc"}, {updatedAt: "desc"}, ...(week ? [{id: "asc"}] : [])],
             take: safeLimit,
             skip: safeSkip,
             include: publicFeedInclude,
@@ -535,6 +537,7 @@ export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, sk
         skip: safeSkip,
         workspaceIds: targetIds,
         boardDate: selectedBoardDate.toISOString().slice(0, 10),
+        ...(week ? {weekStart: week.weekStart, weekView: week.weekView} : {}),
         generatedAt: now,
         nextTransitionAt: earliestPublicationTransition(
             nextScheduled?.publishAt,
