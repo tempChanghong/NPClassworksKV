@@ -25,6 +25,7 @@ const testEnv = {
     NODE_ENV: "test",
     DATABASE_URL: databaseUrl,
     RUN_DATABASE_TESTS: "true",
+    INTEGRATION_COMPOSE_PROJECT: projectName,
     BOOTSTRAP_SETUP_KEY: "integration-bootstrap-key-at-least-32-characters",
 };
 
@@ -41,6 +42,7 @@ try {
         "tests/publicationIdempotencyDatabase.integration.test.js",
         "tests/sessionRevocationDatabase.integration.test.js",
         "tests/publicationRevisionCleanupDatabase.integration.test.js",
+        "tests/backupRestoreDatabase.integration.test.js",
     ], testEnv);
     console.log("真实 PostgreSQL 集成测试通过。");
 } finally {

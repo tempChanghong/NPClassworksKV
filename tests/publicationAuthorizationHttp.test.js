@@ -96,3 +96,21 @@ test("screen rejects NOTICE history and restore, including a NOTICE snapshot on 
     history.snapshot.type = "ASSIGNMENT";
     assert.equal((await fetch(path + "/revisions", {headers})).status, 200);
 });
+
+test("history pagination keeps route authorization and validates cursor parameters", async () => {
+    assert.equal((await get("/api/v2/publications/draft/revisions?limit=20")).status, 403);
+    const response = await get("/api/v2/publications/published/revisions?limit=20");
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).data.items.length, 1);
+    for (const query of ["limit=101", "limit=1&limit=2", "beforeRevision=0", "beforeRevision=abc"]) {
+        assert.equal((await get("/api/v2/publications/published/revisions?" + query)).status, 400);
+    }
+    const headers = {"X-Classworks-Screen-Token": "screen-token"};
+    items.find(item => item.id === "published").targets = [{workspaceId: "class-a", workspace: workspaces[0]}];
+    const url = origin + "/api/v2/classroom-screens/publications/published/revisions?limit=20";
+    assert.equal((await fetch(url)).status, 401);
+    assert.equal((await fetch(url, {headers})).status, 200);
+    const blocked = items.find(item => item.id === "published");
+    blocked.targets = [{workspaceId: "other-school", workspace: {id: "other-school", type: "ADMIN_CLASS"}}];
+    assert.equal((await fetch(url, {headers})).status, 403);
+});

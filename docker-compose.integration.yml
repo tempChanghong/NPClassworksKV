@@ -17,3 +17,9 @@ services:
       timeout: 3s
       retries: 30
       start_period: 3s
+
+  # Exercises restore.sh stop/start/readiness against an actual disposable service.
+  # This is a lifecycle fixture; restored data is verified separately through Prisma.
+  backend:
+    image: node:22-alpine
+    command: ["node", "-e", "require('http').createServer((req,res)=>{res.writeHead(req.url==='/ready'?200:404);res.end()}).listen(3000,'0.0.0.0')"]

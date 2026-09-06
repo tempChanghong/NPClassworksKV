@@ -130,6 +130,8 @@ router.get("/:id/revisions", errors.catchAsync(async (req, res) => {
     const revisions = await listPublicationRevisions({
         accountId: res.locals.account.id,
         publicationId: req.params.id,
+        page: req.query.limit !== undefined || req.query.beforeRevision !== undefined
+            ? {limit: req.query.limit, beforeRevision: req.query.beforeRevision} : undefined,
     });
     return res.json(errors.createSuccessResponse(revisions));
 }));

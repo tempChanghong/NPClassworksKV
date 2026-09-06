@@ -581,24 +581,42 @@ export async function listPublishedFeed({workspaceIds, boardDate, limit = 50, sk
     };
 }
 
-export async function listPublicationRevisions({accountId, publicationId}) {
+async function loadRevisionPage(publicationId, include, page) {
+    if (page === undefined) return prisma.publicationRevision.findMany({where: {publicationId}, orderBy: {revision: "desc"}, include});
+    const integer = (value, fallback) => {
+        if (value === undefined) return fallback;
+        if (typeof value !== "string" && typeof value !== "number") return NaN;
+        if (typeof value === "string" && !/^[1-9]\d*$/.test(value)) return NaN;
+        return Number(value);
+    };
+    const limit = integer(page.limit, 20);
+    const before = integer(page.beforeRevision, undefined);
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100
+        || (before !== undefined && (!Number.isSafeInteger(before) || before < 1 || before > 2147483647))) {
+        throw publicationError("历史分页参数无效", "PUBLICATION_HISTORY_PAGE_INVALID", 400);
+    }
+    const rows = await prisma.publicationRevision.findMany({
+        where: {publicationId, ...(before === undefined ? {} : {revision: {lt: before}})},
+        orderBy: {revision: "desc"}, take: limit + 1, include,
+    });
+    const items = rows.slice(0, limit);
+    return {items, nextBeforeRevision: rows.length > limit ? items.at(-1).revision : null};
+}
+
+export async function listPublicationRevisions({accountId, publicationId, page}) {
     const publication = await getPublicationOrThrow(publicationId);
     await assertCanReadPublication(accountId, publication);
-    return prisma.publicationRevision.findMany({
-        where: {publicationId},
-        orderBy: {revision: "desc"},
-        include: {
-            editor: {select: {id: true, name: true}},
-            certifiedBy: {select: {id: true, name: true}},
-            screenBinding: {
-                select: {
-                    id: true,
-                    name: true,
-                    administrativeClass: {select: {id: true, code: true, name: true}},
-                },
+    return loadRevisionPage(publicationId, {
+        editor: {select: {id: true, name: true}},
+        certifiedBy: {select: {id: true, name: true}},
+        screenBinding: {
+            select: {
+                id: true,
+                name: true,
+                administrativeClass: {select: {id: true, code: true, name: true}},
             },
         },
-    });
+    }, page);
 }
 
 export async function certifyPublication({accountId, publicationId, expectedRevision}) {
@@ -1098,21 +1116,17 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
     return publication;
 }
 
-export async function listScreenPublicationRevisions({screenBinding, publicationId}) {
+export async function listScreenPublicationRevisions({screenBinding, publicationId, page}) {
     const publication = await getPublicationOrThrow(publicationId);
     if (publication.type !== PUBLICATION_TYPES.ASSIGNMENT) {
         throw publicationError("大屏只能查看作业历史", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
     }
     assertScreenCanAccessPublication(screenBinding, publication);
-    return prisma.publicationRevision.findMany({
-        where: {publicationId},
-        orderBy: {revision: "desc"},
-        include: {
-            editor: {select: {id: true, name: true}},
-            certifiedBy: {select: {id: true, name: true}},
-            screenBinding: {select: {id: true, name: true}},
-        },
-    });
+    return loadRevisionPage(publicationId, {
+        editor: {select: {id: true, name: true}},
+        certifiedBy: {select: {id: true, name: true}},
+        screenBinding: {select: {id: true, name: true}},
+    }, page);
 }
 
 export async function getScreenPublication({screenBinding, publicationId}) {
