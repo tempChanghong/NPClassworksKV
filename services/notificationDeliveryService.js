@@ -10,67 +10,63 @@ function deliveryError(message, code, statusCode = 400) {
 }
 
 export async function acknowledgeScreenNotifications({screenBinding, items}) {
-    const normalized = normalizeNotificationDeliveryItems(items);
+    const normalized = normalizeNotificationDeliveryItems(items)
+        .sort((left, right) => left.publicationId.localeCompare(right.publicationId));
     if (!normalized.length) return [];
+    if (!screenBinding.tokenHash) throw deliveryError("大屏绑定已失效", "SCREEN_TOKEN_INVALID", 401);
 
     const workspaces = await resolveClassroomScreenWorkspaces(screenBinding);
     const allowedWorkspaceIds = workspaces.map((workspace) => workspace.id);
-    const publications = await prisma.publication.findMany({
-        where: {
-            id: {in: normalized.map((item) => item.publicationId)},
-            type: "NOTICE",
-            status: "PUBLISHED",
-            targets: {some: {workspaceId: {in: allowedWorkspaceIds}}},
-        },
-        select: {id: true, revision: true},
-    });
-    const allowed = new Map(publications.map((publication) => [publication.id, publication]));
-    const existing = await prisma.notificationScreenDelivery.findMany({
-        where: {
-            screenBindingId: screenBinding.id,
-            publicationId: {in: [...allowed.keys()]},
-        },
-    });
-    const existingByPublication = new Map(existing.map((delivery) => [delivery.publicationId, delivery]));
-    const now = new Date();
-    const operations = normalized.flatMap((item) => {
-        const publication = allowed.get(item.publicationId);
-        if (!publication || publication.revision !== item.revision) return [];
-        const previous = existingByPublication.get(item.publicationId);
-        const newRevision = previous?.revision !== item.revision;
-        return [prisma.notificationScreenDelivery.upsert({
+    return prisma.$transaction(async tx => {
+        // Serialize receipt batches for one binding and recheck the credential in the
+        // same transaction. This UPDATE also prevents revocation halfway through.
+        const binding = await tx.classroomScreenBinding.updateMany({
             where: {
-                publicationId_screenBindingId: {
-                    publicationId: item.publicationId,
-                    screenBindingId: screenBinding.id,
+                id: screenBinding.id, isActive: true, tokenHash: screenBinding.tokenHash,
+                credentialVersion: screenBinding.credentialVersion,
+                administrativeClassId: screenBinding.administrativeClassId,
+            },
+            data: {lastUsedAt: new Date()},
+        });
+        if (binding.count !== 1) throw deliveryError("大屏绑定已失效", "SCREEN_TOKEN_INVALID", 401);
+        const results = [];
+        for (const item of normalized) {
+            // Publication writes must wait until this receipt commits. Re-read version
+            // and status after the lock, so a delayed request cannot acknowledge old data.
+            await tx.$queryRaw`SELECT "id" FROM "Publication" WHERE "id" = ${item.publicationId} FOR SHARE`;
+            const publication = await tx.publication.findFirst({
+                where: {
+                    id: item.publicationId, revision: item.revision, type: "NOTICE", status: "PUBLISHED",
+                    targets: {some: {workspaceId: {in: allowedWorkspaceIds}}},
                 },
-            },
-            create: {
-                publicationId: item.publicationId,
-                screenBindingId: screenBinding.id,
-                revision: item.revision,
-                receivedAt: now,
-                displayedAt: item.displayed ? now : null,
-                acknowledgedAt: item.acknowledged ? now : null,
-            },
-            update: {
-                revision: item.revision,
-                ...(newRevision ? {
-                    receivedAt: now,
-                    displayedAt: item.displayed ? now : null,
-                    acknowledgedAt: item.acknowledged ? now : null,
-                } : {}),
-                ...(!newRevision && item.displayed && !previous?.displayedAt ? {displayedAt: now} : {}),
-                ...(!newRevision && item.acknowledged && !previous?.acknowledgedAt ? {acknowledgedAt: now} : {}),
-            },
-        })];
-    });
-    await prisma.classroomScreenBinding.update({
-        where: {id: screenBinding.id},
-        data: {lastUsedAt: now},
-    });
-    return operations.length ? prisma.$transaction(operations) : [];
+                select: {revision: true},
+            });
+            if (!publication) continue;
+            const where = {publicationId_screenBindingId: {publicationId: item.publicationId, screenBindingId: screenBinding.id}};
+            const previous = await tx.notificationScreenDelivery.findUnique({where});
+            if (previous && previous.revision > item.revision) continue;
+            const newRevision = previous?.revision !== item.revision;
+            const now = new Date();
+            results.push(await tx.notificationScreenDelivery.upsert({
+                where,
+                create: {
+                    publicationId: item.publicationId, screenBindingId: screenBinding.id, revision: item.revision,
+                    receivedAt: now, displayedAt: item.displayed ? now : null, acknowledgedAt: item.acknowledged ? now : null,
+                },
+                update: {
+                    revision: item.revision,
+                    ...(newRevision ? {
+                        receivedAt: now, displayedAt: item.displayed ? now : null, acknowledgedAt: item.acknowledged ? now : null,
+                    } : {}),
+                    ...(!newRevision && item.displayed && !previous.displayedAt ? {displayedAt: now} : {}),
+                    ...(!newRevision && item.acknowledged && !previous.acknowledgedAt ? {acknowledgedAt: now} : {}),
+                },
+            }));
+        }
+        return results;
+    }, {maxWait: 10000, timeout: 15000});
 }
+
 
 export async function listNotificationScreenDeliveries({accountId, publicationId}) {
     const publication = await prisma.publication.findUnique({
