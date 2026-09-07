@@ -17,12 +17,13 @@ import academicMeRouter from "./routes/v2/academic-me.js";
 import publicationsRouter from "./routes/v2/publications.js";
 import classroomScreensRouter from "./routes/v2/classroom-screens.js";
 import setupRouter from "./routes/v2/setup.js";
-import {register} from "./utils/metrics.js";
+import {register, httpMetrics} from "./utils/metrics.js";
 import {prisma} from "./utils/prisma.js";
 import cors from "cors";
 import {createHttpCorsOptions} from "./utils/corsConfig.js";
 
 var app = express();
+app.use(httpMetrics);
 
 if (process.env.TRUST_PROXY) {
     const parsedTrustProxy = Number.parseInt(process.env.TRUST_PROXY, 10);

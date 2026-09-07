@@ -7,7 +7,6 @@
 import app from '../app.js';
 import {createServer} from 'http';
 import {initSocket} from '../utils/socket.js';
-import {initializeMetrics} from '../utils/metrics.js';
 import {prisma} from '../utils/prisma.js';
 import {assertProductionConfig} from '../utils/productionConfig.js';
 import {startPublicationRevisionCleanup} from '../services/publicationRevisionCleanupService.js';
@@ -30,8 +29,6 @@ var server = createServer(app);
 // 初始化 Socket.IO 并绑定到 HTTP Server
 const io = initSocket(server);
 
-// 初始化 Prometheus 指标
-initializeMetrics();
 const stopPublicationRevisionCleanup = startPublicationRevisionCleanup();
 
 /**

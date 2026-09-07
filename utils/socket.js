@@ -7,6 +7,7 @@
 import {Server} from "socket.io";
 import {prisma} from "./prisma.js";
 import {getAllowedOrigins} from "./corsConfig.js";
+import {socketConnectionsGauge} from "./metrics.js";
 
 let io = null;
 
@@ -24,6 +25,8 @@ export function initSocket(server) {
     });
 
     io.on("connection", (socket) => {
+        socketConnectionsGauge.inc();
+        socket.once("disconnect", () => socketConnectionsGauge.dec());
         socket.data.workspaceIds = new Set();
 
         socket.on("join-workspaces", async (payload) => {

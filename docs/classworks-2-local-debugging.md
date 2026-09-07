@@ -10,8 +10,10 @@
 pnpm run debug:init
 pnpm run debug:db:up
 pnpm run debug:prepare
-pnpm run debug:server
+pnpm run dev
 ```
+
+后端 dev 使用 Node 22 内置 watch，显式加载 deploy/.env.debug；修改代码后自动重启。无需自动重启时仍可使用 pnpm debug:server。
 
 另开一个终端，在 NPClassworks 中运行：
 
@@ -24,7 +26,7 @@ pnpm run dev
 - 管理页：`http://localhost:3031/classworks-admin`
 - Classworks 作业板：`http://localhost:3031/`
 
-如果浏览器曾经访问过本地前端，请先清除 `localhost:3031` 的站点数据，以免旧 localStorage 覆盖 `.env.local` 中的后端地址。
+前端开发地址优先使用 `.env.local` 中的 VITE_SERVER_URL；未设置时走同源代理。本地存储不会覆盖该地址，不需要为切换开发地址清除站点数据。
 
 Vite 会把 API、健康检查和 Socket.IO 从 3031 同源代理到本地后端3000，行为与生产环境的 Caddy 路由一致；浏览器不需要直接跨端口访问后端。
 

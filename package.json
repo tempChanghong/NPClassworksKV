@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "NODE_ENV=development nodemon node .bin/www",
+    "dev": "node --watch --env-file=deploy/.env.debug scripts/dev-server.js",
     "test": "node --test",
     "test:database": "node scripts/run-database-tests.js",
     "test:release": "node --test && node scripts/run-database-tests.js",
