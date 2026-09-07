@@ -30,8 +30,66 @@ jobs:
         timeout-minutes: 15
         run: pnpm test:database
 
+  fullstack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # Checkout the frontend explicitly: the triggering repository is the backend.
+      - name: Checkout frontend main
+        uses: actions/checkout@v4
+        with:
+          repository: tempChanghong/NPClassworks
+          ref: refs/heads/main
+          persist-credentials: false
+      - name: Checkout the triggering backend commit
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          path: .contract-backend
+          persist-credentials: false
+      - name: Record and verify the tested revisions
+        shell: bash
+        run: |
+          frontend_sha="$(git rev-parse HEAD)"
+          backend_sha="$(git -C .contract-backend rev-parse HEAD)"
+          test "$backend_sha" = "$GITHUB_SHA"
+          mkdir -p test-results/fullstack-metadata
+          jq -n --arg frontend "$frontend_sha" --arg backend "$backend_sha" \
+            '{frontend: $frontend, backend: $backend}' \
+            > test-results/fullstack-metadata/checkout-versions.json
+          {
+            printf '### Fullstack checkout pair\n\n'
+            printf -- '- Frontend: %s\n' "$frontend_sha"
+            printf -- '- Backend: %s\n' "$backend_sha"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
+        working-directory: .contract-backend
+      - name: Test actual consumer and producer modules
+        run: pnpm test:contracts
+        env:
+          CLASSWORKS_BACKEND_ROOT: ${{ github.workspace }}/.contract-backend
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Test production PWA with real backend and disposable PostgreSQL
+        run: pnpm test:e2e:fullstack
+        env:
+          CLASSWORKS_BACKEND_ROOT: ${{ github.workspace }}/.contract-backend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-fullstack-test-results
+          path: test-results/
+          retention-days: 7
+
   deploy:
-    needs: verify
+    needs: [verify, fullstack]
     runs-on: ubuntu-latest
     environment: production
     steps:

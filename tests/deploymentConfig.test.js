@@ -168,5 +168,5 @@ test("push deployment fetches both repositories and uses the signed deployment a
     assert.match(workflow, /X-NP-Deploy-Signature/);
     assert.match(workflow, /createHmac\("sha256"/);
     assert.doesNotMatch(workflow, /DEPLOY_SSH_KEY|StrictHostKeyChecking|\bssh\s/);
-    assert.match(workflow, /needs: verify/);
+    assert.match(workflow, /needs: \[verify, fullstack\]/);
 });
