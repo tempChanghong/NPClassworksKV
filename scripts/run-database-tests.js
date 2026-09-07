@@ -44,6 +44,7 @@ try {
         "tests/workspaceAssignmentDatabase.integration.test.js",
         "tests/publicationIdempotencyDatabase.integration.test.js",
         "tests/sessionRevocationDatabase.integration.test.js",
+        "tests/accountSessionDatabase.integration.test.js",
         "tests/publicationRevisionCleanupDatabase.integration.test.js",
         "tests/backupRestoreDatabase.integration.test.js",
     ], testEnv);

@@ -336,6 +336,19 @@ export async function validateAccountToken(decoded) {
         throw new Error('Token version mismatch');
     }
 
+    // Only genuinely absent session IDs use the pre-session compatibility path.
+    if (Object.hasOwn(decoded, 'sessionId')) {
+        if (typeof decoded.sessionId !== 'string' || !decoded.sessionId.trim()) {
+            throw new Error('Invalid account session');
+        }
+        const session = await prisma.accountSession.findUnique({where: {id: decoded.sessionId}});
+        if (!session || session.accountId !== account.id || session.revokedAt
+            || !session.expiresAt || new Date(session.expiresAt).getTime() <= Date.now()
+            || !Number.isFinite(new Date(session.expiresAt).getTime())) {
+            throw new Error('Account session revoked or expired');
+        }
+    }
+
     return account;
 }
 
