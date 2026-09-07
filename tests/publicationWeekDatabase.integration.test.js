@@ -25,7 +25,7 @@ test("weekly feeds preserve scope and visibility, paginate ties, and include ear
     });
     async function seed(name, data = {}, workspace = workspaces[0]) {
         const item = await prisma.publication.create({data: {
-            id: suffix + name, subjectId: subject.id, type: "ASSIGNMENT", status: "PUBLISHED", title: name,
+            id: suffix + name, subjectId: subject.id, type: "ASSIGNMENT", status: "PUBLISHED", title: name, content: `测试作业 ${name}`,
             boardDate: new Date("2099-09-07T00:00:00Z"), publishAt: new Date("2099-09-01T00:00:00Z"), updatedAt: now,
             ...data, targets: {create: {workspaceId: workspace.id}},
         }});

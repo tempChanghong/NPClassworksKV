@@ -170,3 +170,21 @@ test("push deployment fetches both repositories and uses the signed deployment a
     assert.doesNotMatch(workflow, /DEPLOY_SSH_KEY|StrictHostKeyChecking|\bssh\s/);
     assert.match(workflow, /needs: \[verify, fullstack\]/);
 });
+
+test("fullstack installs the nested backend independently and keeps both deployment gates", () => {
+    const workflow = read("../.github/workflows/production-deploy.yml");
+    assert.match(workflow, /run: pnpm install --frozen-lockfile --ignore-workspace\r?\n\s*working-directory: \.contract-backend/);
+    assert.match(workflow, /needs: \[verify, fullstack\]/);
+    assert.doesNotMatch(workflow, /continue-on-error: true/);
+});
+
+test("image publishing uses this repository and only enables Docker Hub with both credentials", () => {
+    const workflow = read("../.github/workflows/docker-publish.yml");
+    assert.match(workflow, /DOCKERHUB_ENABLED: \$\{\{ vars\.DOCKERHUB_USERNAME != '' && secrets\.DOCKERHUB_TOKEN != '' \}\}/);
+    assert.match(workflow, /REPOSITORY: \$\{\{ github\.repository \}\}/);
+    assert.match(workflow, /\$\{REGISTRY\}\/\$\{REPOSITORY,,\}/);
+    assert.match(workflow, /if \[ "\$DOCKERHUB_ENABLED" = "true" \]; then/);
+    assert.match(workflow, /if: github\.event_name != 'pull_request' && env\.DOCKERHUB_ENABLED == 'true'/);
+    assert.match(workflow, /images: \$\{\{ steps\.images\.outputs\.names \}\}/);
+    assert.doesNotMatch(workflow, /zerocatdev|continue-on-error|inputs\.tags/);
+});

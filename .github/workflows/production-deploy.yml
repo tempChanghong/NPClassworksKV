@@ -70,7 +70,8 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install --frozen-lockfile
-      - run: pnpm install --frozen-lockfile
+      # The nested checkout must not inherit the frontend pnpm workspace.
+      - run: pnpm install --frozen-lockfile --ignore-workspace
         working-directory: .contract-backend
       - name: Test actual consumer and producer modules
         run: pnpm test:contracts
