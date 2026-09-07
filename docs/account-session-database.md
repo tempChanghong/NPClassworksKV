@@ -23,3 +23,9 @@
 - 本机 Docker 引擎未运行，未启动 Docker Desktop，未执行 PostgreSQL 场景；新增用例尚待 GitHub CI 实测，不将编写完成或默认跳过表述为数据库验证通过。
 
 此用例验证退出提交后发起的新请求，不宣称中断已经通过鉴权的在途业务请求，也不改变历史无 sessionId 令牌的兼容范围。没有推送、触发部署或访问生产服务器。
+
+## 后续 PostgreSQL 实测（2026-09-07）
+
+用户启动 Docker 后，通过前端的全链路运行器，在新建的隔离 PostgreSQL 17 数据库上应用全部已有迁移，再实际执行本文件对应的 accountSessionDatabase.integration.test.js：1 项通过、0 失败、0 跳过。随后三个浏览器全链路场景也全部通过。
+
+这补齐了前文因 Docker 未运行而缺失的单会话持久化实测。通过时后端代码为 1bbb1e11fac90faeb415b24c947ef07a193b0d28；未修改后端业务代码或数据库结构。测试容器和网络已清理，未连接生产数据库。完整记录见前端 docs/fullstack-smoke-tests.md 的“Docker 启动后的完整实测”。本次没有运行后端完整 test:database 清单。
