@@ -106,12 +106,29 @@ export async function loginLocalAccount({schoolCode, username, password}) {
         throw loginError();
     }
 
-    const updated = await prisma.account.update({
-        where: {id: account.id},
-        data: {localLoginFailures: 0, localLockedUntil: null, lastLoginAt: new Date()},
-    });
+    // A PIN reset may commit while bcrypt runs. Never issue tokens using a
+    // newer credential version than the one this request actually verified.
+    let updated;
+    try {
+        updated = await prisma.account.update({
+            where: {id: account.id, tokenVersion: account.tokenVersion,
+                localPasswordHash: account.localPasswordHash, localDisabled: false},
+            data: {localLoginFailures: 0, localLockedUntil: null, lastLoginAt: new Date()},
+        });
+    } catch (error) {
+        if (error.code === "P2025") throw loginError();
+        throw error;
+    }
     const tokens = await generateTokenPair(updated);
     return {account: publicLocalAccount(updated), ...tokens};
+}
+
+// Called inside the credential-write transaction; cover modern and legacy sessions.
+async function revokeReplacedCredentialSessions(tx, accountId) {
+    await tx.account.update({where: {id: accountId}, data: {
+        tokenVersion: {increment: 1}, refreshToken: null, refreshTokenExpiry: null,
+    }});
+    await tx.accountSession.updateMany({where: {accountId, revokedAt: null}, data: {revokedAt: new Date()}});
 }
 
 export async function importLocalTeachers({managerAccountId, schoolId, termId, document, dryRun = false, requireWorkspaces = true}) {
@@ -188,6 +205,7 @@ export async function importLocalTeachers({managerAccountId, schoolId, termId, d
                     providerData: {schoolCode: school.code},
                 },
             });
+            if (existing && assignment.pin) await revokeReplacedCredentialSessions(tx, account.id);
             if (!existing) createdAccounts += 1;
             for (const code of assignment.workspaceCodes) {
                 await tx.workspaceMember.upsert({
@@ -326,6 +344,7 @@ export async function createLocalAdministrator({managerAccountId, schoolId, user
                 providerData: {schoolCode: school.code},
             },
         });
+        if (existing) await revokeReplacedCredentialSessions(tx, account.id);
         const membership = await tx.schoolMember.upsert({
             where: {schoolId_accountId: {schoolId, accountId: account.id}},
             update: {role: normalizedRole},

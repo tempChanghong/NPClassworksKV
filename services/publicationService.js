@@ -31,6 +31,7 @@ import {
 } from "./classroomScreenService.js";
 import {
     classifyActionRequiredPublication,
+    isPublicationWithinActionScope,
 } from "../domain/publicationActionCenter.js";
 import {findDuplicateAssignmentCandidates} from "../domain/publicationDuplicate.js";
 import {screenPublicationRequest} from "../domain/publicationRequest.js";
@@ -240,6 +241,17 @@ async function assertNoDuplicateAssignment({normalized, input, excludePublicatio
     );
 }
 
+// Editing authority is broader than certification authority. Always evaluate
+// the final subject and every final target, including for imported history.
+async function accountCertification(accountId, normalized, workspaces, tx) {
+    const scope = await getPublicationCertificationScope(accountId, workspaces, tx);
+    const isCertified = isPublicationWithinActionScope({
+        subjectId: normalized.subjectId,
+        targets: normalized.targetWorkspaceIds.map(workspaceId => ({workspaceId})),
+    }, scope);
+    return {isCertified, certifiedByAccountId: isCertified ? accountId : null, certifiedAt: isCertified ? new Date() : null};
+}
+
 export async function createPublication({accountId, input}) {
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
     const workspaces = await loadPublicationWorkspaces(targetIds);
@@ -250,15 +262,13 @@ export async function createPublication({accountId, input}) {
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
     await assertNoDuplicateAssignment({normalized, input});
-    const certifiedAt = new Date();
     const publication = await prisma.$transaction(async (tx) => {
+        const certification = await accountCertification(accountId, normalized, workspaces, tx);
         const created = await tx.publication.create({
             data: {
                 authorAccountId: accountId,
                 ...toPublicationData(normalized),
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
                 latestActorType: "ACCOUNT",
                 targets: {
                     create: normalized.targetWorkspaceIds.map((workspaceId) => ({workspaceId})),
@@ -273,9 +283,7 @@ export async function createPublication({accountId, input}) {
                 action: "CREATED",
                 actorType: "ACCOUNT",
                 editorAccountId: accountId,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
             }),
         });
         return tx.publication.findUnique({where: {id: created.id}, include: publicationInclude});
@@ -658,17 +666,15 @@ export async function restorePublicationRevision({
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
-    const certifiedAt = new Date();
 
     const publication = await prisma.$transaction(async (tx) => {
+        const certification = await accountCertification(accountId, normalized, workspaces, tx);
         const result = await tx.publication.updateMany({
             where: {id: publicationId, revision: expectedRevision},
             data: {
                 ...toPublicationData(normalized),
                 withdrawnAt: null,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
                 latestActorType: "ACCOUNT",
                 latestScreenBindingId: null,
                 revision: {increment: 1},
@@ -694,9 +700,7 @@ export async function restorePublicationRevision({
                 actorType: "ACCOUNT",
                 editorAccountId: accountId,
                 restoredFromRevision: sourceRevision,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
             }),
         });
         return tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude});
@@ -1236,15 +1240,13 @@ export async function updatePublication({accountId, publicationId, expectedRevis
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
     await assertNoDuplicateAssignment({normalized, input, excludePublicationId: publicationId});
 
-    const certifiedAt = new Date();
     const publication = await prisma.$transaction(async (tx) => {
+        const certification = await accountCertification(accountId, normalized, workspaces, tx);
         const updateResult = await tx.publication.updateMany({
             where: {id: publicationId, revision: expectedRevision},
             data: {
                 ...toPublicationData(normalized),
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
                 latestActorType: "ACCOUNT",
                 latestScreenBindingId: null,
                 revision: {increment: 1},
@@ -1278,9 +1280,7 @@ export async function updatePublication({accountId, publicationId, expectedRevis
                 action: "UPDATED",
                 actorType: "ACCOUNT",
                 editorAccountId: accountId,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
             }),
         });
         return tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude});
@@ -1304,6 +1304,7 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
     if (existing.status === PUBLICATION_STATUSES.WITHDRAWN) return existing;
 
     const certifiedAt = new Date();
+    const workspaces = existing.targets.map(target => target.workspace);
     const normalized = {
         type: existing.type,
         subjectId: existing.subjectId,
@@ -1319,14 +1320,13 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
         targetWorkspaceIds: existing.targets.map((target) => target.workspaceId),
     };
     const publication = await prisma.$transaction(async (tx) => {
+        const certification = await accountCertification(accountId, normalized, workspaces, tx);
         const updateResult = await tx.publication.updateMany({
             where: {id: publicationId, revision: expectedRevision},
             data: {
                 status: PUBLICATION_STATUSES.WITHDRAWN,
                 withdrawnAt: certifiedAt,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
                 latestActorType: "ACCOUNT",
                 latestScreenBindingId: null,
                 revision: {increment: 1},
@@ -1347,9 +1347,7 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
                 action: "WITHDRAWN",
                 actorType: "ACCOUNT",
                 editorAccountId: accountId,
-                isCertified: true,
-                certifiedByAccountId: accountId,
-                certifiedAt,
+                ...certification,
             }),
         });
         return tx.publication.findUnique({where: {id: publicationId}, include: publicationInclude});

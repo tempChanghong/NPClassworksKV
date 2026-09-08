@@ -125,7 +125,8 @@ export async function decryptMigrationPackage(packageBuffer, passphrase) {
 }
 
 async function verifyManagerConfirmation({managerAccountId, schoolId, currentPin, confirmationSchoolCode}) {
-    await assertSchoolManager(managerAccountId, schoolId);
+    const manager = await assertSchoolManager(managerAccountId, schoolId);
+    if (manager.role !== "OWNER") throw migrationError("只有学校所有者可以导出含账号凭据的迁移包", "SCHOOL_OWNER_REQUIRED", 403);
     const [account, school] = await Promise.all([
         prisma.account.findUnique({where: {id: managerAccountId}}),
         prisma.school.findUnique({where: {id: schoolId}}),
