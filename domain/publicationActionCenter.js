@@ -113,7 +113,7 @@ const REASON_ORDER = Object.freeze({
     [ACTION_REQUIRED_REASONS.OTHER_UNCERTIFIED]: 2,
 });
 
-const PRIORITY_ORDER = Object.freeze({URGENT: 0, IMPORTANT: 1, NORMAL: 2});
+const PRIORITY_ORDER = Object.freeze({URGENT: 0, IMPORTANT: 1, NORMAL: 2, MINOR: 3});
 
 export function compareActionRequiredItems(left, right) {
     const reasonDifference = REASON_ORDER[left.reason] - REASON_ORDER[right.reason];

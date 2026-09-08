@@ -252,6 +252,17 @@ async function accountCertification(accountId, normalized, workspaces, tx) {
     return {isCertified, certifiedByAccountId: isCertified ? accountId : null, certifiedAt: isCertified ? new Date() : null};
 }
 
+// A scheduled notice is attributed to whoever saves its final pre-release content.
+// The CREATED revision retains the original author. Published notices and
+// assignments keep their existing attribution; revision editors remain separate.
+function scheduledNoticeAuthorData(existing, accountId) {
+    return existing.type === PUBLICATION_TYPES.NOTICE
+        && existing.status === PUBLICATION_STATUSES.PUBLISHED
+        && new Date(existing.publishAt).getTime() > Date.now()
+        ? {authorAccountId: accountId}
+        : {};
+}
+
 export async function createPublication({accountId, input}) {
     const targetIds = Array.isArray(input?.targetWorkspaceIds) ? input.targetWorkspaceIds : [];
     const workspaces = await loadPublicationWorkspaces(targetIds);
@@ -673,6 +684,7 @@ export async function restorePublicationRevision({
             where: {id: publicationId, revision: expectedRevision},
             data: {
                 ...toPublicationData(normalized),
+                ...scheduledNoticeAuthorData(existing, accountId),
                 withdrawnAt: null,
                 ...certification,
                 latestActorType: "ACCOUNT",
@@ -1246,6 +1258,7 @@ export async function updatePublication({accountId, publicationId, expectedRevis
             where: {id: publicationId, revision: expectedRevision},
             data: {
                 ...toPublicationData(normalized),
+                ...scheduledNoticeAuthorData(existing, accountId),
                 ...certification,
                 latestActorType: "ACCOUNT",
                 latestScreenBindingId: null,

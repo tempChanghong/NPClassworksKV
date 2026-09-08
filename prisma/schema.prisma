@@ -216,6 +216,7 @@ enum PublicationStatus {
 }
 
 enum PublicationPriority {
+  MINOR
   NORMAL
   IMPORTANT
   URGENT

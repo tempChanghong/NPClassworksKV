@@ -40,6 +40,7 @@ try {
         "tests/organizationConsistencyDatabase.integration.test.js",
         "tests/operationalDatabase.integration.test.js",
         "tests/notificationDeliveryDatabase.integration.test.js",
+        "tests/scheduledNoticePublisherDatabase.integration.test.js",
         "tests/publicationActionDatabase.integration.test.js",
         "tests/publicationWeekDatabase.integration.test.js",
         "tests/schoolMigrationDatabase.integration.test.js",

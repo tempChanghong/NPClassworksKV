@@ -237,3 +237,20 @@ test("no-homework metadata survives normal publication validation and can be exp
     assert.equal(changed.valid, true);
     assert.equal(changed.normalized.contentJson, null);
 });
+
+test("notice popup policy validates minor options and enforces every higher priority", () => {
+    const workspace = adminClass("notice-class", "通知班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
+    const input = {type: "NOTICE", status: "PUBLISHED", content: "通知", targetWorkspaceIds: [workspace.id]};
+    for (const priority of ["MINOR", "NORMAL", "IMPORTANT", "URGENT"]) {
+        for (const popupEnabled of [undefined, false, true]) {
+            const result = validatePublicationSnapshot({input: {...input, priority, contentJson: {custom: "preserved", ...(popupEnabled === undefined ? {} : {popupEnabled})}}, workspaces: [workspace]});
+            assert.equal(result.valid, true);
+            assert.equal(result.normalized.contentJson.popupEnabled, priority !== "MINOR" || popupEnabled === true);
+            assert.equal(result.normalized.contentJson.custom, "preserved");
+        }
+    }
+    const malformed = validatePublicationSnapshot({input: {...input, priority: "MINOR", contentJson: {popupEnabled: "false"}}, workspaces: [workspace]});
+    assert.ok(malformed.errors.some(error => error.code === "INVALID_NOTICE_POPUP"));
+    const homework = validatePublicationSnapshot({input: {...assignment([workspace.id]), priority: "MINOR"}, workspaces: [workspace]});
+    assert.ok(homework.errors.some(error => error.code === "MINOR_PRIORITY_NOTICE_ONLY"));
+});

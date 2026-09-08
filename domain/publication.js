@@ -15,6 +15,7 @@ export const PUBLICATION_STATUSES = Object.freeze({
 });
 
 export const PUBLICATION_PRIORITIES = Object.freeze({
+    MINOR: "MINOR",
     NORMAL: "NORMAL",
     IMPORTANT: "IMPORTANT",
     URGENT: "URGENT",
@@ -178,6 +179,15 @@ export function validatePublicationSnapshot({input, workspaces}) {
         }
     }
 
+    if (type !== PUBLICATION_TYPES.NOTICE && priority === PUBLICATION_PRIORITIES.MINOR) {
+        errors.push({path: "priority", code: "MINOR_PRIORITY_NOTICE_ONLY", message: "次要等级仅适用于通知"});
+    }
+    const metadata = input?.contentJson && typeof input.contentJson === "object" && !Array.isArray(input.contentJson)
+        ? input.contentJson : {};
+    if (type === PUBLICATION_TYPES.NOTICE && Object.hasOwn(metadata, "popupEnabled") && typeof metadata.popupEnabled !== "boolean") {
+        errors.push({path: "contentJson.popupEnabled", code: "INVALID_NOTICE_POPUP", message: "弹窗开关必须为布尔值"});
+    }
+
     const publishAt = parseDate(input?.publishAt || new Date(), "publishAt", errors, {required: true});
     const boardDate = type === PUBLICATION_TYPES.ASSIGNMENT
         ? parseBoardDate(input?.boardDate, errors, {required: true})
@@ -204,7 +214,10 @@ export function validatePublicationSnapshot({input, workspaces}) {
             subjectId,
             title,
             content,
-            contentJson: input?.contentJson === null
+            // Enforce mandatory popups at the API boundary, including restores.
+            contentJson: type === PUBLICATION_TYPES.NOTICE
+                ? {...metadata, popupEnabled: priority !== PUBLICATION_PRIORITIES.MINOR || metadata.popupEnabled === true}
+                : input?.contentJson === null
                 ? null
                 : input?.contentJson && typeof input.contentJson === "object"
                     ? input.contentJson
