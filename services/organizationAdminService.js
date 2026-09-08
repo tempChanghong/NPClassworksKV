@@ -1,5 +1,6 @@
 import {prisma} from "../utils/prisma.js";
 import bcrypt from "bcrypt";
+import {organizationWorkspaceConflicts} from "./organizationWorkspacePolicy.js";
 import {validateOrganizationImport} from "../domain/organizationImport.js";
 import {
     assertCanBootstrapSchool,
@@ -58,6 +59,11 @@ export async function importOrganization({accountId, document, dryRun = false}) 
         );
     }
 
+    const invalidIdentity = (errors) => ({...validation, normalized: undefined,
+        valid: false, imported: false, dryRun, errors: [...validation.errors, ...errors]});
+    const identityErrors = await organizationWorkspaceConflicts(prisma, existingSchool?.id, normalized);
+    if (identityErrors.length) return invalidIdentity(identityErrors);
+
     if (dryRun) {
         return {
             ...validation,
@@ -73,6 +79,8 @@ export async function importOrganization({accountId, document, dryRun = false}) 
         ? await bcrypt.hash(teacherSharedPassword, 12)
         : null;
     const result = await prisma.$transaction(async (tx) => {
+        const errors = await organizationWorkspaceConflicts(tx, existingSchool?.id, normalized);
+        if (errors.length) return {identityErrors: errors};
         const school = await tx.school.upsert({
             where: {code: normalized.school.code},
             update: {
@@ -227,6 +235,7 @@ export async function importOrganization({accountId, document, dryRun = false}) 
         };
     }, {timeout: 30000});
 
+    if (result.identityErrors) return invalidIdentity(result.identityErrors);
     return {
         ...validation,
         normalized: undefined,

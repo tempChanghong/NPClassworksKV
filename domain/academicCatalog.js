@@ -29,7 +29,8 @@ export function buildAdministrativeClassCourseOptions({
     const groupsBySubject = new Map();
     for (const relation of sourcedCourseGroups) {
         const group = relation.workspace || relation;
-        if (!group || group.type !== WORKSPACE_TYPES.COURSE_GROUP || !group.subjectId) continue;
+        if (!group || group.type !== WORKSPACE_TYPES.COURSE_GROUP || !group.subjectId
+            || group.isActive === false || group.isStudentSelectable === false) continue;
         const groups = groupsBySubject.get(group.subjectId) || [];
         groups.push({
             id: group.id,
@@ -109,7 +110,8 @@ export function validateStudentCourseSelection(courseOptions, input = {}) {
     for (const item of streamed) {
         const subjectId = item.subject.id;
         const groupId = candidateGroups[subjectId];
-        const group = (item.courseGroups || []).find((candidate) => candidate.id === groupId);
+        const group = (item.courseGroups || []).find((candidate) => candidate.id === groupId
+            && candidate.isActive !== false && candidate.isStudentSelectable !== false);
         if (group && declined.has(subjectId)) {
             issues.push({severity: "ERROR", code: "SELECTION_DECISION_CONFLICT", subjectId, message: `${item.subject.name}不能同时选择教学班和“不修读”`});
             continue;
@@ -119,7 +121,7 @@ export function validateStudentCourseSelection(courseOptions, input = {}) {
             continue;
         }
         if (groupId) {
-            issues.push({severity: "ERROR", code: "COURSE_GROUP_NOT_AVAILABLE", subjectId, message: `${item.subject.name}所选教学班不属于当前行政班`});
+            issues.push({severity: "ERROR", code: "COURSE_GROUP_NOT_AVAILABLE", subjectId, message: `${item.subject.name}所选教学班已停用或不再适用于当前行政班`});
             continue;
         }
         if (declined.has(subjectId) && !item.isCompulsory) {

@@ -1,3 +1,4 @@
+import {workspaceIdentityConflict} from "../domain/workspaceIdentity.js";
 import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 import {
@@ -478,7 +479,7 @@ export async function updateManagedCourseGroup({
     await assertSchoolManager(managerAccountId, schoolId);
     const existing = await prisma.workspace.findFirst({
         where: {id: courseGroupId, type: "COURSE_GROUP", term: {schoolId}},
-        include: {sourceClasses: true, _count: {select: {publicationTargets: true}}},
+        include: {sourceClasses: true, _count: {select: {publicationTargets: true, teachingAssignments: true}}},
     });
     if (!existing) throw structureError("走班教学班不存在", "COURSE_GROUP_NOT_FOUND", 404);
     if (existing.isActive && isActive === false && !confirmImpact) {
@@ -497,9 +498,8 @@ export async function updateManagedCourseGroup({
     };
     const errors = validateCourseGroupFields(next);
     if (errors.length) throw structureError("走班教学班配置无效", "COURSE_GROUP_INVALID", 422, {errors});
-    if (next.subjectId !== existing.subjectId && existing._count.publicationTargets > 0) {
-        throw structureError("已有作业历史的教学班不能更换科目，请新建教学班并停用旧教学班", "COURSE_GROUP_SUBJECT_LOCKED", 409);
-    }
+    const identityError = workspaceIdentityConflict(existing, {...existing, subjectId: next.subjectId});
+    if (identityError) throw structureError(identityError.message, identityError.code, 409);
     const duplicate = await prisma.workspace.findFirst({
         where: {termId: existing.termId, code: next.code, NOT: {id: existing.id}},
     });
@@ -514,6 +514,11 @@ export async function updateManagedCourseGroup({
         sourceClassIds: next.sourceClassIds,
     });
     return prisma.$transaction(async (tx) => {
+        const current = await tx.workspace.findUnique({where: {id: existing.id},
+            include: {_count: {select: {publicationTargets: true, teachingAssignments: true}}}});
+        if (!current) throw structureError("走班教学班不存在", "COURSE_GROUP_NOT_FOUND", 404);
+        const conflict = workspaceIdentityConflict(current, {...existing, subjectId: next.subjectId});
+        if (conflict) throw structureError(conflict.message, conflict.code, 409);
         await updateVersionedRecord({
             client: tx,
             model: "workspace",

@@ -82,6 +82,7 @@ export async function getAdministrativeClassCourseOptions(administrativeClassId)
                 include: {subject: true},
             },
             sourcedCourseGroups: {
+                where: {workspace: {isActive: true, isStudentSelectable: true}},
                 include: {
                     workspace: {
                         include: {subject: true},
