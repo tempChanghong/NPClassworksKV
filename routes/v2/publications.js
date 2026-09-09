@@ -51,6 +51,7 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
         boardDate: req.query.boardDate,
         weekStart: req.query.weekStart,
         weekView: req.query.weekView,
+        afterId: req.query.afterId,
         limit: req.query.limit,
         skip: req.query.skip,
     });

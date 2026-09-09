@@ -52,6 +52,30 @@ test("weekly feeds preserve scope and visibility, paginate ties, and include ear
     const daily = await listPublishedFeed({workspaceIds: query.workspaceIds, boardDate: "2099-09-07", now});
     assert.equal(daily.weekStart, undefined); assert.equal(daily.items.length, 4);
     assert.ok(daily.items.some(x => x.id === marker.id));
+    await t.test("daily cursor feeds include every active notice despite edits and withdrawal before the cursor", async () => {
+        const expected = [];
+        for (let i = 0; i < 105; i++) {
+            const row = await seed(`page-${String(i).padStart(3, "0")}`, {type: "NOTICE", subjectId: null,
+                priority: i === 104 ? "URGENT" : "NORMAL", expiresAt: new Date(now.getTime() + 3600000)}, workspaces[1]);
+            expected.push(row.id);
+        }
+        await seed("page-expired", {type: "NOTICE", expiresAt: now}, workspaces[1]);
+        await seed("page-future", {type: "NOTICE", publishAt: new Date(now.getTime() + 1000)}, workspaces[1]);
+        const params = {workspaceIds: [workspaces[1].id], boardDate: "2099-09-09", now, limit: 50};
+        const first = await listPublishedFeed({...params, afterId: ""});
+        assert.equal(first.items.length, 50);
+        assert.equal(first.total, 105);
+        await prisma.publication.update({where: {id: expected[0]}, data: {status: "WITHDRAWN"}});
+        await prisma.publication.update({where: {id: expected[80]}, data: {publishAt: new Date(now.getTime() - 1000), content: "分页期间修改"}});
+        const second = await listPublishedFeed({...params, afterId: first.nextAfterId});
+        const third = await listPublishedFeed({...params, afterId: second.nextAfterId});
+        assert.equal(third.nextAfterId, null);
+        const all = [...first.items, ...second.items, ...third.items];
+        assert.deepEqual(all.map(row => row.id), expected);
+        assert.equal(all.at(-1).priority, "URGENT");
+        assert.equal(all.find(row => row.id === expected[80]).content, "分页期间修改");
+        await assert.rejects(listPublishedFeed({...params, afterId: []}), {code: "INVALID_FEED_CURSOR"});
+    });
     await prisma.workspace.update({where: {id: workspaces[0].id}, data: {isActive: false}});
     await assert.rejects(listPublishedFeed(query), error => error.code === "WORKSPACE_NOT_FOUND");
     await prisma.workspace.update({where: {id: workspaces[0].id}, data: {isActive: true}});

@@ -470,8 +470,12 @@ function normalizeBoardDate(value, {defaultToday = false} = {}) {
     return parsed;
 }
 
-export async function listPublishedFeed({workspaceIds, boardDate, weekStart, weekView, limit = 50, skip = 0, now = new Date()}) {
+export async function listPublishedFeed({workspaceIds, boardDate, weekStart, weekView, limit = 50, skip = 0, afterId, now = new Date()}) {
     const week = publicationWeekWindow(weekStart, weekView);
+    const cursorPage = afterId !== undefined;
+    if (cursorPage && (week || typeof afterId !== "string" || afterId.length > 191)) {
+        throw publicationError("无效的作业板分页参数", "INVALID_FEED_CURSOR", 400);
+    }
     const targetIds = [...new Set((workspaceIds || []).filter(Boolean))];
     if (targetIds.length === 0) {
         throw publicationError("至少需要选择一个教学空间", "PUBLICATION_TARGET_REQUIRED", 400);
@@ -510,12 +514,12 @@ export async function listPublishedFeed({workspaceIds, boardDate, weekStart, wee
         OR: visibleForBoardDate,
         targets: {some: {workspaceId: {in: targetIds}}},
     };
-    const [items, total, nextScheduled, nextExpiry] = await Promise.all([
+    const [rows, total, nextScheduled, nextExpiry] = await Promise.all([
         prisma.publication.findMany({
-            where,
-            orderBy: [{publishAt: "desc"}, {updatedAt: "desc"}, ...(week ? [{id: "asc"}] : [])],
-            take: safeLimit,
-            skip: safeSkip,
+            where: {...where, ...(cursorPage && afterId ? {id: {gt: afterId}} : {})},
+            orderBy: cursorPage ? [{id: "asc"}] : [{publishAt: "desc"}, {updatedAt: "desc"}, {id: "asc"}],
+            take: safeLimit + (cursorPage ? 1 : 0),
+            skip: cursorPage ? 0 : safeSkip,
             include: publicFeedInclude,
         }),
         prisma.publication.count({where}),
@@ -541,8 +545,10 @@ export async function listPublishedFeed({workspaceIds, boardDate, weekStart, wee
             select: {expiresAt: true},
         }),
     ]);
+    const items = cursorPage ? rows.slice(0, safeLimit) : rows;
     return {
         items,
+        ...(cursorPage ? {nextAfterId: rows.length > safeLimit ? items.at(-1).id : null} : {}),
         total,
         limit: safeLimit,
         skip: safeSkip,
