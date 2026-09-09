@@ -1381,7 +1381,9 @@ export async function clonePublication({accountId, publicationId, input = {}}) {
             status: PUBLICATION_STATUSES.DRAFT,
             publishAt: input.publishAt || new Date(),
             dueAt: hasOwn(input, "dueAt") ? input.dueAt : existing.dueAt,
-            expiresAt: hasOwn(input, "expiresAt") ? input.expiresAt : existing.expiresAt,
+            // A copied notice starts a new lifetime (the validator defaults to three days).
+            expiresAt: hasOwn(input, "expiresAt") ? input.expiresAt
+                : existing.type === PUBLICATION_TYPES.NOTICE ? null : existing.expiresAt,
             targetWorkspaceIds: input.targetWorkspaceIds || existing.targets.map((target) => target.workspaceId),
         },
     });

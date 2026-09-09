@@ -86,6 +86,25 @@ test("scheduled notice publisher follows successful pre-release saves in Postgre
         assert.equal(clone.priority, "MINOR");
         assert.equal(clone.contentJson.popupEnabled, false);
     });
+    await t.test("copying an expired notice starts a fresh lifetime and preserves explicit expiry overrides", async () => {
+        const now = Date.now();
+        const original = await create({publishAt: new Date(now - 2 * 86400000), expiresAt: new Date(now - 86400000),
+            priority: "MINOR", contentJson: {popupEnabled: false}});
+        const clone = await pub.clonePublication({accountId: b.id, publicationId: original.id, input: {boardDate: null, dueAt: null}});
+        publicationIds.push(clone.id);
+        assert.equal(clone.status, "DRAFT");
+        assert.equal(new Date(clone.expiresAt) - new Date(clone.publishAt), 3 * 86400000);
+        assert.ok(new Date(clone.publishAt).getTime() >= now);
+        assert.equal(clone.priority, "MINOR");
+        assert.equal(clone.contentJson.popupEnabled, false);
+        const expiresAt = new Date(now + 7 * 86400000);
+        const custom = await pub.clonePublication({accountId: b.id, publicationId: original.id, input: {expiresAt}});
+        publicationIds.push(custom.id);
+        assert.equal(new Date(custom.expiresAt).getTime(), expiresAt.getTime());
+        const stored = await prisma.publication.findUnique({where: {id: original.id}});
+        assert.equal(new Date(stored.expiresAt).getTime(), new Date(original.expiresAt).getTime());
+        assert.equal(stored.revision, original.revision);
+    });
     await t.test("last successful editor becomes the public feed publisher, while history retains the creator", async () => {
         let item = await create();
         item = await edit(item, b);
