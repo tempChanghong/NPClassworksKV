@@ -150,6 +150,23 @@ export async function getPublicationCertificationScope(accountId, workspaces, cl
     return {fullWorkspaceIds, teachingAssignments: permittedTeachingAssignments};
 }
 
+export async function getAccountPublicationCertification(accountId, normalized, workspaces, client = prisma) {
+    // Notices have no teaching subject. A successful authorized account write
+    // confirms them directly; assignment certification remains subject-scoped.
+    // Use the caller's transaction client so a stale outer access check is not
+    // sufficient to authorize this write.
+    if (normalized.type === "NOTICE") {
+        await assertCanWriteWorkspaces(accountId, workspaces, client);
+        return {isCertified: true, certifiedByAccountId: accountId, certifiedAt: new Date()};
+    }
+    const scope = await getPublicationCertificationScope(accountId, workspaces, client);
+    const isCertified = isPublicationWithinActionScope({
+        subjectId: normalized.subjectId,
+        targets: normalized.targetWorkspaceIds.map(workspaceId => ({workspaceId})),
+    }, scope);
+    return {isCertified, certifiedByAccountId: isCertified ? accountId : null, certifiedAt: isCertified ? new Date() : null};
+}
+
 export async function assertCanReadPublication(accountId, publication, client = prisma) {
     if (publication.authorAccountId === accountId) return;
     const workspaces = publication.targets.map((target) => target.workspace);

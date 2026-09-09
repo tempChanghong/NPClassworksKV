@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {randomUUID} from "node:crypto";
 import test from "node:test";
+import {readFile} from "node:fs/promises";
 
 test("scheduled notice publisher follows successful pre-release saves in PostgreSQL", {skip: process.env.RUN_DATABASE_TESTS !== "true", timeout: 60000}, async t => {
     const url = new URL(process.env.DATABASE_URL);
@@ -41,6 +42,32 @@ test("scheduled notice publisher follows successful pre-release saves in Postgre
         assert.equal(item.author.name, actor.name);
         assert.equal((await prisma.publication.findUnique({where: {id: item.id}})).authorAccountId, actor.id);
     }
+    await t.test("notice certification repair updates only the verified current account revision and is repeatable", async () => {
+        const original = await create();
+        const current = await edit(original, b);
+        const screenOrigin = await create();
+        const missingEditor = await create();
+        for (const item of [current, screenOrigin, missingEditor]) {
+            await prisma.publication.update({where: {id: item.id}, data: {isCertified: false, certifiedByAccountId: null, certifiedAt: null}});
+            await prisma.publicationRevision.updateMany({where: {publicationId: item.id}, data: {isCertified: false, certifiedByAccountId: null, certifiedAt: null}});
+        }
+        await prisma.publication.update({where: {id: screenOrigin.id}, data: {latestActorType: "CLASSROOM_SCREEN"}});
+        await prisma.publicationRevision.updateMany({where: {publicationId: missingEditor.id}, data: {editorAccountId: null}});
+        const sql = await readFile(new URL("../prisma/migrations/20260909000000_account_notice_certification/migration.sql", import.meta.url), "utf8");
+        assert.equal(await prisma.$executeRawUnsafe(sql), 1);
+        assert.equal(await prisma.$executeRawUnsafe(sql), 0);
+        const repaired = await prisma.publication.findUnique({where: {id: current.id}, include: {revisions: {orderBy: {revision: "asc"}}}});
+        assert.equal(repaired.isCertified, true);
+        assert.equal(repaired.certifiedByAccountId, b.id);
+        assert.equal(repaired.revision, current.revision);
+        assert.equal(repaired.content, current.content);
+        assert.equal(repaired.revisions[0].isCertified, false);
+        assert.equal(repaired.revisions[1].isCertified, true);
+        assert.equal(repaired.certifiedAt.getTime(), repaired.revisions[1].createdAt.getTime());
+        for (const item of [screenOrigin, missingEditor]) {
+            assert.equal((await prisma.publication.findUnique({where: {id: item.id}})).isCertified, false);
+        }
+    });
     await t.test("minor priority and popup choice persist in feeds, edits, clones and restored history", async () => {
         let item = await create({priority: "MINOR", contentJson: {popupEnabled: false}});
         assert.equal(item.priority, "MINOR");

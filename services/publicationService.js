@@ -17,6 +17,7 @@ import {
     assertCanReadWorkspace,
     assertCanWriteWorkspaces,
     getPublicationCertificationScope,
+    getAccountPublicationCertification as accountCertification,
     getWritableWorkspaceIds,
     getReadableWorkspaceIds,
     loadPublicationWorkspaces,
@@ -243,15 +244,6 @@ async function assertNoDuplicateAssignment({normalized, input, excludePublicatio
 
 // Editing authority is broader than certification authority. Always evaluate
 // the final subject and every final target, including for imported history.
-async function accountCertification(accountId, normalized, workspaces, tx) {
-    const scope = await getPublicationCertificationScope(accountId, workspaces, tx);
-    const isCertified = isPublicationWithinActionScope({
-        subjectId: normalized.subjectId,
-        targets: normalized.targetWorkspaceIds.map(workspaceId => ({workspaceId})),
-    }, scope);
-    return {isCertified, certifiedByAccountId: isCertified ? accountId : null, certifiedAt: isCertified ? new Date() : null};
-}
-
 // A scheduled notice is attributed to whoever saves its final pre-release content.
 // The CREATED revision retains the original author. Published notices and
 // assignments keep their existing attribution; revision editors remain separate.
