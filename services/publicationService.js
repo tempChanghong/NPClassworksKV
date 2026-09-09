@@ -718,7 +718,7 @@ export async function restorePublicationRevision({
     emitPublicationEvent(
         "publication.restored",
         publication,
-        publication.targets.map((target) => target.workspaceId),
+        [...new Set([...existing.targets, ...publication.targets].map((target) => target.workspaceId))],
     );
     return publication;
 }
@@ -1203,7 +1203,7 @@ export async function restoreScreenPublicationRevision({
     emitPublicationEvent(
         "publication.restored",
         publication,
-        publication.targets.map((target) => target.workspaceId),
+        [...new Set([...existing.targets, ...publication.targets].map((target) => target.workspaceId))],
     );
     return publication;
 }
