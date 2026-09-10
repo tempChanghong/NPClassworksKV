@@ -1,4 +1,5 @@
 import {Router} from "express";
+import {rosterRevision} from "../../services/classroomToolsService.js";
 import rateLimit from "express-rate-limit";
 import errors from "../../utils/errors.js";
 import {
@@ -128,15 +129,16 @@ router.post("/notification-deliveries", errors.catchAsync(async (req, res) => {
 
 router.get("/students", errors.catchAsync(async (req, res) => {
     const students = await listClassRoster({screenBinding: res.locals.classroomScreen});
-    return res.json(errors.createSuccessResponse(students));
+    return res.json({...errors.createSuccessResponse(students), rosterRevision: rosterRevision(students)});
 }));
 
 router.put("/students", errors.catchAsync(async (req, res) => {
     const students = await replaceClassRoster({
         screenBinding: res.locals.classroomScreen,
         students: req.body?.students,
+        expectedRevision: req.body?.expectedRevision,
     });
-    return res.json(errors.createSuccessResponse(students, "行政班学生名单已保存"));
+    return res.json({...errors.createSuccessResponse(students, "行政班学生名单已保存"), rosterRevision: rosterRevision(students)});
 }));
 
 router.get("/attendance/:date", errors.catchAsync(async (req, res) => {

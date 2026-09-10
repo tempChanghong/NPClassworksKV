@@ -1,6 +1,9 @@
 import {lockClassroomScreenWrite} from "./screenWriteAuthorization.js";
 import {prisma} from "../utils/prisma.js";
 import {authorizationError} from "./academicAuthorizationService.js";
+import {createHash} from "node:crypto";
+import {lockSchoolManagement} from "./schoolOwnerPolicy.js";
+import {broadcastWorkspaceEvent} from "../utils/socket.js";
 
 const EMPTY_ATTENDANCE = Object.freeze({absent: [], late: [], excluded: []});
 
@@ -76,15 +79,57 @@ function normalizeAttendance(input, activeStudentIds) {
 export async function listClassRoster({screenBinding}) {
     return prisma.administrativeClassStudent.findMany({
         where: {administrativeClassId: screenBinding.administrativeClassId, isActive: true},
-        orderBy: [{sortOrder: "asc"}, {name: "asc"}],
+        orderBy: [{sortOrder: "asc"}, {name: "asc"}, {id: "asc"}],
     });
 }
 
-export async function replaceClassRoster({screenBinding, students}) {
-    const normalized = normalizeRoster(students);
+export function rosterRevision(students) {
+    return createHash("sha256").update(JSON.stringify(students.map(({id, name, studentNumber, sortOrder, updatedAt}) =>
+        ({id, name, studentNumber, sortOrder, updatedAt})))).digest("hex");
+}
+
+export async function getManagedClassRoster({managerAccountId, schoolId, administrativeClassId}) {
     return prisma.$transaction(async (tx) => {
+        await lockSchoolManagement(tx, managerAccountId, schoolId);
+        await assertRosterClass(tx, administrativeClassId, schoolId);
+        const students = await readRoster(tx, administrativeClassId);
+        return {students, revision: rosterRevision(students)};
+    });
+}
+
+async function assertRosterClass(tx, id, schoolId) {
+    const classroom = await tx.workspace.findFirst({where: {id, type: "ADMIN_CLASS", term: {schoolId}}});
+    if (!classroom) throw toolError("未找到本校行政班", "CLASS_ROSTER_CLASS_INVALID", 404);
+    return classroom;
+}
+
+const readRoster = (tx, administrativeClassId) => tx.administrativeClassStudent.findMany({
+    where: {administrativeClassId, isActive: true}, orderBy: [{sortOrder: "asc"}, {name: "asc"}, {id: "asc"}],
+});
+
+export async function replaceClassRoster({screenBinding, managerAccountId, schoolId, administrativeClassId, students, expectedRevision}) {
+    const normalized = normalizeRoster(students);
+    administrativeClassId = screenBinding?.administrativeClassId || administrativeClassId;
+    if (typeof expectedRevision !== "string" || !expectedRevision) {
+        throw toolError("请刷新应用并重新载入名单后保存（当前客户端缺少名单版本）", "CLASS_ROSTER_VERSION_REQUIRED", 428);
+    }
+    const result = await prisma.$transaction(async (tx) => {
+        if (screenBinding) {
+            // Acquire school before class, as managers do. The audit insert also
+            // references School; taking its FK lock after the class can deadlock
+            // with an administrator already holding School and waiting for class.
+            await tx.$queryRaw`SELECT "id" FROM "School" WHERE "id" = ${screenBinding.schoolId} FOR SHARE`;
+            await lockClassroomScreenWrite(tx, screenBinding);
+        } else await lockSchoolManagement(tx, managerAccountId, schoolId);
+        await tx.$queryRaw`SELECT "id" FROM "Workspace" WHERE "id" = ${administrativeClassId} FOR UPDATE`;
+        const classroom = await assertRosterClass(tx, administrativeClassId, screenBinding?.schoolId || schoolId);
+        if (!classroom.isActive) throw toolError("该班级已停用，不能修改名单", "CLASS_ROSTER_CLASS_INACTIVE", 409);
+        const before = await readRoster(tx, administrativeClassId);
+        if (rosterRevision(before) !== expectedRevision) {
+            throw toolError("名单已被其他管理员或大屏修改。输入已保留，请重新载入并核对后保存。", "CLASS_ROSTER_CONFLICT", 409);
+        }
         const existing = await tx.administrativeClassStudent.findMany({
-            where: {administrativeClassId: screenBinding.administrativeClassId},
+            where: {administrativeClassId},
             select: {id: true},
         });
         const existingIds = new Set(existing.map((student) => student.id));
@@ -95,7 +140,7 @@ export async function replaceClassRoster({screenBinding, students}) {
         }
 
         await tx.administrativeClassStudent.updateMany({
-            where: {administrativeClassId: screenBinding.administrativeClassId, isActive: true},
+            where: {administrativeClassId, isActive: true},
             data: {isActive: false},
         });
         for (const student of normalized) {
@@ -109,15 +154,25 @@ export async function replaceClassRoster({screenBinding, students}) {
                 await tx.administrativeClassStudent.update({where: {id: student.id}, data});
             } else {
                 await tx.administrativeClassStudent.create({
-                    data: {...data, administrativeClassId: screenBinding.administrativeClassId},
+                    data: {...data, administrativeClassId},
                 });
             }
         }
-        return tx.administrativeClassStudent.findMany({
-            where: {administrativeClassId: screenBinding.administrativeClassId, isActive: true},
-            orderBy: [{sortOrder: "asc"}, {name: "asc"}],
-        });
+        const after = await readRoster(tx, administrativeClassId);
+        // Store the complete before/after roster in the transaction; generic request
+        // audit truncates arrays and cannot reconstruct a large class's changes.
+        await tx.auditLog.create({data: {
+            schoolId: screenBinding?.schoolId || schoolId,
+            actorType: screenBinding ? "CLASSROOM_SCREEN" : "ACCOUNT",
+            actorAccountId: managerAccountId || null, actorScreenBindingId: screenBinding?.id || null,
+            action: "CLASS_ROSTER_SAVED", entityType: "WORKSPACE", entityId: administrativeClassId,
+            summary: `修改${classroom.name}学生名单（${before.length} → ${after.length} 人）`,
+            metadata: {before, after}, success: true,
+        }});
+        return after;
     });
+    broadcastWorkspaceEvent([administrativeClassId], "classroom.roster.updated", {administrativeClassId});
+    return result;
 }
 
 export async function getClassAttendance({screenBinding, date}) {

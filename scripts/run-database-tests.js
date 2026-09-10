@@ -36,6 +36,7 @@ try {
         "--test",
         "--test-concurrency=1",
         "tests/managementDatabase.integration.test.js",
+        "tests/classRosterDatabase.integration.test.js",
         "tests/reviewBoundariesDatabase.integration.test.js",
         "tests/organizationConsistencyDatabase.integration.test.js",
         "tests/operationalDatabase.integration.test.js",

@@ -1,4 +1,5 @@
 import {Router} from "express";
+import {getManagedClassRoster, replaceClassRoster, rosterRevision} from "../../services/classroomToolsService.js";
 import {readFileSync} from "node:fs";
 import {jwtAuth} from "../../middleware/jwt-auth.js";
 import {localAuthLimiter} from "../../middleware/rateLimiter.js";
@@ -97,6 +98,22 @@ router.use(jwtAuth);
 router.use(createAuditMiddleware({
     actorType: "ACCOUNT",
     actorResolver: (_req, res) => ({accountId: res.locals.account?.id}),
+}));
+
+router.get("/schools/:schoolId/administrative-classes/:classId/students", errors.catchAsync(async (req, res) => {
+    return res.json(errors.createSuccessResponse(await getManagedClassRoster({
+        managerAccountId: res.locals.account.id, schoolId: req.params.schoolId,
+        administrativeClassId: req.params.classId,
+    })));
+}));
+
+router.put("/schools/:schoolId/administrative-classes/:classId/students", errors.catchAsync(async (req, res) => {
+    const students = await replaceClassRoster({
+        managerAccountId: res.locals.account.id, schoolId: req.params.schoolId,
+        administrativeClassId: req.params.classId, students: req.body?.students,
+        expectedRevision: req.body?.expectedRevision,
+    });
+    return res.json(errors.createSuccessResponse({students, revision: rosterRevision(students)}, "班级名单已保存"));
 }));
 
 router.get("/organization/template", (req, res) => {

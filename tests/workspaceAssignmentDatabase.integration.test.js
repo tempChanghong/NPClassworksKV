@@ -390,6 +390,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
 
         const classRoster = await classroomToolsService.replaceClassRoster({
             screenBinding: authenticatedScreen,
+            expectedRevision: classroomToolsService.rosterRevision(await classroomToolsService.listClassRoster({screenBinding: authenticatedScreen})),
             students: [
                 {studentNumber: "01", name: "张同学"},
                 {studentNumber: "02", name: "李同学"},

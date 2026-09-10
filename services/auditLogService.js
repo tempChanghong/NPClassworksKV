@@ -5,6 +5,7 @@ import {sanitizeAuditValue} from "../domain/auditLog.js";
 function actionFor(method, routePath) {
     const route = `${method} ${routePath || ""}`;
     const rules = [
+        [/administrative-classes.*\/students$/, "ADMIN_ROSTER_CHANGED"],
         [/schools.*\/profile$/, "SCHOOL_PROFILE_UPDATED"],
         [/schools.*\/subjects(?:\/[^/]+)?$/, method === "POST" ? "SUBJECT_CREATED" : "SUBJECT_UPDATED"],
         [/schools.*\/grades(?:\/[^/]+)?$/, method === "POST" ? "GRADE_CREATED" : "GRADE_UPDATED"],
@@ -42,6 +43,8 @@ function actionFor(method, routePath) {
 }
 
 const ACTION_SUMMARIES = {
+    ADMIN_ROSTER_CHANGED: "管理员修改班级名单",
+    CLASS_ROSTER_SAVED: "保存班级名单与变更记录",
     SCHOOL_PROFILE_UPDATED: "修改学校基础设置",
     SUBJECT_CREATED: "创建学科",
     SUBJECT_UPDATED: "修改学科",
