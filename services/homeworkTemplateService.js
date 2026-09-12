@@ -38,8 +38,11 @@ export async function changeHomeworkTemplate(accountId, id, input, remove = fals
         for (const field of ["materials", "submission"]) {
             if (!remove && !Object.hasOwn(input, field) && existing.value[field]) value[field] = existing.value[field];
         }
+        // Validate the complete merged template too: preserved fields may add
+        // placeholders beyond the global limit even when this request is valid.
+        const finalValue = remove ? null : {...validateHomeworkTemplate(value), revision: revision + 1};
         if (remove) await tx.accountPreference.delete({where});
-        else await tx.accountPreference.update({where, data: {value}});
-        return remove ? {id} : {id, ...value};
+        else await tx.accountPreference.update({where, data: {value: finalValue}});
+        return remove ? {id} : {id, ...finalValue};
     });
 }
