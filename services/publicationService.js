@@ -616,6 +616,11 @@ export async function certifyPublication({accountId, publicationId, expectedRevi
     if (existing.status !== PUBLICATION_STATUSES.PUBLISHED) {
         throw publicationError("只能确认已发布内容", "PUBLICATION_NOT_PUBLISHED", 409);
     }
+    // Idempotent confirmation is only valid for the version the teacher reviewed.
+    if (existing.revision !== expectedRevision) {
+        throw publicationError("内容已被修改，请刷新后检查最新版本", "PUBLICATION_REVISION_CONFLICT", 409,
+            {revision: existing.revision, isCertified: existing.isCertified, updatedAt: existing.updatedAt});
+    }
     if (existing.isCertified) return existing;
 
     const certifiedAt = new Date();
