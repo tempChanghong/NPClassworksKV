@@ -14,6 +14,7 @@ import {
     recoverLocalOwner,
 } from "../services/localAccountService.js";
 import {localAuthLimiter, localLoginSourceLimiter} from "../middleware/rateLimiter.js";
+import {listHomeworkTemplates, createHomeworkTemplate, changeHomeworkTemplate} from "../services/homeworkTemplateService.js";
 import {
     getTeacherTargetPreferences,
     saveTeacherTargetPreferences,
@@ -109,6 +110,19 @@ router.post("/local/change-pin", jwtAuth, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+
+router.get("/preferences/homework-templates", jwtAuth, async (req, res, next) => {
+    try { res.json({success: true, data: await listHomeworkTemplates(res.locals.account.id)}); } catch (error) { next(error); }
+});
+router.post("/preferences/homework-templates", jwtAuth, async (req, res, next) => {
+    try { res.status(201).json({success: true, data: await createHomeworkTemplate(res.locals.account.id, req.body)}); } catch (error) { next(error); }
+});
+router.put("/preferences/homework-templates/:id", jwtAuth, async (req, res, next) => {
+    try { res.json({success: true, data: await changeHomeworkTemplate(res.locals.account.id, req.params.id, req.body)}); } catch (error) { next(error); }
+});
+router.delete("/preferences/homework-templates/:id", jwtAuth, async (req, res, next) => {
+    try { res.json({success: true, data: await changeHomeworkTemplate(res.locals.account.id, req.params.id, req.body, true)}); } catch (error) { next(error); }
 });
 
 router.get("/preferences/teacher-targets", jwtAuth, async (req, res, next) => {

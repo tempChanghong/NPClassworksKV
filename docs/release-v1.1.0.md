@@ -87,8 +87,6 @@ v1.1.0 是 NPClassworksKV 配套 NPClassworks v1.1.0 的功能与可靠性更新
 - 本轮统一将后端 package.json 从此前遗留的 `1.0.0` 更新为 `1.1.0`；`/check` 和 `/ready` 的版本及代号随同一配置返回。历史文档中的 1.0.1 仍代表上一轮维护更新，不因旧包版本号遗漏而失效。
 - 新指标中的 Socket.IO 连接数不是独立设备数或已鉴权大屏数；失败计数包含业务冲突等 4xx 响应，使用时需结合路由与状态码判断。
 
-详细说明见[自动部署文档](./automatic-deployment.md)、[账号会话数据库验证](./account-session-database.md)以及前端仓库的[班级名单管理说明](https://github.com/tempChanghong/NPClassworks/blob/main/docs/class-roster-management.md)。
-
 ## Full Changelog
 
 [查看后端完整变更：v1.0.1...v1.1.0](https://github.com/tempChanghong/NPClassworksKV/compare/v1.0.1...v1.1.0)
