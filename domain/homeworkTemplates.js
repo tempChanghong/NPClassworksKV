@@ -9,7 +9,9 @@ export function validateHomeworkTemplate(input) {
         result[key] = input[key].trim();
     }
     if (!result.name || (!result.title && !result.content)) throw templateError("请填写模板名称及标题或正文");
-    const text = `${result.title}\n${result.content}`;
+    if (input.materials !== undefined && (typeof input.materials !== "string" || input.materials.length > 500)) throw templateError("模板需带物品不能超过500字");
+    if (input.materials?.trim()) result.materials = input.materials.trim();
+    const text = `${result.title}\n${result.content}\n${result.materials || ""}`;
     const fields = [...text.matchAll(/〔([^〔〕\n]{1,32})〕/gu)].map(match => match[1]);
     if (/[〔〕]/u.test(text.replace(/〔([^〔〕\n]{1,32})〕/gu, "")) || fields.some(field => !field.trim()) || new Set(fields).size > 10) {
         throw templateError("填空项请写成〔页码〕，每个名称不超过32字，最多10项");

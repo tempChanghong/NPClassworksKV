@@ -1,4 +1,5 @@
 import {publicationWeekWindow} from "../domain/publicationWeek.js";
+import {withoutPreparation} from "../domain/homeworkPreparation.js";
 import {queryActionRequiredPage} from "./publicationActionQuery.js";
 import {lockClassroomScreenWrite} from "./screenWriteAuthorization.js";
 import {prisma} from "../utils/prisma.js";
@@ -470,7 +471,7 @@ function normalizeBoardDate(value, {defaultToday = false} = {}) {
     return parsed;
 }
 
-export async function listPublishedFeed({workspaceIds, boardDate, weekStart, weekView, limit = 50, skip = 0, afterId, now = new Date()}) {
+export async function listPublishedFeed({workspaceIds, boardDate, weekStart, weekView, includePreparations = false, limit = 50, skip = 0, afterId, now = new Date()}) {
     const week = publicationWeekWindow(weekStart, weekView);
     const cursorPage = afterId !== undefined;
     if (cursorPage && (week || typeof afterId !== "string" || afterId.length > 191)) {
@@ -514,6 +515,9 @@ export async function listPublishedFeed({workspaceIds, boardDate, weekStart, wee
         OR: visibleForBoardDate,
         targets: {some: {workspaceId: {in: targetIds}}},
     };
+    const includesPreparations = includePreparations === true && !week;
+    if (includesPreparations) visibleForBoardDate.push({type: PUBLICATION_TYPES.ASSIGNMENT,
+        contentJson: {path: ["preparation", "date"], gte: selectedBoardDate.toISOString().slice(0, 10)}});
     const [rows, total, nextScheduled, nextExpiry] = await Promise.all([
         prisma.publication.findMany({
             where: {...where, ...(cursorPage && afterId ? {id: {gt: afterId}} : {})},
@@ -549,6 +553,7 @@ export async function listPublishedFeed({workspaceIds, boardDate, weekStart, wee
     return {
         items,
         ...(cursorPage ? {nextAfterId: rows.length > safeLimit ? items.at(-1).id : null} : {}),
+        ...(includesPreparations ? {includesPreparations: true} : {}),
         total,
         limit: safeLimit,
         skip: safeSkip,
@@ -883,7 +888,7 @@ export async function copyScreenBoardDate({screenBinding, sourceBoardDate, targe
                     subjectId: item.subjectId,
                     title: item.title,
                     content: item.content,
-                    contentJson: item.contentJson,
+                    contentJson: withoutPreparation(item.contentJson),
                     priority: item.priority,
                     boardDate: targetValue,
                     publishAt: new Date(),
@@ -1381,7 +1386,7 @@ export async function clonePublication({accountId, publicationId, input = {}}) {
             subjectId: hasOwn(input, "subjectId") ? input.subjectId : existing.subjectId,
             title: hasOwn(input, "title") ? input.title : existing.title,
             content: hasOwn(input, "content") ? input.content : existing.content,
-            contentJson: hasOwn(input, "contentJson") ? input.contentJson : existing.contentJson,
+            contentJson: hasOwn(input, "contentJson") ? input.contentJson : withoutPreparation(existing.contentJson),
             boardDate: hasOwn(input, "boardDate") ? input.boardDate : existing.boardDate,
             priority: hasOwn(input, "priority") ? input.priority : existing.priority,
             status: PUBLICATION_STATUSES.DRAFT,

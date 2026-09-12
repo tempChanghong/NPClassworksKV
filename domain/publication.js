@@ -1,3 +1,4 @@
+import {validatePreparation} from "./homeworkPreparation.js";
 import {
     SUBJECT_DELIVERY_MODES,
     WORKSPACE_TYPES,
@@ -184,6 +185,7 @@ export function validatePublicationSnapshot({input, workspaces}) {
     }
     const metadata = input?.contentJson && typeof input.contentJson === "object" && !Array.isArray(input.contentJson)
         ? input.contentJson : {};
+    validatePreparation(metadata, type, errors);
     if (type === PUBLICATION_TYPES.NOTICE && Object.hasOwn(metadata, "popupEnabled") && typeof metadata.popupEnabled !== "boolean") {
         errors.push({path: "contentJson.popupEnabled", code: "INVALID_NOTICE_POPUP", message: "弹窗开关必须为布尔值"});
     }

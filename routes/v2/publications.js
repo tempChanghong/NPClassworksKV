@@ -49,6 +49,7 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
     const result = await listPublishedFeed({
         workspaceIds: parseWorkspaceIds(req.query),
         boardDate: req.query.boardDate,
+        includePreparations: req.query.includePreparations === "true",
         weekStart: req.query.weekStart,
         weekView: req.query.weekView,
         afterId: req.query.afterId,

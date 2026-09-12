@@ -27,8 +27,17 @@ export async function changeHomeworkTemplate(accountId, id, input, remove = fals
     const key = keyFor(id), revision = input?.expectedRevision;
     if (!Number.isSafeInteger(revision) || revision < 1 || revision >= Number.MAX_SAFE_INTEGER) throw templateError("请重新载入模板后操作", 428);
     const value = remove ? null : {...validateHomeworkTemplate(input), revision: revision + 1};
-    const where = {accountId, key, value: {path: ["revision"], equals: revision}};
-    const result = remove ? await prisma.accountPreference.deleteMany({where}) : await prisma.accountPreference.updateMany({where, data: {value}});
-    if (!result.count) throw templateError("模板已被修改或删除，输入已保留，请重新载入后核对", 409);
-    return remove ? {id} : {id, ...value};
+    return prisma.$transaction(async tx => {
+        // Lock the existing row before reading its version. Keep validation,
+        // optional-field preservation and the write in this one transaction.
+        await tx.$queryRaw`SELECT "accountId" FROM "AccountPreference" WHERE "accountId" = ${accountId} AND "key" = ${key} FOR UPDATE`;
+        const where = {accountId_key: {accountId, key}};
+        const existing = await tx.accountPreference.findUnique({where, select: {value: true}});
+        if (existing?.value?.revision !== revision) throw templateError("模板已被修改或删除，输入已保留，请重新载入后核对", 409);
+        // Old clients omit materials; an explicit empty string clears it.
+        if (!remove && !Object.hasOwn(input, "materials") && existing.value.materials) value.materials = existing.value.materials;
+        if (remove) await tx.accountPreference.delete({where});
+        else await tx.accountPreference.update({where, data: {value}});
+        return remove ? {id} : {id, ...value};
+    });
 }
