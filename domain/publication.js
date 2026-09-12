@@ -1,4 +1,5 @@
 import {validatePreparation} from "./homeworkPreparation.js";
+import {validateSubmission, withoutCorrection} from "./homeworkInstructions.js";
 import {
     SUBJECT_DELIVERY_MODES,
     WORKSPACE_TYPES,
@@ -186,6 +187,7 @@ export function validatePublicationSnapshot({input, workspaces}) {
     const metadata = input?.contentJson && typeof input.contentJson === "object" && !Array.isArray(input.contentJson)
         ? input.contentJson : {};
     validatePreparation(metadata, type, errors);
+    validateSubmission(metadata, type, errors);
     if (type === PUBLICATION_TYPES.NOTICE && Object.hasOwn(metadata, "popupEnabled") && typeof metadata.popupEnabled !== "boolean") {
         errors.push({path: "contentJson.popupEnabled", code: "INVALID_NOTICE_POPUP", message: "弹窗开关必须为布尔值"});
     }
@@ -218,11 +220,11 @@ export function validatePublicationSnapshot({input, workspaces}) {
             content,
             // Enforce mandatory popups at the API boundary, including restores.
             contentJson: type === PUBLICATION_TYPES.NOTICE
-                ? {...metadata, popupEnabled: priority !== PUBLICATION_PRIORITIES.MINOR || metadata.popupEnabled === true}
+                ? {...withoutCorrection(metadata), popupEnabled: priority !== PUBLICATION_PRIORITIES.MINOR || metadata.popupEnabled === true}
                 : input?.contentJson === null
                 ? null
                 : input?.contentJson && typeof input.contentJson === "object"
-                    ? input.contentJson
+                    ? withoutCorrection(input.contentJson)
                     : undefined,
             boardDate,
             publishAt,

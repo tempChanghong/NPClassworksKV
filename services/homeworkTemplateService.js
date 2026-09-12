@@ -34,8 +34,10 @@ export async function changeHomeworkTemplate(accountId, id, input, remove = fals
         const where = {accountId_key: {accountId, key}};
         const existing = await tx.accountPreference.findUnique({where, select: {value: true}});
         if (existing?.value?.revision !== revision) throw templateError("模板已被修改或删除，输入已保留，请重新载入后核对", 409);
-        // Old clients omit materials; an explicit empty string clears it.
-        if (!remove && !Object.hasOwn(input, "materials") && existing.value.materials) value.materials = existing.value.materials;
+        // Old clients omit optional fields; only explicit empty strings clear them.
+        for (const field of ["materials", "submission"]) {
+            if (!remove && !Object.hasOwn(input, field) && existing.value[field]) value[field] = existing.value[field];
+        }
         if (remove) await tx.accountPreference.delete({where});
         else await tx.accountPreference.update({where, data: {value}});
         return remove ? {id} : {id, ...value};

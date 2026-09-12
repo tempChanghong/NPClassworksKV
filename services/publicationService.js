@@ -1,3 +1,4 @@
+import {withCorrection, withoutCorrection} from "../domain/homeworkInstructions.js";
 import {publicationWeekWindow} from "../domain/publicationWeek.js";
 import {withoutPreparation} from "../domain/homeworkPreparation.js";
 import {queryActionRequiredPage} from "./publicationActionQuery.js";
@@ -1252,6 +1253,8 @@ export async function updatePublication({accountId, publicationId, expectedRevis
     const validation = validatePublicationSnapshot({input: mergedInput, workspaces});
     if (!validation.valid) throw validationError(validation);
     const normalized = validation.normalized;
+    normalized.contentJson = withCorrection(normalized.contentJson, input?.correctionReason,
+        existing.type === PUBLICATION_TYPES.ASSIGNMENT && existing.status === PUBLICATION_STATUSES.PUBLISHED);
     await assertSubjectMatchesTargets(normalized.subjectId, workspaces);
     await assertNoDuplicateAssignment({normalized, input, excludePublicationId: publicationId});
 
@@ -1326,7 +1329,7 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
         subjectId: existing.subjectId,
         title: existing.title,
         content: existing.content,
-        contentJson: existing.contentJson,
+        contentJson: withoutCorrection(existing.contentJson),
         boardDate: existing.boardDate,
         publishAt: existing.publishAt,
         dueAt: existing.dueAt,
