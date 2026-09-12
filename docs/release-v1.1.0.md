@@ -92,5 +92,3 @@ v1.1.0 是 NPClassworksKV 配套 NPClassworks v1.1.0 的功能与可靠性更新
 ## Full Changelog
 
 [查看后端完整变更：v1.0.1...v1.1.0](https://github.com/tempChanghong/NPClassworksKV/compare/v1.0.1...v1.1.0)
-
-> Compare 链接需要仓库中存在对应版本标签。本更新文档不代替 GitHub 标签或 Release 的创建。
