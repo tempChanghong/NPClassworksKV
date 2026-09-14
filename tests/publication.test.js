@@ -4,11 +4,21 @@ import {
     DEFAULT_NOTICE_LIFETIME_MS,
     earliestPublicationTransition,
     validatePublicationSnapshot,
+    parseBoardDate,
 } from "../domain/publication.js";
 import {
     SUBJECT_DELIVERY_MODES,
     WORKSPACE_TYPES,
 } from "../domain/academicCatalog.js";
+
+test("invalid calendar dates report validation errors without throwing RangeError", () => {
+    for (const value of ["2026-00-01", "2026-13-01", "2026-01-32", "2026-02-30"]) {
+        const errors = [];
+        assert.equal(parseBoardDate(value, errors), null);
+        assert.equal(errors[0].code, "INVALID_BOARD_DATE");
+    }
+    assert.equal(parseBoardDate(" 2026-09-14 ").toISOString(), "2026-09-14T00:00:00.000Z");
+});
 
 const term = {
     id: "term-2026-1",
