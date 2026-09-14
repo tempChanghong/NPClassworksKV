@@ -1,4 +1,5 @@
 import {Router} from "express";
+import {listHomeworkCorrections} from "../../services/homeworkCorrectionService.js";
 import {rosterRevision} from "../../services/classroomToolsService.js";
 import rateLimit from "express-rate-limit";
 import errors from "../../utils/errors.js";
@@ -118,6 +119,13 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
         skip: req.query.skip,
     });
     return res.json(errors.createSuccessResponse(result));
+}));
+
+router.get("/feed/:id/corrections", errors.catchAsync(async (req, res) => {
+    const workspaces = await resolveClassroomScreenWorkspaces(res.locals.classroomScreen);
+    res.set("Cache-Control", "no-store");
+    return res.json(errors.createSuccessResponse(await listHomeworkCorrections({publicationId: req.params.id,
+        workspaceIds: workspaces.map(w => w.id), date: req.query.date, beforeRevision: req.query.beforeRevision})));
 }));
 
 router.post("/notification-deliveries", errors.catchAsync(async (req, res) => {

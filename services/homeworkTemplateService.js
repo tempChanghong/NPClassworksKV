@@ -35,7 +35,7 @@ export async function changeHomeworkTemplate(accountId, id, input, remove = fals
         const existing = await tx.accountPreference.findUnique({where, select: {value: true}});
         if (existing?.value?.revision !== revision) throw templateError("模板已被修改或删除，输入已保留，请重新载入后核对", 409);
         // Old clients omit optional fields; only explicit empty strings clear them.
-        for (const field of ["materials", "submission"]) {
+        for (const field of ["materials", "submission", "optionalContent"]) {
             if (!remove && !Object.hasOwn(input, field) && existing.value[field]) value[field] = existing.value[field];
         }
         // Validate the complete merged template too: preserved fields may add

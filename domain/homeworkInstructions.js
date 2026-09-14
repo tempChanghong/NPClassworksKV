@@ -6,6 +6,13 @@ export function withoutCorrection(metadata) {
 }
 
 export function validateSubmission(metadata, type, errors) {
+    if (Object.hasOwn(metadata || {}, "optionalContent")) {
+        const optional = metadata.optionalContent;
+        if (type !== "ASSIGNMENT" || typeof optional !== "string" || optional.length > 6000
+            || (metadata.kind === "NO_HOMEWORK" && optional.trim())) {
+            errors.push({path: "contentJson.optionalContent", code: "INVALID_OPTIONAL_HOMEWORK", message: "选做内容仅适用于有作业的记录，不能超过6000字"});
+        }
+    }
     const text = metadata?.submission;
     if (text == null) return;
     if (type !== "ASSIGNMENT" || typeof text !== "string" || text.length > 500 || (metadata.kind === "NO_HOMEWORK" && text.trim())) {

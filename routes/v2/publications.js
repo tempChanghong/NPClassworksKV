@@ -1,4 +1,5 @@
 import {Router} from "express";
+import {listHomeworkCorrections} from "../../services/homeworkCorrectionService.js";
 import {jwtAuth} from "../../middleware/jwt-auth.js";
 import errors from "../../utils/errors.js";
 import {
@@ -57,6 +58,12 @@ router.get("/feed", errors.catchAsync(async (req, res) => {
         skip: req.query.skip,
     });
     return res.json(errors.createSuccessResponse(result));
+}));
+
+router.get("/feed/:id/corrections", errors.catchAsync(async (req, res) => {
+    res.set("Cache-Control", "no-store");
+    return res.json(errors.createSuccessResponse(await listHomeworkCorrections({publicationId: req.params.id,
+        workspaceIds: parseWorkspaceIds(req.query), date: req.query.date, beforeRevision: req.query.beforeRevision})));
 }));
 
 router.use(jwtAuth);

@@ -25,6 +25,7 @@ export function isPublicationWithinActionScope(publication, {
 const DIFF_FIELDS = Object.freeze([
     ["title", "标题"],
     ["content", "作业内容"],
+    ["optionalContent", "选做内容"],
     ["subjectId", "科目"],
     ["boardDate", "作业板日期"],
     ["dueAt", "截止时间"],
@@ -68,13 +69,14 @@ export function currentPublicationSnapshot(publication) {
 
 export function summarizePublicationChanges(previousSnapshot, currentSnapshot) {
     if (!previousSnapshot) return [];
+    const fieldValue = (snapshot, key) => key === "optionalContent" ? snapshot.contentJson?.optionalContent || "" : snapshot[key];
     return DIFF_FIELDS
-        .filter(([key]) => !valuesEqual(previousSnapshot[key], currentSnapshot[key]))
+        .filter(([key]) => !valuesEqual(fieldValue(previousSnapshot, key), fieldValue(currentSnapshot, key)))
         .map(([key, label]) => ({
             field: key,
             label,
-            before: previousSnapshot[key] ?? null,
-            after: currentSnapshot[key] ?? null,
+            before: fieldValue(previousSnapshot, key) ?? null,
+            after: fieldValue(currentSnapshot, key) ?? null,
         }));
 }
 
