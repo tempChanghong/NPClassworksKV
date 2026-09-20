@@ -23,7 +23,7 @@ export const PUBLICATION_PRIORITIES = Object.freeze({
     URGENT: "URGENT",
 });
 
-export const DEFAULT_NOTICE_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
+export const DEFAULT_NOTICE_LIFETIME_MS = 24 * 60 * 60 * 1000;
 
 export function earliestPublicationTransition(...values) {
     const timestamps = values

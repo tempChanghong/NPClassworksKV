@@ -125,7 +125,7 @@ test("notices may target mixed administrative classes and course groups without 
     assert.equal(result.valid, true);
 });
 
-test("notices without an explicit expiry default to three days after publication", () => {
+test("notices without an explicit expiry default to one day after publication", () => {
     const classOne = adminClass("g2-c1", "高二1班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
     const publishAt = "2026-08-09T08:15:30.000Z";
     const result = validatePublicationSnapshot({
@@ -144,10 +144,10 @@ test("notices without an explicit expiry default to three days after publication
         result.normalized.expiresAt.getTime(),
         new Date(publishAt).getTime() + DEFAULT_NOTICE_LIFETIME_MS,
     );
-    assert.equal(result.normalized.expiresAt.toISOString(), "2026-08-12T08:15:30.000Z");
+    assert.equal(result.normalized.expiresAt.toISOString(), "2026-08-10T08:15:30.000Z");
 });
 
-test("an explicit notice expiry overrides the three-day default", () => {
+test("an explicit notice expiry overrides the one-day default", () => {
     const classOne = adminClass("g2-c1", "高二1班", SUBJECT_DELIVERY_MODES.ADMIN_CLASS);
     const expiresAt = "2026-08-20T12:00:00.000Z";
     const result = validatePublicationSnapshot({

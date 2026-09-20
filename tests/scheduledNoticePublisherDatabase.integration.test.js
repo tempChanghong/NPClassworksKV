@@ -93,7 +93,7 @@ test("scheduled notice publisher follows successful pre-release saves in Postgre
         const clone = await pub.clonePublication({accountId: b.id, publicationId: original.id, input: {boardDate: null, dueAt: null}});
         publicationIds.push(clone.id);
         assert.equal(clone.status, "DRAFT");
-        assert.equal(new Date(clone.expiresAt) - new Date(clone.publishAt), 3 * 86400000);
+        assert.equal(new Date(clone.expiresAt) - new Date(clone.publishAt), 86400000);
         assert.ok(new Date(clone.publishAt).getTime() >= now);
         assert.equal(clone.priority, "MINOR");
         assert.equal(clone.contentJson.popupEnabled, false);
