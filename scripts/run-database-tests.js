@@ -35,6 +35,7 @@ try {
     run(process.execPath, [
         "--test",
         "--test-concurrency=1",
+        "tests/npepDatabase.integration.test.js",
         "tests/managementDatabase.integration.test.js",
         "tests/classRosterDatabase.integration.test.js",
         "tests/reviewBoundariesDatabase.integration.test.js",

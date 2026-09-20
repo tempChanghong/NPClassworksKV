@@ -109,7 +109,7 @@ export type InstanceSetupAggregateArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter which InstanceSetup to aggregate.
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -121,7 +121,7 @@ export type InstanceSetupAggregateArgs<ExtArgs extends runtime.Types.Extensions.
    *
    * Sets the start position
    */
-  cursor?: Prisma.InstanceSetupWhereUniqueInpu
+  cursor?: Prisma.InstanceSetupWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -178,10 +178,10 @@ export type GetInstanceSetupAggregateType<T extends InstanceSetupAggregateArgs> 
 
 
 export type InstanceSetupGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   orderBy?: Prisma.InstanceSetupOrderByWithAggregationInput | Prisma.InstanceSetupOrderByWithAggregationInput[]
   by: Prisma.InstanceSetupScalarFieldEnum[] | Prisma.InstanceSetupScalarFieldEnum
-  having?: Prisma.InstanceSetupScalarWhereWithAggregatesInpu
+  having?: Prisma.InstanceSetupScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: InstanceSetupCountAggregateInputType | true
@@ -265,11 +265,11 @@ export type InstanceSetupOrderByWithAggregationInput = {
   completedByAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.InstanceSetupCountOrderByAggregateInpu
-  _avg?: Prisma.InstanceSetupAvgOrderByAggregateInpu
-  _max?: Prisma.InstanceSetupMaxOrderByAggregateInpu
-  _min?: Prisma.InstanceSetupMinOrderByAggregateInpu
-  _sum?: Prisma.InstanceSetupSumOrderByAggregateInpu
+  _count?: Prisma.InstanceSetupCountOrderByAggregateInput
+  _avg?: Prisma.InstanceSetupAvgOrderByAggregateInput
+  _max?: Prisma.InstanceSetupMaxOrderByAggregateInput
+  _min?: Prisma.InstanceSetupMinOrderByAggregateInput
+  _sum?: Prisma.InstanceSetupSumOrderByAggregateInput
 }
 
 export type InstanceSetupScalarWhereWithAggregatesInput = {
@@ -712,7 +712,7 @@ export interface InstanceSetupDelegate<ExtArgs extends runtime.Types.Extensions.
    * // Count the number of InstanceSetups
    * const count = await prisma.instanceSetup.count({
    *   where: {
-   *     // ... the filter for the InstanceSetups we want to coun
+   *     // ... the filter for the InstanceSetups we want to count
    *   }
    * })
   **/
@@ -758,7 +758,7 @@ export interface InstanceSetupDelegate<ExtArgs extends runtime.Types.Extensions.
    * Read more here: https://pris.ly/d/null-undefined
    * @param {InstanceSetupGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -897,7 +897,7 @@ export type InstanceSetupFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter, which InstanceSetup to fetch.
    */
-  where: Prisma.InstanceSetupWhereUniqueInpu
+  where: Prisma.InstanceSetupWhereUniqueInput
 }
 
 /**
@@ -915,11 +915,11 @@ export type InstanceSetupFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which InstanceSetup to fetch.
    */
-  where: Prisma.InstanceSetupWhereUniqueInpu
+  where: Prisma.InstanceSetupWhereUniqueInput
 }
 
 /**
- * InstanceSetup findFirs
+ * InstanceSetup findFirst
  */
 export type InstanceSetupFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -933,7 +933,7 @@ export type InstanceSetupFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter, which InstanceSetup to fetch.
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -945,7 +945,7 @@ export type InstanceSetupFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    *
    * Sets the position for searching for InstanceSetups.
    */
-  cursor?: Prisma.InstanceSetupWhereUniqueInpu
+  cursor?: Prisma.InstanceSetupWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -981,7 +981,7 @@ export type InstanceSetupFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which InstanceSetup to fetch.
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -993,7 +993,7 @@ export type InstanceSetupFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    *
    * Sets the position for searching for InstanceSetups.
    */
-  cursor?: Prisma.InstanceSetupWhereUniqueInpu
+  cursor?: Prisma.InstanceSetupWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1029,7 +1029,7 @@ export type InstanceSetupFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter, which InstanceSetups to fetch.
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1041,7 +1041,7 @@ export type InstanceSetupFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the position for listing InstanceSetups.
    */
-  cursor?: Prisma.InstanceSetupWhereUniqueInpu
+  cursor?: Prisma.InstanceSetupWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1124,7 +1124,7 @@ export type InstanceSetupUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Choose, which InstanceSetup to update.
    */
-  where: Prisma.InstanceSetupWhereUniqueInpu
+  where: Prisma.InstanceSetupWhereUniqueInput
 }
 
 /**
@@ -1138,7 +1138,7 @@ export type InstanceSetupUpdateManyArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter which InstanceSetups to update
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * Limit how many InstanceSetups to update.
    */
@@ -1164,7 +1164,7 @@ export type InstanceSetupUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which InstanceSetups to update
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * Limit how many InstanceSetups to update.
    */
@@ -1172,7 +1172,7 @@ export type InstanceSetupUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.E
 }
 
 /**
- * InstanceSetup upser
+ * InstanceSetup upsert
  */
 export type InstanceSetupUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1186,7 +1186,7 @@ export type InstanceSetupUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * The filter to search for the InstanceSetup to update in case it exists.
    */
-  where: Prisma.InstanceSetupWhereUniqueInpu
+  where: Prisma.InstanceSetupWhereUniqueInput
   /**
    * In case the InstanceSetup found by the `where` argument doesn't exist, create a new InstanceSetup with this data.
    */
@@ -1212,7 +1212,7 @@ export type InstanceSetupDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter which InstanceSetup to delete.
    */
-  where: Prisma.InstanceSetupWhereUniqueInpu
+  where: Prisma.InstanceSetupWhereUniqueInput
 }
 
 /**
@@ -1222,7 +1222,7 @@ export type InstanceSetupDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter which InstanceSetups to delete
    */
-  where?: Prisma.InstanceSetupWhereInpu
+  where?: Prisma.InstanceSetupWhereInput
   /**
    * Limit how many InstanceSetups to delete.
    */

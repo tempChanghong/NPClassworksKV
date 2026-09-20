@@ -131,7 +131,7 @@ export type AcademicTermAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter which AcademicTerm to aggregate.
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -143,7 +143,7 @@ export type AcademicTermAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the start position
    */
-  cursor?: Prisma.AcademicTermWhereUniqueInpu
+  cursor?: Prisma.AcademicTermWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -200,10 +200,10 @@ export type GetAcademicTermAggregateType<T extends AcademicTermAggregateArgs> = 
 
 
 export type AcademicTermGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   orderBy?: Prisma.AcademicTermOrderByWithAggregationInput | Prisma.AcademicTermOrderByWithAggregationInput[]
   by: Prisma.AcademicTermScalarFieldEnum[] | Prisma.AcademicTermScalarFieldEnum
-  having?: Prisma.AcademicTermScalarWhereWithAggregatesInpu
+  having?: Prisma.AcademicTermScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AcademicTermCountAggregateInputType | true
@@ -276,14 +276,14 @@ export type AcademicTermOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  school?: Prisma.SchoolOrderByWithRelationInpu
-  grades?: Prisma.GradeOrderByRelationAggregateInpu
-  workspaces?: Prisma.WorkspaceOrderByRelationAggregateInpu
+  school?: Prisma.SchoolOrderByWithRelationInput
+  grades?: Prisma.GradeOrderByRelationAggregateInput
+  workspaces?: Prisma.WorkspaceOrderByRelationAggregateInput
 }
 
 export type AcademicTermWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  schoolId_academicYear_semester?: Prisma.AcademicTermSchoolIdAcademicYearSemesterCompoundUniqueInpu
+  schoolId_academicYear_semester?: Prisma.AcademicTermSchoolIdAcademicYearSemesterCompoundUniqueInput
   AND?: Prisma.AcademicTermWhereInput | Prisma.AcademicTermWhereInput[]
   OR?: Prisma.AcademicTermWhereInput[]
   NOT?: Prisma.AcademicTermWhereInput | Prisma.AcademicTermWhereInput[]
@@ -312,11 +312,11 @@ export type AcademicTermOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AcademicTermCountOrderByAggregateInpu
-  _avg?: Prisma.AcademicTermAvgOrderByAggregateInpu
-  _max?: Prisma.AcademicTermMaxOrderByAggregateInpu
-  _min?: Prisma.AcademicTermMinOrderByAggregateInpu
-  _sum?: Prisma.AcademicTermSumOrderByAggregateInpu
+  _count?: Prisma.AcademicTermCountOrderByAggregateInput
+  _avg?: Prisma.AcademicTermAvgOrderByAggregateInput
+  _max?: Prisma.AcademicTermMaxOrderByAggregateInput
+  _min?: Prisma.AcademicTermMinOrderByAggregateInput
+  _sum?: Prisma.AcademicTermSumOrderByAggregateInput
 }
 
 export type AcademicTermScalarWhereWithAggregatesInput = {
@@ -345,9 +345,9 @@ export type AcademicTermCreateInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutTermsInpu
-  grades?: Prisma.GradeCreateNestedManyWithoutTermInpu
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInpu
+  school: Prisma.SchoolCreateNestedOneWithoutTermsInput
+  grades?: Prisma.GradeCreateNestedManyWithoutTermInput
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermUncheckedCreateInput = {
@@ -361,8 +361,8 @@ export type AcademicTermUncheckedCreateInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInpu
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInpu
+  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInput
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermUpdateInput = {
@@ -375,9 +375,9 @@ export type AcademicTermUpdateInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInpu
-  grades?: Prisma.GradeUpdateManyWithoutTermNestedInpu
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInpu
+  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInput
+  grades?: Prisma.GradeUpdateManyWithoutTermNestedInput
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermUncheckedUpdateInput = {
@@ -391,8 +391,8 @@ export type AcademicTermUncheckedUpdateInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInpu
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInpu
+  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInput
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermCreateManyInput = {
@@ -434,9 +434,9 @@ export type AcademicTermUncheckedUpdateManyInput = {
 }
 
 export type AcademicTermListRelationFilter = {
-  every?: Prisma.AcademicTermWhereInpu
-  some?: Prisma.AcademicTermWhereInpu
-  none?: Prisma.AcademicTermWhereInpu
+  every?: Prisma.AcademicTermWhereInput
+  some?: Prisma.AcademicTermWhereInput
+  none?: Prisma.AcademicTermWhereInput
 }
 
 export type AcademicTermOrderByRelationAggregateInput = {
@@ -499,8 +499,8 @@ export type AcademicTermSumOrderByAggregateInput = {
 }
 
 export type AcademicTermScalarRelationFilter = {
-  is?: Prisma.AcademicTermWhereInpu
-  isNot?: Prisma.AcademicTermWhereInpu
+  is?: Prisma.AcademicTermWhereInput
+  isNot?: Prisma.AcademicTermWhereInput
 }
 
 export type AcademicTermCreateNestedManyWithoutSchoolInput = {
@@ -551,29 +551,29 @@ export type EnumAcademicTermStatusFieldUpdateOperationsInput = {
 
 export type AcademicTermCreateNestedOneWithoutGradesInput = {
   create?: Prisma.XOR<Prisma.AcademicTermCreateWithoutGradesInput, Prisma.AcademicTermUncheckedCreateWithoutGradesInput>
-  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutGradesInpu
-  connect?: Prisma.AcademicTermWhereUniqueInpu
+  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutGradesInput
+  connect?: Prisma.AcademicTermWhereUniqueInput
 }
 
 export type AcademicTermUpdateOneRequiredWithoutGradesNestedInput = {
   create?: Prisma.XOR<Prisma.AcademicTermCreateWithoutGradesInput, Prisma.AcademicTermUncheckedCreateWithoutGradesInput>
-  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutGradesInpu
-  upsert?: Prisma.AcademicTermUpsertWithoutGradesInpu
-  connect?: Prisma.AcademicTermWhereUniqueInpu
+  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutGradesInput
+  upsert?: Prisma.AcademicTermUpsertWithoutGradesInput
+  connect?: Prisma.AcademicTermWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicTermUpdateToOneWithWhereWithoutGradesInput, Prisma.AcademicTermUpdateWithoutGradesInput>, Prisma.AcademicTermUncheckedUpdateWithoutGradesInput>
 }
 
 export type AcademicTermCreateNestedOneWithoutWorkspacesInput = {
   create?: Prisma.XOR<Prisma.AcademicTermCreateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedCreateWithoutWorkspacesInput>
-  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutWorkspacesInpu
-  connect?: Prisma.AcademicTermWhereUniqueInpu
+  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutWorkspacesInput
+  connect?: Prisma.AcademicTermWhereUniqueInput
 }
 
 export type AcademicTermUpdateOneRequiredWithoutWorkspacesNestedInput = {
   create?: Prisma.XOR<Prisma.AcademicTermCreateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedCreateWithoutWorkspacesInput>
-  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutWorkspacesInpu
-  upsert?: Prisma.AcademicTermUpsertWithoutWorkspacesInpu
-  connect?: Prisma.AcademicTermWhereUniqueInpu
+  connectOrCreate?: Prisma.AcademicTermCreateOrConnectWithoutWorkspacesInput
+  upsert?: Prisma.AcademicTermUpsertWithoutWorkspacesInput
+  connect?: Prisma.AcademicTermWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AcademicTermUpdateToOneWithWhereWithoutWorkspacesInput, Prisma.AcademicTermUpdateWithoutWorkspacesInput>, Prisma.AcademicTermUncheckedUpdateWithoutWorkspacesInput>
 }
 
@@ -587,8 +587,8 @@ export type AcademicTermCreateWithoutSchoolInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  grades?: Prisma.GradeCreateNestedManyWithoutTermInpu
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInpu
+  grades?: Prisma.GradeCreateNestedManyWithoutTermInput
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermUncheckedCreateWithoutSchoolInput = {
@@ -601,12 +601,12 @@ export type AcademicTermUncheckedCreateWithoutSchoolInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInpu
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInpu
+  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInput
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermCreateOrConnectWithoutSchoolInput = {
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutSchoolInput, Prisma.AcademicTermUncheckedCreateWithoutSchoolInput>
 }
 
@@ -616,18 +616,18 @@ export type AcademicTermCreateManySchoolInputEnvelope = {
 }
 
 export type AcademicTermUpsertWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   update: Prisma.XOR<Prisma.AcademicTermUpdateWithoutSchoolInput, Prisma.AcademicTermUncheckedUpdateWithoutSchoolInput>
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutSchoolInput, Prisma.AcademicTermUncheckedCreateWithoutSchoolInput>
 }
 
 export type AcademicTermUpdateWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   data: Prisma.XOR<Prisma.AcademicTermUpdateWithoutSchoolInput, Prisma.AcademicTermUncheckedUpdateWithoutSchoolInput>
 }
 
 export type AcademicTermUpdateManyWithWhereWithoutSchoolInput = {
-  where: Prisma.AcademicTermScalarWhereInpu
+  where: Prisma.AcademicTermScalarWhereInput
   data: Prisma.XOR<Prisma.AcademicTermUpdateManyMutationInput, Prisma.AcademicTermUncheckedUpdateManyWithoutSchoolInput>
 }
 
@@ -657,8 +657,8 @@ export type AcademicTermCreateWithoutGradesInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutTermsInpu
-  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInpu
+  school: Prisma.SchoolCreateNestedOneWithoutTermsInput
+  workspaces?: Prisma.WorkspaceCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermUncheckedCreateWithoutGradesInput = {
@@ -672,22 +672,22 @@ export type AcademicTermUncheckedCreateWithoutGradesInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInpu
+  workspaces?: Prisma.WorkspaceUncheckedCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermCreateOrConnectWithoutGradesInput = {
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutGradesInput, Prisma.AcademicTermUncheckedCreateWithoutGradesInput>
 }
 
 export type AcademicTermUpsertWithoutGradesInput = {
   update: Prisma.XOR<Prisma.AcademicTermUpdateWithoutGradesInput, Prisma.AcademicTermUncheckedUpdateWithoutGradesInput>
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutGradesInput, Prisma.AcademicTermUncheckedCreateWithoutGradesInput>
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
 }
 
 export type AcademicTermUpdateToOneWithWhereWithoutGradesInput = {
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   data: Prisma.XOR<Prisma.AcademicTermUpdateWithoutGradesInput, Prisma.AcademicTermUncheckedUpdateWithoutGradesInput>
 }
 
@@ -701,8 +701,8 @@ export type AcademicTermUpdateWithoutGradesInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInpu
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInpu
+  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInput
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermUncheckedUpdateWithoutGradesInput = {
@@ -716,7 +716,7 @@ export type AcademicTermUncheckedUpdateWithoutGradesInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInpu
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermCreateWithoutWorkspacesInput = {
@@ -729,8 +729,8 @@ export type AcademicTermCreateWithoutWorkspacesInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutTermsInpu
-  grades?: Prisma.GradeCreateNestedManyWithoutTermInpu
+  school: Prisma.SchoolCreateNestedOneWithoutTermsInput
+  grades?: Prisma.GradeCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermUncheckedCreateWithoutWorkspacesInput = {
@@ -744,22 +744,22 @@ export type AcademicTermUncheckedCreateWithoutWorkspacesInput = {
   status?: $Enums.AcademicTermStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInpu
+  grades?: Prisma.GradeUncheckedCreateNestedManyWithoutTermInput
 }
 
 export type AcademicTermCreateOrConnectWithoutWorkspacesInput = {
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedCreateWithoutWorkspacesInput>
 }
 
 export type AcademicTermUpsertWithoutWorkspacesInput = {
   update: Prisma.XOR<Prisma.AcademicTermUpdateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedUpdateWithoutWorkspacesInput>
   create: Prisma.XOR<Prisma.AcademicTermCreateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedCreateWithoutWorkspacesInput>
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
 }
 
 export type AcademicTermUpdateToOneWithWhereWithoutWorkspacesInput = {
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   data: Prisma.XOR<Prisma.AcademicTermUpdateWithoutWorkspacesInput, Prisma.AcademicTermUncheckedUpdateWithoutWorkspacesInput>
 }
 
@@ -773,8 +773,8 @@ export type AcademicTermUpdateWithoutWorkspacesInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInpu
-  grades?: Prisma.GradeUpdateManyWithoutTermNestedInpu
+  school?: Prisma.SchoolUpdateOneRequiredWithoutTermsNestedInput
+  grades?: Prisma.GradeUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermUncheckedUpdateWithoutWorkspacesInput = {
@@ -788,7 +788,7 @@ export type AcademicTermUncheckedUpdateWithoutWorkspacesInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInpu
+  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermCreateManySchoolInput = {
@@ -813,8 +813,8 @@ export type AcademicTermUpdateWithoutSchoolInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grades?: Prisma.GradeUpdateManyWithoutTermNestedInpu
-  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInpu
+  grades?: Prisma.GradeUpdateManyWithoutTermNestedInput
+  workspaces?: Prisma.WorkspaceUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermUncheckedUpdateWithoutSchoolInput = {
@@ -827,8 +827,8 @@ export type AcademicTermUncheckedUpdateWithoutSchoolInput = {
   status?: Prisma.EnumAcademicTermStatusFieldUpdateOperationsInput | $Enums.AcademicTermStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInpu
-  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInpu
+  grades?: Prisma.GradeUncheckedUpdateManyWithoutTermNestedInput
+  workspaces?: Prisma.WorkspaceUncheckedUpdateManyWithoutTermNestedInput
 }
 
 export type AcademicTermUncheckedUpdateManyWithoutSchoolInput = {
@@ -872,14 +872,14 @@ export type AcademicTermCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
  * AcademicTermCountOutputType without action
  */
 export type AcademicTermCountOutputTypeCountGradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GradeWhereInpu
+  where?: Prisma.GradeWhereInput
 }
 
 /**
  * AcademicTermCountOutputType without action
  */
 export type AcademicTermCountOutputTypeCountWorkspacesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceWhereInpu
+  where?: Prisma.WorkspaceWhereInput
 }
 
 
@@ -1237,7 +1237,7 @@ export interface AcademicTermDelegate<ExtArgs extends runtime.Types.Extensions.I
    * // Count the number of AcademicTerms
    * const count = await prisma.academicTerm.count({
    *   where: {
-   *     // ... the filter for the AcademicTerms we want to coun
+   *     // ... the filter for the AcademicTerms we want to count
    *   }
    * })
   **/
@@ -1283,7 +1283,7 @@ export interface AcademicTermDelegate<ExtArgs extends runtime.Types.Extensions.I
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AcademicTermGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1432,7 +1432,7 @@ export type AcademicTermFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter, which AcademicTerm to fetch.
    */
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
 }
 
 /**
@@ -1454,11 +1454,11 @@ export type AcademicTermFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which AcademicTerm to fetch.
    */
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
 }
 
 /**
- * AcademicTerm findFirs
+ * AcademicTerm findFirst
  */
 export type AcademicTermFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1476,7 +1476,7 @@ export type AcademicTermFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter, which AcademicTerm to fetch.
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1488,7 +1488,7 @@ export type AcademicTermFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the position for searching for AcademicTerms.
    */
-  cursor?: Prisma.AcademicTermWhereUniqueInpu
+  cursor?: Prisma.AcademicTermWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1528,7 +1528,7 @@ export type AcademicTermFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which AcademicTerm to fetch.
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1540,7 +1540,7 @@ export type AcademicTermFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    *
    * Sets the position for searching for AcademicTerms.
    */
-  cursor?: Prisma.AcademicTermWhereUniqueInpu
+  cursor?: Prisma.AcademicTermWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1580,7 +1580,7 @@ export type AcademicTermFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter, which AcademicTerms to fetch.
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1592,7 +1592,7 @@ export type AcademicTermFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    *
    * Sets the position for listing AcademicTerms.
    */
-  cursor?: Prisma.AcademicTermWhereUniqueInpu
+  cursor?: Prisma.AcademicTermWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1687,7 +1687,7 @@ export type AcademicTermUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Choose, which AcademicTerm to update.
    */
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
 }
 
 /**
@@ -1701,7 +1701,7 @@ export type AcademicTermUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter which AcademicTerms to update
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * Limit how many AcademicTerms to update.
    */
@@ -1727,7 +1727,7 @@ export type AcademicTermUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which AcademicTerms to update
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * Limit how many AcademicTerms to update.
    */
@@ -1739,7 +1739,7 @@ export type AcademicTermUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
 }
 
 /**
- * AcademicTerm upser
+ * AcademicTerm upsert
  */
 export type AcademicTermUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1757,7 +1757,7 @@ export type AcademicTermUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * The filter to search for the AcademicTerm to update in case it exists.
    */
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
   /**
    * In case the AcademicTerm found by the `where` argument doesn't exist, create a new AcademicTerm with this data.
    */
@@ -1787,7 +1787,7 @@ export type AcademicTermDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which AcademicTerm to delete.
    */
-  where: Prisma.AcademicTermWhereUniqueInpu
+  where: Prisma.AcademicTermWhereUniqueInput
 }
 
 /**
@@ -1797,7 +1797,7 @@ export type AcademicTermDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter which AcademicTerms to delete
    */
-  where?: Prisma.AcademicTermWhereInpu
+  where?: Prisma.AcademicTermWhereInput
   /**
    * Limit how many AcademicTerms to delete.
    */
@@ -1820,9 +1820,9 @@ export type AcademicTerm$gradesArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.GradeInclude<ExtArgs> | null
-  where?: Prisma.GradeWhereInpu
+  where?: Prisma.GradeWhereInput
   orderBy?: Prisma.GradeOrderByWithRelationInput | Prisma.GradeOrderByWithRelationInput[]
-  cursor?: Prisma.GradeWhereUniqueInpu
+  cursor?: Prisma.GradeWhereUniqueInput
   take?: number
   skip?: number
   distinct?: Prisma.GradeScalarFieldEnum | Prisma.GradeScalarFieldEnum[]
@@ -1844,9 +1844,9 @@ export type AcademicTerm$workspacesArgs<ExtArgs extends runtime.Types.Extensions
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.WorkspaceInclude<ExtArgs> | null
-  where?: Prisma.WorkspaceWhereInpu
+  where?: Prisma.WorkspaceWhereInput
   orderBy?: Prisma.WorkspaceOrderByWithRelationInput | Prisma.WorkspaceOrderByWithRelationInput[]
-  cursor?: Prisma.WorkspaceWhereUniqueInpu
+  cursor?: Prisma.WorkspaceWhereUniqueInput
   take?: number
   skip?: number
   distinct?: Prisma.WorkspaceScalarFieldEnum | Prisma.WorkspaceScalarFieldEnum[]

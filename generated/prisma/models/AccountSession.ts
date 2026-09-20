@@ -98,7 +98,7 @@ export type AccountSessionAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter which AccountSession to aggregate.
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -110,7 +110,7 @@ export type AccountSessionAggregateArgs<ExtArgs extends runtime.Types.Extensions
    *
    * Sets the start position
    */
-  cursor?: Prisma.AccountSessionWhereUniqueInpu
+  cursor?: Prisma.AccountSessionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -155,10 +155,10 @@ export type GetAccountSessionAggregateType<T extends AccountSessionAggregateArgs
 
 
 export type AccountSessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   orderBy?: Prisma.AccountSessionOrderByWithAggregationInput | Prisma.AccountSessionOrderByWithAggregationInput[]
   by: Prisma.AccountSessionScalarFieldEnum[] | Prisma.AccountSessionScalarFieldEnum
-  having?: Prisma.AccountSessionScalarWhereWithAggregatesInpu
+  having?: Prisma.AccountSessionScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AccountSessionCountAggregateInputType | true
@@ -219,7 +219,7 @@ export type AccountSessionOrderByWithRelationInput = {
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  account?: Prisma.AccountOrderByWithRelationInpu
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type AccountSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -246,9 +246,9 @@ export type AccountSessionOrderByWithAggregationInput = {
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AccountSessionCountOrderByAggregateInpu
-  _max?: Prisma.AccountSessionMaxOrderByAggregateInpu
-  _min?: Prisma.AccountSessionMinOrderByAggregateInpu
+  _count?: Prisma.AccountSessionCountOrderByAggregateInput
+  _max?: Prisma.AccountSessionMaxOrderByAggregateInput
+  _min?: Prisma.AccountSessionMinOrderByAggregateInput
 }
 
 export type AccountSessionScalarWhereWithAggregatesInput = {
@@ -273,7 +273,7 @@ export type AccountSessionCreateInput = {
   revokedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutSessionsInpu
+  account: Prisma.AccountCreateNestedOneWithoutSessionsInput
 }
 
 export type AccountSessionUncheckedCreateInput = {
@@ -295,7 +295,7 @@ export type AccountSessionUpdateInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutSessionsNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutSessionsNestedInput
 }
 
 export type AccountSessionUncheckedUpdateInput = {
@@ -342,9 +342,9 @@ export type AccountSessionUncheckedUpdateManyInput = {
 }
 
 export type AccountSessionListRelationFilter = {
-  every?: Prisma.AccountSessionWhereInpu
-  some?: Prisma.AccountSessionWhereInpu
-  none?: Prisma.AccountSessionWhereInpu
+  every?: Prisma.AccountSessionWhereInput
+  some?: Prisma.AccountSessionWhereInput
+  none?: Prisma.AccountSessionWhereInput
 }
 
 export type AccountSessionOrderByRelationAggregateInput = {
@@ -447,7 +447,7 @@ export type AccountSessionUncheckedCreateWithoutAccountInput = {
 }
 
 export type AccountSessionCreateOrConnectWithoutAccountInput = {
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
   create: Prisma.XOR<Prisma.AccountSessionCreateWithoutAccountInput, Prisma.AccountSessionUncheckedCreateWithoutAccountInput>
 }
 
@@ -457,18 +457,18 @@ export type AccountSessionCreateManyAccountInputEnvelope = {
 }
 
 export type AccountSessionUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
   update: Prisma.XOR<Prisma.AccountSessionUpdateWithoutAccountInput, Prisma.AccountSessionUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.AccountSessionCreateWithoutAccountInput, Prisma.AccountSessionUncheckedCreateWithoutAccountInput>
 }
 
 export type AccountSessionUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
   data: Prisma.XOR<Prisma.AccountSessionUpdateWithoutAccountInput, Prisma.AccountSessionUncheckedUpdateWithoutAccountInput>
 }
 
 export type AccountSessionUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.AccountSessionScalarWhereInpu
+  where: Prisma.AccountSessionScalarWhereInput
   data: Prisma.XOR<Prisma.AccountSessionUpdateManyMutationInput, Prisma.AccountSessionUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -864,7 +864,7 @@ export interface AccountSessionDelegate<ExtArgs extends runtime.Types.Extensions
    * // Count the number of AccountSessions
    * const count = await prisma.accountSession.count({
    *   where: {
-   *     // ... the filter for the AccountSessions we want to coun
+   *     // ... the filter for the AccountSessions we want to count
    *   }
    * })
   **/
@@ -910,7 +910,7 @@ export interface AccountSessionDelegate<ExtArgs extends runtime.Types.Extensions
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AccountSessionGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1055,7 +1055,7 @@ export type AccountSessionFindUniqueArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which AccountSession to fetch.
    */
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
 }
 
 /**
@@ -1077,11 +1077,11 @@ export type AccountSessionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which AccountSession to fetch.
    */
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
 }
 
 /**
- * AccountSession findFirs
+ * AccountSession findFirst
  */
 export type AccountSessionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1099,7 +1099,7 @@ export type AccountSessionFindFirstArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter, which AccountSession to fetch.
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1111,7 +1111,7 @@ export type AccountSessionFindFirstArgs<ExtArgs extends runtime.Types.Extensions
    *
    * Sets the position for searching for AccountSessions.
    */
-  cursor?: Prisma.AccountSessionWhereUniqueInpu
+  cursor?: Prisma.AccountSessionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1151,7 +1151,7 @@ export type AccountSessionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which AccountSession to fetch.
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1163,7 +1163,7 @@ export type AccountSessionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ext
    *
    * Sets the position for searching for AccountSessions.
    */
-  cursor?: Prisma.AccountSessionWhereUniqueInpu
+  cursor?: Prisma.AccountSessionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1203,7 +1203,7 @@ export type AccountSessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter, which AccountSessions to fetch.
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1215,7 +1215,7 @@ export type AccountSessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    *
    * Sets the position for listing AccountSessions.
    */
-  cursor?: Prisma.AccountSessionWhereUniqueInpu
+  cursor?: Prisma.AccountSessionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1310,7 +1310,7 @@ export type AccountSessionUpdateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Choose, which AccountSession to update.
    */
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
 }
 
 /**
@@ -1324,7 +1324,7 @@ export type AccountSessionUpdateManyArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which AccountSessions to update
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * Limit how many AccountSessions to update.
    */
@@ -1350,7 +1350,7 @@ export type AccountSessionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.
   /**
    * Filter which AccountSessions to update
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * Limit how many AccountSessions to update.
    */
@@ -1362,7 +1362,7 @@ export type AccountSessionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.
 }
 
 /**
- * AccountSession upser
+ * AccountSession upsert
  */
 export type AccountSessionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1380,7 +1380,7 @@ export type AccountSessionUpsertArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * The filter to search for the AccountSession to update in case it exists.
    */
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
   /**
    * In case the AccountSession found by the `where` argument doesn't exist, create a new AccountSession with this data.
    */
@@ -1410,7 +1410,7 @@ export type AccountSessionDeleteArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter which AccountSession to delete.
    */
-  where: Prisma.AccountSessionWhereUniqueInpu
+  where: Prisma.AccountSessionWhereUniqueInput
 }
 
 /**
@@ -1420,7 +1420,7 @@ export type AccountSessionDeleteManyArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which AccountSessions to delete
    */
-  where?: Prisma.AccountSessionWhereInpu
+  where?: Prisma.AccountSessionWhereInput
   /**
    * Limit how many AccountSessions to delete.
    */

@@ -109,7 +109,7 @@ export type AutoAuthAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter which AutoAuth to aggregate.
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -121,7 +121,7 @@ export type AutoAuthAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    *
    * Sets the start position
    */
-  cursor?: Prisma.AutoAuthWhereUniqueInpu
+  cursor?: Prisma.AutoAuthWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -178,10 +178,10 @@ export type GetAutoAuthAggregateType<T extends AutoAuthAggregateArgs> = {
 
 
 export type AutoAuthGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   orderBy?: Prisma.AutoAuthOrderByWithAggregationInput | Prisma.AutoAuthOrderByWithAggregationInput[]
   by: Prisma.AutoAuthScalarFieldEnum[] | Prisma.AutoAuthScalarFieldEnum
-  having?: Prisma.AutoAuthScalarWhereWithAggregatesInpu
+  having?: Prisma.AutoAuthScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AutoAuthCountAggregateInputType | true
@@ -243,12 +243,12 @@ export type AutoAuthOrderByWithRelationInput = {
   isReadOnly?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  device?: Prisma.DeviceOrderByWithRelationInpu
+  device?: Prisma.DeviceOrderByWithRelationInput
 }
 
 export type AutoAuthWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  deviceId_password?: Prisma.AutoAuthDeviceIdPasswordCompoundUniqueInpu
+  deviceId_password?: Prisma.AutoAuthDeviceIdPasswordCompoundUniqueInput
   AND?: Prisma.AutoAuthWhereInput | Prisma.AutoAuthWhereInput[]
   OR?: Prisma.AutoAuthWhereInput[]
   NOT?: Prisma.AutoAuthWhereInput | Prisma.AutoAuthWhereInput[]
@@ -269,11 +269,11 @@ export type AutoAuthOrderByWithAggregationInput = {
   isReadOnly?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AutoAuthCountOrderByAggregateInpu
-  _avg?: Prisma.AutoAuthAvgOrderByAggregateInpu
-  _max?: Prisma.AutoAuthMaxOrderByAggregateInpu
-  _min?: Prisma.AutoAuthMinOrderByAggregateInpu
-  _sum?: Prisma.AutoAuthSumOrderByAggregateInpu
+  _count?: Prisma.AutoAuthCountOrderByAggregateInput
+  _avg?: Prisma.AutoAuthAvgOrderByAggregateInput
+  _max?: Prisma.AutoAuthMaxOrderByAggregateInput
+  _min?: Prisma.AutoAuthMinOrderByAggregateInput
+  _sum?: Prisma.AutoAuthSumOrderByAggregateInput
 }
 
 export type AutoAuthScalarWhereWithAggregatesInput = {
@@ -296,7 +296,7 @@ export type AutoAuthCreateInput = {
   isReadOnly?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  device: Prisma.DeviceCreateNestedOneWithoutAutoAuthsInpu
+  device: Prisma.DeviceCreateNestedOneWithoutAutoAuthsInput
 }
 
 export type AutoAuthUncheckedCreateInput = {
@@ -316,7 +316,7 @@ export type AutoAuthUpdateInput = {
   isReadOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  device?: Prisma.DeviceUpdateOneRequiredWithoutAutoAuthsNestedInpu
+  device?: Prisma.DeviceUpdateOneRequiredWithoutAutoAuthsNestedInput
 }
 
 export type AutoAuthUncheckedUpdateInput = {
@@ -402,9 +402,9 @@ export type AutoAuthSumOrderByAggregateInput = {
 }
 
 export type AutoAuthListRelationFilter = {
-  every?: Prisma.AutoAuthWhereInpu
-  some?: Prisma.AutoAuthWhereInpu
-  none?: Prisma.AutoAuthWhereInpu
+  every?: Prisma.AutoAuthWhereInput
+  some?: Prisma.AutoAuthWhereInput
+  none?: Prisma.AutoAuthWhereInput
 }
 
 export type AutoAuthOrderByRelationAggregateInput = {
@@ -472,7 +472,7 @@ export type AutoAuthUncheckedCreateWithoutDeviceInput = {
 }
 
 export type AutoAuthCreateOrConnectWithoutDeviceInput = {
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
   create: Prisma.XOR<Prisma.AutoAuthCreateWithoutDeviceInput, Prisma.AutoAuthUncheckedCreateWithoutDeviceInput>
 }
 
@@ -482,18 +482,18 @@ export type AutoAuthCreateManyDeviceInputEnvelope = {
 }
 
 export type AutoAuthUpsertWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
   update: Prisma.XOR<Prisma.AutoAuthUpdateWithoutDeviceInput, Prisma.AutoAuthUncheckedUpdateWithoutDeviceInput>
   create: Prisma.XOR<Prisma.AutoAuthCreateWithoutDeviceInput, Prisma.AutoAuthUncheckedCreateWithoutDeviceInput>
 }
 
 export type AutoAuthUpdateWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
   data: Prisma.XOR<Prisma.AutoAuthUpdateWithoutDeviceInput, Prisma.AutoAuthUncheckedUpdateWithoutDeviceInput>
 }
 
 export type AutoAuthUpdateManyWithWhereWithoutDeviceInput = {
-  where: Prisma.AutoAuthScalarWhereInpu
+  where: Prisma.AutoAuthScalarWhereInput
   data: Prisma.XOR<Prisma.AutoAuthUpdateManyMutationInput, Prisma.AutoAuthUncheckedUpdateManyWithoutDeviceInput>
 }
 
@@ -879,7 +879,7 @@ export interface AutoAuthDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Count the number of AutoAuths
    * const count = await prisma.autoAuth.count({
    *   where: {
-   *     // ... the filter for the AutoAuths we want to coun
+   *     // ... the filter for the AutoAuths we want to count
    *   }
    * })
   **/
@@ -925,7 +925,7 @@ export interface AutoAuthDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AutoAuthGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1069,7 +1069,7 @@ export type AutoAuthFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter, which AutoAuth to fetch.
    */
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
 }
 
 /**
@@ -1091,11 +1091,11 @@ export type AutoAuthFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which AutoAuth to fetch.
    */
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
 }
 
 /**
- * AutoAuth findFirs
+ * AutoAuth findFirst
  */
 export type AutoAuthFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1113,7 +1113,7 @@ export type AutoAuthFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter, which AutoAuth to fetch.
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1125,7 +1125,7 @@ export type AutoAuthFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    *
    * Sets the position for searching for AutoAuths.
    */
-  cursor?: Prisma.AutoAuthWhereUniqueInpu
+  cursor?: Prisma.AutoAuthWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1165,7 +1165,7 @@ export type AutoAuthFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which AutoAuth to fetch.
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1177,7 +1177,7 @@ export type AutoAuthFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the position for searching for AutoAuths.
    */
-  cursor?: Prisma.AutoAuthWhereUniqueInpu
+  cursor?: Prisma.AutoAuthWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1217,7 +1217,7 @@ export type AutoAuthFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Filter, which AutoAuths to fetch.
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1229,7 +1229,7 @@ export type AutoAuthFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    *
    * Sets the position for listing AutoAuths.
    */
-  cursor?: Prisma.AutoAuthWhereUniqueInpu
+  cursor?: Prisma.AutoAuthWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1324,7 +1324,7 @@ export type AutoAuthUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Choose, which AutoAuth to update.
    */
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
 }
 
 /**
@@ -1338,7 +1338,7 @@ export type AutoAuthUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which AutoAuths to update
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * Limit how many AutoAuths to update.
    */
@@ -1364,7 +1364,7 @@ export type AutoAuthUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which AutoAuths to update
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * Limit how many AutoAuths to update.
    */
@@ -1376,7 +1376,7 @@ export type AutoAuthUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * AutoAuth upser
+ * AutoAuth upsert
  */
 export type AutoAuthUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1394,7 +1394,7 @@ export type AutoAuthUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * The filter to search for the AutoAuth to update in case it exists.
    */
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
   /**
    * In case the AutoAuth found by the `where` argument doesn't exist, create a new AutoAuth with this data.
    */
@@ -1424,7 +1424,7 @@ export type AutoAuthDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Filter which AutoAuth to delete.
    */
-  where: Prisma.AutoAuthWhereUniqueInpu
+  where: Prisma.AutoAuthWhereUniqueInput
 }
 
 /**
@@ -1434,7 +1434,7 @@ export type AutoAuthDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which AutoAuths to delete
    */
-  where?: Prisma.AutoAuthWhereInpu
+  where?: Prisma.AutoAuthWhereInput
   /**
    * Limit how many AutoAuths to delete.
    */

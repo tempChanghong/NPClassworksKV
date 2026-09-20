@@ -67,7 +67,7 @@ export type WorkspaceSourceClassAggregateArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter which WorkspaceSourceClass to aggregate.
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -79,7 +79,7 @@ export type WorkspaceSourceClassAggregateArgs<ExtArgs extends runtime.Types.Exte
    *
    * Sets the start position
    */
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -124,10 +124,10 @@ export type GetWorkspaceSourceClassAggregateType<T extends WorkspaceSourceClassA
 
 
 export type WorkspaceSourceClassGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   orderBy?: Prisma.WorkspaceSourceClassOrderByWithAggregationInput | Prisma.WorkspaceSourceClassOrderByWithAggregationInput[]
   by: Prisma.WorkspaceSourceClassScalarFieldEnum[] | Prisma.WorkspaceSourceClassScalarFieldEnum
-  having?: Prisma.WorkspaceSourceClassScalarWhereWithAggregatesInpu
+  having?: Prisma.WorkspaceSourceClassScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: WorkspaceSourceClassCountAggregateInputType | true
@@ -174,12 +174,12 @@ export type WorkspaceSourceClassOrderByWithRelationInput = {
   workspaceId?: Prisma.SortOrder
   administrativeClassId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  workspace?: Prisma.WorkspaceOrderByWithRelationInpu
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type WorkspaceSourceClassWhereUniqueInput = Prisma.AtLeast<{
-  workspaceId_administrativeClassId?: Prisma.WorkspaceSourceClassWorkspaceIdAdministrativeClassIdCompoundUniqueInpu
+  workspaceId_administrativeClassId?: Prisma.WorkspaceSourceClassWorkspaceIdAdministrativeClassIdCompoundUniqueInput
   AND?: Prisma.WorkspaceSourceClassWhereInput | Prisma.WorkspaceSourceClassWhereInput[]
   OR?: Prisma.WorkspaceSourceClassWhereInput[]
   NOT?: Prisma.WorkspaceSourceClassWhereInput | Prisma.WorkspaceSourceClassWhereInput[]
@@ -194,9 +194,9 @@ export type WorkspaceSourceClassOrderByWithAggregationInput = {
   workspaceId?: Prisma.SortOrder
   administrativeClassId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  _count?: Prisma.WorkspaceSourceClassCountOrderByAggregateInpu
-  _max?: Prisma.WorkspaceSourceClassMaxOrderByAggregateInpu
-  _min?: Prisma.WorkspaceSourceClassMinOrderByAggregateInpu
+  _count?: Prisma.WorkspaceSourceClassCountOrderByAggregateInput
+  _max?: Prisma.WorkspaceSourceClassMaxOrderByAggregateInput
+  _min?: Prisma.WorkspaceSourceClassMinOrderByAggregateInput
 }
 
 export type WorkspaceSourceClassScalarWhereWithAggregatesInput = {
@@ -210,8 +210,8 @@ export type WorkspaceSourceClassScalarWhereWithAggregatesInput = {
 
 export type WorkspaceSourceClassCreateInput = {
   createdAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutSourceClassesInpu
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSourcedCourseGroupsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutSourceClassesInput
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSourcedCourseGroupsInput
 }
 
 export type WorkspaceSourceClassUncheckedCreateInput = {
@@ -222,8 +222,8 @@ export type WorkspaceSourceClassUncheckedCreateInput = {
 
 export type WorkspaceSourceClassUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutSourceClassesNestedInpu
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSourcedCourseGroupsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutSourceClassesNestedInput
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSourcedCourseGroupsNestedInput
 }
 
 export type WorkspaceSourceClassUncheckedUpdateInput = {
@@ -249,9 +249,9 @@ export type WorkspaceSourceClassUncheckedUpdateManyInput = {
 }
 
 export type WorkspaceSourceClassListRelationFilter = {
-  every?: Prisma.WorkspaceSourceClassWhereInpu
-  some?: Prisma.WorkspaceSourceClassWhereInpu
-  none?: Prisma.WorkspaceSourceClassWhereInpu
+  every?: Prisma.WorkspaceSourceClassWhereInput
+  some?: Prisma.WorkspaceSourceClassWhereInput
+  none?: Prisma.WorkspaceSourceClassWhereInput
 }
 
 export type WorkspaceSourceClassOrderByRelationAggregateInput = {
@@ -367,7 +367,7 @@ export type WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassNes
 
 export type WorkspaceSourceClassCreateWithoutWorkspaceInput = {
   createdAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSourcedCourseGroupsInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSourcedCourseGroupsInput
 }
 
 export type WorkspaceSourceClassUncheckedCreateWithoutWorkspaceInput = {
@@ -376,7 +376,7 @@ export type WorkspaceSourceClassUncheckedCreateWithoutWorkspaceInput = {
 }
 
 export type WorkspaceSourceClassCreateOrConnectWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   create: Prisma.XOR<Prisma.WorkspaceSourceClassCreateWithoutWorkspaceInput, Prisma.WorkspaceSourceClassUncheckedCreateWithoutWorkspaceInput>
 }
 
@@ -387,7 +387,7 @@ export type WorkspaceSourceClassCreateManyWorkspaceInputEnvelope = {
 
 export type WorkspaceSourceClassCreateWithoutAdministrativeClassInput = {
   createdAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutSourceClassesInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutSourceClassesInput
 }
 
 export type WorkspaceSourceClassUncheckedCreateWithoutAdministrativeClassInput = {
@@ -396,7 +396,7 @@ export type WorkspaceSourceClassUncheckedCreateWithoutAdministrativeClassInput =
 }
 
 export type WorkspaceSourceClassCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   create: Prisma.XOR<Prisma.WorkspaceSourceClassCreateWithoutAdministrativeClassInput, Prisma.WorkspaceSourceClassUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -406,18 +406,18 @@ export type WorkspaceSourceClassCreateManyAdministrativeClassInputEnvelope = {
 }
 
 export type WorkspaceSourceClassUpsertWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   update: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateWithoutWorkspaceInput, Prisma.WorkspaceSourceClassUncheckedUpdateWithoutWorkspaceInput>
   create: Prisma.XOR<Prisma.WorkspaceSourceClassCreateWithoutWorkspaceInput, Prisma.WorkspaceSourceClassUncheckedCreateWithoutWorkspaceInput>
 }
 
 export type WorkspaceSourceClassUpdateWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   data: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateWithoutWorkspaceInput, Prisma.WorkspaceSourceClassUncheckedUpdateWithoutWorkspaceInput>
 }
 
 export type WorkspaceSourceClassUpdateManyWithWhereWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceSourceClassScalarWhereInpu
+  where: Prisma.WorkspaceSourceClassScalarWhereInput
   data: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateManyMutationInput, Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceInput>
 }
 
@@ -431,18 +431,18 @@ export type WorkspaceSourceClassScalarWhereInput = {
 }
 
 export type WorkspaceSourceClassUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   update: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateWithoutAdministrativeClassInput, Prisma.WorkspaceSourceClassUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.WorkspaceSourceClassCreateWithoutAdministrativeClassInput, Prisma.WorkspaceSourceClassUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type WorkspaceSourceClassUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   data: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateWithoutAdministrativeClassInput, Prisma.WorkspaceSourceClassUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type WorkspaceSourceClassUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.WorkspaceSourceClassScalarWhereInpu
+  where: Prisma.WorkspaceSourceClassScalarWhereInput
   data: Prisma.XOR<Prisma.WorkspaceSourceClassUpdateManyMutationInput, Prisma.WorkspaceSourceClassUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -458,7 +458,7 @@ export type WorkspaceSourceClassCreateManyAdministrativeClassInput = {
 
 export type WorkspaceSourceClassUpdateWithoutWorkspaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSourcedCourseGroupsNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSourcedCourseGroupsNestedInput
 }
 
 export type WorkspaceSourceClassUncheckedUpdateWithoutWorkspaceInput = {
@@ -473,7 +473,7 @@ export type WorkspaceSourceClassUncheckedUpdateManyWithoutWorkspaceInput = {
 
 export type WorkspaceSourceClassUpdateWithoutAdministrativeClassInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutSourceClassesNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutSourceClassesNestedInput
 }
 
 export type WorkspaceSourceClassUncheckedUpdateWithoutAdministrativeClassInput = {
@@ -806,7 +806,7 @@ export interface WorkspaceSourceClassDelegate<ExtArgs extends runtime.Types.Exte
    * // Count the number of WorkspaceSourceClasses
    * const count = await prisma.workspaceSourceClass.count({
    *   where: {
-   *     // ... the filter for the WorkspaceSourceClasses we want to coun
+   *     // ... the filter for the WorkspaceSourceClasses we want to count
    *   }
    * })
   **/
@@ -852,7 +852,7 @@ export interface WorkspaceSourceClassDelegate<ExtArgs extends runtime.Types.Exte
    * Read more here: https://pris.ly/d/null-undefined
    * @param {WorkspaceSourceClassGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -993,7 +993,7 @@ export type WorkspaceSourceClassFindUniqueArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which WorkspaceSourceClass to fetch.
    */
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
 }
 
 /**
@@ -1015,11 +1015,11 @@ export type WorkspaceSourceClassFindUniqueOrThrowArgs<ExtArgs extends runtime.Ty
   /**
    * Filter, which WorkspaceSourceClass to fetch.
    */
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
 }
 
 /**
- * WorkspaceSourceClass findFirs
+ * WorkspaceSourceClass findFirst
  */
 export type WorkspaceSourceClassFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1037,7 +1037,7 @@ export type WorkspaceSourceClassFindFirstArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which WorkspaceSourceClass to fetch.
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1049,7 +1049,7 @@ export type WorkspaceSourceClassFindFirstArgs<ExtArgs extends runtime.Types.Exte
    *
    * Sets the position for searching for WorkspaceSourceClasses.
    */
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1089,7 +1089,7 @@ export type WorkspaceSourceClassFindFirstOrThrowArgs<ExtArgs extends runtime.Typ
   /**
    * Filter, which WorkspaceSourceClass to fetch.
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1101,7 +1101,7 @@ export type WorkspaceSourceClassFindFirstOrThrowArgs<ExtArgs extends runtime.Typ
    *
    * Sets the position for searching for WorkspaceSourceClasses.
    */
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1141,7 +1141,7 @@ export type WorkspaceSourceClassFindManyArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which WorkspaceSourceClasses to fetch.
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1153,7 +1153,7 @@ export type WorkspaceSourceClassFindManyArgs<ExtArgs extends runtime.Types.Exten
    *
    * Sets the position for listing WorkspaceSourceClasses.
    */
-  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  cursor?: Prisma.WorkspaceSourceClassWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1248,7 +1248,7 @@ export type WorkspaceSourceClassUpdateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Choose, which WorkspaceSourceClass to update.
    */
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
 }
 
 /**
@@ -1262,7 +1262,7 @@ export type WorkspaceSourceClassUpdateManyArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter which WorkspaceSourceClasses to update
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * Limit how many WorkspaceSourceClasses to update.
    */
@@ -1288,7 +1288,7 @@ export type WorkspaceSourceClassUpdateManyAndReturnArgs<ExtArgs extends runtime.
   /**
    * Filter which WorkspaceSourceClasses to update
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * Limit how many WorkspaceSourceClasses to update.
    */
@@ -1300,7 +1300,7 @@ export type WorkspaceSourceClassUpdateManyAndReturnArgs<ExtArgs extends runtime.
 }
 
 /**
- * WorkspaceSourceClass upser
+ * WorkspaceSourceClass upsert
  */
 export type WorkspaceSourceClassUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1318,7 +1318,7 @@ export type WorkspaceSourceClassUpsertArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * The filter to search for the WorkspaceSourceClass to update in case it exists.
    */
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
   /**
    * In case the WorkspaceSourceClass found by the `where` argument doesn't exist, create a new WorkspaceSourceClass with this data.
    */
@@ -1348,7 +1348,7 @@ export type WorkspaceSourceClassDeleteArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter which WorkspaceSourceClass to delete.
    */
-  where: Prisma.WorkspaceSourceClassWhereUniqueInpu
+  where: Prisma.WorkspaceSourceClassWhereUniqueInput
 }
 
 /**
@@ -1358,7 +1358,7 @@ export type WorkspaceSourceClassDeleteManyArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter which WorkspaceSourceClasses to delete
    */
-  where?: Prisma.WorkspaceSourceClassWhereInpu
+  where?: Prisma.WorkspaceSourceClassWhereInput
   /**
    * Limit how many WorkspaceSourceClasses to delete.
    */

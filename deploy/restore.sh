@@ -48,6 +48,11 @@ if [[ "$skip_safety_backup" != true ]]; then
 fi
 
 log "停止后端并恢复数据库 $POSTGRES_DB"
+if [[ "${NPEP_ENABLED:-false}" == "true" ]]; then
+  # Requires a separately mounted writable configuration directory, never the
+  # PostgreSQL volume. Keep the gate CLOSED after restore until explicit activation.
+  compose exec -T backend node scripts/npep-deployment.js prepare-restore || die "NPEP 外部代际关闭失败，拒绝恢复数据库"
+fi
 compose stop backend >/dev/null
 restart_backend=true
 trap 'if [[ "${restart_backend:-false}" == true ]]; then compose up -d backend >/dev/null 2>&1 || true; fi' EXIT

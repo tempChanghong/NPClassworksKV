@@ -109,7 +109,7 @@ export type NotificationScreenDeliveryAggregateArgs<ExtArgs extends runtime.Type
   /**
    * Filter which NotificationScreenDelivery to aggregate.
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -121,7 +121,7 @@ export type NotificationScreenDeliveryAggregateArgs<ExtArgs extends runtime.Type
    *
    * Sets the start position
    */
-  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -178,10 +178,10 @@ export type GetNotificationScreenDeliveryAggregateType<T extends NotificationScr
 
 
 export type NotificationScreenDeliveryGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   orderBy?: Prisma.NotificationScreenDeliveryOrderByWithAggregationInput | Prisma.NotificationScreenDeliveryOrderByWithAggregationInput[]
   by: Prisma.NotificationScreenDeliveryScalarFieldEnum[] | Prisma.NotificationScreenDeliveryScalarFieldEnum
-  having?: Prisma.NotificationScreenDeliveryScalarWhereWithAggregatesInpu
+  having?: Prisma.NotificationScreenDeliveryScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: NotificationScreenDeliveryCountAggregateInputType | true
@@ -244,12 +244,12 @@ export type NotificationScreenDeliveryOrderByWithRelationInput = {
   displayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   acknowledgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  publication?: Prisma.PublicationOrderByWithRelationInpu
-  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInpu
+  publication?: Prisma.PublicationOrderByWithRelationInput
+  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
 }
 
 export type NotificationScreenDeliveryWhereUniqueInput = Prisma.AtLeast<{
-  publicationId_screenBindingId?: Prisma.NotificationScreenDeliveryPublicationIdScreenBindingIdCompoundUniqueInpu
+  publicationId_screenBindingId?: Prisma.NotificationScreenDeliveryPublicationIdScreenBindingIdCompoundUniqueInput
   AND?: Prisma.NotificationScreenDeliveryWhereInput | Prisma.NotificationScreenDeliveryWhereInput[]
   OR?: Prisma.NotificationScreenDeliveryWhereInput[]
   NOT?: Prisma.NotificationScreenDeliveryWhereInput | Prisma.NotificationScreenDeliveryWhereInput[]
@@ -272,11 +272,11 @@ export type NotificationScreenDeliveryOrderByWithAggregationInput = {
   displayedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   acknowledgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.NotificationScreenDeliveryCountOrderByAggregateInpu
-  _avg?: Prisma.NotificationScreenDeliveryAvgOrderByAggregateInpu
-  _max?: Prisma.NotificationScreenDeliveryMaxOrderByAggregateInpu
-  _min?: Prisma.NotificationScreenDeliveryMinOrderByAggregateInpu
-  _sum?: Prisma.NotificationScreenDeliverySumOrderByAggregateInpu
+  _count?: Prisma.NotificationScreenDeliveryCountOrderByAggregateInput
+  _avg?: Prisma.NotificationScreenDeliveryAvgOrderByAggregateInput
+  _max?: Prisma.NotificationScreenDeliveryMaxOrderByAggregateInput
+  _min?: Prisma.NotificationScreenDeliveryMinOrderByAggregateInput
+  _sum?: Prisma.NotificationScreenDeliverySumOrderByAggregateInput
 }
 
 export type NotificationScreenDeliveryScalarWhereWithAggregatesInput = {
@@ -298,8 +298,8 @@ export type NotificationScreenDeliveryCreateInput = {
   displayedAt?: Date | string | null
   acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInpu
-  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInput
+  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInput
 }
 
 export type NotificationScreenDeliveryUncheckedCreateInput = {
@@ -318,8 +318,8 @@ export type NotificationScreenDeliveryUpdateInput = {
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInpu
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInput
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInput
 }
 
 export type NotificationScreenDeliveryUncheckedUpdateInput = {
@@ -361,9 +361,9 @@ export type NotificationScreenDeliveryUncheckedUpdateManyInput = {
 }
 
 export type NotificationScreenDeliveryListRelationFilter = {
-  every?: Prisma.NotificationScreenDeliveryWhereInpu
-  some?: Prisma.NotificationScreenDeliveryWhereInpu
-  none?: Prisma.NotificationScreenDeliveryWhereInpu
+  every?: Prisma.NotificationScreenDeliveryWhereInput
+  some?: Prisma.NotificationScreenDeliveryWhereInput
+  none?: Prisma.NotificationScreenDeliveryWhereInput
 }
 
 export type NotificationScreenDeliveryOrderByRelationAggregateInput = {
@@ -503,7 +503,7 @@ export type NotificationScreenDeliveryCreateWithoutPublicationInput = {
   displayedAt?: Date | string | null
   acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
-  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInpu
+  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutNotificationDeliveriesInput
 }
 
 export type NotificationScreenDeliveryUncheckedCreateWithoutPublicationInput = {
@@ -516,7 +516,7 @@ export type NotificationScreenDeliveryUncheckedCreateWithoutPublicationInput = {
 }
 
 export type NotificationScreenDeliveryCreateOrConnectWithoutPublicationInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   create: Prisma.XOR<Prisma.NotificationScreenDeliveryCreateWithoutPublicationInput, Prisma.NotificationScreenDeliveryUncheckedCreateWithoutPublicationInput>
 }
 
@@ -526,18 +526,18 @@ export type NotificationScreenDeliveryCreateManyPublicationInputEnvelope = {
 }
 
 export type NotificationScreenDeliveryUpsertWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   update: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateWithoutPublicationInput, Prisma.NotificationScreenDeliveryUncheckedUpdateWithoutPublicationInput>
   create: Prisma.XOR<Prisma.NotificationScreenDeliveryCreateWithoutPublicationInput, Prisma.NotificationScreenDeliveryUncheckedCreateWithoutPublicationInput>
 }
 
 export type NotificationScreenDeliveryUpdateWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   data: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateWithoutPublicationInput, Prisma.NotificationScreenDeliveryUncheckedUpdateWithoutPublicationInput>
 }
 
 export type NotificationScreenDeliveryUpdateManyWithWhereWithoutPublicationInput = {
-  where: Prisma.NotificationScreenDeliveryScalarWhereInpu
+  where: Prisma.NotificationScreenDeliveryScalarWhereInput
   data: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateManyMutationInput, Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutPublicationInput>
 }
 
@@ -560,7 +560,7 @@ export type NotificationScreenDeliveryCreateWithoutScreenBindingInput = {
   displayedAt?: Date | string | null
   acknowledgedAt?: Date | string | null
   updatedAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutScreenDeliveriesInput
 }
 
 export type NotificationScreenDeliveryUncheckedCreateWithoutScreenBindingInput = {
@@ -573,7 +573,7 @@ export type NotificationScreenDeliveryUncheckedCreateWithoutScreenBindingInput =
 }
 
 export type NotificationScreenDeliveryCreateOrConnectWithoutScreenBindingInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   create: Prisma.XOR<Prisma.NotificationScreenDeliveryCreateWithoutScreenBindingInput, Prisma.NotificationScreenDeliveryUncheckedCreateWithoutScreenBindingInput>
 }
 
@@ -583,18 +583,18 @@ export type NotificationScreenDeliveryCreateManyScreenBindingInputEnvelope = {
 }
 
 export type NotificationScreenDeliveryUpsertWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   update: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateWithoutScreenBindingInput, Prisma.NotificationScreenDeliveryUncheckedUpdateWithoutScreenBindingInput>
   create: Prisma.XOR<Prisma.NotificationScreenDeliveryCreateWithoutScreenBindingInput, Prisma.NotificationScreenDeliveryUncheckedCreateWithoutScreenBindingInput>
 }
 
 export type NotificationScreenDeliveryUpdateWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   data: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateWithoutScreenBindingInput, Prisma.NotificationScreenDeliveryUncheckedUpdateWithoutScreenBindingInput>
 }
 
 export type NotificationScreenDeliveryUpdateManyWithWhereWithoutScreenBindingInput = {
-  where: Prisma.NotificationScreenDeliveryScalarWhereInpu
+  where: Prisma.NotificationScreenDeliveryScalarWhereInput
   data: Prisma.XOR<Prisma.NotificationScreenDeliveryUpdateManyMutationInput, Prisma.NotificationScreenDeliveryUncheckedUpdateManyWithoutScreenBindingInput>
 }
 
@@ -613,7 +613,7 @@ export type NotificationScreenDeliveryUpdateWithoutPublicationInput = {
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInpu
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutNotificationDeliveriesNestedInput
 }
 
 export type NotificationScreenDeliveryUncheckedUpdateWithoutPublicationInput = {
@@ -649,7 +649,7 @@ export type NotificationScreenDeliveryUpdateWithoutScreenBindingInput = {
   displayedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   acknowledgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutScreenDeliveriesNestedInput
 }
 
 export type NotificationScreenDeliveryUncheckedUpdateWithoutScreenBindingInput = {
@@ -1010,7 +1010,7 @@ export interface NotificationScreenDeliveryDelegate<ExtArgs extends runtime.Type
    * // Count the number of NotificationScreenDeliveries
    * const count = await prisma.notificationScreenDelivery.count({
    *   where: {
-   *     // ... the filter for the NotificationScreenDeliveries we want to coun
+   *     // ... the filter for the NotificationScreenDeliveries we want to count
    *   }
    * })
   **/
@@ -1056,7 +1056,7 @@ export interface NotificationScreenDeliveryDelegate<ExtArgs extends runtime.Type
    * Read more here: https://pris.ly/d/null-undefined
    * @param {NotificationScreenDeliveryGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1201,7 +1201,7 @@ export type NotificationScreenDeliveryFindUniqueArgs<ExtArgs extends runtime.Typ
   /**
    * Filter, which NotificationScreenDelivery to fetch.
    */
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
 }
 
 /**
@@ -1223,11 +1223,11 @@ export type NotificationScreenDeliveryFindUniqueOrThrowArgs<ExtArgs extends runt
   /**
    * Filter, which NotificationScreenDelivery to fetch.
    */
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
 }
 
 /**
- * NotificationScreenDelivery findFirs
+ * NotificationScreenDelivery findFirst
  */
 export type NotificationScreenDeliveryFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1245,7 +1245,7 @@ export type NotificationScreenDeliveryFindFirstArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which NotificationScreenDelivery to fetch.
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1257,7 +1257,7 @@ export type NotificationScreenDeliveryFindFirstArgs<ExtArgs extends runtime.Type
    *
    * Sets the position for searching for NotificationScreenDeliveries.
    */
-  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1297,7 +1297,7 @@ export type NotificationScreenDeliveryFindFirstOrThrowArgs<ExtArgs extends runti
   /**
    * Filter, which NotificationScreenDelivery to fetch.
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1309,7 +1309,7 @@ export type NotificationScreenDeliveryFindFirstOrThrowArgs<ExtArgs extends runti
    *
    * Sets the position for searching for NotificationScreenDeliveries.
    */
-  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1349,7 +1349,7 @@ export type NotificationScreenDeliveryFindManyArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which NotificationScreenDeliveries to fetch.
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1361,7 +1361,7 @@ export type NotificationScreenDeliveryFindManyArgs<ExtArgs extends runtime.Types
    *
    * Sets the position for listing NotificationScreenDeliveries.
    */
-  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  cursor?: Prisma.NotificationScreenDeliveryWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1456,7 +1456,7 @@ export type NotificationScreenDeliveryUpdateArgs<ExtArgs extends runtime.Types.E
   /**
    * Choose, which NotificationScreenDelivery to update.
    */
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
 }
 
 /**
@@ -1470,7 +1470,7 @@ export type NotificationScreenDeliveryUpdateManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which NotificationScreenDeliveries to update
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * Limit how many NotificationScreenDeliveries to update.
    */
@@ -1496,7 +1496,7 @@ export type NotificationScreenDeliveryUpdateManyAndReturnArgs<ExtArgs extends ru
   /**
    * Filter which NotificationScreenDeliveries to update
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * Limit how many NotificationScreenDeliveries to update.
    */
@@ -1508,7 +1508,7 @@ export type NotificationScreenDeliveryUpdateManyAndReturnArgs<ExtArgs extends ru
 }
 
 /**
- * NotificationScreenDelivery upser
+ * NotificationScreenDelivery upsert
  */
 export type NotificationScreenDeliveryUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1526,7 +1526,7 @@ export type NotificationScreenDeliveryUpsertArgs<ExtArgs extends runtime.Types.E
   /**
    * The filter to search for the NotificationScreenDelivery to update in case it exists.
    */
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
   /**
    * In case the NotificationScreenDelivery found by the `where` argument doesn't exist, create a new NotificationScreenDelivery with this data.
    */
@@ -1556,7 +1556,7 @@ export type NotificationScreenDeliveryDeleteArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which NotificationScreenDelivery to delete.
    */
-  where: Prisma.NotificationScreenDeliveryWhereUniqueInpu
+  where: Prisma.NotificationScreenDeliveryWhereUniqueInput
 }
 
 /**
@@ -1566,7 +1566,7 @@ export type NotificationScreenDeliveryDeleteManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which NotificationScreenDeliveries to delete
    */
-  where?: Prisma.NotificationScreenDeliveryWhereInpu
+  where?: Prisma.NotificationScreenDeliveryWhereInput
   /**
    * Limit how many NotificationScreenDeliveries to delete.
    */

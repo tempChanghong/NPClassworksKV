@@ -13,7 +13,7 @@ import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
- * Model AdministrativeClassStuden
+ * Model AdministrativeClassStudent
  * 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
  */
 export type AdministrativeClassStudentModel = runtime.Types.Result.DefaultSelection<Prisma.$AdministrativeClassStudentPayload>
@@ -115,7 +115,7 @@ export type AdministrativeClassStudentAggregateArgs<ExtArgs extends runtime.Type
   /**
    * Filter which AdministrativeClassStudent to aggregate.
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -127,7 +127,7 @@ export type AdministrativeClassStudentAggregateArgs<ExtArgs extends runtime.Type
    *
    * Sets the start position
    */
-  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -184,10 +184,10 @@ export type GetAdministrativeClassStudentAggregateType<T extends AdministrativeC
 
 
 export type AdministrativeClassStudentGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   orderBy?: Prisma.AdministrativeClassStudentOrderByWithAggregationInput | Prisma.AdministrativeClassStudentOrderByWithAggregationInput[]
   by: Prisma.AdministrativeClassStudentScalarFieldEnum[] | Prisma.AdministrativeClassStudentScalarFieldEnum
-  having?: Prisma.AdministrativeClassStudentScalarWhereWithAggregatesInpu
+  having?: Prisma.AdministrativeClassStudentScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AdministrativeClassStudentCountAggregateInputType | true
@@ -252,7 +252,7 @@ export type AdministrativeClassStudentOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type AdministrativeClassStudentWhereUniqueInput = Prisma.AtLeast<{
@@ -279,11 +279,11 @@ export type AdministrativeClassStudentOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AdministrativeClassStudentCountOrderByAggregateInpu
-  _avg?: Prisma.AdministrativeClassStudentAvgOrderByAggregateInpu
-  _max?: Prisma.AdministrativeClassStudentMaxOrderByAggregateInpu
-  _min?: Prisma.AdministrativeClassStudentMinOrderByAggregateInpu
-  _sum?: Prisma.AdministrativeClassStudentSumOrderByAggregateInpu
+  _count?: Prisma.AdministrativeClassStudentCountOrderByAggregateInput
+  _avg?: Prisma.AdministrativeClassStudentAvgOrderByAggregateInput
+  _max?: Prisma.AdministrativeClassStudentMaxOrderByAggregateInput
+  _min?: Prisma.AdministrativeClassStudentMinOrderByAggregateInput
+  _sum?: Prisma.AdministrativeClassStudentSumOrderByAggregateInput
 }
 
 export type AdministrativeClassStudentScalarWhereWithAggregatesInput = {
@@ -308,7 +308,7 @@ export type AdministrativeClassStudentCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutStudentsInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutStudentsInput
 }
 
 export type AdministrativeClassStudentUncheckedCreateInput = {
@@ -330,7 +330,7 @@ export type AdministrativeClassStudentUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutStudentsNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutStudentsNestedInput
 }
 
 export type AdministrativeClassStudentUncheckedUpdateInput = {
@@ -377,9 +377,9 @@ export type AdministrativeClassStudentUncheckedUpdateManyInput = {
 }
 
 export type AdministrativeClassStudentListRelationFilter = {
-  every?: Prisma.AdministrativeClassStudentWhereInpu
-  some?: Prisma.AdministrativeClassStudentWhereInpu
-  none?: Prisma.AdministrativeClassStudentWhereInpu
+  every?: Prisma.AdministrativeClassStudentWhereInput
+  some?: Prisma.AdministrativeClassStudentWhereInput
+  none?: Prisma.AdministrativeClassStudentWhereInput
 }
 
 export type AdministrativeClassStudentOrderByRelationAggregateInput = {
@@ -490,7 +490,7 @@ export type AdministrativeClassStudentUncheckedCreateWithoutAdministrativeClassI
 }
 
 export type AdministrativeClassStudentCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
   create: Prisma.XOR<Prisma.AdministrativeClassStudentCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassStudentUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -500,18 +500,18 @@ export type AdministrativeClassStudentCreateManyAdministrativeClassInputEnvelope
 }
 
 export type AdministrativeClassStudentUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
   update: Prisma.XOR<Prisma.AdministrativeClassStudentUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassStudentUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.AdministrativeClassStudentCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassStudentUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassStudentUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
   data: Prisma.XOR<Prisma.AdministrativeClassStudentUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassStudentUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassStudentUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassStudentScalarWhereInpu
+  where: Prisma.AdministrativeClassStudentScalarWhereInput
   data: Prisma.XOR<Prisma.AdministrativeClassStudentUpdateManyMutationInput, Prisma.AdministrativeClassStudentUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -658,9 +658,9 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdministrativeClassStudent'], meta: { name: 'AdministrativeClassStudent' } }
   /**
    * Find zero or one AdministrativeClassStudent that matches the filter.
-   * @param {AdministrativeClassStudentFindUniqueArgs} args - Arguments to find a AdministrativeClassStuden
+   * @param {AdministrativeClassStudentFindUniqueArgs} args - Arguments to find a AdministrativeClassStudent
    * @example
-   * // Get one AdministrativeClassStuden
+   * // Get one AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.findUnique({
    *   where: {
    *     // ... provide filter here
@@ -672,9 +672,9 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
   /**
    * Find one AdministrativeClassStudent that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {AdministrativeClassStudentFindUniqueOrThrowArgs} args - Arguments to find a AdministrativeClassStuden
+   * @param {AdministrativeClassStudentFindUniqueOrThrowArgs} args - Arguments to find a AdministrativeClassStudent
    * @example
-   * // Get one AdministrativeClassStuden
+   * // Get one AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -687,9 +687,9 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Find the first AdministrativeClassStudent that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AdministrativeClassStudentFindFirstArgs} args - Arguments to find a AdministrativeClassStuden
+   * @param {AdministrativeClassStudentFindFirstArgs} args - Arguments to find a AdministrativeClassStudent
    * @example
-   * // Get one AdministrativeClassStuden
+   * // Get one AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.findFirst({
    *   where: {
    *     // ... provide filter here
@@ -703,9 +703,9 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AdministrativeClassStudentFindFirstOrThrowArgs} args - Arguments to find a AdministrativeClassStuden
+   * @param {AdministrativeClassStudentFindFirstOrThrowArgs} args - Arguments to find a AdministrativeClassStudent
    * @example
-   * // Get one AdministrativeClassStuden
+   * // Get one AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -736,10 +736,10 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Create a AdministrativeClassStudent.
    * @param {AdministrativeClassStudentCreateArgs} args - Arguments to create a AdministrativeClassStudent.
    * @example
-   * // Create one AdministrativeClassStuden
+   * // Create one AdministrativeClassStudent
    * const AdministrativeClassStudent = await prisma.administrativeClassStudent.create({
    *   data: {
-   *     // ... data to create a AdministrativeClassStuden
+   *     // ... data to create a AdministrativeClassStudent
    *   }
    * })
    *
@@ -788,10 +788,10 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Delete a AdministrativeClassStudent.
    * @param {AdministrativeClassStudentDeleteArgs} args - Arguments to delete one AdministrativeClassStudent.
    * @example
-   * // Delete one AdministrativeClassStuden
+   * // Delete one AdministrativeClassStudent
    * const AdministrativeClassStudent = await prisma.administrativeClassStudent.delete({
    *   where: {
-   *     // ... filter to delete one AdministrativeClassStuden
+   *     // ... filter to delete one AdministrativeClassStudent
    *   }
    * })
    *
@@ -802,7 +802,7 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Update one AdministrativeClassStudent.
    * @param {AdministrativeClassStudentUpdateArgs} args - Arguments to update one AdministrativeClassStudent.
    * @example
-   * // Update one AdministrativeClassStuden
+   * // Update one AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.update({
    *   where: {
    *     // ... provide filter here
@@ -882,10 +882,10 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Create or update one AdministrativeClassStudent.
    * @param {AdministrativeClassStudentUpsertArgs} args - Arguments to update or create a AdministrativeClassStudent.
    * @example
-   * // Update or create a AdministrativeClassStuden
+   * // Update or create a AdministrativeClassStudent
    * const administrativeClassStudent = await prisma.administrativeClassStudent.upsert({
    *   create: {
-   *     // ... data to create a AdministrativeClassStuden
+   *     // ... data to create a AdministrativeClassStudent
    *   },
    *   update: {
    *     // ... in case it already exists, update
@@ -907,7 +907,7 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * // Count the number of AdministrativeClassStudents
    * const count = await prisma.administrativeClassStudent.count({
    *   where: {
-   *     // ... the filter for the AdministrativeClassStudents we want to coun
+   *     // ... the filter for the AdministrativeClassStudents we want to count
    *   }
    * })
   **/
@@ -953,7 +953,7 @@ export interface AdministrativeClassStudentDelegate<ExtArgs extends runtime.Type
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AdministrativeClassStudentGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1084,11 +1084,11 @@ export interface AdministrativeClassStudentFieldRefs {
  */
 export type AdministrativeClassStudentFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1098,7 +1098,7 @@ export type AdministrativeClassStudentFindUniqueArgs<ExtArgs extends runtime.Typ
   /**
    * Filter, which AdministrativeClassStudent to fetch.
    */
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
 }
 
 /**
@@ -1106,11 +1106,11 @@ export type AdministrativeClassStudentFindUniqueArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassStudentFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1120,19 +1120,19 @@ export type AdministrativeClassStudentFindUniqueOrThrowArgs<ExtArgs extends runt
   /**
    * Filter, which AdministrativeClassStudent to fetch.
    */
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
 }
 
 /**
- * AdministrativeClassStudent findFirs
+ * AdministrativeClassStudent findFirst
  */
 export type AdministrativeClassStudentFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1142,7 +1142,7 @@ export type AdministrativeClassStudentFindFirstArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which AdministrativeClassStudent to fetch.
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1154,7 +1154,7 @@ export type AdministrativeClassStudentFindFirstArgs<ExtArgs extends runtime.Type
    *
    * Sets the position for searching for AdministrativeClassStudents.
    */
-  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1180,11 +1180,11 @@ export type AdministrativeClassStudentFindFirstArgs<ExtArgs extends runtime.Type
  */
 export type AdministrativeClassStudentFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1194,7 +1194,7 @@ export type AdministrativeClassStudentFindFirstOrThrowArgs<ExtArgs extends runti
   /**
    * Filter, which AdministrativeClassStudent to fetch.
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1206,7 +1206,7 @@ export type AdministrativeClassStudentFindFirstOrThrowArgs<ExtArgs extends runti
    *
    * Sets the position for searching for AdministrativeClassStudents.
    */
-  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1232,11 +1232,11 @@ export type AdministrativeClassStudentFindFirstOrThrowArgs<ExtArgs extends runti
  */
 export type AdministrativeClassStudentFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1246,7 +1246,7 @@ export type AdministrativeClassStudentFindManyArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which AdministrativeClassStudents to fetch.
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1258,7 +1258,7 @@ export type AdministrativeClassStudentFindManyArgs<ExtArgs extends runtime.Types
    *
    * Sets the position for listing AdministrativeClassStudents.
    */
-  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassStudentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1279,11 +1279,11 @@ export type AdministrativeClassStudentFindManyArgs<ExtArgs extends runtime.Types
  */
 export type AdministrativeClassStudentCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1312,11 +1312,11 @@ export type AdministrativeClassStudentCreateManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassStudentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1335,11 +1335,11 @@ export type AdministrativeClassStudentCreateManyAndReturnArgs<ExtArgs extends ru
  */
 export type AdministrativeClassStudentUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1353,7 +1353,7 @@ export type AdministrativeClassStudentUpdateArgs<ExtArgs extends runtime.Types.E
   /**
    * Choose, which AdministrativeClassStudent to update.
    */
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
 }
 
 /**
@@ -1367,7 +1367,7 @@ export type AdministrativeClassStudentUpdateManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which AdministrativeClassStudents to update
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * Limit how many AdministrativeClassStudents to update.
    */
@@ -1379,11 +1379,11 @@ export type AdministrativeClassStudentUpdateManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassStudentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1393,7 +1393,7 @@ export type AdministrativeClassStudentUpdateManyAndReturnArgs<ExtArgs extends ru
   /**
    * Filter which AdministrativeClassStudents to update
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * Limit how many AdministrativeClassStudents to update.
    */
@@ -1405,15 +1405,15 @@ export type AdministrativeClassStudentUpdateManyAndReturnArgs<ExtArgs extends ru
 }
 
 /**
- * AdministrativeClassStudent upser
+ * AdministrativeClassStudent upsert
  */
 export type AdministrativeClassStudentUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1423,7 +1423,7 @@ export type AdministrativeClassStudentUpsertArgs<ExtArgs extends runtime.Types.E
   /**
    * The filter to search for the AdministrativeClassStudent to update in case it exists.
    */
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
   /**
    * In case the AdministrativeClassStudent found by the `where` argument doesn't exist, create a new AdministrativeClassStudent with this data.
    */
@@ -1439,11 +1439,11 @@ export type AdministrativeClassStudentUpsertArgs<ExtArgs extends runtime.Types.E
  */
 export type AdministrativeClassStudentDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**
@@ -1453,7 +1453,7 @@ export type AdministrativeClassStudentDeleteArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which AdministrativeClassStudent to delete.
    */
-  where: Prisma.AdministrativeClassStudentWhereUniqueInpu
+  where: Prisma.AdministrativeClassStudentWhereUniqueInput
 }
 
 /**
@@ -1463,7 +1463,7 @@ export type AdministrativeClassStudentDeleteManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which AdministrativeClassStudents to delete
    */
-  where?: Prisma.AdministrativeClassStudentWhereInpu
+  where?: Prisma.AdministrativeClassStudentWhereInput
   /**
    * Limit how many AdministrativeClassStudents to delete.
    */
@@ -1475,11 +1475,11 @@ export type AdministrativeClassStudentDeleteManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassStudentDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassStuden
+   * Select specific fields to fetch from the AdministrativeClassStudent
    */
   select?: Prisma.AdministrativeClassStudentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassStuden
+   * Omit specific fields from the AdministrativeClassStudent
    */
   omit?: Prisma.AdministrativeClassStudentOmit<ExtArgs> | null
   /**

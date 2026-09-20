@@ -10,6 +10,7 @@ import {initSocket} from '../utils/socket.js';
 import {prisma} from '../utils/prisma.js';
 import {assertProductionConfig} from '../utils/productionConfig.js';
 import {startPublicationRevisionCleanup} from '../services/publicationRevisionCleanupService.js';
+import {startNpepMaintenance} from '../services/npepMaintenanceService.js';
 
 assertProductionConfig();
 
@@ -30,6 +31,7 @@ var server = createServer(app);
 const io = initSocket(server);
 
 const stopPublicationRevisionCleanup = startPublicationRevisionCleanup();
+const stopNpepMaintenance = startNpepMaintenance();
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -53,6 +55,7 @@ async function shutdown(signal, exitCode = 0) {
 
     try {
         stopPublicationRevisionCleanup();
+        stopNpepMaintenance();
         await new Promise((resolve) => io.close(resolve));
         if (server.listening) {
             await new Promise((resolve, reject) => {

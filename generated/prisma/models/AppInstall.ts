@@ -121,7 +121,7 @@ export type AppInstallAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter which AppInstall to aggregate.
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -133,7 +133,7 @@ export type AppInstallAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
    *
    * Sets the start position
    */
-  cursor?: Prisma.AppInstallWhereUniqueInpu
+  cursor?: Prisma.AppInstallWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -190,10 +190,10 @@ export type GetAppInstallAggregateType<T extends AppInstallAggregateArgs> = {
 
 
 export type AppInstallGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   orderBy?: Prisma.AppInstallOrderByWithAggregationInput | Prisma.AppInstallOrderByWithAggregationInput[]
   by: Prisma.AppInstallScalarFieldEnum[] | Prisma.AppInstallScalarFieldEnum
-  having?: Prisma.AppInstallScalarWhereWithAggregatesInpu
+  having?: Prisma.AppInstallScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AppInstallCountAggregateInputType | true
@@ -261,7 +261,7 @@ export type AppInstallOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deviceType?: Prisma.SortOrderInput | Prisma.SortOrder
   isReadOnly?: Prisma.SortOrder
-  device?: Prisma.DeviceOrderByWithRelationInpu
+  device?: Prisma.DeviceOrderByWithRelationInput
 }
 
 export type AppInstallWhereUniqueInput = Prisma.AtLeast<{
@@ -290,11 +290,11 @@ export type AppInstallOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deviceType?: Prisma.SortOrderInput | Prisma.SortOrder
   isReadOnly?: Prisma.SortOrder
-  _count?: Prisma.AppInstallCountOrderByAggregateInpu
-  _avg?: Prisma.AppInstallAvgOrderByAggregateInpu
-  _max?: Prisma.AppInstallMaxOrderByAggregateInpu
-  _min?: Prisma.AppInstallMinOrderByAggregateInpu
-  _sum?: Prisma.AppInstallSumOrderByAggregateInpu
+  _count?: Prisma.AppInstallCountOrderByAggregateInput
+  _avg?: Prisma.AppInstallAvgOrderByAggregateInput
+  _max?: Prisma.AppInstallMaxOrderByAggregateInput
+  _min?: Prisma.AppInstallMinOrderByAggregateInput
+  _sum?: Prisma.AppInstallSumOrderByAggregateInput
 }
 
 export type AppInstallScalarWhereWithAggregatesInput = {
@@ -321,7 +321,7 @@ export type AppInstallCreateInput = {
   updatedAt?: Date | string
   deviceType?: string | null
   isReadOnly?: boolean
-  device: Prisma.DeviceCreateNestedOneWithoutAppInstallsInpu
+  device: Prisma.DeviceCreateNestedOneWithoutAppInstallsInput
 }
 
 export type AppInstallUncheckedCreateInput = {
@@ -345,7 +345,7 @@ export type AppInstallUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deviceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isReadOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  device?: Prisma.DeviceUpdateOneRequiredWithoutAppInstallsNestedInpu
+  device?: Prisma.DeviceUpdateOneRequiredWithoutAppInstallsNestedInput
 }
 
 export type AppInstallUncheckedUpdateInput = {
@@ -440,9 +440,9 @@ export type AppInstallSumOrderByAggregateInput = {
 }
 
 export type AppInstallListRelationFilter = {
-  every?: Prisma.AppInstallWhereInpu
-  some?: Prisma.AppInstallWhereInpu
-  none?: Prisma.AppInstallWhereInpu
+  every?: Prisma.AppInstallWhereInput
+  some?: Prisma.AppInstallWhereInput
+  none?: Prisma.AppInstallWhereInput
 }
 
 export type AppInstallOrderByRelationAggregateInput = {
@@ -514,7 +514,7 @@ export type AppInstallUncheckedCreateWithoutDeviceInput = {
 }
 
 export type AppInstallCreateOrConnectWithoutDeviceInput = {
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
   create: Prisma.XOR<Prisma.AppInstallCreateWithoutDeviceInput, Prisma.AppInstallUncheckedCreateWithoutDeviceInput>
 }
 
@@ -524,18 +524,18 @@ export type AppInstallCreateManyDeviceInputEnvelope = {
 }
 
 export type AppInstallUpsertWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
   update: Prisma.XOR<Prisma.AppInstallUpdateWithoutDeviceInput, Prisma.AppInstallUncheckedUpdateWithoutDeviceInput>
   create: Prisma.XOR<Prisma.AppInstallCreateWithoutDeviceInput, Prisma.AppInstallUncheckedCreateWithoutDeviceInput>
 }
 
 export type AppInstallUpdateWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
   data: Prisma.XOR<Prisma.AppInstallUpdateWithoutDeviceInput, Prisma.AppInstallUncheckedUpdateWithoutDeviceInput>
 }
 
 export type AppInstallUpdateManyWithWhereWithoutDeviceInput = {
-  where: Prisma.AppInstallScalarWhereInpu
+  where: Prisma.AppInstallScalarWhereInput
   data: Prisma.XOR<Prisma.AppInstallUpdateManyMutationInput, Prisma.AppInstallUncheckedUpdateManyWithoutDeviceInput>
 }
 
@@ -941,7 +941,7 @@ export interface AppInstallDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Count the number of AppInstalls
    * const count = await prisma.appInstall.count({
    *   where: {
-   *     // ... the filter for the AppInstalls we want to coun
+   *     // ... the filter for the AppInstalls we want to count
    *   }
    * })
   **/
@@ -987,7 +987,7 @@ export interface AppInstallDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AppInstallGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1133,7 +1133,7 @@ export type AppInstallFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter, which AppInstall to fetch.
    */
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
 }
 
 /**
@@ -1155,11 +1155,11 @@ export type AppInstallFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which AppInstall to fetch.
    */
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
 }
 
 /**
- * AppInstall findFirs
+ * AppInstall findFirst
  */
 export type AppInstallFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1177,7 +1177,7 @@ export type AppInstallFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * Filter, which AppInstall to fetch.
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1189,7 +1189,7 @@ export type AppInstallFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    *
    * Sets the position for searching for AppInstalls.
    */
-  cursor?: Prisma.AppInstallWhereUniqueInpu
+  cursor?: Prisma.AppInstallWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1229,7 +1229,7 @@ export type AppInstallFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which AppInstall to fetch.
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1241,7 +1241,7 @@ export type AppInstallFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the position for searching for AppInstalls.
    */
-  cursor?: Prisma.AppInstallWhereUniqueInpu
+  cursor?: Prisma.AppInstallWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1281,7 +1281,7 @@ export type AppInstallFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter, which AppInstalls to fetch.
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1293,7 +1293,7 @@ export type AppInstallFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    *
    * Sets the position for listing AppInstalls.
    */
-  cursor?: Prisma.AppInstallWhereUniqueInpu
+  cursor?: Prisma.AppInstallWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1388,7 +1388,7 @@ export type AppInstallUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Choose, which AppInstall to update.
    */
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
 }
 
 /**
@@ -1402,7 +1402,7 @@ export type AppInstallUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter which AppInstalls to update
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * Limit how many AppInstalls to update.
    */
@@ -1428,7 +1428,7 @@ export type AppInstallUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter which AppInstalls to update
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * Limit how many AppInstalls to update.
    */
@@ -1440,7 +1440,7 @@ export type AppInstallUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
 }
 
 /**
- * AppInstall upser
+ * AppInstall upsert
  */
 export type AppInstallUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1458,7 +1458,7 @@ export type AppInstallUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * The filter to search for the AppInstall to update in case it exists.
    */
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
   /**
    * In case the AppInstall found by the `where` argument doesn't exist, create a new AppInstall with this data.
    */
@@ -1488,7 +1488,7 @@ export type AppInstallDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Filter which AppInstall to delete.
    */
-  where: Prisma.AppInstallWhereUniqueInpu
+  where: Prisma.AppInstallWhereUniqueInput
 }
 
 /**
@@ -1498,7 +1498,7 @@ export type AppInstallDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter which AppInstalls to delete
    */
-  where?: Prisma.AppInstallWhereInpu
+  where?: Prisma.AppInstallWhereInput
   /**
    * Limit how many AppInstalls to delete.
    */

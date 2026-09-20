@@ -575,6 +575,7 @@ model ClassroomScreenBinding {
   loginFailures         Int       @default(0)
   lockedUntil           DateTime? @db.Timestamptz(6)
   credentialVersion     Int       @default(1)
+  npepBindingRevision   Float     @default(1)
   activatedAt           DateTime? @db.Timestamptz(6)
   lastUsedAt            DateTime? @db.Timestamptz(6)
   lastHeartbeatAt       DateTime? @db.Timestamptz(6)
@@ -597,6 +598,103 @@ model ClassroomScreenBinding {
   @@unique([schoolId, loginCode])
   @@index([administrativeClassId, isActive])
   @@index([createdByAccountId])
+}
+
+// NPEP authorization is deliberately separate from school business export and
+// browser credentials. Deployment identity also lives OUTSIDE database backups.
+model NpepDeployment {
+  id String @id
+  serverInstanceId String @db.Uuid
+  deploymentEpoch String @db.Uuid
+}
+
+model NpepPairing {
+  id String @id @db.Uuid
+  installationId String @db.Uuid
+  requestId String @db.Uuid
+  createDigest String @db.VarChar(64)
+  secretHash String? @db.VarChar(64)
+  userCode String @unique @db.VarChar(8)
+  deviceName String @db.VarChar(256)
+  appVersion String @db.VarChar(256)
+  serverInstanceId String @db.Uuid
+  deploymentEpoch String @db.Uuid
+  state String @default("PENDING") @db.VarChar(16)
+  expiresAt DateTime @db.Timestamptz(3)
+  schoolId String? @db.VarChar(191)
+  screenBindingId String? @db.VarChar(191)
+  approvalId String? @db.Uuid
+  approvalRequestId String? @db.Uuid
+  approvalDigest String? @db.VarChar(64)
+  approverId String? @db.VarChar(191)
+  approverSessionId String? @db.VarChar(191)
+  approverTokenVersion Int?
+  approvalSnapshot Json?
+  confirmRequestId String? @db.Uuid
+  confirmDigest String? @db.VarChar(64)
+  deviceId String? @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@unique([installationId, requestId])
+  @@index([expiresAt])
+  @@index([screenBindingId, state])
+}
+
+model NpepDevice {
+  id String @id @db.Uuid
+  installationId String @db.Uuid
+  credentialId String @unique @db.Uuid
+  secretHash String @db.VarChar(64)
+  serverInstanceId String @db.Uuid
+  deploymentEpoch String @db.Uuid
+  schoolId String @db.VarChar(191)
+  administrativeClassId String @db.VarChar(191)
+  screenBindingId String @db.VarChar(191)
+  bindingRevision Float
+  deviceName String @db.VarChar(256)
+  state String @default("ACTIVE") @db.VarChar(16)
+  credentialExpiresAt DateTime @db.Timestamptz(3)
+  statusEpoch Float @default(0)
+  sessionId String? @db.Uuid
+  lastSequence Float @default(0)
+  lastStatusDigest String? @db.VarChar(64)
+  lastSeenAt DateTime? @db.Timestamptz(3)
+  status Json?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  @@index([schoolId, id])
+  @@index([screenBindingId, state])
+  @@index([credentialExpiresAt])
+}
+
+model NpepSessionReceipt {
+  deviceId String @db.Uuid
+  requestId String @db.Uuid
+  runId String @db.Uuid
+  sessionId String @unique @db.Uuid
+  digest String @db.VarChar(64)
+  statusEpoch Float
+  expiresAt DateTime @db.Timestamptz(3)
+  @@id([deviceId, requestId])
+  @@unique([deviceId, runId])
+  @@index([expiresAt])
+}
+
+model NpepAudit {
+  id String @id @default(uuid()) @db.Uuid
+  schoolId String? @db.VarChar(191)
+  actorId String? @db.VarChar(191)
+  objectId String @db.VarChar(191)
+  action String @db.VarChar(48)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([createdAt])
+  @@index([schoolId, createdAt])
+}
+
+model NpepRateLimit {
+  key String @id @db.VarChar(160)
+  count Int
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([expiresAt])
 }
 
 /// 管理操作和大屏写操作的不可变审计摘要。敏感字段在写入前统一脱敏。

@@ -75,7 +75,7 @@ export type AccountPreferenceAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter which AccountPreference to aggregate.
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -87,7 +87,7 @@ export type AccountPreferenceAggregateArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the start position
    */
-  cursor?: Prisma.AccountPreferenceWhereUniqueInpu
+  cursor?: Prisma.AccountPreferenceWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -132,10 +132,10 @@ export type GetAccountPreferenceAggregateType<T extends AccountPreferenceAggrega
 
 
 export type AccountPreferenceGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   orderBy?: Prisma.AccountPreferenceOrderByWithAggregationInput | Prisma.AccountPreferenceOrderByWithAggregationInput[]
   by: Prisma.AccountPreferenceScalarFieldEnum[] | Prisma.AccountPreferenceScalarFieldEnum
-  having?: Prisma.AccountPreferenceScalarWhereWithAggregatesInpu
+  having?: Prisma.AccountPreferenceScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AccountPreferenceCountAggregateInputType | true
@@ -187,11 +187,11 @@ export type AccountPreferenceOrderByWithRelationInput = {
   value?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  account?: Prisma.AccountOrderByWithRelationInpu
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type AccountPreferenceWhereUniqueInput = Prisma.AtLeast<{
-  accountId_key?: Prisma.AccountPreferenceAccountIdKeyCompoundUniqueInpu
+  accountId_key?: Prisma.AccountPreferenceAccountIdKeyCompoundUniqueInput
   AND?: Prisma.AccountPreferenceWhereInput | Prisma.AccountPreferenceWhereInput[]
   OR?: Prisma.AccountPreferenceWhereInput[]
   NOT?: Prisma.AccountPreferenceWhereInput | Prisma.AccountPreferenceWhereInput[]
@@ -209,9 +209,9 @@ export type AccountPreferenceOrderByWithAggregationInput = {
   value?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AccountPreferenceCountOrderByAggregateInpu
-  _max?: Prisma.AccountPreferenceMaxOrderByAggregateInpu
-  _min?: Prisma.AccountPreferenceMinOrderByAggregateInpu
+  _count?: Prisma.AccountPreferenceCountOrderByAggregateInput
+  _max?: Prisma.AccountPreferenceMaxOrderByAggregateInput
+  _min?: Prisma.AccountPreferenceMinOrderByAggregateInput
 }
 
 export type AccountPreferenceScalarWhereWithAggregatesInput = {
@@ -230,7 +230,7 @@ export type AccountPreferenceCreateInput = {
   value: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutPreferencesInpu
+  account: Prisma.AccountCreateNestedOneWithoutPreferencesInput
 }
 
 export type AccountPreferenceUncheckedCreateInput = {
@@ -246,7 +246,7 @@ export type AccountPreferenceUpdateInput = {
   value?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutPreferencesNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutPreferencesNestedInput
 }
 
 export type AccountPreferenceUncheckedUpdateInput = {
@@ -281,9 +281,9 @@ export type AccountPreferenceUncheckedUpdateManyInput = {
 }
 
 export type AccountPreferenceListRelationFilter = {
-  every?: Prisma.AccountPreferenceWhereInpu
-  some?: Prisma.AccountPreferenceWhereInpu
-  none?: Prisma.AccountPreferenceWhereInpu
+  every?: Prisma.AccountPreferenceWhereInput
+  some?: Prisma.AccountPreferenceWhereInput
+  none?: Prisma.AccountPreferenceWhereInput
 }
 
 export type AccountPreferenceOrderByRelationAggregateInput = {
@@ -374,7 +374,7 @@ export type AccountPreferenceUncheckedCreateWithoutAccountInput = {
 }
 
 export type AccountPreferenceCreateOrConnectWithoutAccountInput = {
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
   create: Prisma.XOR<Prisma.AccountPreferenceCreateWithoutAccountInput, Prisma.AccountPreferenceUncheckedCreateWithoutAccountInput>
 }
 
@@ -384,18 +384,18 @@ export type AccountPreferenceCreateManyAccountInputEnvelope = {
 }
 
 export type AccountPreferenceUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
   update: Prisma.XOR<Prisma.AccountPreferenceUpdateWithoutAccountInput, Prisma.AccountPreferenceUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.AccountPreferenceCreateWithoutAccountInput, Prisma.AccountPreferenceUncheckedCreateWithoutAccountInput>
 }
 
 export type AccountPreferenceUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
   data: Prisma.XOR<Prisma.AccountPreferenceUpdateWithoutAccountInput, Prisma.AccountPreferenceUncheckedUpdateWithoutAccountInput>
 }
 
 export type AccountPreferenceUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.AccountPreferenceScalarWhereInpu
+  where: Prisma.AccountPreferenceScalarWhereInput
   data: Prisma.XOR<Prisma.AccountPreferenceUpdateManyMutationInput, Prisma.AccountPreferenceUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -761,7 +761,7 @@ export interface AccountPreferenceDelegate<ExtArgs extends runtime.Types.Extensi
    * // Count the number of AccountPreferences
    * const count = await prisma.accountPreference.count({
    *   where: {
-   *     // ... the filter for the AccountPreferences we want to coun
+   *     // ... the filter for the AccountPreferences we want to count
    *   }
    * })
   **/
@@ -807,7 +807,7 @@ export interface AccountPreferenceDelegate<ExtArgs extends runtime.Types.Extensi
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AccountPreferenceGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -949,7 +949,7 @@ export type AccountPreferenceFindUniqueArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which AccountPreference to fetch.
    */
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
 }
 
 /**
@@ -971,11 +971,11 @@ export type AccountPreferenceFindUniqueOrThrowArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which AccountPreference to fetch.
    */
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
 }
 
 /**
- * AccountPreference findFirs
+ * AccountPreference findFirst
  */
 export type AccountPreferenceFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -993,7 +993,7 @@ export type AccountPreferenceFindFirstArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which AccountPreference to fetch.
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1005,7 +1005,7 @@ export type AccountPreferenceFindFirstArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the position for searching for AccountPreferences.
    */
-  cursor?: Prisma.AccountPreferenceWhereUniqueInpu
+  cursor?: Prisma.AccountPreferenceWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1045,7 +1045,7 @@ export type AccountPreferenceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.
   /**
    * Filter, which AccountPreference to fetch.
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1057,7 +1057,7 @@ export type AccountPreferenceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.
    *
    * Sets the position for searching for AccountPreferences.
    */
-  cursor?: Prisma.AccountPreferenceWhereUniqueInpu
+  cursor?: Prisma.AccountPreferenceWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1097,7 +1097,7 @@ export type AccountPreferenceFindManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which AccountPreferences to fetch.
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1109,7 +1109,7 @@ export type AccountPreferenceFindManyArgs<ExtArgs extends runtime.Types.Extensio
    *
    * Sets the position for listing AccountPreferences.
    */
-  cursor?: Prisma.AccountPreferenceWhereUniqueInpu
+  cursor?: Prisma.AccountPreferenceWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1204,7 +1204,7 @@ export type AccountPreferenceUpdateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Choose, which AccountPreference to update.
    */
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
 }
 
 /**
@@ -1218,7 +1218,7 @@ export type AccountPreferenceUpdateManyArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which AccountPreferences to update
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * Limit how many AccountPreferences to update.
    */
@@ -1244,7 +1244,7 @@ export type AccountPreferenceUpdateManyAndReturnArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which AccountPreferences to update
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * Limit how many AccountPreferences to update.
    */
@@ -1256,7 +1256,7 @@ export type AccountPreferenceUpdateManyAndReturnArgs<ExtArgs extends runtime.Typ
 }
 
 /**
- * AccountPreference upser
+ * AccountPreference upsert
  */
 export type AccountPreferenceUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1274,7 +1274,7 @@ export type AccountPreferenceUpsertArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * The filter to search for the AccountPreference to update in case it exists.
    */
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
   /**
    * In case the AccountPreference found by the `where` argument doesn't exist, create a new AccountPreference with this data.
    */
@@ -1304,7 +1304,7 @@ export type AccountPreferenceDeleteArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter which AccountPreference to delete.
    */
-  where: Prisma.AccountPreferenceWhereUniqueInpu
+  where: Prisma.AccountPreferenceWhereUniqueInput
 }
 
 /**
@@ -1314,7 +1314,7 @@ export type AccountPreferenceDeleteManyArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which AccountPreferences to delete
    */
-  where?: Prisma.AccountPreferenceWhereInpu
+  where?: Prisma.AccountPreferenceWhereInput
   /**
    * Limit how many AccountPreferences to delete.
    */

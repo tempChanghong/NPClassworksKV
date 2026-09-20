@@ -21,7 +21,7 @@ export function httpMetrics(req, res, next) {
     if (req.path === '/metrics') return next();
     const start = performance.now();
     // Only fixed mount prefixes and Express route templates become labels, never raw URLs/IDs.
-    const prefix = req.path.match(/^(\/accounts|\/api\/v2\/(?:catalog|admin|me|publications|classroom-screens|setup))(?=\/|$)/)?.[1] || '';
+    const prefix = req.path.match(/^(\/accounts|\/api\/v2\/(?:catalog|admin|me|publications|classroom-screens|setup|npep))(?=\/|$)/)?.[1] || '';
     const method = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'].includes(req.method) ? req.method : 'OTHER';
     let recorded = false;
     function observe(aborted) {

@@ -23,9 +23,9 @@ import * as Prisma from "./internal/prismaNamespace.ts"
 export * as $Enums from './enums.ts'
 export * from "./enums.ts"
 /**
- * ## Prisma Clien
+ * ## Prisma Client
  *
- * Type-safe database client for TypeScrip
+ * Type-safe database client for TypeScript
  * @example
  * ```
  * const prisma = new PrismaClient()
@@ -40,7 +40,7 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Accoun
+ * Model Account
  *
  */
 export type Account = Prisma.AccountModel
@@ -101,7 +101,7 @@ export type AcademicTerm = Prisma.AcademicTermModel
  */
 export type Grade = Prisma.GradeModel
 /**
- * Model Subjec
+ * Model Subject
  *
  */
 export type Subject = Prisma.SubjectModel
@@ -116,7 +116,7 @@ export type Workspace = Prisma.WorkspaceModel
  */
 export type WorkspaceSourceClass = Prisma.WorkspaceSourceClassModel
 /**
- * Model AdministrativeClassSubjec
+ * Model AdministrativeClassSubject
  * 明确记录行政班每个科目是随行政班还是走班。
  * 例如一、二班的物化生为 ADMIN_CLASS，五至七班的选科可为 COURSE_GROUP。
  */
@@ -127,7 +127,7 @@ export type AdministrativeClassSubject = Prisma.AdministrativeClassSubjectModel
  */
 export type WorkspaceMember = Prisma.WorkspaceMemberModel
 /**
- * Model TeachingAssignmen
+ * Model TeachingAssignment
  * 教师实际承担的授课关系。WorkspaceMember 只负责空间访问权限，本表负责表达“教哪一科”。
  * 行政班必须明确 subjectId；走班教学班的 subjectId 必须与 Workspace.subjectId 一致。
  */
@@ -154,7 +154,7 @@ export type WorkspaceMemberInvite = Prisma.WorkspaceMemberInviteModel
  */
 export type Publication = Prisma.PublicationModel
 /**
- * Model PublicationTarge
+ * Model PublicationTarget
  *
  */
 export type PublicationTarget = Prisma.PublicationTargetModel
@@ -163,6 +163,36 @@ export type PublicationTarget = Prisma.PublicationTargetModel
  * 班级大屏使用独立设备账号首次登录，之后使用随机令牌提交未认证版本。
  */
 export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
+/**
+ * Model NpepDeployment
+ *
+ */
+export type NpepDeployment = Prisma.NpepDeploymentModel
+/**
+ * Model NpepPairing
+ *
+ */
+export type NpepPairing = Prisma.NpepPairingModel
+/**
+ * Model NpepDevice
+ *
+ */
+export type NpepDevice = Prisma.NpepDeviceModel
+/**
+ * Model NpepSessionReceipt
+ *
+ */
+export type NpepSessionReceipt = Prisma.NpepSessionReceiptModel
+/**
+ * Model NpepAudit
+ *
+ */
+export type NpepAudit = Prisma.NpepAuditModel
+/**
+ * Model NpepRateLimit
+ *
+ */
+export type NpepRateLimit = Prisma.NpepRateLimitModel
 /**
  * Model AuditLog
  * 管理操作和大屏写操作的不可变审计摘要。敏感字段在写入前统一脱敏。
@@ -179,7 +209,7 @@ export type ClassroomScreenCommand = Prisma.ClassroomScreenCommandModel
  */
 export type NotificationScreenDelivery = Prisma.NotificationScreenDeliveryModel
 /**
- * Model AdministrativeClassStuden
+ * Model AdministrativeClassStudent
  * 行政班学生名单独立于登录账户。学生无需注册，也能供考勤和随机点名共用。
  */
 export type AdministrativeClassStudent = Prisma.AdministrativeClassStudentModel

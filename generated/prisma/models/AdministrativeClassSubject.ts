@@ -13,7 +13,7 @@ import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
- * Model AdministrativeClassSubjec
+ * Model AdministrativeClassSubject
  * 明确记录行政班每个科目是随行政班还是走班。
  * 例如一、二班的物化生为 ADMIN_CLASS，五至七班的选科可为 COURSE_GROUP。
  */
@@ -86,7 +86,7 @@ export type AdministrativeClassSubjectAggregateArgs<ExtArgs extends runtime.Type
   /**
    * Filter which AdministrativeClassSubject to aggregate.
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -98,7 +98,7 @@ export type AdministrativeClassSubjectAggregateArgs<ExtArgs extends runtime.Type
    *
    * Sets the start position
    */
-  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -143,10 +143,10 @@ export type GetAdministrativeClassSubjectAggregateType<T extends AdministrativeC
 
 
 export type AdministrativeClassSubjectGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   orderBy?: Prisma.AdministrativeClassSubjectOrderByWithAggregationInput | Prisma.AdministrativeClassSubjectOrderByWithAggregationInput[]
   by: Prisma.AdministrativeClassSubjectScalarFieldEnum[] | Prisma.AdministrativeClassSubjectScalarFieldEnum
-  having?: Prisma.AdministrativeClassSubjectScalarWhereWithAggregatesInpu
+  having?: Prisma.AdministrativeClassSubjectScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AdministrativeClassSubjectCountAggregateInputType | true
@@ -202,12 +202,12 @@ export type AdministrativeClassSubjectOrderByWithRelationInput = {
   isCompulsory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
-  subject?: Prisma.SubjectOrderByWithRelationInpu
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
+  subject?: Prisma.SubjectOrderByWithRelationInput
 }
 
 export type AdministrativeClassSubjectWhereUniqueInput = Prisma.AtLeast<{
-  administrativeClassId_subjectId?: Prisma.AdministrativeClassSubjectAdministrativeClassIdSubjectIdCompoundUniqueInpu
+  administrativeClassId_subjectId?: Prisma.AdministrativeClassSubjectAdministrativeClassIdSubjectIdCompoundUniqueInput
   AND?: Prisma.AdministrativeClassSubjectWhereInput | Prisma.AdministrativeClassSubjectWhereInput[]
   OR?: Prisma.AdministrativeClassSubjectWhereInput[]
   NOT?: Prisma.AdministrativeClassSubjectWhereInput | Prisma.AdministrativeClassSubjectWhereInput[]
@@ -228,9 +228,9 @@ export type AdministrativeClassSubjectOrderByWithAggregationInput = {
   isCompulsory?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AdministrativeClassSubjectCountOrderByAggregateInpu
-  _max?: Prisma.AdministrativeClassSubjectMaxOrderByAggregateInpu
-  _min?: Prisma.AdministrativeClassSubjectMinOrderByAggregateInpu
+  _count?: Prisma.AdministrativeClassSubjectCountOrderByAggregateInput
+  _max?: Prisma.AdministrativeClassSubjectMaxOrderByAggregateInput
+  _min?: Prisma.AdministrativeClassSubjectMinOrderByAggregateInput
 }
 
 export type AdministrativeClassSubjectScalarWhereWithAggregatesInput = {
@@ -250,8 +250,8 @@ export type AdministrativeClassSubjectCreateInput = {
   isCompulsory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSubjectRulesInpu
-  subject: Prisma.SubjectCreateNestedOneWithoutSubjectRulesInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSubjectRulesInput
+  subject: Prisma.SubjectCreateNestedOneWithoutSubjectRulesInput
 }
 
 export type AdministrativeClassSubjectUncheckedCreateInput = {
@@ -268,8 +268,8 @@ export type AdministrativeClassSubjectUpdateInput = {
   isCompulsory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSubjectRulesNestedInpu
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutSubjectRulesNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSubjectRulesNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutSubjectRulesNestedInput
 }
 
 export type AdministrativeClassSubjectUncheckedUpdateInput = {
@@ -307,9 +307,9 @@ export type AdministrativeClassSubjectUncheckedUpdateManyInput = {
 }
 
 export type AdministrativeClassSubjectListRelationFilter = {
-  every?: Prisma.AdministrativeClassSubjectWhereInpu
-  some?: Prisma.AdministrativeClassSubjectWhereInpu
-  none?: Prisma.AdministrativeClassSubjectWhereInpu
+  every?: Prisma.AdministrativeClassSubjectWhereInput
+  some?: Prisma.AdministrativeClassSubjectWhereInput
+  none?: Prisma.AdministrativeClassSubjectWhereInput
 }
 
 export type AdministrativeClassSubjectOrderByRelationAggregateInput = {
@@ -441,7 +441,7 @@ export type AdministrativeClassSubjectCreateWithoutSubjectInput = {
   isCompulsory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSubjectRulesInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutSubjectRulesInput
 }
 
 export type AdministrativeClassSubjectUncheckedCreateWithoutSubjectInput = {
@@ -453,7 +453,7 @@ export type AdministrativeClassSubjectUncheckedCreateWithoutSubjectInput = {
 }
 
 export type AdministrativeClassSubjectCreateOrConnectWithoutSubjectInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   create: Prisma.XOR<Prisma.AdministrativeClassSubjectCreateWithoutSubjectInput, Prisma.AdministrativeClassSubjectUncheckedCreateWithoutSubjectInput>
 }
 
@@ -463,18 +463,18 @@ export type AdministrativeClassSubjectCreateManySubjectInputEnvelope = {
 }
 
 export type AdministrativeClassSubjectUpsertWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   update: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateWithoutSubjectInput, Prisma.AdministrativeClassSubjectUncheckedUpdateWithoutSubjectInput>
   create: Prisma.XOR<Prisma.AdministrativeClassSubjectCreateWithoutSubjectInput, Prisma.AdministrativeClassSubjectUncheckedCreateWithoutSubjectInput>
 }
 
 export type AdministrativeClassSubjectUpdateWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   data: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateWithoutSubjectInput, Prisma.AdministrativeClassSubjectUncheckedUpdateWithoutSubjectInput>
 }
 
 export type AdministrativeClassSubjectUpdateManyWithWhereWithoutSubjectInput = {
-  where: Prisma.AdministrativeClassSubjectScalarWhereInpu
+  where: Prisma.AdministrativeClassSubjectScalarWhereInput
   data: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateManyMutationInput, Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutSubjectInput>
 }
 
@@ -495,7 +495,7 @@ export type AdministrativeClassSubjectCreateWithoutAdministrativeClassInput = {
   isCompulsory?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  subject: Prisma.SubjectCreateNestedOneWithoutSubjectRulesInpu
+  subject: Prisma.SubjectCreateNestedOneWithoutSubjectRulesInput
 }
 
 export type AdministrativeClassSubjectUncheckedCreateWithoutAdministrativeClassInput = {
@@ -507,7 +507,7 @@ export type AdministrativeClassSubjectUncheckedCreateWithoutAdministrativeClassI
 }
 
 export type AdministrativeClassSubjectCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   create: Prisma.XOR<Prisma.AdministrativeClassSubjectCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassSubjectUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -517,18 +517,18 @@ export type AdministrativeClassSubjectCreateManyAdministrativeClassInputEnvelope
 }
 
 export type AdministrativeClassSubjectUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   update: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassSubjectUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.AdministrativeClassSubjectCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassSubjectUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassSubjectUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   data: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassSubjectUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassSubjectUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassSubjectScalarWhereInpu
+  where: Prisma.AdministrativeClassSubjectScalarWhereInput
   data: Prisma.XOR<Prisma.AdministrativeClassSubjectUpdateManyMutationInput, Prisma.AdministrativeClassSubjectUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -545,7 +545,7 @@ export type AdministrativeClassSubjectUpdateWithoutSubjectInput = {
   isCompulsory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSubjectRulesNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutSubjectRulesNestedInput
 }
 
 export type AdministrativeClassSubjectUncheckedUpdateWithoutSubjectInput = {
@@ -577,7 +577,7 @@ export type AdministrativeClassSubjectUpdateWithoutAdministrativeClassInput = {
   isCompulsory?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutSubjectRulesNestedInpu
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutSubjectRulesNestedInput
 }
 
 export type AdministrativeClassSubjectUncheckedUpdateWithoutAdministrativeClassInput = {
@@ -682,9 +682,9 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdministrativeClassSubject'], meta: { name: 'AdministrativeClassSubject' } }
   /**
    * Find zero or one AdministrativeClassSubject that matches the filter.
-   * @param {AdministrativeClassSubjectFindUniqueArgs} args - Arguments to find a AdministrativeClassSubjec
+   * @param {AdministrativeClassSubjectFindUniqueArgs} args - Arguments to find a AdministrativeClassSubject
    * @example
-   * // Get one AdministrativeClassSubjec
+   * // Get one AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.findUnique({
    *   where: {
    *     // ... provide filter here
@@ -696,9 +696,9 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
   /**
    * Find one AdministrativeClassSubject that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {AdministrativeClassSubjectFindUniqueOrThrowArgs} args - Arguments to find a AdministrativeClassSubjec
+   * @param {AdministrativeClassSubjectFindUniqueOrThrowArgs} args - Arguments to find a AdministrativeClassSubject
    * @example
-   * // Get one AdministrativeClassSubjec
+   * // Get one AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -711,9 +711,9 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Find the first AdministrativeClassSubject that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AdministrativeClassSubjectFindFirstArgs} args - Arguments to find a AdministrativeClassSubjec
+   * @param {AdministrativeClassSubjectFindFirstArgs} args - Arguments to find a AdministrativeClassSubject
    * @example
-   * // Get one AdministrativeClassSubjec
+   * // Get one AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.findFirst({
    *   where: {
    *     // ... provide filter here
@@ -727,9 +727,9 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AdministrativeClassSubjectFindFirstOrThrowArgs} args - Arguments to find a AdministrativeClassSubjec
+   * @param {AdministrativeClassSubjectFindFirstOrThrowArgs} args - Arguments to find a AdministrativeClassSubject
    * @example
-   * // Get one AdministrativeClassSubjec
+   * // Get one AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -760,10 +760,10 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Create a AdministrativeClassSubject.
    * @param {AdministrativeClassSubjectCreateArgs} args - Arguments to create a AdministrativeClassSubject.
    * @example
-   * // Create one AdministrativeClassSubjec
+   * // Create one AdministrativeClassSubject
    * const AdministrativeClassSubject = await prisma.administrativeClassSubject.create({
    *   data: {
-   *     // ... data to create a AdministrativeClassSubjec
+   *     // ... data to create a AdministrativeClassSubject
    *   }
    * })
    *
@@ -812,10 +812,10 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Delete a AdministrativeClassSubject.
    * @param {AdministrativeClassSubjectDeleteArgs} args - Arguments to delete one AdministrativeClassSubject.
    * @example
-   * // Delete one AdministrativeClassSubjec
+   * // Delete one AdministrativeClassSubject
    * const AdministrativeClassSubject = await prisma.administrativeClassSubject.delete({
    *   where: {
-   *     // ... filter to delete one AdministrativeClassSubjec
+   *     // ... filter to delete one AdministrativeClassSubject
    *   }
    * })
    *
@@ -826,7 +826,7 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Update one AdministrativeClassSubject.
    * @param {AdministrativeClassSubjectUpdateArgs} args - Arguments to update one AdministrativeClassSubject.
    * @example
-   * // Update one AdministrativeClassSubjec
+   * // Update one AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.update({
    *   where: {
    *     // ... provide filter here
@@ -906,10 +906,10 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Create or update one AdministrativeClassSubject.
    * @param {AdministrativeClassSubjectUpsertArgs} args - Arguments to update or create a AdministrativeClassSubject.
    * @example
-   * // Update or create a AdministrativeClassSubjec
+   * // Update or create a AdministrativeClassSubject
    * const administrativeClassSubject = await prisma.administrativeClassSubject.upsert({
    *   create: {
-   *     // ... data to create a AdministrativeClassSubjec
+   *     // ... data to create a AdministrativeClassSubject
    *   },
    *   update: {
    *     // ... in case it already exists, update
@@ -931,7 +931,7 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * // Count the number of AdministrativeClassSubjects
    * const count = await prisma.administrativeClassSubject.count({
    *   where: {
-   *     // ... the filter for the AdministrativeClassSubjects we want to coun
+   *     // ... the filter for the AdministrativeClassSubjects we want to count
    *   }
    * })
   **/
@@ -977,7 +977,7 @@ export interface AdministrativeClassSubjectDelegate<ExtArgs extends runtime.Type
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AdministrativeClassSubjectGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1107,11 +1107,11 @@ export interface AdministrativeClassSubjectFieldRefs {
  */
 export type AdministrativeClassSubjectFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1121,7 +1121,7 @@ export type AdministrativeClassSubjectFindUniqueArgs<ExtArgs extends runtime.Typ
   /**
    * Filter, which AdministrativeClassSubject to fetch.
    */
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
 }
 
 /**
@@ -1129,11 +1129,11 @@ export type AdministrativeClassSubjectFindUniqueArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassSubjectFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1143,19 +1143,19 @@ export type AdministrativeClassSubjectFindUniqueOrThrowArgs<ExtArgs extends runt
   /**
    * Filter, which AdministrativeClassSubject to fetch.
    */
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
 }
 
 /**
- * AdministrativeClassSubject findFirs
+ * AdministrativeClassSubject findFirst
  */
 export type AdministrativeClassSubjectFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1165,7 +1165,7 @@ export type AdministrativeClassSubjectFindFirstArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which AdministrativeClassSubject to fetch.
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1177,7 +1177,7 @@ export type AdministrativeClassSubjectFindFirstArgs<ExtArgs extends runtime.Type
    *
    * Sets the position for searching for AdministrativeClassSubjects.
    */
-  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1203,11 +1203,11 @@ export type AdministrativeClassSubjectFindFirstArgs<ExtArgs extends runtime.Type
  */
 export type AdministrativeClassSubjectFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1217,7 +1217,7 @@ export type AdministrativeClassSubjectFindFirstOrThrowArgs<ExtArgs extends runti
   /**
    * Filter, which AdministrativeClassSubject to fetch.
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1229,7 +1229,7 @@ export type AdministrativeClassSubjectFindFirstOrThrowArgs<ExtArgs extends runti
    *
    * Sets the position for searching for AdministrativeClassSubjects.
    */
-  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1255,11 +1255,11 @@ export type AdministrativeClassSubjectFindFirstOrThrowArgs<ExtArgs extends runti
  */
 export type AdministrativeClassSubjectFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1269,7 +1269,7 @@ export type AdministrativeClassSubjectFindManyArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which AdministrativeClassSubjects to fetch.
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1281,7 +1281,7 @@ export type AdministrativeClassSubjectFindManyArgs<ExtArgs extends runtime.Types
    *
    * Sets the position for listing AdministrativeClassSubjects.
    */
-  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassSubjectWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1302,11 +1302,11 @@ export type AdministrativeClassSubjectFindManyArgs<ExtArgs extends runtime.Types
  */
 export type AdministrativeClassSubjectCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1335,11 +1335,11 @@ export type AdministrativeClassSubjectCreateManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassSubjectCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1358,11 +1358,11 @@ export type AdministrativeClassSubjectCreateManyAndReturnArgs<ExtArgs extends ru
  */
 export type AdministrativeClassSubjectUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1376,7 +1376,7 @@ export type AdministrativeClassSubjectUpdateArgs<ExtArgs extends runtime.Types.E
   /**
    * Choose, which AdministrativeClassSubject to update.
    */
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
 }
 
 /**
@@ -1390,7 +1390,7 @@ export type AdministrativeClassSubjectUpdateManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which AdministrativeClassSubjects to update
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * Limit how many AdministrativeClassSubjects to update.
    */
@@ -1402,11 +1402,11 @@ export type AdministrativeClassSubjectUpdateManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassSubjectUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1416,7 +1416,7 @@ export type AdministrativeClassSubjectUpdateManyAndReturnArgs<ExtArgs extends ru
   /**
    * Filter which AdministrativeClassSubjects to update
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * Limit how many AdministrativeClassSubjects to update.
    */
@@ -1428,15 +1428,15 @@ export type AdministrativeClassSubjectUpdateManyAndReturnArgs<ExtArgs extends ru
 }
 
 /**
- * AdministrativeClassSubject upser
+ * AdministrativeClassSubject upsert
  */
 export type AdministrativeClassSubjectUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1446,7 +1446,7 @@ export type AdministrativeClassSubjectUpsertArgs<ExtArgs extends runtime.Types.E
   /**
    * The filter to search for the AdministrativeClassSubject to update in case it exists.
    */
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
   /**
    * In case the AdministrativeClassSubject found by the `where` argument doesn't exist, create a new AdministrativeClassSubject with this data.
    */
@@ -1462,11 +1462,11 @@ export type AdministrativeClassSubjectUpsertArgs<ExtArgs extends runtime.Types.E
  */
 export type AdministrativeClassSubjectDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**
@@ -1476,7 +1476,7 @@ export type AdministrativeClassSubjectDeleteArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which AdministrativeClassSubject to delete.
    */
-  where: Prisma.AdministrativeClassSubjectWhereUniqueInpu
+  where: Prisma.AdministrativeClassSubjectWhereUniqueInput
 }
 
 /**
@@ -1486,7 +1486,7 @@ export type AdministrativeClassSubjectDeleteManyArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which AdministrativeClassSubjects to delete
    */
-  where?: Prisma.AdministrativeClassSubjectWhereInpu
+  where?: Prisma.AdministrativeClassSubjectWhereInput
   /**
    * Limit how many AdministrativeClassSubjects to delete.
    */
@@ -1498,11 +1498,11 @@ export type AdministrativeClassSubjectDeleteManyArgs<ExtArgs extends runtime.Typ
  */
 export type AdministrativeClassSubjectDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AdministrativeClassSubjec
+   * Select specific fields to fetch from the AdministrativeClassSubject
    */
   select?: Prisma.AdministrativeClassSubjectSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AdministrativeClassSubjec
+   * Omit specific fields from the AdministrativeClassSubject
    */
   omit?: Prisma.AdministrativeClassSubjectOmit<ExtArgs> | null
   /**

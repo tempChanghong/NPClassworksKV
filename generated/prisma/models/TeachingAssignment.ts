@@ -13,7 +13,7 @@ import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
- * Model TeachingAssignmen
+ * Model TeachingAssignment
  * 教师实际承担的授课关系。WorkspaceMember 只负责空间访问权限，本表负责表达“教哪一科”。
  * 行政班必须明确 subjectId；走班教学班的 subjectId 必须与 Workspace.subjectId 一致。
  */
@@ -98,7 +98,7 @@ export type TeachingAssignmentAggregateArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which TeachingAssignment to aggregate.
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -110,7 +110,7 @@ export type TeachingAssignmentAggregateArgs<ExtArgs extends runtime.Types.Extens
    *
    * Sets the start position
    */
-  cursor?: Prisma.TeachingAssignmentWhereUniqueInpu
+  cursor?: Prisma.TeachingAssignmentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -155,10 +155,10 @@ export type GetTeachingAssignmentAggregateType<T extends TeachingAssignmentAggre
 
 
 export type TeachingAssignmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   orderBy?: Prisma.TeachingAssignmentOrderByWithAggregationInput | Prisma.TeachingAssignmentOrderByWithAggregationInput[]
   by: Prisma.TeachingAssignmentScalarFieldEnum[] | Prisma.TeachingAssignmentScalarFieldEnum
-  having?: Prisma.TeachingAssignmentScalarWhereWithAggregatesInpu
+  having?: Prisma.TeachingAssignmentScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: TeachingAssignmentCountAggregateInputType | true
@@ -221,14 +221,14 @@ export type TeachingAssignmentOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  workspace?: Prisma.WorkspaceOrderByWithRelationInpu
-  subject?: Prisma.SubjectOrderByWithRelationInpu
-  account?: Prisma.AccountOrderByWithRelationInpu
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
+  subject?: Prisma.SubjectOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type TeachingAssignmentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  workspaceId_subjectId_accountId?: Prisma.TeachingAssignmentWorkspaceIdSubjectIdAccountIdCompoundUniqueInpu
+  workspaceId_subjectId_accountId?: Prisma.TeachingAssignmentWorkspaceIdSubjectIdAccountIdCompoundUniqueInput
   AND?: Prisma.TeachingAssignmentWhereInput | Prisma.TeachingAssignmentWhereInput[]
   OR?: Prisma.TeachingAssignmentWhereInput[]
   NOT?: Prisma.TeachingAssignmentWhereInput | Prisma.TeachingAssignmentWhereInput[]
@@ -253,9 +253,9 @@ export type TeachingAssignmentOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.TeachingAssignmentCountOrderByAggregateInpu
-  _max?: Prisma.TeachingAssignmentMaxOrderByAggregateInpu
-  _min?: Prisma.TeachingAssignmentMinOrderByAggregateInpu
+  _count?: Prisma.TeachingAssignmentCountOrderByAggregateInput
+  _max?: Prisma.TeachingAssignmentMaxOrderByAggregateInput
+  _min?: Prisma.TeachingAssignmentMinOrderByAggregateInput
 }
 
 export type TeachingAssignmentScalarWhereWithAggregatesInput = {
@@ -278,9 +278,9 @@ export type TeachingAssignmentCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInpu
-  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInpu
-  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInput
+  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInput
+  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInput
 }
 
 export type TeachingAssignmentUncheckedCreateInput = {
@@ -300,9 +300,9 @@ export type TeachingAssignmentUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
 }
 
 export type TeachingAssignmentUncheckedUpdateInput = {
@@ -347,9 +347,9 @@ export type TeachingAssignmentUncheckedUpdateManyInput = {
 }
 
 export type TeachingAssignmentListRelationFilter = {
-  every?: Prisma.TeachingAssignmentWhereInpu
-  some?: Prisma.TeachingAssignmentWhereInpu
-  none?: Prisma.TeachingAssignmentWhereInpu
+  every?: Prisma.TeachingAssignmentWhereInput
+  some?: Prisma.TeachingAssignmentWhereInput
+  none?: Prisma.TeachingAssignmentWhereInput
 }
 
 export type TeachingAssignmentOrderByRelationAggregateInput = {
@@ -531,8 +531,8 @@ export type TeachingAssignmentCreateWithoutAccountInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInpu
-  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInput
+  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInput
 }
 
 export type TeachingAssignmentUncheckedCreateWithoutAccountInput = {
@@ -546,7 +546,7 @@ export type TeachingAssignmentUncheckedCreateWithoutAccountInput = {
 }
 
 export type TeachingAssignmentCreateOrConnectWithoutAccountInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutAccountInput, Prisma.TeachingAssignmentUncheckedCreateWithoutAccountInput>
 }
 
@@ -556,18 +556,18 @@ export type TeachingAssignmentCreateManyAccountInputEnvelope = {
 }
 
 export type TeachingAssignmentUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   update: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutAccountInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutAccountInput, Prisma.TeachingAssignmentUncheckedCreateWithoutAccountInput>
 }
 
 export type TeachingAssignmentUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutAccountInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutAccountInput>
 }
 
 export type TeachingAssignmentUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.TeachingAssignmentScalarWhereInpu
+  where: Prisma.TeachingAssignmentScalarWhereInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateManyMutationInput, Prisma.TeachingAssignmentUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -591,8 +591,8 @@ export type TeachingAssignmentCreateWithoutSubjectInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInpu
-  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutTeachingAssignmentsInput
+  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInput
 }
 
 export type TeachingAssignmentUncheckedCreateWithoutSubjectInput = {
@@ -606,7 +606,7 @@ export type TeachingAssignmentUncheckedCreateWithoutSubjectInput = {
 }
 
 export type TeachingAssignmentCreateOrConnectWithoutSubjectInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutSubjectInput, Prisma.TeachingAssignmentUncheckedCreateWithoutSubjectInput>
 }
 
@@ -616,18 +616,18 @@ export type TeachingAssignmentCreateManySubjectInputEnvelope = {
 }
 
 export type TeachingAssignmentUpsertWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   update: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutSubjectInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutSubjectInput>
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutSubjectInput, Prisma.TeachingAssignmentUncheckedCreateWithoutSubjectInput>
 }
 
 export type TeachingAssignmentUpdateWithWhereUniqueWithoutSubjectInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutSubjectInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutSubjectInput>
 }
 
 export type TeachingAssignmentUpdateManyWithWhereWithoutSubjectInput = {
-  where: Prisma.TeachingAssignmentScalarWhereInpu
+  where: Prisma.TeachingAssignmentScalarWhereInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateManyMutationInput, Prisma.TeachingAssignmentUncheckedUpdateManyWithoutSubjectInput>
 }
 
@@ -637,8 +637,8 @@ export type TeachingAssignmentCreateWithoutWorkspaceInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInpu
-  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInpu
+  subject: Prisma.SubjectCreateNestedOneWithoutTeachingAssignmentsInput
+  account: Prisma.AccountCreateNestedOneWithoutTeachingAssignmentsInput
 }
 
 export type TeachingAssignmentUncheckedCreateWithoutWorkspaceInput = {
@@ -652,7 +652,7 @@ export type TeachingAssignmentUncheckedCreateWithoutWorkspaceInput = {
 }
 
 export type TeachingAssignmentCreateOrConnectWithoutWorkspaceInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutWorkspaceInput, Prisma.TeachingAssignmentUncheckedCreateWithoutWorkspaceInput>
 }
 
@@ -662,18 +662,18 @@ export type TeachingAssignmentCreateManyWorkspaceInputEnvelope = {
 }
 
 export type TeachingAssignmentUpsertWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   update: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutWorkspaceInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutWorkspaceInput>
   create: Prisma.XOR<Prisma.TeachingAssignmentCreateWithoutWorkspaceInput, Prisma.TeachingAssignmentUncheckedCreateWithoutWorkspaceInput>
 }
 
 export type TeachingAssignmentUpdateWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateWithoutWorkspaceInput, Prisma.TeachingAssignmentUncheckedUpdateWithoutWorkspaceInput>
 }
 
 export type TeachingAssignmentUpdateManyWithWhereWithoutWorkspaceInput = {
-  where: Prisma.TeachingAssignmentScalarWhereInpu
+  where: Prisma.TeachingAssignmentScalarWhereInput
   data: Prisma.XOR<Prisma.TeachingAssignmentUpdateManyMutationInput, Prisma.TeachingAssignmentUncheckedUpdateManyWithoutWorkspaceInput>
 }
 
@@ -693,8 +693,8 @@ export type TeachingAssignmentUpdateWithoutAccountInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
 }
 
 export type TeachingAssignmentUncheckedUpdateWithoutAccountInput = {
@@ -733,8 +733,8 @@ export type TeachingAssignmentUpdateWithoutSubjectInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
 }
 
 export type TeachingAssignmentUncheckedUpdateWithoutSubjectInput = {
@@ -773,8 +773,8 @@ export type TeachingAssignmentUpdateWithoutWorkspaceInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInpu
+  subject?: Prisma.SubjectUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTeachingAssignmentsNestedInput
 }
 
 export type TeachingAssignmentUncheckedUpdateWithoutWorkspaceInput = {
@@ -900,9 +900,9 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TeachingAssignment'], meta: { name: 'TeachingAssignment' } }
   /**
    * Find zero or one TeachingAssignment that matches the filter.
-   * @param {TeachingAssignmentFindUniqueArgs} args - Arguments to find a TeachingAssignmen
+   * @param {TeachingAssignmentFindUniqueArgs} args - Arguments to find a TeachingAssignment
    * @example
-   * // Get one TeachingAssignmen
+   * // Get one TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.findUnique({
    *   where: {
    *     // ... provide filter here
@@ -914,9 +914,9 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
   /**
    * Find one TeachingAssignment that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {TeachingAssignmentFindUniqueOrThrowArgs} args - Arguments to find a TeachingAssignmen
+   * @param {TeachingAssignmentFindUniqueOrThrowArgs} args - Arguments to find a TeachingAssignment
    * @example
-   * // Get one TeachingAssignmen
+   * // Get one TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -929,9 +929,9 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Find the first TeachingAssignment that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {TeachingAssignmentFindFirstArgs} args - Arguments to find a TeachingAssignmen
+   * @param {TeachingAssignmentFindFirstArgs} args - Arguments to find a TeachingAssignment
    * @example
-   * // Get one TeachingAssignmen
+   * // Get one TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.findFirst({
    *   where: {
    *     // ... provide filter here
@@ -945,9 +945,9 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {TeachingAssignmentFindFirstOrThrowArgs} args - Arguments to find a TeachingAssignmen
+   * @param {TeachingAssignmentFindFirstOrThrowArgs} args - Arguments to find a TeachingAssignment
    * @example
-   * // Get one TeachingAssignmen
+   * // Get one TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -978,10 +978,10 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Create a TeachingAssignment.
    * @param {TeachingAssignmentCreateArgs} args - Arguments to create a TeachingAssignment.
    * @example
-   * // Create one TeachingAssignmen
+   * // Create one TeachingAssignment
    * const TeachingAssignment = await prisma.teachingAssignment.create({
    *   data: {
-   *     // ... data to create a TeachingAssignmen
+   *     // ... data to create a TeachingAssignment
    *   }
    * })
    *
@@ -1030,10 +1030,10 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Delete a TeachingAssignment.
    * @param {TeachingAssignmentDeleteArgs} args - Arguments to delete one TeachingAssignment.
    * @example
-   * // Delete one TeachingAssignmen
+   * // Delete one TeachingAssignment
    * const TeachingAssignment = await prisma.teachingAssignment.delete({
    *   where: {
-   *     // ... filter to delete one TeachingAssignmen
+   *     // ... filter to delete one TeachingAssignment
    *   }
    * })
    *
@@ -1044,7 +1044,7 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Update one TeachingAssignment.
    * @param {TeachingAssignmentUpdateArgs} args - Arguments to update one TeachingAssignment.
    * @example
-   * // Update one TeachingAssignmen
+   * // Update one TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.update({
    *   where: {
    *     // ... provide filter here
@@ -1124,10 +1124,10 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Create or update one TeachingAssignment.
    * @param {TeachingAssignmentUpsertArgs} args - Arguments to update or create a TeachingAssignment.
    * @example
-   * // Update or create a TeachingAssignmen
+   * // Update or create a TeachingAssignment
    * const teachingAssignment = await prisma.teachingAssignment.upsert({
    *   create: {
-   *     // ... data to create a TeachingAssignmen
+   *     // ... data to create a TeachingAssignment
    *   },
    *   update: {
    *     // ... in case it already exists, update
@@ -1149,7 +1149,7 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * // Count the number of TeachingAssignments
    * const count = await prisma.teachingAssignment.count({
    *   where: {
-   *     // ... the filter for the TeachingAssignments we want to coun
+   *     // ... the filter for the TeachingAssignments we want to count
    *   }
    * })
   **/
@@ -1195,7 +1195,7 @@ export interface TeachingAssignmentDelegate<ExtArgs extends runtime.Types.Extens
    * Read more here: https://pris.ly/d/null-undefined
    * @param {TeachingAssignmentGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1328,11 +1328,11 @@ export interface TeachingAssignmentFieldRefs {
  */
 export type TeachingAssignmentFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1342,7 +1342,7 @@ export type TeachingAssignmentFindUniqueArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which TeachingAssignment to fetch.
    */
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
 }
 
 /**
@@ -1350,11 +1350,11 @@ export type TeachingAssignmentFindUniqueArgs<ExtArgs extends runtime.Types.Exten
  */
 export type TeachingAssignmentFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1364,19 +1364,19 @@ export type TeachingAssignmentFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which TeachingAssignment to fetch.
    */
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
 }
 
 /**
- * TeachingAssignment findFirs
+ * TeachingAssignment findFirst
  */
 export type TeachingAssignmentFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1386,7 +1386,7 @@ export type TeachingAssignmentFindFirstArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which TeachingAssignment to fetch.
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1398,7 +1398,7 @@ export type TeachingAssignmentFindFirstArgs<ExtArgs extends runtime.Types.Extens
    *
    * Sets the position for searching for TeachingAssignments.
    */
-  cursor?: Prisma.TeachingAssignmentWhereUniqueInpu
+  cursor?: Prisma.TeachingAssignmentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1424,11 +1424,11 @@ export type TeachingAssignmentFindFirstArgs<ExtArgs extends runtime.Types.Extens
  */
 export type TeachingAssignmentFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1438,7 +1438,7 @@ export type TeachingAssignmentFindFirstOrThrowArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which TeachingAssignment to fetch.
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1450,7 +1450,7 @@ export type TeachingAssignmentFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    *
    * Sets the position for searching for TeachingAssignments.
    */
-  cursor?: Prisma.TeachingAssignmentWhereUniqueInpu
+  cursor?: Prisma.TeachingAssignmentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1476,11 +1476,11 @@ export type TeachingAssignmentFindFirstOrThrowArgs<ExtArgs extends runtime.Types
  */
 export type TeachingAssignmentFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1490,7 +1490,7 @@ export type TeachingAssignmentFindManyArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which TeachingAssignments to fetch.
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1502,7 +1502,7 @@ export type TeachingAssignmentFindManyArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the position for listing TeachingAssignments.
    */
-  cursor?: Prisma.TeachingAssignmentWhereUniqueInpu
+  cursor?: Prisma.TeachingAssignmentWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1523,11 +1523,11 @@ export type TeachingAssignmentFindManyArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type TeachingAssignmentCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1556,11 +1556,11 @@ export type TeachingAssignmentCreateManyArgs<ExtArgs extends runtime.Types.Exten
  */
 export type TeachingAssignmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1579,11 +1579,11 @@ export type TeachingAssignmentCreateManyAndReturnArgs<ExtArgs extends runtime.Ty
  */
 export type TeachingAssignmentUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1597,7 +1597,7 @@ export type TeachingAssignmentUpdateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Choose, which TeachingAssignment to update.
    */
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
 }
 
 /**
@@ -1611,7 +1611,7 @@ export type TeachingAssignmentUpdateManyArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which TeachingAssignments to update
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * Limit how many TeachingAssignments to update.
    */
@@ -1623,11 +1623,11 @@ export type TeachingAssignmentUpdateManyArgs<ExtArgs extends runtime.Types.Exten
  */
 export type TeachingAssignmentUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1637,7 +1637,7 @@ export type TeachingAssignmentUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
   /**
    * Filter which TeachingAssignments to update
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * Limit how many TeachingAssignments to update.
    */
@@ -1649,15 +1649,15 @@ export type TeachingAssignmentUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
 }
 
 /**
- * TeachingAssignment upser
+ * TeachingAssignment upsert
  */
 export type TeachingAssignmentUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1667,7 +1667,7 @@ export type TeachingAssignmentUpsertArgs<ExtArgs extends runtime.Types.Extension
   /**
    * The filter to search for the TeachingAssignment to update in case it exists.
    */
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
   /**
    * In case the TeachingAssignment found by the `where` argument doesn't exist, create a new TeachingAssignment with this data.
    */
@@ -1683,11 +1683,11 @@ export type TeachingAssignmentUpsertArgs<ExtArgs extends runtime.Types.Extension
  */
 export type TeachingAssignmentDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**
@@ -1697,7 +1697,7 @@ export type TeachingAssignmentDeleteArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which TeachingAssignment to delete.
    */
-  where: Prisma.TeachingAssignmentWhereUniqueInpu
+  where: Prisma.TeachingAssignmentWhereUniqueInput
 }
 
 /**
@@ -1707,7 +1707,7 @@ export type TeachingAssignmentDeleteManyArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which TeachingAssignments to delete
    */
-  where?: Prisma.TeachingAssignmentWhereInpu
+  where?: Prisma.TeachingAssignmentWhereInput
   /**
    * Limit how many TeachingAssignments to delete.
    */
@@ -1719,11 +1719,11 @@ export type TeachingAssignmentDeleteManyArgs<ExtArgs extends runtime.Types.Exten
  */
 export type TeachingAssignmentDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TeachingAssignmen
+   * Select specific fields to fetch from the TeachingAssignment
    */
   select?: Prisma.TeachingAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TeachingAssignmen
+   * Omit specific fields from the TeachingAssignment
    */
   omit?: Prisma.TeachingAssignmentOmit<ExtArgs> | null
   /**

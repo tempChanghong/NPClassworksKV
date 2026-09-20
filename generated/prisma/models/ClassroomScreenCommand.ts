@@ -113,7 +113,7 @@ export type ClassroomScreenCommandAggregateArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which ClassroomScreenCommand to aggregate.
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -125,7 +125,7 @@ export type ClassroomScreenCommandAggregateArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the start position
    */
-  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -170,10 +170,10 @@ export type GetClassroomScreenCommandAggregateType<T extends ClassroomScreenComm
 
 
 export type ClassroomScreenCommandGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   orderBy?: Prisma.ClassroomScreenCommandOrderByWithAggregationInput | Prisma.ClassroomScreenCommandOrderByWithAggregationInput[]
   by: Prisma.ClassroomScreenCommandScalarFieldEnum[] | Prisma.ClassroomScreenCommandScalarFieldEnum
-  having?: Prisma.ClassroomScreenCommandScalarWhereWithAggregatesInpu
+  having?: Prisma.ClassroomScreenCommandScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: ClassroomScreenCommandCountAggregateInputType | true
@@ -247,8 +247,8 @@ export type ClassroomScreenCommandOrderByWithRelationInput = {
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInpu
-  issuedBy?: Prisma.AccountOrderByWithRelationInpu
+  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
+  issuedBy?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type ClassroomScreenCommandWhereUniqueInput = Prisma.AtLeast<{
@@ -284,9 +284,9 @@ export type ClassroomScreenCommandOrderByWithAggregationInput = {
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.ClassroomScreenCommandCountOrderByAggregateInpu
-  _max?: Prisma.ClassroomScreenCommandMaxOrderByAggregateInpu
-  _min?: Prisma.ClassroomScreenCommandMinOrderByAggregateInpu
+  _count?: Prisma.ClassroomScreenCommandCountOrderByAggregateInput
+  _max?: Prisma.ClassroomScreenCommandMaxOrderByAggregateInput
+  _min?: Prisma.ClassroomScreenCommandMinOrderByAggregateInput
 }
 
 export type ClassroomScreenCommandScalarWhereWithAggregatesInput = {
@@ -318,8 +318,8 @@ export type ClassroomScreenCommandCreateInput = {
   expiresAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutCommandsInpu
-  issuedBy: Prisma.AccountCreateNestedOneWithoutIssuedScreenCommandsInpu
+  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutCommandsInput
+  issuedBy: Prisma.AccountCreateNestedOneWithoutIssuedScreenCommandsInput
 }
 
 export type ClassroomScreenCommandUncheckedCreateInput = {
@@ -348,8 +348,8 @@ export type ClassroomScreenCommandUpdateInput = {
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutCommandsNestedInpu
-  issuedBy?: Prisma.AccountUpdateOneRequiredWithoutIssuedScreenCommandsNestedInpu
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutCommandsNestedInput
+  issuedBy?: Prisma.AccountUpdateOneRequiredWithoutIssuedScreenCommandsNestedInput
 }
 
 export type ClassroomScreenCommandUncheckedUpdateInput = {
@@ -411,9 +411,9 @@ export type ClassroomScreenCommandUncheckedUpdateManyInput = {
 }
 
 export type ClassroomScreenCommandListRelationFilter = {
-  every?: Prisma.ClassroomScreenCommandWhereInpu
-  some?: Prisma.ClassroomScreenCommandWhereInpu
-  none?: Prisma.ClassroomScreenCommandWhereInpu
+  every?: Prisma.ClassroomScreenCommandWhereInput
+  some?: Prisma.ClassroomScreenCommandWhereInput
+  none?: Prisma.ClassroomScreenCommandWhereInput
 }
 
 export type ClassroomScreenCommandOrderByRelationAggregateInput = {
@@ -556,7 +556,7 @@ export type ClassroomScreenCommandCreateWithoutIssuedByInput = {
   expiresAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutCommandsInpu
+  screenBinding: Prisma.ClassroomScreenBindingCreateNestedOneWithoutCommandsInput
 }
 
 export type ClassroomScreenCommandUncheckedCreateWithoutIssuedByInput = {
@@ -574,7 +574,7 @@ export type ClassroomScreenCommandUncheckedCreateWithoutIssuedByInput = {
 }
 
 export type ClassroomScreenCommandCreateOrConnectWithoutIssuedByInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   create: Prisma.XOR<Prisma.ClassroomScreenCommandCreateWithoutIssuedByInput, Prisma.ClassroomScreenCommandUncheckedCreateWithoutIssuedByInput>
 }
 
@@ -584,18 +584,18 @@ export type ClassroomScreenCommandCreateManyIssuedByInputEnvelope = {
 }
 
 export type ClassroomScreenCommandUpsertWithWhereUniqueWithoutIssuedByInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   update: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateWithoutIssuedByInput, Prisma.ClassroomScreenCommandUncheckedUpdateWithoutIssuedByInput>
   create: Prisma.XOR<Prisma.ClassroomScreenCommandCreateWithoutIssuedByInput, Prisma.ClassroomScreenCommandUncheckedCreateWithoutIssuedByInput>
 }
 
 export type ClassroomScreenCommandUpdateWithWhereUniqueWithoutIssuedByInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   data: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateWithoutIssuedByInput, Prisma.ClassroomScreenCommandUncheckedUpdateWithoutIssuedByInput>
 }
 
 export type ClassroomScreenCommandUpdateManyWithWhereWithoutIssuedByInput = {
-  where: Prisma.ClassroomScreenCommandScalarWhereInpu
+  where: Prisma.ClassroomScreenCommandScalarWhereInput
   data: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateManyMutationInput, Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutIssuedByInput>
 }
 
@@ -628,7 +628,7 @@ export type ClassroomScreenCommandCreateWithoutScreenBindingInput = {
   expiresAt: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  issuedBy: Prisma.AccountCreateNestedOneWithoutIssuedScreenCommandsInpu
+  issuedBy: Prisma.AccountCreateNestedOneWithoutIssuedScreenCommandsInput
 }
 
 export type ClassroomScreenCommandUncheckedCreateWithoutScreenBindingInput = {
@@ -646,7 +646,7 @@ export type ClassroomScreenCommandUncheckedCreateWithoutScreenBindingInput = {
 }
 
 export type ClassroomScreenCommandCreateOrConnectWithoutScreenBindingInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   create: Prisma.XOR<Prisma.ClassroomScreenCommandCreateWithoutScreenBindingInput, Prisma.ClassroomScreenCommandUncheckedCreateWithoutScreenBindingInput>
 }
 
@@ -656,18 +656,18 @@ export type ClassroomScreenCommandCreateManyScreenBindingInputEnvelope = {
 }
 
 export type ClassroomScreenCommandUpsertWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   update: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateWithoutScreenBindingInput, Prisma.ClassroomScreenCommandUncheckedUpdateWithoutScreenBindingInput>
   create: Prisma.XOR<Prisma.ClassroomScreenCommandCreateWithoutScreenBindingInput, Prisma.ClassroomScreenCommandUncheckedCreateWithoutScreenBindingInput>
 }
 
 export type ClassroomScreenCommandUpdateWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   data: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateWithoutScreenBindingInput, Prisma.ClassroomScreenCommandUncheckedUpdateWithoutScreenBindingInput>
 }
 
 export type ClassroomScreenCommandUpdateManyWithWhereWithoutScreenBindingInput = {
-  where: Prisma.ClassroomScreenCommandScalarWhereInpu
+  where: Prisma.ClassroomScreenCommandScalarWhereInput
   data: Prisma.XOR<Prisma.ClassroomScreenCommandUpdateManyMutationInput, Prisma.ClassroomScreenCommandUncheckedUpdateManyWithoutScreenBindingInput>
 }
 
@@ -696,7 +696,7 @@ export type ClassroomScreenCommandUpdateWithoutIssuedByInput = {
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutCommandsNestedInpu
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneRequiredWithoutCommandsNestedInput
 }
 
 export type ClassroomScreenCommandUncheckedUpdateWithoutIssuedByInput = {
@@ -752,7 +752,7 @@ export type ClassroomScreenCommandUpdateWithoutScreenBindingInput = {
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  issuedBy?: Prisma.AccountUpdateOneRequiredWithoutIssuedScreenCommandsNestedInpu
+  issuedBy?: Prisma.AccountUpdateOneRequiredWithoutIssuedScreenCommandsNestedInput
 }
 
 export type ClassroomScreenCommandUncheckedUpdateWithoutScreenBindingInput = {
@@ -1148,7 +1148,7 @@ export interface ClassroomScreenCommandDelegate<ExtArgs extends runtime.Types.Ex
    * // Count the number of ClassroomScreenCommands
    * const count = await prisma.classroomScreenCommand.count({
    *   where: {
-   *     // ... the filter for the ClassroomScreenCommands we want to coun
+   *     // ... the filter for the ClassroomScreenCommands we want to count
    *   }
    * })
   **/
@@ -1194,7 +1194,7 @@ export interface ClassroomScreenCommandDelegate<ExtArgs extends runtime.Types.Ex
    * Read more here: https://pris.ly/d/null-undefined
    * @param {ClassroomScreenCommandGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1344,7 +1344,7 @@ export type ClassroomScreenCommandFindUniqueArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter, which ClassroomScreenCommand to fetch.
    */
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
 }
 
 /**
@@ -1366,11 +1366,11 @@ export type ClassroomScreenCommandFindUniqueOrThrowArgs<ExtArgs extends runtime.
   /**
    * Filter, which ClassroomScreenCommand to fetch.
    */
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
 }
 
 /**
- * ClassroomScreenCommand findFirs
+ * ClassroomScreenCommand findFirst
  */
 export type ClassroomScreenCommandFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1388,7 +1388,7 @@ export type ClassroomScreenCommandFindFirstArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which ClassroomScreenCommand to fetch.
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1400,7 +1400,7 @@ export type ClassroomScreenCommandFindFirstArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the position for searching for ClassroomScreenCommands.
    */
-  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1440,7 +1440,7 @@ export type ClassroomScreenCommandFindFirstOrThrowArgs<ExtArgs extends runtime.T
   /**
    * Filter, which ClassroomScreenCommand to fetch.
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1452,7 +1452,7 @@ export type ClassroomScreenCommandFindFirstOrThrowArgs<ExtArgs extends runtime.T
    *
    * Sets the position for searching for ClassroomScreenCommands.
    */
-  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1492,7 +1492,7 @@ export type ClassroomScreenCommandFindManyArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which ClassroomScreenCommands to fetch.
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1504,7 +1504,7 @@ export type ClassroomScreenCommandFindManyArgs<ExtArgs extends runtime.Types.Ext
    *
    * Sets the position for listing ClassroomScreenCommands.
    */
-  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  cursor?: Prisma.ClassroomScreenCommandWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1599,7 +1599,7 @@ export type ClassroomScreenCommandUpdateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Choose, which ClassroomScreenCommand to update.
    */
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
 }
 
 /**
@@ -1613,7 +1613,7 @@ export type ClassroomScreenCommandUpdateManyArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which ClassroomScreenCommands to update
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * Limit how many ClassroomScreenCommands to update.
    */
@@ -1639,7 +1639,7 @@ export type ClassroomScreenCommandUpdateManyAndReturnArgs<ExtArgs extends runtim
   /**
    * Filter which ClassroomScreenCommands to update
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * Limit how many ClassroomScreenCommands to update.
    */
@@ -1651,7 +1651,7 @@ export type ClassroomScreenCommandUpdateManyAndReturnArgs<ExtArgs extends runtim
 }
 
 /**
- * ClassroomScreenCommand upser
+ * ClassroomScreenCommand upsert
  */
 export type ClassroomScreenCommandUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1669,7 +1669,7 @@ export type ClassroomScreenCommandUpsertArgs<ExtArgs extends runtime.Types.Exten
   /**
    * The filter to search for the ClassroomScreenCommand to update in case it exists.
    */
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
   /**
    * In case the ClassroomScreenCommand found by the `where` argument doesn't exist, create a new ClassroomScreenCommand with this data.
    */
@@ -1699,7 +1699,7 @@ export type ClassroomScreenCommandDeleteArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which ClassroomScreenCommand to delete.
    */
-  where: Prisma.ClassroomScreenCommandWhereUniqueInpu
+  where: Prisma.ClassroomScreenCommandWhereUniqueInput
 }
 
 /**
@@ -1709,7 +1709,7 @@ export type ClassroomScreenCommandDeleteManyArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter which ClassroomScreenCommands to delete
    */
-  where?: Prisma.ClassroomScreenCommandWhereInpu
+  where?: Prisma.ClassroomScreenCommandWhereInput
   /**
    * Limit how many ClassroomScreenCommands to delete.
    */

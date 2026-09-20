@@ -87,7 +87,7 @@ export type ClassAttendanceDayAggregateArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which ClassAttendanceDay to aggregate.
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -99,7 +99,7 @@ export type ClassAttendanceDayAggregateArgs<ExtArgs extends runtime.Types.Extens
    *
    * Sets the start position
    */
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -144,10 +144,10 @@ export type GetClassAttendanceDayAggregateType<T extends ClassAttendanceDayAggre
 
 
 export type ClassAttendanceDayGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   orderBy?: Prisma.ClassAttendanceDayOrderByWithAggregationInput | Prisma.ClassAttendanceDayOrderByWithAggregationInput[]
   by: Prisma.ClassAttendanceDayScalarFieldEnum[] | Prisma.ClassAttendanceDayScalarFieldEnum
-  having?: Prisma.ClassAttendanceDayScalarWhereWithAggregatesInpu
+  having?: Prisma.ClassAttendanceDayScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: ClassAttendanceDayCountAggregateInputType | true
@@ -207,13 +207,13 @@ export type ClassAttendanceDayOrderByWithRelationInput = {
   updatedByScreenBindingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
-  updatedByAccount?: Prisma.AccountOrderByWithRelationInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingOrderByWithRelationInpu
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
+  updatedByAccount?: Prisma.AccountOrderByWithRelationInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
 }
 
 export type ClassAttendanceDayWhereUniqueInput = Prisma.AtLeast<{
-  administrativeClassId_attendanceDate?: Prisma.ClassAttendanceDayAdministrativeClassIdAttendanceDateCompoundUniqueInpu
+  administrativeClassId_attendanceDate?: Prisma.ClassAttendanceDayAdministrativeClassIdAttendanceDateCompoundUniqueInput
   AND?: Prisma.ClassAttendanceDayWhereInput | Prisma.ClassAttendanceDayWhereInput[]
   OR?: Prisma.ClassAttendanceDayWhereInput[]
   NOT?: Prisma.ClassAttendanceDayWhereInput | Prisma.ClassAttendanceDayWhereInput[]
@@ -237,9 +237,9 @@ export type ClassAttendanceDayOrderByWithAggregationInput = {
   updatedByScreenBindingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.ClassAttendanceDayCountOrderByAggregateInpu
-  _max?: Prisma.ClassAttendanceDayMaxOrderByAggregateInpu
-  _min?: Prisma.ClassAttendanceDayMinOrderByAggregateInpu
+  _count?: Prisma.ClassAttendanceDayCountOrderByAggregateInput
+  _max?: Prisma.ClassAttendanceDayMaxOrderByAggregateInput
+  _min?: Prisma.ClassAttendanceDayMinOrderByAggregateInput
 }
 
 export type ClassAttendanceDayScalarWhereWithAggregatesInput = {
@@ -260,9 +260,9 @@ export type ClassAttendanceDayCreateInput = {
   attendance: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInpu
-  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInput
+  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInput
 }
 
 export type ClassAttendanceDayUncheckedCreateInput = {
@@ -280,9 +280,9 @@ export type ClassAttendanceDayUpdateInput = {
   attendance?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInpu
-  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInput
+  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInput
 }
 
 export type ClassAttendanceDayUncheckedUpdateInput = {
@@ -323,9 +323,9 @@ export type ClassAttendanceDayUncheckedUpdateManyInput = {
 }
 
 export type ClassAttendanceDayListRelationFilter = {
-  every?: Prisma.ClassAttendanceDayWhereInpu
-  some?: Prisma.ClassAttendanceDayWhereInpu
-  none?: Prisma.ClassAttendanceDayWhereInpu
+  every?: Prisma.ClassAttendanceDayWhereInput
+  some?: Prisma.ClassAttendanceDayWhereInput
+  none?: Prisma.ClassAttendanceDayWhereInput
 }
 
 export type ClassAttendanceDayOrderByRelationAggregateInput = {
@@ -496,8 +496,8 @@ export type ClassAttendanceDayCreateWithoutUpdatedByAccountInput = {
   attendance: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInput
 }
 
 export type ClassAttendanceDayUncheckedCreateWithoutUpdatedByAccountInput = {
@@ -510,7 +510,7 @@ export type ClassAttendanceDayUncheckedCreateWithoutUpdatedByAccountInput = {
 }
 
 export type ClassAttendanceDayCreateOrConnectWithoutUpdatedByAccountInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutUpdatedByAccountInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutUpdatedByAccountInput>
 }
 
@@ -520,18 +520,18 @@ export type ClassAttendanceDayCreateManyUpdatedByAccountInputEnvelope = {
 }
 
 export type ClassAttendanceDayUpsertWithWhereUniqueWithoutUpdatedByAccountInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   update: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutUpdatedByAccountInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutUpdatedByAccountInput>
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutUpdatedByAccountInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutUpdatedByAccountInput>
 }
 
 export type ClassAttendanceDayUpdateWithWhereUniqueWithoutUpdatedByAccountInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutUpdatedByAccountInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutUpdatedByAccountInput>
 }
 
 export type ClassAttendanceDayUpdateManyWithWhereWithoutUpdatedByAccountInput = {
-  where: Prisma.ClassAttendanceDayScalarWhereInpu
+  where: Prisma.ClassAttendanceDayScalarWhereInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateManyMutationInput, Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByAccountInput>
 }
 
@@ -553,8 +553,8 @@ export type ClassAttendanceDayCreateWithoutAdministrativeClassInput = {
   attendance: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInpu
+  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAttendanceDaysUpdatedInput
 }
 
 export type ClassAttendanceDayUncheckedCreateWithoutAdministrativeClassInput = {
@@ -567,7 +567,7 @@ export type ClassAttendanceDayUncheckedCreateWithoutAdministrativeClassInput = {
 }
 
 export type ClassAttendanceDayCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutAdministrativeClassInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -577,18 +577,18 @@ export type ClassAttendanceDayCreateManyAdministrativeClassInputEnvelope = {
 }
 
 export type ClassAttendanceDayUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   update: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutAdministrativeClassInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutAdministrativeClassInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type ClassAttendanceDayUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutAdministrativeClassInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type ClassAttendanceDayUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.ClassAttendanceDayScalarWhereInpu
+  where: Prisma.ClassAttendanceDayScalarWhereInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateManyMutationInput, Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -597,8 +597,8 @@ export type ClassAttendanceDayCreateWithoutUpdatedByScreenInput = {
   attendance: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInpu
-  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutAttendanceDaysInput
+  updatedByAccount?: Prisma.AccountCreateNestedOneWithoutAttendanceDaysUpdatedInput
 }
 
 export type ClassAttendanceDayUncheckedCreateWithoutUpdatedByScreenInput = {
@@ -611,7 +611,7 @@ export type ClassAttendanceDayUncheckedCreateWithoutUpdatedByScreenInput = {
 }
 
 export type ClassAttendanceDayCreateOrConnectWithoutUpdatedByScreenInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutUpdatedByScreenInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutUpdatedByScreenInput>
 }
 
@@ -621,18 +621,18 @@ export type ClassAttendanceDayCreateManyUpdatedByScreenInputEnvelope = {
 }
 
 export type ClassAttendanceDayUpsertWithWhereUniqueWithoutUpdatedByScreenInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   update: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutUpdatedByScreenInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutUpdatedByScreenInput>
   create: Prisma.XOR<Prisma.ClassAttendanceDayCreateWithoutUpdatedByScreenInput, Prisma.ClassAttendanceDayUncheckedCreateWithoutUpdatedByScreenInput>
 }
 
 export type ClassAttendanceDayUpdateWithWhereUniqueWithoutUpdatedByScreenInput = {
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateWithoutUpdatedByScreenInput, Prisma.ClassAttendanceDayUncheckedUpdateWithoutUpdatedByScreenInput>
 }
 
 export type ClassAttendanceDayUpdateManyWithWhereWithoutUpdatedByScreenInput = {
-  where: Prisma.ClassAttendanceDayScalarWhereInpu
+  where: Prisma.ClassAttendanceDayScalarWhereInput
   data: Prisma.XOR<Prisma.ClassAttendanceDayUpdateManyMutationInput, Prisma.ClassAttendanceDayUncheckedUpdateManyWithoutUpdatedByScreenInput>
 }
 
@@ -650,8 +650,8 @@ export type ClassAttendanceDayUpdateWithoutUpdatedByAccountInput = {
   attendance?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInput
 }
 
 export type ClassAttendanceDayUncheckedUpdateWithoutUpdatedByAccountInput = {
@@ -686,8 +686,8 @@ export type ClassAttendanceDayUpdateWithoutAdministrativeClassInput = {
   attendance?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
-  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
+  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInput
+  updatedByScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAttendanceDaysUpdatedNestedInput
 }
 
 export type ClassAttendanceDayUncheckedUpdateWithoutAdministrativeClassInput = {
@@ -722,8 +722,8 @@ export type ClassAttendanceDayUpdateWithoutUpdatedByScreenInput = {
   attendance?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInpu
-  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutAttendanceDaysNestedInput
+  updatedByAccount?: Prisma.AccountUpdateOneWithoutAttendanceDaysUpdatedNestedInput
 }
 
 export type ClassAttendanceDayUncheckedUpdateWithoutUpdatedByScreenInput = {
@@ -1091,7 +1091,7 @@ export interface ClassAttendanceDayDelegate<ExtArgs extends runtime.Types.Extens
    * // Count the number of ClassAttendanceDays
    * const count = await prisma.classAttendanceDay.count({
    *   where: {
-   *     // ... the filter for the ClassAttendanceDays we want to coun
+   *     // ... the filter for the ClassAttendanceDays we want to count
    *   }
    * })
   **/
@@ -1137,7 +1137,7 @@ export interface ClassAttendanceDayDelegate<ExtArgs extends runtime.Types.Extens
    * Read more here: https://pris.ly/d/null-undefined
    * @param {ClassAttendanceDayGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1283,7 +1283,7 @@ export type ClassAttendanceDayFindUniqueArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which ClassAttendanceDay to fetch.
    */
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
 }
 
 /**
@@ -1305,11 +1305,11 @@ export type ClassAttendanceDayFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which ClassAttendanceDay to fetch.
    */
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
 }
 
 /**
- * ClassAttendanceDay findFirs
+ * ClassAttendanceDay findFirst
  */
 export type ClassAttendanceDayFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1327,7 +1327,7 @@ export type ClassAttendanceDayFindFirstArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which ClassAttendanceDay to fetch.
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1339,7 +1339,7 @@ export type ClassAttendanceDayFindFirstArgs<ExtArgs extends runtime.Types.Extens
    *
    * Sets the position for searching for ClassAttendanceDays.
    */
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1379,7 +1379,7 @@ export type ClassAttendanceDayFindFirstOrThrowArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which ClassAttendanceDay to fetch.
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1391,7 +1391,7 @@ export type ClassAttendanceDayFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    *
    * Sets the position for searching for ClassAttendanceDays.
    */
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1431,7 +1431,7 @@ export type ClassAttendanceDayFindManyArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which ClassAttendanceDays to fetch.
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1443,7 +1443,7 @@ export type ClassAttendanceDayFindManyArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the position for listing ClassAttendanceDays.
    */
-  cursor?: Prisma.ClassAttendanceDayWhereUniqueInpu
+  cursor?: Prisma.ClassAttendanceDayWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1538,7 +1538,7 @@ export type ClassAttendanceDayUpdateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Choose, which ClassAttendanceDay to update.
    */
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
 }
 
 /**
@@ -1552,7 +1552,7 @@ export type ClassAttendanceDayUpdateManyArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which ClassAttendanceDays to update
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * Limit how many ClassAttendanceDays to update.
    */
@@ -1578,7 +1578,7 @@ export type ClassAttendanceDayUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
   /**
    * Filter which ClassAttendanceDays to update
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * Limit how many ClassAttendanceDays to update.
    */
@@ -1590,7 +1590,7 @@ export type ClassAttendanceDayUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
 }
 
 /**
- * ClassAttendanceDay upser
+ * ClassAttendanceDay upsert
  */
 export type ClassAttendanceDayUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1608,7 +1608,7 @@ export type ClassAttendanceDayUpsertArgs<ExtArgs extends runtime.Types.Extension
   /**
    * The filter to search for the ClassAttendanceDay to update in case it exists.
    */
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
   /**
    * In case the ClassAttendanceDay found by the `where` argument doesn't exist, create a new ClassAttendanceDay with this data.
    */
@@ -1638,7 +1638,7 @@ export type ClassAttendanceDayDeleteArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which ClassAttendanceDay to delete.
    */
-  where: Prisma.ClassAttendanceDayWhereUniqueInpu
+  where: Prisma.ClassAttendanceDayWhereUniqueInput
 }
 
 /**
@@ -1648,7 +1648,7 @@ export type ClassAttendanceDayDeleteManyArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which ClassAttendanceDays to delete
    */
-  where?: Prisma.ClassAttendanceDayWhereInpu
+  where?: Prisma.ClassAttendanceDayWhereInput
   /**
    * Limit how many ClassAttendanceDays to delete.
    */
@@ -1656,22 +1656,22 @@ export type ClassAttendanceDayDeleteManyArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * ClassAttendanceDay.updatedByAccoun
+ * ClassAttendanceDay.updatedByAccount
  */
 export type ClassAttendanceDay$updatedByAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Accoun
+   * Select specific fields to fetch from the Account
    */
   select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Accoun
+   * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
-  where?: Prisma.AccountWhereInpu
+  where?: Prisma.AccountWhereInput
 }
 
 /**
@@ -1690,7 +1690,7 @@ export type ClassAttendanceDay$updatedByScreenArgs<ExtArgs extends runtime.Types
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassroomScreenBindingInclude<ExtArgs> | null
-  where?: Prisma.ClassroomScreenBindingWhereInpu
+  where?: Prisma.ClassroomScreenBindingWhereInput
 }
 
 /**

@@ -79,7 +79,7 @@ export type WorkspaceMemberAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which WorkspaceMember to aggregate.
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -91,7 +91,7 @@ export type WorkspaceMemberAggregateArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the start position
    */
-  cursor?: Prisma.WorkspaceMemberWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -136,10 +136,10 @@ export type GetWorkspaceMemberAggregateType<T extends WorkspaceMemberAggregateAr
 
 
 export type WorkspaceMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   orderBy?: Prisma.WorkspaceMemberOrderByWithAggregationInput | Prisma.WorkspaceMemberOrderByWithAggregationInput[]
   by: Prisma.WorkspaceMemberScalarFieldEnum[] | Prisma.WorkspaceMemberScalarFieldEnum
-  having?: Prisma.WorkspaceMemberScalarWhereWithAggregatesInpu
+  having?: Prisma.WorkspaceMemberScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: WorkspaceMemberCountAggregateInputType | true
@@ -192,12 +192,12 @@ export type WorkspaceMemberOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  workspace?: Prisma.WorkspaceOrderByWithRelationInpu
-  account?: Prisma.AccountOrderByWithRelationInpu
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type WorkspaceMemberWhereUniqueInput = Prisma.AtLeast<{
-  workspaceId_accountId?: Prisma.WorkspaceMemberWorkspaceIdAccountIdCompoundUniqueInpu
+  workspaceId_accountId?: Prisma.WorkspaceMemberWorkspaceIdAccountIdCompoundUniqueInput
   AND?: Prisma.WorkspaceMemberWhereInput | Prisma.WorkspaceMemberWhereInput[]
   OR?: Prisma.WorkspaceMemberWhereInput[]
   NOT?: Prisma.WorkspaceMemberWhereInput | Prisma.WorkspaceMemberWhereInput[]
@@ -216,9 +216,9 @@ export type WorkspaceMemberOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.WorkspaceMemberCountOrderByAggregateInpu
-  _max?: Prisma.WorkspaceMemberMaxOrderByAggregateInpu
-  _min?: Prisma.WorkspaceMemberMinOrderByAggregateInpu
+  _count?: Prisma.WorkspaceMemberCountOrderByAggregateInput
+  _max?: Prisma.WorkspaceMemberMaxOrderByAggregateInput
+  _min?: Prisma.WorkspaceMemberMinOrderByAggregateInput
 }
 
 export type WorkspaceMemberScalarWhereWithAggregatesInput = {
@@ -236,8 +236,8 @@ export type WorkspaceMemberCreateInput = {
   role?: $Enums.WorkspaceMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInpu
-  account: Prisma.AccountCreateNestedOneWithoutWorkspaceMembershipsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInput
+  account: Prisma.AccountCreateNestedOneWithoutWorkspaceMembershipsInput
 }
 
 export type WorkspaceMemberUncheckedCreateInput = {
@@ -252,8 +252,8 @@ export type WorkspaceMemberUpdateInput = {
   role?: Prisma.EnumWorkspaceMemberRoleFieldUpdateOperationsInput | $Enums.WorkspaceMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutWorkspaceMembershipsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput
 }
 
 export type WorkspaceMemberUncheckedUpdateInput = {
@@ -287,9 +287,9 @@ export type WorkspaceMemberUncheckedUpdateManyInput = {
 }
 
 export type WorkspaceMemberListRelationFilter = {
-  every?: Prisma.WorkspaceMemberWhereInpu
-  some?: Prisma.WorkspaceMemberWhereInpu
-  none?: Prisma.WorkspaceMemberWhereInpu
+  every?: Prisma.WorkspaceMemberWhereInput
+  some?: Prisma.WorkspaceMemberWhereInput
+  none?: Prisma.WorkspaceMemberWhereInput
 }
 
 export type WorkspaceMemberOrderByRelationAggregateInput = {
@@ -417,7 +417,7 @@ export type WorkspaceMemberCreateWithoutAccountInput = {
   role?: $Enums.WorkspaceMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutMembersInput
 }
 
 export type WorkspaceMemberUncheckedCreateWithoutAccountInput = {
@@ -428,7 +428,7 @@ export type WorkspaceMemberUncheckedCreateWithoutAccountInput = {
 }
 
 export type WorkspaceMemberCreateOrConnectWithoutAccountInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   create: Prisma.XOR<Prisma.WorkspaceMemberCreateWithoutAccountInput, Prisma.WorkspaceMemberUncheckedCreateWithoutAccountInput>
 }
 
@@ -438,18 +438,18 @@ export type WorkspaceMemberCreateManyAccountInputEnvelope = {
 }
 
 export type WorkspaceMemberUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   update: Prisma.XOR<Prisma.WorkspaceMemberUpdateWithoutAccountInput, Prisma.WorkspaceMemberUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.WorkspaceMemberCreateWithoutAccountInput, Prisma.WorkspaceMemberUncheckedCreateWithoutAccountInput>
 }
 
 export type WorkspaceMemberUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   data: Prisma.XOR<Prisma.WorkspaceMemberUpdateWithoutAccountInput, Prisma.WorkspaceMemberUncheckedUpdateWithoutAccountInput>
 }
 
 export type WorkspaceMemberUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.WorkspaceMemberScalarWhereInpu
+  where: Prisma.WorkspaceMemberScalarWhereInput
   data: Prisma.XOR<Prisma.WorkspaceMemberUpdateManyMutationInput, Prisma.WorkspaceMemberUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -468,7 +468,7 @@ export type WorkspaceMemberCreateWithoutWorkspaceInput = {
   role?: $Enums.WorkspaceMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutWorkspaceMembershipsInpu
+  account: Prisma.AccountCreateNestedOneWithoutWorkspaceMembershipsInput
 }
 
 export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
@@ -479,7 +479,7 @@ export type WorkspaceMemberUncheckedCreateWithoutWorkspaceInput = {
 }
 
 export type WorkspaceMemberCreateOrConnectWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   create: Prisma.XOR<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput, Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
 }
 
@@ -489,18 +489,18 @@ export type WorkspaceMemberCreateManyWorkspaceInputEnvelope = {
 }
 
 export type WorkspaceMemberUpsertWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   update: Prisma.XOR<Prisma.WorkspaceMemberUpdateWithoutWorkspaceInput, Prisma.WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
   create: Prisma.XOR<Prisma.WorkspaceMemberCreateWithoutWorkspaceInput, Prisma.WorkspaceMemberUncheckedCreateWithoutWorkspaceInput>
 }
 
 export type WorkspaceMemberUpdateWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   data: Prisma.XOR<Prisma.WorkspaceMemberUpdateWithoutWorkspaceInput, Prisma.WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput>
 }
 
 export type WorkspaceMemberUpdateManyWithWhereWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberScalarWhereInpu
+  where: Prisma.WorkspaceMemberScalarWhereInput
   data: Prisma.XOR<Prisma.WorkspaceMemberUpdateManyMutationInput, Prisma.WorkspaceMemberUncheckedUpdateManyWithoutWorkspaceInput>
 }
 
@@ -515,7 +515,7 @@ export type WorkspaceMemberUpdateWithoutAccountInput = {
   role?: Prisma.EnumWorkspaceMemberRoleFieldUpdateOperationsInput | $Enums.WorkspaceMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutMembersNestedInput
 }
 
 export type WorkspaceMemberUncheckedUpdateWithoutAccountInput = {
@@ -543,7 +543,7 @@ export type WorkspaceMemberUpdateWithoutWorkspaceInput = {
   role?: Prisma.EnumWorkspaceMemberRoleFieldUpdateOperationsInput | $Enums.WorkspaceMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutWorkspaceMembershipsNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutWorkspaceMembershipsNestedInput
 }
 
 export type WorkspaceMemberUncheckedUpdateWithoutWorkspaceInput = {
@@ -890,7 +890,7 @@ export interface WorkspaceMemberDelegate<ExtArgs extends runtime.Types.Extension
    * // Count the number of WorkspaceMembers
    * const count = await prisma.workspaceMember.count({
    *   where: {
-   *     // ... the filter for the WorkspaceMembers we want to coun
+   *     // ... the filter for the WorkspaceMembers we want to count
    *   }
    * })
   **/
@@ -936,7 +936,7 @@ export interface WorkspaceMemberDelegate<ExtArgs extends runtime.Types.Extension
    * Read more here: https://pris.ly/d/null-undefined
    * @param {WorkspaceMemberGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1079,7 +1079,7 @@ export type WorkspaceMemberFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which WorkspaceMember to fetch.
    */
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
 }
 
 /**
@@ -1101,11 +1101,11 @@ export type WorkspaceMemberFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter, which WorkspaceMember to fetch.
    */
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
 }
 
 /**
- * WorkspaceMember findFirs
+ * WorkspaceMember findFirst
  */
 export type WorkspaceMemberFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1123,7 +1123,7 @@ export type WorkspaceMemberFindFirstArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which WorkspaceMember to fetch.
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1135,7 +1135,7 @@ export type WorkspaceMemberFindFirstArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the position for searching for WorkspaceMembers.
    */
-  cursor?: Prisma.WorkspaceMemberWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1175,7 +1175,7 @@ export type WorkspaceMemberFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which WorkspaceMember to fetch.
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1187,7 +1187,7 @@ export type WorkspaceMemberFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the position for searching for WorkspaceMembers.
    */
-  cursor?: Prisma.WorkspaceMemberWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1227,7 +1227,7 @@ export type WorkspaceMemberFindManyArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter, which WorkspaceMembers to fetch.
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1239,7 +1239,7 @@ export type WorkspaceMemberFindManyArgs<ExtArgs extends runtime.Types.Extensions
    *
    * Sets the position for listing WorkspaceMembers.
    */
-  cursor?: Prisma.WorkspaceMemberWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1334,7 +1334,7 @@ export type WorkspaceMemberUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Choose, which WorkspaceMember to update.
    */
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
 }
 
 /**
@@ -1348,7 +1348,7 @@ export type WorkspaceMemberUpdateManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter which WorkspaceMembers to update
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * Limit how many WorkspaceMembers to update.
    */
@@ -1374,7 +1374,7 @@ export type WorkspaceMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
   /**
    * Filter which WorkspaceMembers to update
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * Limit how many WorkspaceMembers to update.
    */
@@ -1386,7 +1386,7 @@ export type WorkspaceMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
 }
 
 /**
- * WorkspaceMember upser
+ * WorkspaceMember upsert
  */
 export type WorkspaceMemberUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1404,7 +1404,7 @@ export type WorkspaceMemberUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * The filter to search for the WorkspaceMember to update in case it exists.
    */
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
   /**
    * In case the WorkspaceMember found by the `where` argument doesn't exist, create a new WorkspaceMember with this data.
    */
@@ -1434,7 +1434,7 @@ export type WorkspaceMemberDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter which WorkspaceMember to delete.
    */
-  where: Prisma.WorkspaceMemberWhereUniqueInpu
+  where: Prisma.WorkspaceMemberWhereUniqueInput
 }
 
 /**
@@ -1444,7 +1444,7 @@ export type WorkspaceMemberDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter which WorkspaceMembers to delete
    */
-  where?: Prisma.WorkspaceMemberWhereInpu
+  where?: Prisma.WorkspaceMemberWhereInput
   /**
    * Limit how many WorkspaceMembers to delete.
    */

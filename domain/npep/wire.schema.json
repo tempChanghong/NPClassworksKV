@@ -1,0 +1,1344 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NPEP N1 v0.1 wire shapes",
+  "description": "Candidate request bodies and response envelopes. Does not validate authorization or runtime semantics.",
+  "definitions": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "supportedCapabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "serverInstanceId",
+        "deploymentEpoch",
+        "supportedCapabilities"
+      ],
+      "additionalProperties": false
+    },
+    "createPairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "installationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "appVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "pairingSecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+        },
+        "requestedCapabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "requestId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "installationId",
+        "deviceName",
+        "appVersion",
+        "pairingSecret",
+        "requestedCapabilities"
+      ],
+      "additionalProperties": false
+    },
+    "createdPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "userCode": {
+          "type": "string",
+          "pattern": "^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$"
+        },
+        "state": {
+          "const": "PENDING"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "pollAfterSeconds": {
+          "const": 5
+        }
+      },
+      "required": [
+        "pairingId",
+        "userCode",
+        "state",
+        "expiresAt",
+        "pollAfterSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "pendingPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "state": {
+          "const": "PENDING"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "pollAfterSeconds": {
+          "const": 5
+        }
+      },
+      "required": [
+        "pairingId",
+        "state",
+        "expiresAt",
+        "pollAfterSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "approvedPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "state": {
+          "const": "APPROVED"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "pollAfterSeconds": {
+          "const": 5
+        },
+        "approvalId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "schoolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "schoolName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "administrativeClassId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "administrativeClassName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "screenBindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "screenBindingName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "pairingId",
+        "state",
+        "expiresAt",
+        "pollAfterSeconds",
+        "approvalId",
+        "schoolId",
+        "schoolName",
+        "administrativeClassId",
+        "administrativeClassName",
+        "screenBindingId",
+        "screenBindingName",
+        "bindingRevision",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "activatedPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "state": {
+          "const": "ACTIVATED"
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "pairingId",
+        "state",
+        "deviceId"
+      ],
+      "additionalProperties": false
+    },
+    "resolvePairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "userCode": {
+          "type": "string",
+          "pattern": "^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$"
+        }
+      },
+      "required": [
+        "requestId",
+        "userCode"
+      ],
+      "additionalProperties": false
+    },
+    "resolvedPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "appVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "requestedCapabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "pairingId",
+        "deviceName",
+        "appVersion",
+        "expiresAt",
+        "requestedCapabilities"
+      ],
+      "additionalProperties": false
+    },
+    "approvePairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "screenBindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "requestId",
+        "screenBindingId",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "confirmPairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "approvalId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "credentialId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceSecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+        }
+      },
+      "required": [
+        "requestId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "approvalId",
+        "credentialId",
+        "deviceSecret"
+      ],
+      "additionalProperties": false
+    },
+    "cancelPairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "requestId"
+      ],
+      "additionalProperties": false
+    },
+    "cancelledPairing": {
+      "type": "object",
+      "properties": {
+        "pairingId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "state": {
+          "const": "CANCELLED"
+        }
+      },
+      "required": [
+        "pairingId",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "registration": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "installationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "schoolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "administrativeClassId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "screenBindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "credentialGeneration": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "credentialExpiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "deviceId",
+        "installationId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "schoolId",
+        "administrativeClassId",
+        "screenBindingId",
+        "bindingRevision",
+        "credentialGeneration",
+        "capabilities",
+        "credentialExpiresAt",
+        "statusEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "openSession": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "expectedStatusEpoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "requestId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "runId",
+        "expectedStatusEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nextPollSeconds": {
+          "const": 20
+        }
+      },
+      "required": [
+        "sessionId",
+        "runId",
+        "statusEpoch",
+        "nextPollSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "bridge": {
+      "type": "object",
+      "properties": {
+        "connection": {
+          "type": "string",
+          "enum": [
+            "READY",
+            "DISCONNECTED",
+            "UNKNOWN"
+          ]
+        },
+        "bridgeVersion": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "connection",
+        "bridgeVersion"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "DAILY",
+            "EXAM",
+            "UNCONFIGURED",
+            "UNKNOWN"
+          ]
+        },
+        "modePhase": {
+          "type": "string",
+          "enum": [
+            "IDLE",
+            "CHECKING",
+            "SWITCHING",
+            "RUNNING",
+            "INCOMPLETE",
+            "UNAVAILABLE",
+            "UNKNOWN"
+          ]
+        },
+        "modeRevision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "automaticRecording": {
+          "type": "string",
+          "enum": [
+            "ENABLED",
+            "DISABLED",
+            "UNKNOWN"
+          ]
+        },
+        "recording": {
+          "type": "string",
+          "enum": [
+            "IDLE",
+            "RECORDING",
+            "PAUSED",
+            "FINALIZING",
+            "UNKNOWN"
+          ]
+        },
+        "classIsland": {
+          "$ref": "#/definitions/bridge"
+        },
+        "examAware": {
+          "$ref": "#/definitions/bridge"
+        }
+      },
+      "required": [
+        "appVersion",
+        "mode",
+        "modePhase",
+        "modeRevision",
+        "automaticRecording",
+        "recording",
+        "classIsland",
+        "examAware"
+      ],
+      "additionalProperties": false
+    },
+    "reportStatus": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sampleAgeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      },
+      "required": [
+        "requestId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "sessionId",
+        "statusEpoch",
+        "sequence",
+        "sampleAgeMs",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "statusReceipt": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "type": "string",
+          "enum": [
+            "APPLIED",
+            "DUPLICATE"
+          ]
+        },
+        "acceptedSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "nextPollSeconds": {
+          "const": 20
+        }
+      },
+      "required": [
+        "disposition",
+        "acceptedSequence",
+        "receivedAt",
+        "nextPollSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "revokeDevice": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "expectedBindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "requestId",
+        "expectedBindingRevision"
+      ],
+      "additionalProperties": false
+    },
+    "revokedDevice": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "state": {
+          "const": "REVOKED"
+        }
+      },
+      "required": [
+        "deviceId",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "deviceSummary": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "installationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "schoolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "administrativeClassId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "screenBindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "credentialGeneration": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "deviceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "REVOKED",
+            "EXPIRED",
+            "INVALIDATED"
+          ]
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "credentialExpiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "connectivity": {
+          "type": "string",
+          "enum": [
+            "ONLINE",
+            "OFFLINE",
+            "UNKNOWN"
+          ]
+        },
+        "lastSeenAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/status"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "deviceId",
+        "installationId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "schoolId",
+        "administrativeClassId",
+        "screenBindingId",
+        "bindingRevision",
+        "credentialGeneration",
+        "deviceName",
+        "state",
+        "capabilities",
+        "credentialExpiresAt",
+        "connectivity",
+        "lastSeenAt",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "deviceList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/deviceSummary"
+          },
+          "maxItems": 100
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "enum": [
+                "INVALID_REQUEST",
+                "AUTH_INVALID",
+                "CREDENTIAL_EXPIRED",
+                "SCHOOL_ADMIN_REQUIRED",
+                "CAPABILITY_DENIED",
+                "APPROVER_NO_LONGER_AUTHORIZED",
+                "NOT_FOUND",
+                "INSTANCE_MISMATCH",
+                "PAIRING_STATE_CONFLICT",
+                "IDEMPOTENCY_CONFLICT",
+                "CREDENTIAL_ID_CONFLICT",
+                "BINDING_OCCUPIED",
+                "BINDING_CHANGED",
+                "REVISION_CONFLICT",
+                "SESSION_SUPERSEDED",
+                "SEQUENCE_CONFLICT",
+                "STALE_SEQUENCE",
+                "PAIRING_EXPIRED",
+                "PAYLOAD_TOO_LARGE",
+                "PROTOCOL_UNSUPPORTED",
+                "RATE_LIMITED",
+                "TEMPORARILY_UNAVAILABLE"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "retryAfterSeconds": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 3600
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryAfterSeconds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "infoResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/info"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "createdPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/createdPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "pendingPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/pendingPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "approvedPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/approvedPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "activatedPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/activatedPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "resolvedPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/resolvedPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "cancelledPairingResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/cancelledPairing"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "registrationResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/registration"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "sessionResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/session"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "statusReceiptResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/statusReceipt"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "revokedDeviceResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/revokedDevice"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "deviceListResponse": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.1"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/deviceList"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

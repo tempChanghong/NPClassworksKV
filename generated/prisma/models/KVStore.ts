@@ -99,7 +99,7 @@ export type KVStoreAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Filter which KVStore to aggregate.
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -111,7 +111,7 @@ export type KVStoreAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    *
    * Sets the start position
    */
-  cursor?: Prisma.KVStoreWhereUniqueInpu
+  cursor?: Prisma.KVStoreWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -168,10 +168,10 @@ export type GetKVStoreAggregateType<T extends KVStoreAggregateArgs> = {
 
 
 export type KVStoreGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   orderBy?: Prisma.KVStoreOrderByWithAggregationInput | Prisma.KVStoreOrderByWithAggregationInput[]
   by: Prisma.KVStoreScalarFieldEnum[] | Prisma.KVStoreScalarFieldEnum
-  having?: Prisma.KVStoreScalarWhereWithAggregatesInpu
+  having?: Prisma.KVStoreScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: KVStoreCountAggregateInputType | true
@@ -230,11 +230,11 @@ export type KVStoreOrderByWithRelationInput = {
   creatorIp?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  device?: Prisma.DeviceOrderByWithRelationInpu
+  device?: Prisma.DeviceOrderByWithRelationInput
 }
 
 export type KVStoreWhereUniqueInput = Prisma.AtLeast<{
-  deviceId_key?: Prisma.KVStoreDeviceIdKeyCompoundUniqueInpu
+  deviceId_key?: Prisma.KVStoreDeviceIdKeyCompoundUniqueInput
   AND?: Prisma.KVStoreWhereInput | Prisma.KVStoreWhereInput[]
   OR?: Prisma.KVStoreWhereInput[]
   NOT?: Prisma.KVStoreWhereInput | Prisma.KVStoreWhereInput[]
@@ -254,11 +254,11 @@ export type KVStoreOrderByWithAggregationInput = {
   creatorIp?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.KVStoreCountOrderByAggregateInpu
-  _avg?: Prisma.KVStoreAvgOrderByAggregateInpu
-  _max?: Prisma.KVStoreMaxOrderByAggregateInpu
-  _min?: Prisma.KVStoreMinOrderByAggregateInpu
-  _sum?: Prisma.KVStoreSumOrderByAggregateInpu
+  _count?: Prisma.KVStoreCountOrderByAggregateInput
+  _avg?: Prisma.KVStoreAvgOrderByAggregateInput
+  _max?: Prisma.KVStoreMaxOrderByAggregateInput
+  _min?: Prisma.KVStoreMinOrderByAggregateInput
+  _sum?: Prisma.KVStoreSumOrderByAggregateInput
 }
 
 export type KVStoreScalarWhereWithAggregatesInput = {
@@ -279,7 +279,7 @@ export type KVStoreCreateInput = {
   creatorIp?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  device: Prisma.DeviceCreateNestedOneWithoutKvStoreInpu
+  device: Prisma.DeviceCreateNestedOneWithoutKvStoreInput
 }
 
 export type KVStoreUncheckedCreateInput = {
@@ -297,7 +297,7 @@ export type KVStoreUpdateInput = {
   creatorIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  device?: Prisma.DeviceUpdateOneRequiredWithoutKvStoreNestedInpu
+  device?: Prisma.DeviceUpdateOneRequiredWithoutKvStoreNestedInput
 }
 
 export type KVStoreUncheckedUpdateInput = {
@@ -336,9 +336,9 @@ export type KVStoreUncheckedUpdateManyInput = {
 }
 
 export type KVStoreListRelationFilter = {
-  every?: Prisma.KVStoreWhereInpu
-  some?: Prisma.KVStoreWhereInpu
-  none?: Prisma.KVStoreWhereInpu
+  every?: Prisma.KVStoreWhereInput
+  some?: Prisma.KVStoreWhereInput
+  none?: Prisma.KVStoreWhereInput
 }
 
 export type KVStoreOrderByRelationAggregateInput = {
@@ -442,7 +442,7 @@ export type KVStoreUncheckedCreateWithoutDeviceInput = {
 }
 
 export type KVStoreCreateOrConnectWithoutDeviceInput = {
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
   create: Prisma.XOR<Prisma.KVStoreCreateWithoutDeviceInput, Prisma.KVStoreUncheckedCreateWithoutDeviceInput>
 }
 
@@ -452,18 +452,18 @@ export type KVStoreCreateManyDeviceInputEnvelope = {
 }
 
 export type KVStoreUpsertWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
   update: Prisma.XOR<Prisma.KVStoreUpdateWithoutDeviceInput, Prisma.KVStoreUncheckedUpdateWithoutDeviceInput>
   create: Prisma.XOR<Prisma.KVStoreCreateWithoutDeviceInput, Prisma.KVStoreUncheckedCreateWithoutDeviceInput>
 }
 
 export type KVStoreUpdateWithWhereUniqueWithoutDeviceInput = {
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
   data: Prisma.XOR<Prisma.KVStoreUpdateWithoutDeviceInput, Prisma.KVStoreUncheckedUpdateWithoutDeviceInput>
 }
 
 export type KVStoreUpdateManyWithWhereWithoutDeviceInput = {
-  where: Prisma.KVStoreScalarWhereInpu
+  where: Prisma.KVStoreScalarWhereInput
   data: Prisma.XOR<Prisma.KVStoreUpdateManyMutationInput, Prisma.KVStoreUncheckedUpdateManyWithoutDeviceInput>
 }
 
@@ -839,7 +839,7 @@ export interface KVStoreDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Count the number of KVStores
    * const count = await prisma.kVStore.count({
    *   where: {
-   *     // ... the filter for the KVStores we want to coun
+   *     // ... the filter for the KVStores we want to count
    *   }
    * })
   **/
@@ -885,7 +885,7 @@ export interface KVStoreDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * Read more here: https://pris.ly/d/null-undefined
    * @param {KVStoreGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1028,7 +1028,7 @@ export type KVStoreFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter, which KVStore to fetch.
    */
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
 }
 
 /**
@@ -1050,11 +1050,11 @@ export type KVStoreFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which KVStore to fetch.
    */
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
 }
 
 /**
- * KVStore findFirs
+ * KVStore findFirst
  */
 export type KVStoreFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1072,7 +1072,7 @@ export type KVStoreFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Filter, which KVStore to fetch.
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1084,7 +1084,7 @@ export type KVStoreFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    *
    * Sets the position for searching for KVStores.
    */
-  cursor?: Prisma.KVStoreWhereUniqueInpu
+  cursor?: Prisma.KVStoreWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1124,7 +1124,7 @@ export type KVStoreFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter, which KVStore to fetch.
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1136,7 +1136,7 @@ export type KVStoreFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    *
    * Sets the position for searching for KVStores.
    */
-  cursor?: Prisma.KVStoreWhereUniqueInpu
+  cursor?: Prisma.KVStoreWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1176,7 +1176,7 @@ export type KVStoreFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * Filter, which KVStores to fetch.
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1188,7 +1188,7 @@ export type KVStoreFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    *
    * Sets the position for listing KVStores.
    */
-  cursor?: Prisma.KVStoreWhereUniqueInpu
+  cursor?: Prisma.KVStoreWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1283,7 +1283,7 @@ export type KVStoreUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * Choose, which KVStore to update.
    */
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
 }
 
 /**
@@ -1297,7 +1297,7 @@ export type KVStoreUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter which KVStores to update
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * Limit how many KVStores to update.
    */
@@ -1323,7 +1323,7 @@ export type KVStoreUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter which KVStores to update
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * Limit how many KVStores to update.
    */
@@ -1335,7 +1335,7 @@ export type KVStoreUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * KVStore upser
+ * KVStore upsert
  */
 export type KVStoreUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1353,7 +1353,7 @@ export type KVStoreUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * The filter to search for the KVStore to update in case it exists.
    */
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
   /**
    * In case the KVStore found by the `where` argument doesn't exist, create a new KVStore with this data.
    */
@@ -1383,7 +1383,7 @@ export type KVStoreDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * Filter which KVStore to delete.
    */
-  where: Prisma.KVStoreWhereUniqueInpu
+  where: Prisma.KVStoreWhereUniqueInput
 }
 
 /**
@@ -1393,7 +1393,7 @@ export type KVStoreDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter which KVStores to delete
    */
-  where?: Prisma.KVStoreWhereInpu
+  where?: Prisma.KVStoreWhereInput
   /**
    * Limit how many KVStores to delete.
    */

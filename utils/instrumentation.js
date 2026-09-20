@@ -32,7 +32,11 @@ if (process.env.AXIOM_TOKEN && process.env.AXIOM_DATASET) {
         resource: resource,
 
         // Adding auto-instrumentations to automatically collect trace data
-        instrumentations: [getNodeAutoInstrumentations()],
+        instrumentations: [getNodeAutoInstrumentations({
+            '@opentelemetry/instrumentation-http': {
+                ignoreIncomingRequestHook: request => /^\/api\/v2\/npep(?:\/|\?|$)/.test(request.url || ''),
+            },
+        })],
     });
 
     console.log("✅成功加载 Axiom 遥测");

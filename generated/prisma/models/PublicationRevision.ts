@@ -151,7 +151,7 @@ export type PublicationRevisionAggregateArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter which PublicationRevision to aggregate.
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -163,7 +163,7 @@ export type PublicationRevisionAggregateArgs<ExtArgs extends runtime.Types.Exten
    *
    * Sets the start position
    */
-  cursor?: Prisma.PublicationRevisionWhereUniqueInpu
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -220,10 +220,10 @@ export type GetPublicationRevisionAggregateType<T extends PublicationRevisionAgg
 
 
 export type PublicationRevisionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   orderBy?: Prisma.PublicationRevisionOrderByWithAggregationInput | Prisma.PublicationRevisionOrderByWithAggregationInput[]
   by: Prisma.PublicationRevisionScalarFieldEnum[] | Prisma.PublicationRevisionScalarFieldEnum
-  having?: Prisma.PublicationRevisionScalarWhereWithAggregatesInpu
+  having?: Prisma.PublicationRevisionScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: PublicationRevisionCountAggregateInputType | true
@@ -309,15 +309,15 @@ export type PublicationRevisionOrderByWithRelationInput = {
   certifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   purgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  publication?: Prisma.PublicationOrderByWithRelationInpu
-  editor?: Prisma.AccountOrderByWithRelationInpu
-  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInpu
-  certifiedBy?: Prisma.AccountOrderByWithRelationInpu
+  publication?: Prisma.PublicationOrderByWithRelationInput
+  editor?: Prisma.AccountOrderByWithRelationInput
+  screenBinding?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
+  certifiedBy?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type PublicationRevisionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  publicationId_revision?: Prisma.PublicationRevisionPublicationIdRevisionCompoundUniqueInpu
+  publicationId_revision?: Prisma.PublicationRevisionPublicationIdRevisionCompoundUniqueInput
   AND?: Prisma.PublicationRevisionWhereInput | Prisma.PublicationRevisionWhereInput[]
   OR?: Prisma.PublicationRevisionWhereInput[]
   NOT?: Prisma.PublicationRevisionWhereInput | Prisma.PublicationRevisionWhereInput[]
@@ -355,11 +355,11 @@ export type PublicationRevisionOrderByWithAggregationInput = {
   certifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   purgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  _count?: Prisma.PublicationRevisionCountOrderByAggregateInpu
-  _avg?: Prisma.PublicationRevisionAvgOrderByAggregateInpu
-  _max?: Prisma.PublicationRevisionMaxOrderByAggregateInpu
-  _min?: Prisma.PublicationRevisionMinOrderByAggregateInpu
-  _sum?: Prisma.PublicationRevisionSumOrderByAggregateInpu
+  _count?: Prisma.PublicationRevisionCountOrderByAggregateInput
+  _avg?: Prisma.PublicationRevisionAvgOrderByAggregateInput
+  _max?: Prisma.PublicationRevisionMaxOrderByAggregateInput
+  _min?: Prisma.PublicationRevisionMinOrderByAggregateInput
+  _sum?: Prisma.PublicationRevisionSumOrderByAggregateInput
 }
 
 export type PublicationRevisionScalarWhereWithAggregatesInput = {
@@ -393,10 +393,10 @@ export type PublicationRevisionCreateInput = {
   certifiedAt?: Date | string | null
   purgedAt?: Date | string | null
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInpu
-  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInpu
-  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInpu
-  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInput
+  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInput
+  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInput
+  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInput
 }
 
 export type PublicationRevisionUncheckedCreateInput = {
@@ -427,10 +427,10 @@ export type PublicationRevisionUpdateInput = {
   certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInpu
-  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInpu
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInpu
-  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInput
+  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInput
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInput
+  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput
 }
 
 export type PublicationRevisionUncheckedUpdateInput = {
@@ -498,9 +498,9 @@ export type PublicationRevisionUncheckedUpdateManyInput = {
 }
 
 export type PublicationRevisionListRelationFilter = {
-  every?: Prisma.PublicationRevisionWhereInpu
-  some?: Prisma.PublicationRevisionWhereInpu
-  none?: Prisma.PublicationRevisionWhereInpu
+  every?: Prisma.PublicationRevisionWhereInput
+  some?: Prisma.PublicationRevisionWhereInput
+  none?: Prisma.PublicationRevisionWhereInput
 }
 
 export type PublicationRevisionOrderByRelationAggregateInput = {
@@ -754,9 +754,9 @@ export type PublicationRevisionCreateWithoutEditorInput = {
   certifiedAt?: Date | string | null
   purgedAt?: Date | string | null
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInpu
-  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInpu
-  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInput
+  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInput
+  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInput
 }
 
 export type PublicationRevisionUncheckedCreateWithoutEditorInput = {
@@ -776,7 +776,7 @@ export type PublicationRevisionUncheckedCreateWithoutEditorInput = {
 }
 
 export type PublicationRevisionCreateOrConnectWithoutEditorInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutEditorInput, Prisma.PublicationRevisionUncheckedCreateWithoutEditorInput>
 }
 
@@ -796,9 +796,9 @@ export type PublicationRevisionCreateWithoutCertifiedByInput = {
   certifiedAt?: Date | string | null
   purgedAt?: Date | string | null
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInpu
-  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInpu
-  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInput
+  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInput
+  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInput
 }
 
 export type PublicationRevisionUncheckedCreateWithoutCertifiedByInput = {
@@ -818,7 +818,7 @@ export type PublicationRevisionUncheckedCreateWithoutCertifiedByInput = {
 }
 
 export type PublicationRevisionCreateOrConnectWithoutCertifiedByInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutCertifiedByInput, Prisma.PublicationRevisionUncheckedCreateWithoutCertifiedByInput>
 }
 
@@ -828,18 +828,18 @@ export type PublicationRevisionCreateManyCertifiedByInputEnvelope = {
 }
 
 export type PublicationRevisionUpsertWithWhereUniqueWithoutEditorInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutEditorInput, Prisma.PublicationRevisionUncheckedUpdateWithoutEditorInput>
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutEditorInput, Prisma.PublicationRevisionUncheckedCreateWithoutEditorInput>
 }
 
 export type PublicationRevisionUpdateWithWhereUniqueWithoutEditorInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutEditorInput, Prisma.PublicationRevisionUncheckedUpdateWithoutEditorInput>
 }
 
 export type PublicationRevisionUpdateManyWithWhereWithoutEditorInput = {
-  where: Prisma.PublicationRevisionScalarWhereInpu
+  where: Prisma.PublicationRevisionScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateManyMutationInput, Prisma.PublicationRevisionUncheckedUpdateManyWithoutEditorInput>
 }
 
@@ -864,18 +864,18 @@ export type PublicationRevisionScalarWhereInput = {
 }
 
 export type PublicationRevisionUpsertWithWhereUniqueWithoutCertifiedByInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutCertifiedByInput, Prisma.PublicationRevisionUncheckedUpdateWithoutCertifiedByInput>
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutCertifiedByInput, Prisma.PublicationRevisionUncheckedCreateWithoutCertifiedByInput>
 }
 
 export type PublicationRevisionUpdateWithWhereUniqueWithoutCertifiedByInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutCertifiedByInput, Prisma.PublicationRevisionUncheckedUpdateWithoutCertifiedByInput>
 }
 
 export type PublicationRevisionUpdateManyWithWhereWithoutCertifiedByInput = {
-  where: Prisma.PublicationRevisionScalarWhereInpu
+  where: Prisma.PublicationRevisionScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateManyMutationInput, Prisma.PublicationRevisionUncheckedUpdateManyWithoutCertifiedByInput>
 }
 
@@ -890,9 +890,9 @@ export type PublicationRevisionCreateWithoutPublicationInput = {
   certifiedAt?: Date | string | null
   purgedAt?: Date | string | null
   createdAt?: Date | string
-  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInpu
-  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInpu
-  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInpu
+  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInput
+  screenBinding?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutPublicationRevisionsInput
+  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInput
 }
 
 export type PublicationRevisionUncheckedCreateWithoutPublicationInput = {
@@ -912,7 +912,7 @@ export type PublicationRevisionUncheckedCreateWithoutPublicationInput = {
 }
 
 export type PublicationRevisionCreateOrConnectWithoutPublicationInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutPublicationInput, Prisma.PublicationRevisionUncheckedCreateWithoutPublicationInput>
 }
 
@@ -922,18 +922,18 @@ export type PublicationRevisionCreateManyPublicationInputEnvelope = {
 }
 
 export type PublicationRevisionUpsertWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutPublicationInput, Prisma.PublicationRevisionUncheckedUpdateWithoutPublicationInput>
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutPublicationInput, Prisma.PublicationRevisionUncheckedCreateWithoutPublicationInput>
 }
 
 export type PublicationRevisionUpdateWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutPublicationInput, Prisma.PublicationRevisionUncheckedUpdateWithoutPublicationInput>
 }
 
 export type PublicationRevisionUpdateManyWithWhereWithoutPublicationInput = {
-  where: Prisma.PublicationRevisionScalarWhereInpu
+  where: Prisma.PublicationRevisionScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateManyMutationInput, Prisma.PublicationRevisionUncheckedUpdateManyWithoutPublicationInput>
 }
 
@@ -948,9 +948,9 @@ export type PublicationRevisionCreateWithoutScreenBindingInput = {
   certifiedAt?: Date | string | null
   purgedAt?: Date | string | null
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInpu
-  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInpu
-  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutRevisionsInput
+  editor?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionEditsInput
+  certifiedBy?: Prisma.AccountCreateNestedOneWithoutPublicationRevisionCertificationsInput
 }
 
 export type PublicationRevisionUncheckedCreateWithoutScreenBindingInput = {
@@ -970,7 +970,7 @@ export type PublicationRevisionUncheckedCreateWithoutScreenBindingInput = {
 }
 
 export type PublicationRevisionCreateOrConnectWithoutScreenBindingInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutScreenBindingInput, Prisma.PublicationRevisionUncheckedCreateWithoutScreenBindingInput>
 }
 
@@ -980,18 +980,18 @@ export type PublicationRevisionCreateManyScreenBindingInputEnvelope = {
 }
 
 export type PublicationRevisionUpsertWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutScreenBindingInput, Prisma.PublicationRevisionUncheckedUpdateWithoutScreenBindingInput>
   create: Prisma.XOR<Prisma.PublicationRevisionCreateWithoutScreenBindingInput, Prisma.PublicationRevisionUncheckedCreateWithoutScreenBindingInput>
 }
 
 export type PublicationRevisionUpdateWithWhereUniqueWithoutScreenBindingInput = {
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateWithoutScreenBindingInput, Prisma.PublicationRevisionUncheckedUpdateWithoutScreenBindingInput>
 }
 
 export type PublicationRevisionUpdateManyWithWhereWithoutScreenBindingInput = {
-  where: Prisma.PublicationRevisionScalarWhereInpu
+  where: Prisma.PublicationRevisionScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationRevisionUpdateManyMutationInput, Prisma.PublicationRevisionUncheckedUpdateManyWithoutScreenBindingInput>
 }
 
@@ -1038,9 +1038,9 @@ export type PublicationRevisionUpdateWithoutEditorInput = {
   certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInpu
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInpu
-  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInput
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInput
+  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput
 }
 
 export type PublicationRevisionUncheckedUpdateWithoutEditorInput = {
@@ -1086,9 +1086,9 @@ export type PublicationRevisionUpdateWithoutCertifiedByInput = {
   certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInpu
-  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInpu
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInput
+  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInput
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInput
 }
 
 export type PublicationRevisionUncheckedUpdateWithoutCertifiedByInput = {
@@ -1150,9 +1150,9 @@ export type PublicationRevisionUpdateWithoutPublicationInput = {
   certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInpu
-  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInpu
-  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInpu
+  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInput
+  screenBinding?: Prisma.ClassroomScreenBindingUpdateOneWithoutPublicationRevisionsNestedInput
+  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput
 }
 
 export type PublicationRevisionUncheckedUpdateWithoutPublicationInput = {
@@ -1214,9 +1214,9 @@ export type PublicationRevisionUpdateWithoutScreenBindingInput = {
   certifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInpu
-  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInpu
-  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutRevisionsNestedInput
+  editor?: Prisma.AccountUpdateOneWithoutPublicationRevisionEditsNestedInput
+  certifiedBy?: Prisma.AccountUpdateOneWithoutPublicationRevisionCertificationsNestedInput
 }
 
 export type PublicationRevisionUncheckedUpdateWithoutScreenBindingInput = {
@@ -1640,7 +1640,7 @@ export interface PublicationRevisionDelegate<ExtArgs extends runtime.Types.Exten
    * // Count the number of PublicationRevisions
    * const count = await prisma.publicationRevision.count({
    *   where: {
-   *     // ... the filter for the PublicationRevisions we want to coun
+   *     // ... the filter for the PublicationRevisions we want to count
    *   }
    * })
   **/
@@ -1686,7 +1686,7 @@ export interface PublicationRevisionDelegate<ExtArgs extends runtime.Types.Exten
    * Read more here: https://pris.ly/d/null-undefined
    * @param {PublicationRevisionGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1840,7 +1840,7 @@ export type PublicationRevisionFindUniqueArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which PublicationRevision to fetch.
    */
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
 }
 
 /**
@@ -1862,11 +1862,11 @@ export type PublicationRevisionFindUniqueOrThrowArgs<ExtArgs extends runtime.Typ
   /**
    * Filter, which PublicationRevision to fetch.
    */
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
 }
 
 /**
- * PublicationRevision findFirs
+ * PublicationRevision findFirst
  */
 export type PublicationRevisionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1884,7 +1884,7 @@ export type PublicationRevisionFindFirstArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which PublicationRevision to fetch.
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1896,7 +1896,7 @@ export type PublicationRevisionFindFirstArgs<ExtArgs extends runtime.Types.Exten
    *
    * Sets the position for searching for PublicationRevisions.
    */
-  cursor?: Prisma.PublicationRevisionWhereUniqueInpu
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1936,7 +1936,7 @@ export type PublicationRevisionFindFirstOrThrowArgs<ExtArgs extends runtime.Type
   /**
    * Filter, which PublicationRevision to fetch.
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1948,7 +1948,7 @@ export type PublicationRevisionFindFirstOrThrowArgs<ExtArgs extends runtime.Type
    *
    * Sets the position for searching for PublicationRevisions.
    */
-  cursor?: Prisma.PublicationRevisionWhereUniqueInpu
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1988,7 +1988,7 @@ export type PublicationRevisionFindManyArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which PublicationRevisions to fetch.
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -2000,7 +2000,7 @@ export type PublicationRevisionFindManyArgs<ExtArgs extends runtime.Types.Extens
    *
    * Sets the position for listing PublicationRevisions.
    */
-  cursor?: Prisma.PublicationRevisionWhereUniqueInpu
+  cursor?: Prisma.PublicationRevisionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -2095,7 +2095,7 @@ export type PublicationRevisionUpdateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Choose, which PublicationRevision to update.
    */
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
 }
 
 /**
@@ -2109,7 +2109,7 @@ export type PublicationRevisionUpdateManyArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter which PublicationRevisions to update
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * Limit how many PublicationRevisions to update.
    */
@@ -2135,7 +2135,7 @@ export type PublicationRevisionUpdateManyAndReturnArgs<ExtArgs extends runtime.T
   /**
    * Filter which PublicationRevisions to update
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * Limit how many PublicationRevisions to update.
    */
@@ -2147,7 +2147,7 @@ export type PublicationRevisionUpdateManyAndReturnArgs<ExtArgs extends runtime.T
 }
 
 /**
- * PublicationRevision upser
+ * PublicationRevision upsert
  */
 export type PublicationRevisionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -2165,7 +2165,7 @@ export type PublicationRevisionUpsertArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * The filter to search for the PublicationRevision to update in case it exists.
    */
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
   /**
    * In case the PublicationRevision found by the `where` argument doesn't exist, create a new PublicationRevision with this data.
    */
@@ -2195,7 +2195,7 @@ export type PublicationRevisionDeleteArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter which PublicationRevision to delete.
    */
-  where: Prisma.PublicationRevisionWhereUniqueInpu
+  where: Prisma.PublicationRevisionWhereUniqueInput
 }
 
 /**
@@ -2205,7 +2205,7 @@ export type PublicationRevisionDeleteManyArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter which PublicationRevisions to delete
    */
-  where?: Prisma.PublicationRevisionWhereInpu
+  where?: Prisma.PublicationRevisionWhereInput
   /**
    * Limit how many PublicationRevisions to delete.
    */
@@ -2217,18 +2217,18 @@ export type PublicationRevisionDeleteManyArgs<ExtArgs extends runtime.Types.Exte
  */
 export type PublicationRevision$editorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Accoun
+   * Select specific fields to fetch from the Account
    */
   select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Accoun
+   * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
-  where?: Prisma.AccountWhereInpu
+  where?: Prisma.AccountWhereInput
 }
 
 /**
@@ -2247,7 +2247,7 @@ export type PublicationRevision$screenBindingArgs<ExtArgs extends runtime.Types.
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassroomScreenBindingInclude<ExtArgs> | null
-  where?: Prisma.ClassroomScreenBindingWhereInpu
+  where?: Prisma.ClassroomScreenBindingWhereInput
 }
 
 /**
@@ -2255,18 +2255,18 @@ export type PublicationRevision$screenBindingArgs<ExtArgs extends runtime.Types.
  */
 export type PublicationRevision$certifiedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Accoun
+   * Select specific fields to fetch from the Account
    */
   select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Accoun
+   * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
-  where?: Prisma.AccountWhereInpu
+  where?: Prisma.AccountWhereInput
 }
 
 /**

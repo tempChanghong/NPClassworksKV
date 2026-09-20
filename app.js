@@ -17,6 +17,7 @@ import academicMeRouter from "./routes/v2/academic-me.js";
 import publicationsRouter from "./routes/v2/publications.js";
 import classroomScreensRouter from "./routes/v2/classroom-screens.js";
 import setupRouter from "./routes/v2/setup.js";
+import npepRouter from "./routes/v2/npep.js";
 import {register, httpMetrics} from "./utils/metrics.js";
 import {prisma} from "./utils/prisma.js";
 import cors from "cors";
@@ -42,6 +43,8 @@ const __dirname = dirname(__filename);
 // view engine setup
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
+// NPEP has stricter parsing and deliberately bypasses generic access/error logs.
+app.use("/api/v2/npep", npepRouter);
 app.use(bodyParser.urlencoded({extended: true}));
 // 组织与教师批量配置会携带较大的 JSON 文档；保留明确上限，避免使用 Express 默认的 100 KB。
 app.use(bodyParser.json({limit: "2mb"}));

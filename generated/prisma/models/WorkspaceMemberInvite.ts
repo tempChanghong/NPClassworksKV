@@ -110,7 +110,7 @@ export type WorkspaceMemberInviteAggregateArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter which WorkspaceMemberInvite to aggregate.
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -122,7 +122,7 @@ export type WorkspaceMemberInviteAggregateArgs<ExtArgs extends runtime.Types.Ext
    *
    * Sets the start position
    */
-  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -167,10 +167,10 @@ export type GetWorkspaceMemberInviteAggregateType<T extends WorkspaceMemberInvit
 
 
 export type WorkspaceMemberInviteGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   orderBy?: Prisma.WorkspaceMemberInviteOrderByWithAggregationInput | Prisma.WorkspaceMemberInviteOrderByWithAggregationInput[]
   by: Prisma.WorkspaceMemberInviteScalarFieldEnum[] | Prisma.WorkspaceMemberInviteScalarFieldEnum
-  having?: Prisma.WorkspaceMemberInviteScalarWhereWithAggregatesInpu
+  having?: Prisma.WorkspaceMemberInviteScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: WorkspaceMemberInviteCountAggregateInputType | true
@@ -237,12 +237,12 @@ export type WorkspaceMemberInviteOrderByWithRelationInput = {
   claimedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  workspace?: Prisma.WorkspaceOrderByWithRelationInpu
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type WorkspaceMemberInviteWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  workspaceId_normalizedEmail?: Prisma.WorkspaceMemberInviteWorkspaceIdNormalizedEmailCompoundUniqueInpu
+  workspaceId_normalizedEmail?: Prisma.WorkspaceMemberInviteWorkspaceIdNormalizedEmailCompoundUniqueInput
   AND?: Prisma.WorkspaceMemberInviteWhereInput | Prisma.WorkspaceMemberInviteWhereInput[]
   OR?: Prisma.WorkspaceMemberInviteWhereInput[]
   NOT?: Prisma.WorkspaceMemberInviteWhereInput | Prisma.WorkspaceMemberInviteWhereInput[]
@@ -269,9 +269,9 @@ export type WorkspaceMemberInviteOrderByWithAggregationInput = {
   claimedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.WorkspaceMemberInviteCountOrderByAggregateInpu
-  _max?: Prisma.WorkspaceMemberInviteMaxOrderByAggregateInpu
-  _min?: Prisma.WorkspaceMemberInviteMinOrderByAggregateInpu
+  _count?: Prisma.WorkspaceMemberInviteCountOrderByAggregateInput
+  _max?: Prisma.WorkspaceMemberInviteMaxOrderByAggregateInput
+  _min?: Prisma.WorkspaceMemberInviteMinOrderByAggregateInput
 }
 
 export type WorkspaceMemberInviteScalarWhereWithAggregatesInput = {
@@ -300,7 +300,7 @@ export type WorkspaceMemberInviteCreateInput = {
   claimedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutPendingInvitationsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutPendingInvitationsInput
 }
 
 export type WorkspaceMemberInviteUncheckedCreateInput = {
@@ -326,7 +326,7 @@ export type WorkspaceMemberInviteUpdateInput = {
   claimedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPendingInvitationsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPendingInvitationsNestedInput
 }
 
 export type WorkspaceMemberInviteUncheckedUpdateInput = {
@@ -381,9 +381,9 @@ export type WorkspaceMemberInviteUncheckedUpdateManyInput = {
 }
 
 export type WorkspaceMemberInviteListRelationFilter = {
-  every?: Prisma.WorkspaceMemberInviteWhereInpu
-  some?: Prisma.WorkspaceMemberInviteWhereInpu
-  none?: Prisma.WorkspaceMemberInviteWhereInpu
+  every?: Prisma.WorkspaceMemberInviteWhereInput
+  some?: Prisma.WorkspaceMemberInviteWhereInput
+  none?: Prisma.WorkspaceMemberInviteWhereInput
 }
 
 export type WorkspaceMemberInviteOrderByRelationAggregateInput = {
@@ -501,7 +501,7 @@ export type WorkspaceMemberInviteUncheckedCreateWithoutWorkspaceInput = {
 }
 
 export type WorkspaceMemberInviteCreateOrConnectWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
   create: Prisma.XOR<Prisma.WorkspaceMemberInviteCreateWithoutWorkspaceInput, Prisma.WorkspaceMemberInviteUncheckedCreateWithoutWorkspaceInput>
 }
 
@@ -511,18 +511,18 @@ export type WorkspaceMemberInviteCreateManyWorkspaceInputEnvelope = {
 }
 
 export type WorkspaceMemberInviteUpsertWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
   update: Prisma.XOR<Prisma.WorkspaceMemberInviteUpdateWithoutWorkspaceInput, Prisma.WorkspaceMemberInviteUncheckedUpdateWithoutWorkspaceInput>
   create: Prisma.XOR<Prisma.WorkspaceMemberInviteCreateWithoutWorkspaceInput, Prisma.WorkspaceMemberInviteUncheckedCreateWithoutWorkspaceInput>
 }
 
 export type WorkspaceMemberInviteUpdateWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
   data: Prisma.XOR<Prisma.WorkspaceMemberInviteUpdateWithoutWorkspaceInput, Prisma.WorkspaceMemberInviteUncheckedUpdateWithoutWorkspaceInput>
 }
 
 export type WorkspaceMemberInviteUpdateManyWithWhereWithoutWorkspaceInput = {
-  where: Prisma.WorkspaceMemberInviteScalarWhereInpu
+  where: Prisma.WorkspaceMemberInviteScalarWhereInput
   data: Prisma.XOR<Prisma.WorkspaceMemberInviteUpdateManyMutationInput, Prisma.WorkspaceMemberInviteUncheckedUpdateManyWithoutWorkspaceInput>
 }
 
@@ -938,7 +938,7 @@ export interface WorkspaceMemberInviteDelegate<ExtArgs extends runtime.Types.Ext
    * // Count the number of WorkspaceMemberInvites
    * const count = await prisma.workspaceMemberInvite.count({
    *   where: {
-   *     // ... the filter for the WorkspaceMemberInvites we want to coun
+   *     // ... the filter for the WorkspaceMemberInvites we want to count
    *   }
    * })
   **/
@@ -984,7 +984,7 @@ export interface WorkspaceMemberInviteDelegate<ExtArgs extends runtime.Types.Ext
    * Read more here: https://pris.ly/d/null-undefined
    * @param {WorkspaceMemberInviteGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1131,7 +1131,7 @@ export type WorkspaceMemberInviteFindUniqueArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which WorkspaceMemberInvite to fetch.
    */
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
 }
 
 /**
@@ -1153,11 +1153,11 @@ export type WorkspaceMemberInviteFindUniqueOrThrowArgs<ExtArgs extends runtime.T
   /**
    * Filter, which WorkspaceMemberInvite to fetch.
    */
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
 }
 
 /**
- * WorkspaceMemberInvite findFirs
+ * WorkspaceMemberInvite findFirst
  */
 export type WorkspaceMemberInviteFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1175,7 +1175,7 @@ export type WorkspaceMemberInviteFindFirstArgs<ExtArgs extends runtime.Types.Ext
   /**
    * Filter, which WorkspaceMemberInvite to fetch.
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1187,7 +1187,7 @@ export type WorkspaceMemberInviteFindFirstArgs<ExtArgs extends runtime.Types.Ext
    *
    * Sets the position for searching for WorkspaceMemberInvites.
    */
-  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1227,7 +1227,7 @@ export type WorkspaceMemberInviteFindFirstOrThrowArgs<ExtArgs extends runtime.Ty
   /**
    * Filter, which WorkspaceMemberInvite to fetch.
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1239,7 +1239,7 @@ export type WorkspaceMemberInviteFindFirstOrThrowArgs<ExtArgs extends runtime.Ty
    *
    * Sets the position for searching for WorkspaceMemberInvites.
    */
-  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1279,7 +1279,7 @@ export type WorkspaceMemberInviteFindManyArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which WorkspaceMemberInvites to fetch.
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1291,7 +1291,7 @@ export type WorkspaceMemberInviteFindManyArgs<ExtArgs extends runtime.Types.Exte
    *
    * Sets the position for listing WorkspaceMemberInvites.
    */
-  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  cursor?: Prisma.WorkspaceMemberInviteWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1386,7 +1386,7 @@ export type WorkspaceMemberInviteUpdateArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Choose, which WorkspaceMemberInvite to update.
    */
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
 }
 
 /**
@@ -1400,7 +1400,7 @@ export type WorkspaceMemberInviteUpdateManyArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which WorkspaceMemberInvites to update
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * Limit how many WorkspaceMemberInvites to update.
    */
@@ -1426,7 +1426,7 @@ export type WorkspaceMemberInviteUpdateManyAndReturnArgs<ExtArgs extends runtime
   /**
    * Filter which WorkspaceMemberInvites to update
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * Limit how many WorkspaceMemberInvites to update.
    */
@@ -1438,7 +1438,7 @@ export type WorkspaceMemberInviteUpdateManyAndReturnArgs<ExtArgs extends runtime
 }
 
 /**
- * WorkspaceMemberInvite upser
+ * WorkspaceMemberInvite upsert
  */
 export type WorkspaceMemberInviteUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1456,7 +1456,7 @@ export type WorkspaceMemberInviteUpsertArgs<ExtArgs extends runtime.Types.Extens
   /**
    * The filter to search for the WorkspaceMemberInvite to update in case it exists.
    */
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
   /**
    * In case the WorkspaceMemberInvite found by the `where` argument doesn't exist, create a new WorkspaceMemberInvite with this data.
    */
@@ -1486,7 +1486,7 @@ export type WorkspaceMemberInviteDeleteArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which WorkspaceMemberInvite to delete.
    */
-  where: Prisma.WorkspaceMemberInviteWhereUniqueInpu
+  where: Prisma.WorkspaceMemberInviteWhereUniqueInput
 }
 
 /**
@@ -1496,7 +1496,7 @@ export type WorkspaceMemberInviteDeleteManyArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which WorkspaceMemberInvites to delete
    */
-  where?: Prisma.WorkspaceMemberInviteWhereInpu
+  where?: Prisma.WorkspaceMemberInviteWhereInput
   /**
    * Limit how many WorkspaceMemberInvites to delete.
    */

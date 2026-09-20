@@ -13,7 +13,7 @@ import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
- * Model PublicationTarge
+ * Model PublicationTarget
  *
  */
 export type PublicationTargetModel = runtime.Types.Result.DefaultSelection<Prisma.$PublicationTargetPayload>
@@ -67,7 +67,7 @@ export type PublicationTargetAggregateArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter which PublicationTarget to aggregate.
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -79,7 +79,7 @@ export type PublicationTargetAggregateArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the start position
    */
-  cursor?: Prisma.PublicationTargetWhereUniqueInpu
+  cursor?: Prisma.PublicationTargetWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -124,10 +124,10 @@ export type GetPublicationTargetAggregateType<T extends PublicationTargetAggrega
 
 
 export type PublicationTargetGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   orderBy?: Prisma.PublicationTargetOrderByWithAggregationInput | Prisma.PublicationTargetOrderByWithAggregationInput[]
   by: Prisma.PublicationTargetScalarFieldEnum[] | Prisma.PublicationTargetScalarFieldEnum
-  having?: Prisma.PublicationTargetScalarWhereWithAggregatesInpu
+  having?: Prisma.PublicationTargetScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: PublicationTargetCountAggregateInputType | true
@@ -174,12 +174,12 @@ export type PublicationTargetOrderByWithRelationInput = {
   publicationId?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  publication?: Prisma.PublicationOrderByWithRelationInpu
-  workspace?: Prisma.WorkspaceOrderByWithRelationInpu
+  publication?: Prisma.PublicationOrderByWithRelationInput
+  workspace?: Prisma.WorkspaceOrderByWithRelationInput
 }
 
 export type PublicationTargetWhereUniqueInput = Prisma.AtLeast<{
-  publicationId_workspaceId?: Prisma.PublicationTargetPublicationIdWorkspaceIdCompoundUniqueInpu
+  publicationId_workspaceId?: Prisma.PublicationTargetPublicationIdWorkspaceIdCompoundUniqueInput
   AND?: Prisma.PublicationTargetWhereInput | Prisma.PublicationTargetWhereInput[]
   OR?: Prisma.PublicationTargetWhereInput[]
   NOT?: Prisma.PublicationTargetWhereInput | Prisma.PublicationTargetWhereInput[]
@@ -194,9 +194,9 @@ export type PublicationTargetOrderByWithAggregationInput = {
   publicationId?: Prisma.SortOrder
   workspaceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  _count?: Prisma.PublicationTargetCountOrderByAggregateInpu
-  _max?: Prisma.PublicationTargetMaxOrderByAggregateInpu
-  _min?: Prisma.PublicationTargetMinOrderByAggregateInpu
+  _count?: Prisma.PublicationTargetCountOrderByAggregateInput
+  _max?: Prisma.PublicationTargetMaxOrderByAggregateInput
+  _min?: Prisma.PublicationTargetMinOrderByAggregateInput
 }
 
 export type PublicationTargetScalarWhereWithAggregatesInput = {
@@ -210,8 +210,8 @@ export type PublicationTargetScalarWhereWithAggregatesInput = {
 
 export type PublicationTargetCreateInput = {
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutTargetsInpu
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutPublicationTargetsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutTargetsInput
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutPublicationTargetsInput
 }
 
 export type PublicationTargetUncheckedCreateInput = {
@@ -222,8 +222,8 @@ export type PublicationTargetUncheckedCreateInput = {
 
 export type PublicationTargetUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutTargetsNestedInpu
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPublicationTargetsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutTargetsNestedInput
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPublicationTargetsNestedInput
 }
 
 export type PublicationTargetUncheckedUpdateInput = {
@@ -249,9 +249,9 @@ export type PublicationTargetUncheckedUpdateManyInput = {
 }
 
 export type PublicationTargetListRelationFilter = {
-  every?: Prisma.PublicationTargetWhereInpu
-  some?: Prisma.PublicationTargetWhereInpu
-  none?: Prisma.PublicationTargetWhereInpu
+  every?: Prisma.PublicationTargetWhereInput
+  some?: Prisma.PublicationTargetWhereInput
+  none?: Prisma.PublicationTargetWhereInput
 }
 
 export type PublicationTargetOrderByRelationAggregateInput = {
@@ -367,7 +367,7 @@ export type PublicationTargetUncheckedUpdateManyWithoutPublicationNestedInput = 
 
 export type PublicationTargetCreateWithoutWorkspaceInput = {
   createdAt?: Date | string
-  publication: Prisma.PublicationCreateNestedOneWithoutTargetsInpu
+  publication: Prisma.PublicationCreateNestedOneWithoutTargetsInput
 }
 
 export type PublicationTargetUncheckedCreateWithoutWorkspaceInput = {
@@ -376,7 +376,7 @@ export type PublicationTargetUncheckedCreateWithoutWorkspaceInput = {
 }
 
 export type PublicationTargetCreateOrConnectWithoutWorkspaceInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationTargetCreateWithoutWorkspaceInput, Prisma.PublicationTargetUncheckedCreateWithoutWorkspaceInput>
 }
 
@@ -386,18 +386,18 @@ export type PublicationTargetCreateManyWorkspaceInputEnvelope = {
 }
 
 export type PublicationTargetUpsertWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationTargetUpdateWithoutWorkspaceInput, Prisma.PublicationTargetUncheckedUpdateWithoutWorkspaceInput>
   create: Prisma.XOR<Prisma.PublicationTargetCreateWithoutWorkspaceInput, Prisma.PublicationTargetUncheckedCreateWithoutWorkspaceInput>
 }
 
 export type PublicationTargetUpdateWithWhereUniqueWithoutWorkspaceInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationTargetUpdateWithoutWorkspaceInput, Prisma.PublicationTargetUncheckedUpdateWithoutWorkspaceInput>
 }
 
 export type PublicationTargetUpdateManyWithWhereWithoutWorkspaceInput = {
-  where: Prisma.PublicationTargetScalarWhereInpu
+  where: Prisma.PublicationTargetScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationTargetUpdateManyMutationInput, Prisma.PublicationTargetUncheckedUpdateManyWithoutWorkspaceInput>
 }
 
@@ -412,7 +412,7 @@ export type PublicationTargetScalarWhereInput = {
 
 export type PublicationTargetCreateWithoutPublicationInput = {
   createdAt?: Date | string
-  workspace: Prisma.WorkspaceCreateNestedOneWithoutPublicationTargetsInpu
+  workspace: Prisma.WorkspaceCreateNestedOneWithoutPublicationTargetsInput
 }
 
 export type PublicationTargetUncheckedCreateWithoutPublicationInput = {
@@ -421,7 +421,7 @@ export type PublicationTargetUncheckedCreateWithoutPublicationInput = {
 }
 
 export type PublicationTargetCreateOrConnectWithoutPublicationInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   create: Prisma.XOR<Prisma.PublicationTargetCreateWithoutPublicationInput, Prisma.PublicationTargetUncheckedCreateWithoutPublicationInput>
 }
 
@@ -431,18 +431,18 @@ export type PublicationTargetCreateManyPublicationInputEnvelope = {
 }
 
 export type PublicationTargetUpsertWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   update: Prisma.XOR<Prisma.PublicationTargetUpdateWithoutPublicationInput, Prisma.PublicationTargetUncheckedUpdateWithoutPublicationInput>
   create: Prisma.XOR<Prisma.PublicationTargetCreateWithoutPublicationInput, Prisma.PublicationTargetUncheckedCreateWithoutPublicationInput>
 }
 
 export type PublicationTargetUpdateWithWhereUniqueWithoutPublicationInput = {
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   data: Prisma.XOR<Prisma.PublicationTargetUpdateWithoutPublicationInput, Prisma.PublicationTargetUncheckedUpdateWithoutPublicationInput>
 }
 
 export type PublicationTargetUpdateManyWithWhereWithoutPublicationInput = {
-  where: Prisma.PublicationTargetScalarWhereInpu
+  where: Prisma.PublicationTargetScalarWhereInput
   data: Prisma.XOR<Prisma.PublicationTargetUpdateManyMutationInput, Prisma.PublicationTargetUncheckedUpdateManyWithoutPublicationInput>
 }
 
@@ -453,7 +453,7 @@ export type PublicationTargetCreateManyWorkspaceInput = {
 
 export type PublicationTargetUpdateWithoutWorkspaceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  publication?: Prisma.PublicationUpdateOneRequiredWithoutTargetsNestedInpu
+  publication?: Prisma.PublicationUpdateOneRequiredWithoutTargetsNestedInput
 }
 
 export type PublicationTargetUncheckedUpdateWithoutWorkspaceInput = {
@@ -473,7 +473,7 @@ export type PublicationTargetCreateManyPublicationInput = {
 
 export type PublicationTargetUpdateWithoutPublicationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPublicationTargetsNestedInpu
+  workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutPublicationTargetsNestedInput
 }
 
 export type PublicationTargetUncheckedUpdateWithoutPublicationInput = {
@@ -557,9 +557,9 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PublicationTarget'], meta: { name: 'PublicationTarget' } }
   /**
    * Find zero or one PublicationTarget that matches the filter.
-   * @param {PublicationTargetFindUniqueArgs} args - Arguments to find a PublicationTarge
+   * @param {PublicationTargetFindUniqueArgs} args - Arguments to find a PublicationTarget
    * @example
-   * // Get one PublicationTarge
+   * // Get one PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.findUnique({
    *   where: {
    *     // ... provide filter here
@@ -571,9 +571,9 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
   /**
    * Find one PublicationTarget that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {PublicationTargetFindUniqueOrThrowArgs} args - Arguments to find a PublicationTarge
+   * @param {PublicationTargetFindUniqueOrThrowArgs} args - Arguments to find a PublicationTarget
    * @example
-   * // Get one PublicationTarge
+   * // Get one PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -586,9 +586,9 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Find the first PublicationTarget that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {PublicationTargetFindFirstArgs} args - Arguments to find a PublicationTarge
+   * @param {PublicationTargetFindFirstArgs} args - Arguments to find a PublicationTarget
    * @example
-   * // Get one PublicationTarge
+   * // Get one PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.findFirst({
    *   where: {
    *     // ... provide filter here
@@ -602,9 +602,9 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {PublicationTargetFindFirstOrThrowArgs} args - Arguments to find a PublicationTarge
+   * @param {PublicationTargetFindFirstOrThrowArgs} args - Arguments to find a PublicationTarget
    * @example
-   * // Get one PublicationTarge
+   * // Get one PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
@@ -635,10 +635,10 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Create a PublicationTarget.
    * @param {PublicationTargetCreateArgs} args - Arguments to create a PublicationTarget.
    * @example
-   * // Create one PublicationTarge
+   * // Create one PublicationTarget
    * const PublicationTarget = await prisma.publicationTarget.create({
    *   data: {
-   *     // ... data to create a PublicationTarge
+   *     // ... data to create a PublicationTarget
    *   }
    * })
    *
@@ -687,10 +687,10 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Delete a PublicationTarget.
    * @param {PublicationTargetDeleteArgs} args - Arguments to delete one PublicationTarget.
    * @example
-   * // Delete one PublicationTarge
+   * // Delete one PublicationTarget
    * const PublicationTarget = await prisma.publicationTarget.delete({
    *   where: {
-   *     // ... filter to delete one PublicationTarge
+   *     // ... filter to delete one PublicationTarget
    *   }
    * })
    *
@@ -701,7 +701,7 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Update one PublicationTarget.
    * @param {PublicationTargetUpdateArgs} args - Arguments to update one PublicationTarget.
    * @example
-   * // Update one PublicationTarge
+   * // Update one PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.update({
    *   where: {
    *     // ... provide filter here
@@ -781,10 +781,10 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Create or update one PublicationTarget.
    * @param {PublicationTargetUpsertArgs} args - Arguments to update or create a PublicationTarget.
    * @example
-   * // Update or create a PublicationTarge
+   * // Update or create a PublicationTarget
    * const publicationTarget = await prisma.publicationTarget.upsert({
    *   create: {
-   *     // ... data to create a PublicationTarge
+   *     // ... data to create a PublicationTarget
    *   },
    *   update: {
    *     // ... in case it already exists, update
@@ -806,7 +806,7 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * // Count the number of PublicationTargets
    * const count = await prisma.publicationTarget.count({
    *   where: {
-   *     // ... the filter for the PublicationTargets we want to coun
+   *     // ... the filter for the PublicationTargets we want to count
    *   }
    * })
   **/
@@ -852,7 +852,7 @@ export interface PublicationTargetDelegate<ExtArgs extends runtime.Types.Extensi
    * Read more here: https://pris.ly/d/null-undefined
    * @param {PublicationTargetGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -979,11 +979,11 @@ export interface PublicationTargetFieldRefs {
  */
 export type PublicationTargetFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -993,7 +993,7 @@ export type PublicationTargetFindUniqueArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter, which PublicationTarget to fetch.
    */
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
 }
 
 /**
@@ -1001,11 +1001,11 @@ export type PublicationTargetFindUniqueArgs<ExtArgs extends runtime.Types.Extens
  */
 export type PublicationTargetFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1015,19 +1015,19 @@ export type PublicationTargetFindUniqueOrThrowArgs<ExtArgs extends runtime.Types
   /**
    * Filter, which PublicationTarget to fetch.
    */
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
 }
 
 /**
- * PublicationTarget findFirs
+ * PublicationTarget findFirst
  */
 export type PublicationTargetFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1037,7 +1037,7 @@ export type PublicationTargetFindFirstArgs<ExtArgs extends runtime.Types.Extensi
   /**
    * Filter, which PublicationTarget to fetch.
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1049,7 +1049,7 @@ export type PublicationTargetFindFirstArgs<ExtArgs extends runtime.Types.Extensi
    *
    * Sets the position for searching for PublicationTargets.
    */
-  cursor?: Prisma.PublicationTargetWhereUniqueInpu
+  cursor?: Prisma.PublicationTargetWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1075,11 +1075,11 @@ export type PublicationTargetFindFirstArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type PublicationTargetFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1089,7 +1089,7 @@ export type PublicationTargetFindFirstOrThrowArgs<ExtArgs extends runtime.Types.
   /**
    * Filter, which PublicationTarget to fetch.
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1101,7 +1101,7 @@ export type PublicationTargetFindFirstOrThrowArgs<ExtArgs extends runtime.Types.
    *
    * Sets the position for searching for PublicationTargets.
    */
-  cursor?: Prisma.PublicationTargetWhereUniqueInpu
+  cursor?: Prisma.PublicationTargetWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1127,11 +1127,11 @@ export type PublicationTargetFindFirstOrThrowArgs<ExtArgs extends runtime.Types.
  */
 export type PublicationTargetFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1141,7 +1141,7 @@ export type PublicationTargetFindManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which PublicationTargets to fetch.
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1153,7 +1153,7 @@ export type PublicationTargetFindManyArgs<ExtArgs extends runtime.Types.Extensio
    *
    * Sets the position for listing PublicationTargets.
    */
-  cursor?: Prisma.PublicationTargetWhereUniqueInpu
+  cursor?: Prisma.PublicationTargetWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1174,11 +1174,11 @@ export type PublicationTargetFindManyArgs<ExtArgs extends runtime.Types.Extensio
  */
 export type PublicationTargetCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1207,11 +1207,11 @@ export type PublicationTargetCreateManyArgs<ExtArgs extends runtime.Types.Extens
  */
 export type PublicationTargetCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1230,11 +1230,11 @@ export type PublicationTargetCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
  */
 export type PublicationTargetUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1248,7 +1248,7 @@ export type PublicationTargetUpdateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Choose, which PublicationTarget to update.
    */
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
 }
 
 /**
@@ -1262,7 +1262,7 @@ export type PublicationTargetUpdateManyArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which PublicationTargets to update
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * Limit how many PublicationTargets to update.
    */
@@ -1274,11 +1274,11 @@ export type PublicationTargetUpdateManyArgs<ExtArgs extends runtime.Types.Extens
  */
 export type PublicationTargetUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1288,7 +1288,7 @@ export type PublicationTargetUpdateManyAndReturnArgs<ExtArgs extends runtime.Typ
   /**
    * Filter which PublicationTargets to update
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * Limit how many PublicationTargets to update.
    */
@@ -1300,15 +1300,15 @@ export type PublicationTargetUpdateManyAndReturnArgs<ExtArgs extends runtime.Typ
 }
 
 /**
- * PublicationTarget upser
+ * PublicationTarget upsert
  */
 export type PublicationTargetUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1318,7 +1318,7 @@ export type PublicationTargetUpsertArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * The filter to search for the PublicationTarget to update in case it exists.
    */
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
   /**
    * In case the PublicationTarget found by the `where` argument doesn't exist, create a new PublicationTarget with this data.
    */
@@ -1334,11 +1334,11 @@ export type PublicationTargetUpsertArgs<ExtArgs extends runtime.Types.Extensions
  */
 export type PublicationTargetDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**
@@ -1348,7 +1348,7 @@ export type PublicationTargetDeleteArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter which PublicationTarget to delete.
    */
-  where: Prisma.PublicationTargetWhereUniqueInpu
+  where: Prisma.PublicationTargetWhereUniqueInput
 }
 
 /**
@@ -1358,7 +1358,7 @@ export type PublicationTargetDeleteManyArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which PublicationTargets to delete
    */
-  where?: Prisma.PublicationTargetWhereInpu
+  where?: Prisma.PublicationTargetWhereInput
   /**
    * Limit how many PublicationTargets to delete.
    */
@@ -1370,11 +1370,11 @@ export type PublicationTargetDeleteManyArgs<ExtArgs extends runtime.Types.Extens
  */
 export type PublicationTargetDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PublicationTarge
+   * Select specific fields to fetch from the PublicationTarget
    */
   select?: Prisma.PublicationTargetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PublicationTarge
+   * Omit specific fields from the PublicationTarget
    */
   omit?: Prisma.PublicationTargetOmit<ExtArgs> | null
   /**

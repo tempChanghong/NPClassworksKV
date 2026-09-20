@@ -79,7 +79,7 @@ export type SchoolMemberAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter which SchoolMember to aggregate.
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -91,7 +91,7 @@ export type SchoolMemberAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the start position
    */
-  cursor?: Prisma.SchoolMemberWhereUniqueInpu
+  cursor?: Prisma.SchoolMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -136,10 +136,10 @@ export type GetSchoolMemberAggregateType<T extends SchoolMemberAggregateArgs> = 
 
 
 export type SchoolMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   orderBy?: Prisma.SchoolMemberOrderByWithAggregationInput | Prisma.SchoolMemberOrderByWithAggregationInput[]
   by: Prisma.SchoolMemberScalarFieldEnum[] | Prisma.SchoolMemberScalarFieldEnum
-  having?: Prisma.SchoolMemberScalarWhereWithAggregatesInpu
+  having?: Prisma.SchoolMemberScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: SchoolMemberCountAggregateInputType | true
@@ -192,12 +192,12 @@ export type SchoolMemberOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  school?: Prisma.SchoolOrderByWithRelationInpu
-  account?: Prisma.AccountOrderByWithRelationInpu
+  school?: Prisma.SchoolOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type SchoolMemberWhereUniqueInput = Prisma.AtLeast<{
-  schoolId_accountId?: Prisma.SchoolMemberSchoolIdAccountIdCompoundUniqueInpu
+  schoolId_accountId?: Prisma.SchoolMemberSchoolIdAccountIdCompoundUniqueInput
   AND?: Prisma.SchoolMemberWhereInput | Prisma.SchoolMemberWhereInput[]
   OR?: Prisma.SchoolMemberWhereInput[]
   NOT?: Prisma.SchoolMemberWhereInput | Prisma.SchoolMemberWhereInput[]
@@ -216,9 +216,9 @@ export type SchoolMemberOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.SchoolMemberCountOrderByAggregateInpu
-  _max?: Prisma.SchoolMemberMaxOrderByAggregateInpu
-  _min?: Prisma.SchoolMemberMinOrderByAggregateInpu
+  _count?: Prisma.SchoolMemberCountOrderByAggregateInput
+  _max?: Prisma.SchoolMemberMaxOrderByAggregateInput
+  _min?: Prisma.SchoolMemberMinOrderByAggregateInput
 }
 
 export type SchoolMemberScalarWhereWithAggregatesInput = {
@@ -236,8 +236,8 @@ export type SchoolMemberCreateInput = {
   role?: $Enums.SchoolMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutMembersInpu
-  account: Prisma.AccountCreateNestedOneWithoutSchoolMembershipsInpu
+  school: Prisma.SchoolCreateNestedOneWithoutMembersInput
+  account: Prisma.AccountCreateNestedOneWithoutSchoolMembershipsInput
 }
 
 export type SchoolMemberUncheckedCreateInput = {
@@ -252,8 +252,8 @@ export type SchoolMemberUpdateInput = {
   role?: Prisma.EnumSchoolMemberRoleFieldUpdateOperationsInput | $Enums.SchoolMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutMembersNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutSchoolMembershipsNestedInpu
+  school?: Prisma.SchoolUpdateOneRequiredWithoutMembersNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutSchoolMembershipsNestedInput
 }
 
 export type SchoolMemberUncheckedUpdateInput = {
@@ -287,9 +287,9 @@ export type SchoolMemberUncheckedUpdateManyInput = {
 }
 
 export type SchoolMemberListRelationFilter = {
-  every?: Prisma.SchoolMemberWhereInpu
-  some?: Prisma.SchoolMemberWhereInpu
-  none?: Prisma.SchoolMemberWhereInpu
+  every?: Prisma.SchoolMemberWhereInput
+  some?: Prisma.SchoolMemberWhereInput
+  none?: Prisma.SchoolMemberWhereInput
 }
 
 export type SchoolMemberOrderByRelationAggregateInput = {
@@ -417,7 +417,7 @@ export type SchoolMemberCreateWithoutAccountInput = {
   role?: $Enums.SchoolMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  school: Prisma.SchoolCreateNestedOneWithoutMembersInpu
+  school: Prisma.SchoolCreateNestedOneWithoutMembersInput
 }
 
 export type SchoolMemberUncheckedCreateWithoutAccountInput = {
@@ -428,7 +428,7 @@ export type SchoolMemberUncheckedCreateWithoutAccountInput = {
 }
 
 export type SchoolMemberCreateOrConnectWithoutAccountInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   create: Prisma.XOR<Prisma.SchoolMemberCreateWithoutAccountInput, Prisma.SchoolMemberUncheckedCreateWithoutAccountInput>
 }
 
@@ -438,18 +438,18 @@ export type SchoolMemberCreateManyAccountInputEnvelope = {
 }
 
 export type SchoolMemberUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   update: Prisma.XOR<Prisma.SchoolMemberUpdateWithoutAccountInput, Prisma.SchoolMemberUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.SchoolMemberCreateWithoutAccountInput, Prisma.SchoolMemberUncheckedCreateWithoutAccountInput>
 }
 
 export type SchoolMemberUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   data: Prisma.XOR<Prisma.SchoolMemberUpdateWithoutAccountInput, Prisma.SchoolMemberUncheckedUpdateWithoutAccountInput>
 }
 
 export type SchoolMemberUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.SchoolMemberScalarWhereInpu
+  where: Prisma.SchoolMemberScalarWhereInput
   data: Prisma.XOR<Prisma.SchoolMemberUpdateManyMutationInput, Prisma.SchoolMemberUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -468,7 +468,7 @@ export type SchoolMemberCreateWithoutSchoolInput = {
   role?: $Enums.SchoolMemberRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutSchoolMembershipsInpu
+  account: Prisma.AccountCreateNestedOneWithoutSchoolMembershipsInput
 }
 
 export type SchoolMemberUncheckedCreateWithoutSchoolInput = {
@@ -479,7 +479,7 @@ export type SchoolMemberUncheckedCreateWithoutSchoolInput = {
 }
 
 export type SchoolMemberCreateOrConnectWithoutSchoolInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   create: Prisma.XOR<Prisma.SchoolMemberCreateWithoutSchoolInput, Prisma.SchoolMemberUncheckedCreateWithoutSchoolInput>
 }
 
@@ -489,18 +489,18 @@ export type SchoolMemberCreateManySchoolInputEnvelope = {
 }
 
 export type SchoolMemberUpsertWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   update: Prisma.XOR<Prisma.SchoolMemberUpdateWithoutSchoolInput, Prisma.SchoolMemberUncheckedUpdateWithoutSchoolInput>
   create: Prisma.XOR<Prisma.SchoolMemberCreateWithoutSchoolInput, Prisma.SchoolMemberUncheckedCreateWithoutSchoolInput>
 }
 
 export type SchoolMemberUpdateWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   data: Prisma.XOR<Prisma.SchoolMemberUpdateWithoutSchoolInput, Prisma.SchoolMemberUncheckedUpdateWithoutSchoolInput>
 }
 
 export type SchoolMemberUpdateManyWithWhereWithoutSchoolInput = {
-  where: Prisma.SchoolMemberScalarWhereInpu
+  where: Prisma.SchoolMemberScalarWhereInput
   data: Prisma.XOR<Prisma.SchoolMemberUpdateManyMutationInput, Prisma.SchoolMemberUncheckedUpdateManyWithoutSchoolInput>
 }
 
@@ -515,7 +515,7 @@ export type SchoolMemberUpdateWithoutAccountInput = {
   role?: Prisma.EnumSchoolMemberRoleFieldUpdateOperationsInput | $Enums.SchoolMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneRequiredWithoutMembersNestedInpu
+  school?: Prisma.SchoolUpdateOneRequiredWithoutMembersNestedInput
 }
 
 export type SchoolMemberUncheckedUpdateWithoutAccountInput = {
@@ -543,7 +543,7 @@ export type SchoolMemberUpdateWithoutSchoolInput = {
   role?: Prisma.EnumSchoolMemberRoleFieldUpdateOperationsInput | $Enums.SchoolMemberRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutSchoolMembershipsNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutSchoolMembershipsNestedInput
 }
 
 export type SchoolMemberUncheckedUpdateWithoutSchoolInput = {
@@ -890,7 +890,7 @@ export interface SchoolMemberDelegate<ExtArgs extends runtime.Types.Extensions.I
    * // Count the number of SchoolMembers
    * const count = await prisma.schoolMember.count({
    *   where: {
-   *     // ... the filter for the SchoolMembers we want to coun
+   *     // ... the filter for the SchoolMembers we want to count
    *   }
    * })
   **/
@@ -936,7 +936,7 @@ export interface SchoolMemberDelegate<ExtArgs extends runtime.Types.Extensions.I
    * Read more here: https://pris.ly/d/null-undefined
    * @param {SchoolMemberGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1079,7 +1079,7 @@ export type SchoolMemberFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter, which SchoolMember to fetch.
    */
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
 }
 
 /**
@@ -1101,11 +1101,11 @@ export type SchoolMemberFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
   /**
    * Filter, which SchoolMember to fetch.
    */
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
 }
 
 /**
- * SchoolMember findFirs
+ * SchoolMember findFirst
  */
 export type SchoolMemberFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1123,7 +1123,7 @@ export type SchoolMemberFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter, which SchoolMember to fetch.
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1135,7 +1135,7 @@ export type SchoolMemberFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    *
    * Sets the position for searching for SchoolMembers.
    */
-  cursor?: Prisma.SchoolMemberWhereUniqueInpu
+  cursor?: Prisma.SchoolMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1175,7 +1175,7 @@ export type SchoolMemberFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
   /**
    * Filter, which SchoolMember to fetch.
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1187,7 +1187,7 @@ export type SchoolMemberFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    *
    * Sets the position for searching for SchoolMembers.
    */
-  cursor?: Prisma.SchoolMemberWhereUniqueInpu
+  cursor?: Prisma.SchoolMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1227,7 +1227,7 @@ export type SchoolMemberFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * Filter, which SchoolMembers to fetch.
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1239,7 +1239,7 @@ export type SchoolMemberFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    *
    * Sets the position for listing SchoolMembers.
    */
-  cursor?: Prisma.SchoolMemberWhereUniqueInpu
+  cursor?: Prisma.SchoolMemberWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1334,7 +1334,7 @@ export type SchoolMemberUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Choose, which SchoolMember to update.
    */
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
 }
 
 /**
@@ -1348,7 +1348,7 @@ export type SchoolMemberUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter which SchoolMembers to update
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * Limit how many SchoolMembers to update.
    */
@@ -1374,7 +1374,7 @@ export type SchoolMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter which SchoolMembers to update
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * Limit how many SchoolMembers to update.
    */
@@ -1386,7 +1386,7 @@ export type SchoolMemberUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
 }
 
 /**
- * SchoolMember upser
+ * SchoolMember upsert
  */
 export type SchoolMemberUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1404,7 +1404,7 @@ export type SchoolMemberUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * The filter to search for the SchoolMember to update in case it exists.
    */
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
   /**
    * In case the SchoolMember found by the `where` argument doesn't exist, create a new SchoolMember with this data.
    */
@@ -1434,7 +1434,7 @@ export type SchoolMemberDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which SchoolMember to delete.
    */
-  where: Prisma.SchoolMemberWhereUniqueInpu
+  where: Prisma.SchoolMemberWhereUniqueInput
 }
 
 /**
@@ -1444,7 +1444,7 @@ export type SchoolMemberDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * Filter which SchoolMembers to delete
    */
-  where?: Prisma.SchoolMemberWhereInpu
+  where?: Prisma.SchoolMemberWhereInput
   /**
    * Limit how many SchoolMembers to delete.
    */

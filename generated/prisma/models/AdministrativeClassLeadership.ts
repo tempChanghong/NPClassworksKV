@@ -91,7 +91,7 @@ export type AdministrativeClassLeadershipAggregateArgs<ExtArgs extends runtime.T
   /**
    * Filter which AdministrativeClassLeadership to aggregate.
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -103,7 +103,7 @@ export type AdministrativeClassLeadershipAggregateArgs<ExtArgs extends runtime.T
    *
    * Sets the start position
    */
-  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -148,10 +148,10 @@ export type GetAdministrativeClassLeadershipAggregateType<T extends Administrati
 
 
 export type AdministrativeClassLeadershipGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   orderBy?: Prisma.AdministrativeClassLeadershipOrderByWithAggregationInput | Prisma.AdministrativeClassLeadershipOrderByWithAggregationInput[]
   by: Prisma.AdministrativeClassLeadershipScalarFieldEnum[] | Prisma.AdministrativeClassLeadershipScalarFieldEnum
-  having?: Prisma.AdministrativeClassLeadershipScalarWhereWithAggregatesInpu
+  having?: Prisma.AdministrativeClassLeadershipScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AdministrativeClassLeadershipCountAggregateInputType | true
@@ -210,13 +210,13 @@ export type AdministrativeClassLeadershipOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInpu
-  account?: Prisma.AccountOrderByWithRelationInpu
+  administrativeClass?: Prisma.WorkspaceOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type AdministrativeClassLeadershipWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  administrativeClassId_accountId?: Prisma.AdministrativeClassLeadershipAdministrativeClassIdAccountIdCompoundUniqueInpu
+  administrativeClassId_accountId?: Prisma.AdministrativeClassLeadershipAdministrativeClassIdAccountIdCompoundUniqueInput
   AND?: Prisma.AdministrativeClassLeadershipWhereInput | Prisma.AdministrativeClassLeadershipWhereInput[]
   OR?: Prisma.AdministrativeClassLeadershipWhereInput[]
   NOT?: Prisma.AdministrativeClassLeadershipWhereInput | Prisma.AdministrativeClassLeadershipWhereInput[]
@@ -238,9 +238,9 @@ export type AdministrativeClassLeadershipOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AdministrativeClassLeadershipCountOrderByAggregateInpu
-  _max?: Prisma.AdministrativeClassLeadershipMaxOrderByAggregateInpu
-  _min?: Prisma.AdministrativeClassLeadershipMinOrderByAggregateInpu
+  _count?: Prisma.AdministrativeClassLeadershipCountOrderByAggregateInput
+  _max?: Prisma.AdministrativeClassLeadershipMaxOrderByAggregateInput
+  _min?: Prisma.AdministrativeClassLeadershipMinOrderByAggregateInput
 }
 
 export type AdministrativeClassLeadershipScalarWhereWithAggregatesInput = {
@@ -262,8 +262,8 @@ export type AdministrativeClassLeadershipCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutLeadershipsInpu
-  account: Prisma.AccountCreateNestedOneWithoutAdministrativeClassLeadershipsInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutLeadershipsInput
+  account: Prisma.AccountCreateNestedOneWithoutAdministrativeClassLeadershipsInput
 }
 
 export type AdministrativeClassLeadershipUncheckedCreateInput = {
@@ -282,8 +282,8 @@ export type AdministrativeClassLeadershipUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutLeadershipsNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutAdministrativeClassLeadershipsNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutLeadershipsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutAdministrativeClassLeadershipsNestedInput
 }
 
 export type AdministrativeClassLeadershipUncheckedUpdateInput = {
@@ -325,9 +325,9 @@ export type AdministrativeClassLeadershipUncheckedUpdateManyInput = {
 }
 
 export type AdministrativeClassLeadershipListRelationFilter = {
-  every?: Prisma.AdministrativeClassLeadershipWhereInpu
-  some?: Prisma.AdministrativeClassLeadershipWhereInpu
-  none?: Prisma.AdministrativeClassLeadershipWhereInpu
+  every?: Prisma.AdministrativeClassLeadershipWhereInput
+  some?: Prisma.AdministrativeClassLeadershipWhereInput
+  none?: Prisma.AdministrativeClassLeadershipWhereInput
 }
 
 export type AdministrativeClassLeadershipOrderByRelationAggregateInput = {
@@ -463,7 +463,7 @@ export type AdministrativeClassLeadershipCreateWithoutAccountInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutLeadershipsInpu
+  administrativeClass: Prisma.WorkspaceCreateNestedOneWithoutLeadershipsInput
 }
 
 export type AdministrativeClassLeadershipUncheckedCreateWithoutAccountInput = {
@@ -476,7 +476,7 @@ export type AdministrativeClassLeadershipUncheckedCreateWithoutAccountInput = {
 }
 
 export type AdministrativeClassLeadershipCreateOrConnectWithoutAccountInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   create: Prisma.XOR<Prisma.AdministrativeClassLeadershipCreateWithoutAccountInput, Prisma.AdministrativeClassLeadershipUncheckedCreateWithoutAccountInput>
 }
 
@@ -486,18 +486,18 @@ export type AdministrativeClassLeadershipCreateManyAccountInputEnvelope = {
 }
 
 export type AdministrativeClassLeadershipUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   update: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateWithoutAccountInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.AdministrativeClassLeadershipCreateWithoutAccountInput, Prisma.AdministrativeClassLeadershipUncheckedCreateWithoutAccountInput>
 }
 
 export type AdministrativeClassLeadershipUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   data: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateWithoutAccountInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateWithoutAccountInput>
 }
 
 export type AdministrativeClassLeadershipUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.AdministrativeClassLeadershipScalarWhereInpu
+  where: Prisma.AdministrativeClassLeadershipScalarWhereInput
   data: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateManyMutationInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -520,7 +520,7 @@ export type AdministrativeClassLeadershipCreateWithoutAdministrativeClassInput =
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutAdministrativeClassLeadershipsInpu
+  account: Prisma.AccountCreateNestedOneWithoutAdministrativeClassLeadershipsInput
 }
 
 export type AdministrativeClassLeadershipUncheckedCreateWithoutAdministrativeClassInput = {
@@ -533,7 +533,7 @@ export type AdministrativeClassLeadershipUncheckedCreateWithoutAdministrativeCla
 }
 
 export type AdministrativeClassLeadershipCreateOrConnectWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   create: Prisma.XOR<Prisma.AdministrativeClassLeadershipCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassLeadershipUncheckedCreateWithoutAdministrativeClassInput>
 }
 
@@ -543,18 +543,18 @@ export type AdministrativeClassLeadershipCreateManyAdministrativeClassInputEnvel
 }
 
 export type AdministrativeClassLeadershipUpsertWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   update: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateWithoutAdministrativeClassInput>
   create: Prisma.XOR<Prisma.AdministrativeClassLeadershipCreateWithoutAdministrativeClassInput, Prisma.AdministrativeClassLeadershipUncheckedCreateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassLeadershipUpdateWithWhereUniqueWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   data: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateWithoutAdministrativeClassInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateWithoutAdministrativeClassInput>
 }
 
 export type AdministrativeClassLeadershipUpdateManyWithWhereWithoutAdministrativeClassInput = {
-  where: Prisma.AdministrativeClassLeadershipScalarWhereInpu
+  where: Prisma.AdministrativeClassLeadershipScalarWhereInput
   data: Prisma.XOR<Prisma.AdministrativeClassLeadershipUpdateManyMutationInput, Prisma.AdministrativeClassLeadershipUncheckedUpdateManyWithoutAdministrativeClassInput>
 }
 
@@ -573,7 +573,7 @@ export type AdministrativeClassLeadershipUpdateWithoutAccountInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutLeadershipsNestedInpu
+  administrativeClass?: Prisma.WorkspaceUpdateOneRequiredWithoutLeadershipsNestedInput
 }
 
 export type AdministrativeClassLeadershipUncheckedUpdateWithoutAccountInput = {
@@ -609,7 +609,7 @@ export type AdministrativeClassLeadershipUpdateWithoutAdministrativeClassInput =
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutAdministrativeClassLeadershipsNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutAdministrativeClassLeadershipsNestedInput
 }
 
 export type AdministrativeClassLeadershipUncheckedUpdateWithoutAdministrativeClassInput = {
@@ -970,7 +970,7 @@ export interface AdministrativeClassLeadershipDelegate<ExtArgs extends runtime.T
    * // Count the number of AdministrativeClassLeaderships
    * const count = await prisma.administrativeClassLeadership.count({
    *   where: {
-   *     // ... the filter for the AdministrativeClassLeaderships we want to coun
+   *     // ... the filter for the AdministrativeClassLeaderships we want to count
    *   }
    * })
   **/
@@ -1016,7 +1016,7 @@ export interface AdministrativeClassLeadershipDelegate<ExtArgs extends runtime.T
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AdministrativeClassLeadershipGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1161,7 +1161,7 @@ export type AdministrativeClassLeadershipFindUniqueArgs<ExtArgs extends runtime.
   /**
    * Filter, which AdministrativeClassLeadership to fetch.
    */
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
 }
 
 /**
@@ -1183,11 +1183,11 @@ export type AdministrativeClassLeadershipFindUniqueOrThrowArgs<ExtArgs extends r
   /**
    * Filter, which AdministrativeClassLeadership to fetch.
    */
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
 }
 
 /**
- * AdministrativeClassLeadership findFirs
+ * AdministrativeClassLeadership findFirst
  */
 export type AdministrativeClassLeadershipFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1205,7 +1205,7 @@ export type AdministrativeClassLeadershipFindFirstArgs<ExtArgs extends runtime.T
   /**
    * Filter, which AdministrativeClassLeadership to fetch.
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1217,7 +1217,7 @@ export type AdministrativeClassLeadershipFindFirstArgs<ExtArgs extends runtime.T
    *
    * Sets the position for searching for AdministrativeClassLeaderships.
    */
-  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1257,7 +1257,7 @@ export type AdministrativeClassLeadershipFindFirstOrThrowArgs<ExtArgs extends ru
   /**
    * Filter, which AdministrativeClassLeadership to fetch.
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1269,7 +1269,7 @@ export type AdministrativeClassLeadershipFindFirstOrThrowArgs<ExtArgs extends ru
    *
    * Sets the position for searching for AdministrativeClassLeaderships.
    */
-  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1309,7 +1309,7 @@ export type AdministrativeClassLeadershipFindManyArgs<ExtArgs extends runtime.Ty
   /**
    * Filter, which AdministrativeClassLeaderships to fetch.
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1321,7 +1321,7 @@ export type AdministrativeClassLeadershipFindManyArgs<ExtArgs extends runtime.Ty
    *
    * Sets the position for listing AdministrativeClassLeaderships.
    */
-  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  cursor?: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1416,7 +1416,7 @@ export type AdministrativeClassLeadershipUpdateArgs<ExtArgs extends runtime.Type
   /**
    * Choose, which AdministrativeClassLeadership to update.
    */
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
 }
 
 /**
@@ -1430,7 +1430,7 @@ export type AdministrativeClassLeadershipUpdateManyArgs<ExtArgs extends runtime.
   /**
    * Filter which AdministrativeClassLeaderships to update
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * Limit how many AdministrativeClassLeaderships to update.
    */
@@ -1456,7 +1456,7 @@ export type AdministrativeClassLeadershipUpdateManyAndReturnArgs<ExtArgs extends
   /**
    * Filter which AdministrativeClassLeaderships to update
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * Limit how many AdministrativeClassLeaderships to update.
    */
@@ -1468,7 +1468,7 @@ export type AdministrativeClassLeadershipUpdateManyAndReturnArgs<ExtArgs extends
 }
 
 /**
- * AdministrativeClassLeadership upser
+ * AdministrativeClassLeadership upsert
  */
 export type AdministrativeClassLeadershipUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1486,7 +1486,7 @@ export type AdministrativeClassLeadershipUpsertArgs<ExtArgs extends runtime.Type
   /**
    * The filter to search for the AdministrativeClassLeadership to update in case it exists.
    */
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
   /**
    * In case the AdministrativeClassLeadership found by the `where` argument doesn't exist, create a new AdministrativeClassLeadership with this data.
    */
@@ -1516,7 +1516,7 @@ export type AdministrativeClassLeadershipDeleteArgs<ExtArgs extends runtime.Type
   /**
    * Filter which AdministrativeClassLeadership to delete.
    */
-  where: Prisma.AdministrativeClassLeadershipWhereUniqueInpu
+  where: Prisma.AdministrativeClassLeadershipWhereUniqueInput
 }
 
 /**
@@ -1526,7 +1526,7 @@ export type AdministrativeClassLeadershipDeleteManyArgs<ExtArgs extends runtime.
   /**
    * Filter which AdministrativeClassLeaderships to delete
    */
-  where?: Prisma.AdministrativeClassLeadershipWhereInpu
+  where?: Prisma.AdministrativeClassLeadershipWhereInput
   /**
    * Limit how many AdministrativeClassLeaderships to delete.
    */

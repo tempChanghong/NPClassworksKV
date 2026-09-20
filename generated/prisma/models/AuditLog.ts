@@ -165,7 +165,7 @@ export type AuditLogAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter which AuditLog to aggregate.
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -177,7 +177,7 @@ export type AuditLogAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
    *
    * Sets the start position
    */
-  cursor?: Prisma.AuditLogWhereUniqueInpu
+  cursor?: Prisma.AuditLogWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -234,10 +234,10 @@ export type GetAuditLogAggregateType<T extends AuditLogAggregateArgs> = {
 
 
 export type AuditLogGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   orderBy?: Prisma.AuditLogOrderByWithAggregationInput | Prisma.AuditLogOrderByWithAggregationInput[]
   by: Prisma.AuditLogScalarFieldEnum[] | Prisma.AuditLogScalarFieldEnum
-  having?: Prisma.AuditLogScalarWhereWithAggregatesInpu
+  having?: Prisma.AuditLogScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AuditLogCountAggregateInputType | true
@@ -331,9 +331,9 @@ export type AuditLogOrderByWithRelationInput = {
   clientIp?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  school?: Prisma.SchoolOrderByWithRelationInpu
-  actorAccount?: Prisma.AccountOrderByWithRelationInpu
-  actorScreen?: Prisma.ClassroomScreenBindingOrderByWithRelationInpu
+  school?: Prisma.SchoolOrderByWithRelationInput
+  actorAccount?: Prisma.AccountOrderByWithRelationInput
+  actorScreen?: Prisma.ClassroomScreenBindingOrderByWithRelationInput
 }
 
 export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
@@ -380,11 +380,11 @@ export type AuditLogOrderByWithAggregationInput = {
   clientIp?: Prisma.SortOrderInput | Prisma.SortOrder
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  _count?: Prisma.AuditLogCountOrderByAggregateInpu
-  _avg?: Prisma.AuditLogAvgOrderByAggregateInpu
-  _max?: Prisma.AuditLogMaxOrderByAggregateInpu
-  _min?: Prisma.AuditLogMinOrderByAggregateInpu
-  _sum?: Prisma.AuditLogSumOrderByAggregateInpu
+  _count?: Prisma.AuditLogCountOrderByAggregateInput
+  _avg?: Prisma.AuditLogAvgOrderByAggregateInput
+  _max?: Prisma.AuditLogMaxOrderByAggregateInput
+  _min?: Prisma.AuditLogMinOrderByAggregateInput
+  _sum?: Prisma.AuditLogSumOrderByAggregateInput
 }
 
 export type AuditLogScalarWhereWithAggregatesInput = {
@@ -425,9 +425,9 @@ export type AuditLogCreateInput = {
   clientIp?: string | null
   userAgent?: string | null
   createdAt?: Date | string
-  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInpu
-  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInpu
-  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInpu
+  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInput
+  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInput
+  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateInput = {
@@ -465,9 +465,9 @@ export type AuditLogUpdateInput = {
   clientIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInpu
-  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInpu
-  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInpu
+  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInput
+  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInput
+  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateInput = {
@@ -548,9 +548,9 @@ export type AuditLogUncheckedUpdateManyInput = {
 }
 
 export type AuditLogListRelationFilter = {
-  every?: Prisma.AuditLogWhereInpu
-  some?: Prisma.AuditLogWhereInpu
-  none?: Prisma.AuditLogWhereInpu
+  every?: Prisma.AuditLogWhereInput
+  some?: Prisma.AuditLogWhereInput
+  none?: Prisma.AuditLogWhereInput
 }
 
 export type AuditLogOrderByRelationAggregateInput = {
@@ -764,8 +764,8 @@ export type AuditLogCreateWithoutActorAccountInput = {
   clientIp?: string | null
   userAgent?: string | null
   createdAt?: Date | string
-  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInpu
-  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInpu
+  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInput
+  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateWithoutActorAccountInput = {
@@ -788,7 +788,7 @@ export type AuditLogUncheckedCreateWithoutActorAccountInput = {
 }
 
 export type AuditLogCreateOrConnectWithoutActorAccountInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutActorAccountInput, Prisma.AuditLogUncheckedCreateWithoutActorAccountInput>
 }
 
@@ -798,18 +798,18 @@ export type AuditLogCreateManyActorAccountInputEnvelope = {
 }
 
 export type AuditLogUpsertWithWhereUniqueWithoutActorAccountInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   update: Prisma.XOR<Prisma.AuditLogUpdateWithoutActorAccountInput, Prisma.AuditLogUncheckedUpdateWithoutActorAccountInput>
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutActorAccountInput, Prisma.AuditLogUncheckedCreateWithoutActorAccountInput>
 }
 
 export type AuditLogUpdateWithWhereUniqueWithoutActorAccountInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   data: Prisma.XOR<Prisma.AuditLogUpdateWithoutActorAccountInput, Prisma.AuditLogUncheckedUpdateWithoutActorAccountInput>
 }
 
 export type AuditLogUpdateManyWithWhereWithoutActorAccountInput = {
-  where: Prisma.AuditLogScalarWhereInpu
+  where: Prisma.AuditLogScalarWhereInput
   data: Prisma.XOR<Prisma.AuditLogUpdateManyMutationInput, Prisma.AuditLogUncheckedUpdateManyWithoutActorAccountInput>
 }
 
@@ -851,8 +851,8 @@ export type AuditLogCreateWithoutSchoolInput = {
   clientIp?: string | null
   userAgent?: string | null
   createdAt?: Date | string
-  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInpu
-  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInpu
+  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInput
+  actorScreen?: Prisma.ClassroomScreenBindingCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateWithoutSchoolInput = {
@@ -875,7 +875,7 @@ export type AuditLogUncheckedCreateWithoutSchoolInput = {
 }
 
 export type AuditLogCreateOrConnectWithoutSchoolInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutSchoolInput, Prisma.AuditLogUncheckedCreateWithoutSchoolInput>
 }
 
@@ -885,18 +885,18 @@ export type AuditLogCreateManySchoolInputEnvelope = {
 }
 
 export type AuditLogUpsertWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   update: Prisma.XOR<Prisma.AuditLogUpdateWithoutSchoolInput, Prisma.AuditLogUncheckedUpdateWithoutSchoolInput>
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutSchoolInput, Prisma.AuditLogUncheckedCreateWithoutSchoolInput>
 }
 
 export type AuditLogUpdateWithWhereUniqueWithoutSchoolInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   data: Prisma.XOR<Prisma.AuditLogUpdateWithoutSchoolInput, Prisma.AuditLogUncheckedUpdateWithoutSchoolInput>
 }
 
 export type AuditLogUpdateManyWithWhereWithoutSchoolInput = {
-  where: Prisma.AuditLogScalarWhereInpu
+  where: Prisma.AuditLogScalarWhereInput
   data: Prisma.XOR<Prisma.AuditLogUpdateManyMutationInput, Prisma.AuditLogUncheckedUpdateManyWithoutSchoolInput>
 }
 
@@ -915,8 +915,8 @@ export type AuditLogCreateWithoutActorScreenInput = {
   clientIp?: string | null
   userAgent?: string | null
   createdAt?: Date | string
-  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInpu
-  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInpu
+  school?: Prisma.SchoolCreateNestedOneWithoutAuditLogsInput
+  actorAccount?: Prisma.AccountCreateNestedOneWithoutAuditLogsInput
 }
 
 export type AuditLogUncheckedCreateWithoutActorScreenInput = {
@@ -939,7 +939,7 @@ export type AuditLogUncheckedCreateWithoutActorScreenInput = {
 }
 
 export type AuditLogCreateOrConnectWithoutActorScreenInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutActorScreenInput, Prisma.AuditLogUncheckedCreateWithoutActorScreenInput>
 }
 
@@ -949,18 +949,18 @@ export type AuditLogCreateManyActorScreenInputEnvelope = {
 }
 
 export type AuditLogUpsertWithWhereUniqueWithoutActorScreenInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   update: Prisma.XOR<Prisma.AuditLogUpdateWithoutActorScreenInput, Prisma.AuditLogUncheckedUpdateWithoutActorScreenInput>
   create: Prisma.XOR<Prisma.AuditLogCreateWithoutActorScreenInput, Prisma.AuditLogUncheckedCreateWithoutActorScreenInput>
 }
 
 export type AuditLogUpdateWithWhereUniqueWithoutActorScreenInput = {
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   data: Prisma.XOR<Prisma.AuditLogUpdateWithoutActorScreenInput, Prisma.AuditLogUncheckedUpdateWithoutActorScreenInput>
 }
 
 export type AuditLogUpdateManyWithWhereWithoutActorScreenInput = {
-  where: Prisma.AuditLogScalarWhereInpu
+  where: Prisma.AuditLogScalarWhereInput
   data: Prisma.XOR<Prisma.AuditLogUpdateManyMutationInput, Prisma.AuditLogUncheckedUpdateManyWithoutActorScreenInput>
 }
 
@@ -998,8 +998,8 @@ export type AuditLogUpdateWithoutActorAccountInput = {
   clientIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInpu
-  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInpu
+  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInput
+  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateWithoutActorAccountInput = {
@@ -1074,8 +1074,8 @@ export type AuditLogUpdateWithoutSchoolInput = {
   clientIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInpu
-  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInpu
+  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInput
+  actorScreen?: Prisma.ClassroomScreenBindingUpdateOneWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateWithoutSchoolInput = {
@@ -1150,8 +1150,8 @@ export type AuditLogUpdateWithoutActorScreenInput = {
   clientIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInpu
-  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInpu
+  school?: Prisma.SchoolUpdateOneWithoutAuditLogsNestedInput
+  actorAccount?: Prisma.AccountUpdateOneWithoutAuditLogsNestedInput
 }
 
 export type AuditLogUncheckedUpdateWithoutActorScreenInput = {
@@ -1589,7 +1589,7 @@ export interface AuditLogDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Count the number of AuditLogs
    * const count = await prisma.auditLog.count({
    *   where: {
-   *     // ... the filter for the AuditLogs we want to coun
+   *     // ... the filter for the AuditLogs we want to count
    *   }
    * })
   **/
@@ -1635,7 +1635,7 @@ export interface AuditLogDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * Read more here: https://pris.ly/d/null-undefined
    * @param {AuditLogGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1791,7 +1791,7 @@ export type AuditLogFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter, which AuditLog to fetch.
    */
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
 }
 
 /**
@@ -1813,11 +1813,11 @@ export type AuditLogFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which AuditLog to fetch.
    */
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
 }
 
 /**
- * AuditLog findFirs
+ * AuditLog findFirst
  */
 export type AuditLogFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1835,7 +1835,7 @@ export type AuditLogFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * Filter, which AuditLog to fetch.
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1847,7 +1847,7 @@ export type AuditLogFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    *
    * Sets the position for searching for AuditLogs.
    */
-  cursor?: Prisma.AuditLogWhereUniqueInpu
+  cursor?: Prisma.AuditLogWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1887,7 +1887,7 @@ export type AuditLogFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which AuditLog to fetch.
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1899,7 +1899,7 @@ export type AuditLogFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the position for searching for AuditLogs.
    */
-  cursor?: Prisma.AuditLogWhereUniqueInpu
+  cursor?: Prisma.AuditLogWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1939,7 +1939,7 @@ export type AuditLogFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * Filter, which AuditLogs to fetch.
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1951,7 +1951,7 @@ export type AuditLogFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    *
    * Sets the position for listing AuditLogs.
    */
-  cursor?: Prisma.AuditLogWhereUniqueInpu
+  cursor?: Prisma.AuditLogWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -2046,7 +2046,7 @@ export type AuditLogUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Choose, which AuditLog to update.
    */
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
 }
 
 /**
@@ -2060,7 +2060,7 @@ export type AuditLogUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which AuditLogs to update
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * Limit how many AuditLogs to update.
    */
@@ -2086,7 +2086,7 @@ export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
   /**
    * Filter which AuditLogs to update
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * Limit how many AuditLogs to update.
    */
@@ -2098,7 +2098,7 @@ export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * AuditLog upser
+ * AuditLog upsert
  */
 export type AuditLogUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -2116,7 +2116,7 @@ export type AuditLogUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * The filter to search for the AuditLog to update in case it exists.
    */
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
   /**
    * In case the AuditLog found by the `where` argument doesn't exist, create a new AuditLog with this data.
    */
@@ -2146,7 +2146,7 @@ export type AuditLogDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * Filter which AuditLog to delete.
    */
-  where: Prisma.AuditLogWhereUniqueInpu
+  where: Prisma.AuditLogWhereUniqueInput
 }
 
 /**
@@ -2156,7 +2156,7 @@ export type AuditLogDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * Filter which AuditLogs to delete
    */
-  where?: Prisma.AuditLogWhereInpu
+  where?: Prisma.AuditLogWhereInput
   /**
    * Limit how many AuditLogs to delete.
    */
@@ -2179,26 +2179,26 @@ export type AuditLog$schoolArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.SchoolInclude<ExtArgs> | null
-  where?: Prisma.SchoolWhereInpu
+  where?: Prisma.SchoolWhereInput
 }
 
 /**
- * AuditLog.actorAccoun
+ * AuditLog.actorAccount
  */
 export type AuditLog$actorAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Accoun
+   * Select specific fields to fetch from the Account
    */
   select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Accoun
+   * Omit specific fields from the Account
    */
   omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
-  where?: Prisma.AccountWhereInpu
+  where?: Prisma.AccountWhereInput
 }
 
 /**
@@ -2217,7 +2217,7 @@ export type AuditLog$actorScreenArgs<ExtArgs extends runtime.Types.Extensions.In
    * Choose, which related nodes to fetch as well
    */
   include?: Prisma.ClassroomScreenBindingInclude<ExtArgs> | null
-  where?: Prisma.ClassroomScreenBindingWhereInpu
+  where?: Prisma.ClassroomScreenBindingWhereInput
 }
 
 /**

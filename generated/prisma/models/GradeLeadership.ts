@@ -91,7 +91,7 @@ export type GradeLeadershipAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter which GradeLeadership to aggregate.
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -103,7 +103,7 @@ export type GradeLeadershipAggregateArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the start position
    */
-  cursor?: Prisma.GradeLeadershipWhereUniqueInpu
+  cursor?: Prisma.GradeLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -148,10 +148,10 @@ export type GetGradeLeadershipAggregateType<T extends GradeLeadershipAggregateAr
 
 
 export type GradeLeadershipGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   orderBy?: Prisma.GradeLeadershipOrderByWithAggregationInput | Prisma.GradeLeadershipOrderByWithAggregationInput[]
   by: Prisma.GradeLeadershipScalarFieldEnum[] | Prisma.GradeLeadershipScalarFieldEnum
-  having?: Prisma.GradeLeadershipScalarWhereWithAggregatesInpu
+  having?: Prisma.GradeLeadershipScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: GradeLeadershipCountAggregateInputType | true
@@ -210,13 +210,13 @@ export type GradeLeadershipOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  grade?: Prisma.GradeOrderByWithRelationInpu
-  account?: Prisma.AccountOrderByWithRelationInpu
+  grade?: Prisma.GradeOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type GradeLeadershipWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  gradeId_accountId?: Prisma.GradeLeadershipGradeIdAccountIdCompoundUniqueInpu
+  gradeId_accountId?: Prisma.GradeLeadershipGradeIdAccountIdCompoundUniqueInput
   AND?: Prisma.GradeLeadershipWhereInput | Prisma.GradeLeadershipWhereInput[]
   OR?: Prisma.GradeLeadershipWhereInput[]
   NOT?: Prisma.GradeLeadershipWhereInput | Prisma.GradeLeadershipWhereInput[]
@@ -238,9 +238,9 @@ export type GradeLeadershipOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.GradeLeadershipCountOrderByAggregateInpu
-  _max?: Prisma.GradeLeadershipMaxOrderByAggregateInpu
-  _min?: Prisma.GradeLeadershipMinOrderByAggregateInpu
+  _count?: Prisma.GradeLeadershipCountOrderByAggregateInput
+  _max?: Prisma.GradeLeadershipMaxOrderByAggregateInput
+  _min?: Prisma.GradeLeadershipMinOrderByAggregateInput
 }
 
 export type GradeLeadershipScalarWhereWithAggregatesInput = {
@@ -262,8 +262,8 @@ export type GradeLeadershipCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  grade: Prisma.GradeCreateNestedOneWithoutLeadershipsInpu
-  account: Prisma.AccountCreateNestedOneWithoutGradeLeadershipsInpu
+  grade: Prisma.GradeCreateNestedOneWithoutLeadershipsInput
+  account: Prisma.AccountCreateNestedOneWithoutGradeLeadershipsInput
 }
 
 export type GradeLeadershipUncheckedCreateInput = {
@@ -282,8 +282,8 @@ export type GradeLeadershipUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grade?: Prisma.GradeUpdateOneRequiredWithoutLeadershipsNestedInpu
-  account?: Prisma.AccountUpdateOneRequiredWithoutGradeLeadershipsNestedInpu
+  grade?: Prisma.GradeUpdateOneRequiredWithoutLeadershipsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutGradeLeadershipsNestedInput
 }
 
 export type GradeLeadershipUncheckedUpdateInput = {
@@ -325,9 +325,9 @@ export type GradeLeadershipUncheckedUpdateManyInput = {
 }
 
 export type GradeLeadershipListRelationFilter = {
-  every?: Prisma.GradeLeadershipWhereInpu
-  some?: Prisma.GradeLeadershipWhereInpu
-  none?: Prisma.GradeLeadershipWhereInpu
+  every?: Prisma.GradeLeadershipWhereInput
+  some?: Prisma.GradeLeadershipWhereInput
+  none?: Prisma.GradeLeadershipWhereInput
 }
 
 export type GradeLeadershipOrderByRelationAggregateInput = {
@@ -463,7 +463,7 @@ export type GradeLeadershipCreateWithoutAccountInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  grade: Prisma.GradeCreateNestedOneWithoutLeadershipsInpu
+  grade: Prisma.GradeCreateNestedOneWithoutLeadershipsInput
 }
 
 export type GradeLeadershipUncheckedCreateWithoutAccountInput = {
@@ -476,7 +476,7 @@ export type GradeLeadershipUncheckedCreateWithoutAccountInput = {
 }
 
 export type GradeLeadershipCreateOrConnectWithoutAccountInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   create: Prisma.XOR<Prisma.GradeLeadershipCreateWithoutAccountInput, Prisma.GradeLeadershipUncheckedCreateWithoutAccountInput>
 }
 
@@ -486,18 +486,18 @@ export type GradeLeadershipCreateManyAccountInputEnvelope = {
 }
 
 export type GradeLeadershipUpsertWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   update: Prisma.XOR<Prisma.GradeLeadershipUpdateWithoutAccountInput, Prisma.GradeLeadershipUncheckedUpdateWithoutAccountInput>
   create: Prisma.XOR<Prisma.GradeLeadershipCreateWithoutAccountInput, Prisma.GradeLeadershipUncheckedCreateWithoutAccountInput>
 }
 
 export type GradeLeadershipUpdateWithWhereUniqueWithoutAccountInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   data: Prisma.XOR<Prisma.GradeLeadershipUpdateWithoutAccountInput, Prisma.GradeLeadershipUncheckedUpdateWithoutAccountInput>
 }
 
 export type GradeLeadershipUpdateManyWithWhereWithoutAccountInput = {
-  where: Prisma.GradeLeadershipScalarWhereInpu
+  where: Prisma.GradeLeadershipScalarWhereInput
   data: Prisma.XOR<Prisma.GradeLeadershipUpdateManyMutationInput, Prisma.GradeLeadershipUncheckedUpdateManyWithoutAccountInput>
 }
 
@@ -520,7 +520,7 @@ export type GradeLeadershipCreateWithoutGradeInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutGradeLeadershipsInpu
+  account: Prisma.AccountCreateNestedOneWithoutGradeLeadershipsInput
 }
 
 export type GradeLeadershipUncheckedCreateWithoutGradeInput = {
@@ -533,7 +533,7 @@ export type GradeLeadershipUncheckedCreateWithoutGradeInput = {
 }
 
 export type GradeLeadershipCreateOrConnectWithoutGradeInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   create: Prisma.XOR<Prisma.GradeLeadershipCreateWithoutGradeInput, Prisma.GradeLeadershipUncheckedCreateWithoutGradeInput>
 }
 
@@ -543,18 +543,18 @@ export type GradeLeadershipCreateManyGradeInputEnvelope = {
 }
 
 export type GradeLeadershipUpsertWithWhereUniqueWithoutGradeInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   update: Prisma.XOR<Prisma.GradeLeadershipUpdateWithoutGradeInput, Prisma.GradeLeadershipUncheckedUpdateWithoutGradeInput>
   create: Prisma.XOR<Prisma.GradeLeadershipCreateWithoutGradeInput, Prisma.GradeLeadershipUncheckedCreateWithoutGradeInput>
 }
 
 export type GradeLeadershipUpdateWithWhereUniqueWithoutGradeInput = {
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   data: Prisma.XOR<Prisma.GradeLeadershipUpdateWithoutGradeInput, Prisma.GradeLeadershipUncheckedUpdateWithoutGradeInput>
 }
 
 export type GradeLeadershipUpdateManyWithWhereWithoutGradeInput = {
-  where: Prisma.GradeLeadershipScalarWhereInpu
+  where: Prisma.GradeLeadershipScalarWhereInput
   data: Prisma.XOR<Prisma.GradeLeadershipUpdateManyMutationInput, Prisma.GradeLeadershipUncheckedUpdateManyWithoutGradeInput>
 }
 
@@ -573,7 +573,7 @@ export type GradeLeadershipUpdateWithoutAccountInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  grade?: Prisma.GradeUpdateOneRequiredWithoutLeadershipsNestedInpu
+  grade?: Prisma.GradeUpdateOneRequiredWithoutLeadershipsNestedInput
 }
 
 export type GradeLeadershipUncheckedUpdateWithoutAccountInput = {
@@ -609,7 +609,7 @@ export type GradeLeadershipUpdateWithoutGradeInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutGradeLeadershipsNestedInpu
+  account?: Prisma.AccountUpdateOneRequiredWithoutGradeLeadershipsNestedInput
 }
 
 export type GradeLeadershipUncheckedUpdateWithoutGradeInput = {
@@ -970,7 +970,7 @@ export interface GradeLeadershipDelegate<ExtArgs extends runtime.Types.Extension
    * // Count the number of GradeLeaderships
    * const count = await prisma.gradeLeadership.count({
    *   where: {
-   *     // ... the filter for the GradeLeaderships we want to coun
+   *     // ... the filter for the GradeLeaderships we want to count
    *   }
    * })
   **/
@@ -1016,7 +1016,7 @@ export interface GradeLeadershipDelegate<ExtArgs extends runtime.Types.Extension
    * Read more here: https://pris.ly/d/null-undefined
    * @param {GradeLeadershipGroupByArgs} args - Group by arguments.
    * @example
-   * // Group by city, order by createdAt, get coun
+   * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
    *   by: ['city', 'createdAt'],
    *   orderBy: {
@@ -1161,7 +1161,7 @@ export type GradeLeadershipFindUniqueArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter, which GradeLeadership to fetch.
    */
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
 }
 
 /**
@@ -1183,11 +1183,11 @@ export type GradeLeadershipFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.E
   /**
    * Filter, which GradeLeadership to fetch.
    */
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
 }
 
 /**
- * GradeLeadership findFirs
+ * GradeLeadership findFirst
  */
 export type GradeLeadershipFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1205,7 +1205,7 @@ export type GradeLeadershipFindFirstArgs<ExtArgs extends runtime.Types.Extension
   /**
    * Filter, which GradeLeadership to fetch.
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1217,7 +1217,7 @@ export type GradeLeadershipFindFirstArgs<ExtArgs extends runtime.Types.Extension
    *
    * Sets the position for searching for GradeLeaderships.
    */
-  cursor?: Prisma.GradeLeadershipWhereUniqueInpu
+  cursor?: Prisma.GradeLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1257,7 +1257,7 @@ export type GradeLeadershipFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
   /**
    * Filter, which GradeLeadership to fetch.
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1269,7 +1269,7 @@ export type GradeLeadershipFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Ex
    *
    * Sets the position for searching for GradeLeaderships.
    */
-  cursor?: Prisma.GradeLeadershipWhereUniqueInpu
+  cursor?: Prisma.GradeLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1309,7 +1309,7 @@ export type GradeLeadershipFindManyArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * Filter, which GradeLeaderships to fetch.
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    *
@@ -1321,7 +1321,7 @@ export type GradeLeadershipFindManyArgs<ExtArgs extends runtime.Types.Extensions
    *
    * Sets the position for listing GradeLeaderships.
    */
-  cursor?: Prisma.GradeLeadershipWhereUniqueInpu
+  cursor?: Prisma.GradeLeadershipWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    *
@@ -1416,7 +1416,7 @@ export type GradeLeadershipUpdateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Choose, which GradeLeadership to update.
    */
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
 }
 
 /**
@@ -1430,7 +1430,7 @@ export type GradeLeadershipUpdateManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter which GradeLeaderships to update
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * Limit how many GradeLeaderships to update.
    */
@@ -1456,7 +1456,7 @@ export type GradeLeadershipUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
   /**
    * Filter which GradeLeaderships to update
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * Limit how many GradeLeaderships to update.
    */
@@ -1468,7 +1468,7 @@ export type GradeLeadershipUpdateManyAndReturnArgs<ExtArgs extends runtime.Types
 }
 
 /**
- * GradeLeadership upser
+ * GradeLeadership upsert
  */
 export type GradeLeadershipUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
@@ -1486,7 +1486,7 @@ export type GradeLeadershipUpsertArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * The filter to search for the GradeLeadership to update in case it exists.
    */
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
   /**
    * In case the GradeLeadership found by the `where` argument doesn't exist, create a new GradeLeadership with this data.
    */
@@ -1516,7 +1516,7 @@ export type GradeLeadershipDeleteArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * Filter which GradeLeadership to delete.
    */
-  where: Prisma.GradeLeadershipWhereUniqueInpu
+  where: Prisma.GradeLeadershipWhereUniqueInput
 }
 
 /**
@@ -1526,7 +1526,7 @@ export type GradeLeadershipDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * Filter which GradeLeaderships to delete
    */
-  where?: Prisma.GradeLeadershipWhereInpu
+  where?: Prisma.GradeLeadershipWhereInput
   /**
    * Limit how many GradeLeaderships to delete.
    */
