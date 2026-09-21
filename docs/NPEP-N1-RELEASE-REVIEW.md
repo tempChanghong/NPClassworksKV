@@ -40,6 +40,12 @@ GitHub concurrency 名称相同也不构成两个仓库之间的全局发布锁�
 
 协作任务于 2026-09-21 只读查询 GitHub API：两仓 production environment 的 `protection_rules=[]`、`deployment_branch_policy=null`；main 均 `protected=false`，`rules/branches/main=[]`，传统 protection endpoint 为 404。**当前没有 production 人工批准关卡，也没有已启用的 main 保护。** 两仓 production-deploy 的 queued/in_progress/waiting/requested/pending 查询均为零，这是当时 GitHub 侧快照，不证明 server.js 内部队列为空。未联系生产代理，也未确认朋友服务器运行的脚本与仓库 main 一致，须在正式发布前由管理员核验。
 
+### 镜像发布也是独立发布入口
+
+后端 `.github/workflows/docker-publish.yml:4-9,77-82` 在 main push、`v*` tag push 和手动触发时都会尝试推镜像；PR 只构建不推。该 job 不依赖 production-deploy/quality，也没有 production environment 审批。目标为 GHCR，配置 Docker Hub 变量和凭据时还会推 Docker Hub（`11-13,35-39,45-58`）；本轮没有读取或判断这些秘密是否实际存在。
+
+按当前 `tags` 与 `latest=auto`（`65-73`）：main push 生成 `main` 与 `sha-<完整SHA>`，**不会仅因 main 是默认分支就生成 latest**；正式 SemVer `v*` 标签会生成版本/主次版本及 latest，预发布标签不应当作正式 latest。依据 [docker/metadata-action v5 官方说明](https://github.com/docker/metadata-action/blob/v5/README.md#latest-tag)。因此暂停 production-deploy 不等于暂停全部发布；维护窗口须一并处理 docker-publish、历史排队镜像任务及版本标签操作。发布新镜像不等于当前 Compose 服务器自动更新：当前升级脚本是在现场构建 `npclassworks-backend:current`，但外部镜像消费者仍可能受移动标签影响。前端另有手动 Pages 发布入口 `前端/.github/workflows/deploy.yml`，不得误当作纯测试入口。
+
 ## 建议顺序：先关闭状态发布，再单独启用
 
 1. **一次性确认发布窗口与控制入口。** 暂停两仓库自动生产部署，或设置已验证有效的 production 人工审批；清点并取消不该执行的历史/排队任务，服务器管理员确认代理无正在执行/排队任务。停止无关 main 合入。不要只依赖“先合一端会失败”，旧工作流或已发送代理请求不受新门槛保护。
@@ -61,9 +67,11 @@ GitHub concurrency 名称相同也不构成两个仓库之间的全局发布锁�
 
 ## 用户需要集中处理的最少事项
 
-1. 确认“本次先发布默认关闭的代码，还是同时安排一台大屏试点”，并指定发布窗口；这两项不是同一授权。
-2. 请服务器管理员一次性确认部署入口可暂停/排空、现场使用的脚本与分离 Compose 配置、备份与原镜像可恢复。若选精确 SHA 发布，由管理员执行上述一次升级；本任务没有服务器访问能力，也不要求提供秘密。
-3. 代码上线后若要启用，由管理员完成一次初始化、开关同步和显式激活；现场安排一位学校管理员和一台大屏完成试点。普通 GitHub 推送不会替代这三步。
+1. 确定维护窗口。
+2. 指定服务器操作者，并确认现场部署路径/方式。
+3. 同意在窗口内短时收紧自动部署及镜像发布入口；具体暂停、核验、备份和精确 SHA 操作由任务与服务器管理员落实。
+
+建议本次先发布默认关闭的代码；大屏试点作为后续单独步骤。NPEduTools 尚未制作 N1 试点 portable 包，现有打包默认 `InDev20260920` 不能当作新版本重传；试点前需确定新包标识、对应受测代码与校验值。届时再安排管理员初始化、开关同步、显式激活，以及学校管理员和一台真实大屏现场验收。
 
 除上述确认外，最终 SHA 的记录、测试运行核验、审核清单和失败分析可继续由任务处理。用户不在场期间只整理方案，不自行推进合并或启用。
 
