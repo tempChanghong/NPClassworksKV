@@ -265,11 +265,17 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
   await t.test('bounded maintenance deletes expired pairing secrets and receipts but preserves current devices', async () => {
     const {cleanupNpep} = await import('../services/npepMaintenanceService.js');
     const f = await fixture(), d = await activate(f), p = await pending();
-    await prisma.npepPairing.update({where: {id: p.pairingId}, data: {expiresAt: new Date(Date.now() - 1000)}});
+    // Maintenance uses the database clock. Docker's clock may differ from the
+    // host, so expire this fixture in the same clock domain as the SQL predicate.
+    const [expired] = await prisma.$queryRaw`UPDATE "NpepPairing"
+      SET "expiresAt"=clock_timestamp()-interval '1 second' WHERE id=${p.pairingId}::uuid
+      RETURNING "expiresAt" < clock_timestamp() AS expired`;
+    assert.equal(expired.expired, true);
     await cleanupNpep(prisma);
     assert.equal((await prisma.npepPairing.findUnique({where: {id: p.pairingId}})).secretHash, null);
     assert.equal((await request('/device/me', {auth: d.auth})).status, 200);
-    await prisma.npepPairing.update({where: {id: p.pairingId}, data: {expiresAt: new Date(Date.now() - 2 * 86400000)}});
+    assert.equal(await prisma.$executeRaw`UPDATE "NpepPairing"
+      SET "expiresAt"=clock_timestamp()-interval '2 days' WHERE id=${p.pairingId}::uuid`, 1);
     await cleanupNpep(prisma);
     assert.equal(await prisma.npepPairing.findUnique({where: {id: p.pairingId}}), null);
   });
