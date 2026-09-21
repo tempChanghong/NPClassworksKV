@@ -37,9 +37,9 @@
 
 环境变量为 `NPEP_ENABLED=true`、`NPEP_DEPLOYMENT_FILE=<该文件绝对路径>`。未启用、缺失/关闭配置、配置与数据库代际不一致均返回 503。每次事务开始和结束核对外部文件；普通重启不得自行换代际或自动同步旧库。
 
-`node scripts/npep-deployment.js prepare-restore` 原子关闭外部入口并轮换 epoch；`activate --invalidate-all-old-devices` 在事务内废止旧设备、配对、会话并同步数据库代际，提交后才打开外部入口。`deploy/restore.sh` 在显式配置 `NPEP_ENABLED=true` 时，于停止后端/恢复库之前调用 prepare-restore，失败则拒绝恢复；恢复后保持关闭，必须显式激活。
+`node scripts/npep-config.js prepare-restore <宿主开关>` 核验宿主/容器开关、配置和目录权限，原子关闭外部入口并轮换 epoch；旧 `npep-deployment.js prepare-restore` 入口也要求显式传入宿主开关并调用同一检查。`activate --invalidate-all-old-devices` 在事务内废止旧设备、配对、会话并同步数据库代际，提交后才打开外部入口。`deploy/restore.sh` 无条件于停止后端/恢复库之前调用检查，失败则拒绝恢复；恢复后保持关闭，必须显式激活。
 
-**尚未进行生产运维接入。** 当前生产 Compose 未启用 NPEP。未来启用时须让后端和恢复脚本使用一致的 NPEP 标志，并挂载独立配置目录（不能只挂载单个文件，因为采用原子重命名；不能放入数据库卷或旧备份中）。还需验收真实反代 TLS、受信代理、配置权限，以及操作员绕过恢复脚本的应急流程。这里不将本地恢复测试等同于生产恢复验收。
+**尚未部署生产。** 生产 Compose 已接入默认关闭的 NPEP 开关和独立目录卷，启用步骤及检查见 [部署准备记录](NPEP-N1-DEPLOYMENT-READINESS.md)。仍需验收真实反代 TLS、受信代理、现场配置权限，以及操作员绕过恢复脚本的应急流程。这里不将本地恢复测试等同于生产恢复验收。
 
 ## 隔离运行
 

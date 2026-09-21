@@ -30,6 +30,8 @@ services:
       - "127.0.0.1:${SHARED_BACKEND_PORT:-13000}:3000"
     environment:
       NODE_ENV: production
+      NPEP_ENABLED: ${NPEP_ENABLED:-false}
+      NPEP_DEPLOYMENT_FILE: /var/lib/npclassworks-npep/deployment.json
       PORT: 3000
       TRUST_PROXY: 1
       DATABASE_URL: postgresql://${POSTGRES_USER:-classworks}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-classworks}
@@ -56,6 +58,8 @@ services:
       DLASS_CLIENT_SECRET: ${DLASS_CLIENT_SECRET:-}
       AXIOM_TOKEN: ${AXIOM_TOKEN:-}
       AXIOM_DATASET: ${AXIOM_DATASET:-}
+    volumes:
+      - npep-config:/var/lib/npclassworks-npep
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,4 +77,5 @@ services:
       - "127.0.0.1:${SHARED_FRONTEND_PORT:-13080}:80"
 
 volumes:
+  npep-config:
   postgres-data:

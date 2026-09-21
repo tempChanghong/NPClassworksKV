@@ -22,6 +22,8 @@ test("real deployment scripts restore disposable data and history pages stay bou
     const [{prisma}, service] = await Promise.all([import("../utils/prisma.js"), import("../services/publicationService.js")]);
     const directory = await mkdtemp(join(tmpdir(), "npclassworks-restore-test-"));
     await mkdir(join(directory, "deploy"));
+    await mkdir(join(directory, "scripts"));
+    await copyFile(join(root, "scripts/npep-config.js"), join(directory, "scripts/npep-config.js"));
     for (const file of ["lib.sh", "backup.sh", "restore.sh"]) {
         // Keep the actual production script logic; only its surrounding paths/config differ.
         await writeFile(join(directory, "deploy", file), (await readFile(join(root, "deploy", file), "utf8")).replaceAll("\r\n", "\n"));
@@ -29,12 +31,12 @@ test("real deployment scripts restore disposable data and history pages stay bou
     for (const file of ["docker-compose.yml", "docker-compose.shared.yml"]) {
         await copyFile(join(root, "docker-compose.integration.yml"), join(directory, file));
     }
-    async function config(mode) {
+    async function config(mode, npep = "false") {
         const values = {DEPLOY_MODE: mode, COMPOSE_PROJECT_NAME: project,
             POSTGRES_USER: decodeURIComponent(url.username), POSTGRES_PASSWORD: decodeURIComponent(url.password), POSTGRES_DB: url.pathname.slice(1),
             INTEGRATION_POSTGRES_USER: decodeURIComponent(url.username), INTEGRATION_POSTGRES_PASSWORD: decodeURIComponent(url.password),
             INTEGRATION_POSTGRES_DB: url.pathname.slice(1), INTEGRATION_POSTGRES_PORT: url.port,
-            BACKUP_RETENTION_DAYS: "0"};
+            BACKUP_RETENTION_DAYS: "0", NPEP_ENABLED: npep};
         await writeFile(join(directory, "deploy/test.env"), Object.entries(values).map(([key,value]) => `${key}=${quote(value)}`).join("\n") + "\n");
     }
     const bash = process.platform === "win32" ? "C:/Program Files/Git/bin/bash.exe" : "bash";
@@ -125,6 +127,10 @@ test("real deployment scripts restore disposable data and history pages stay bou
             await writeFile(corrupt + ".sha256", `${createHash("sha256").update("invalid dump").digest("hex")}  corrupt-${mode}.dump\n`);
             shell("deploy/restore.sh", [posix(corrupt), "--yes"], false);
             assert.deepEqual(await snapshot(), mutated);
+            await config(mode, "true");
+            assert.match(shell("deploy/restore.sh", [backup, "--yes"], false).stderr, /NPEP/);
+            assert.deepEqual(await snapshot(), mutated, "flag mismatch must not drop the database");
+            await config(mode);
             await prisma.$disconnect();
             shell("deploy/restore.sh", [backup, "--yes"]);
             assert.deepEqual(await snapshot(), expected);

@@ -22,4 +22,7 @@ services:
   # This is a lifecycle fixture; restored data is verified separately through Prisma.
   backend:
     image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./scripts/npep-config.js:/app/scripts/npep-config.js:ro
     command: ["node", "-e", "require('http').createServer((req,res)=>{res.writeHead(req.url==='/ready'?200:404);res.end()}).listen(3000,'0.0.0.0')"]

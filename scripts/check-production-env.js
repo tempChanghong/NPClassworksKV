@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 import dotenv from "dotenv";
 import {collectProductionConfigErrors} from "../utils/productionConfig.js";
+import {enabledFlag} from "./npep-config.js";
 
 const envPath = path.resolve(process.argv[2] || "deploy/.env.production");
 if (!fs.existsSync(envPath)) {
@@ -24,6 +25,7 @@ const environment = {
 };
 
 const errors = collectProductionConfigErrors(environment);
+try { enabledFlag(parsed.NPEP_ENABLED); } catch { errors.push("NPEP_ENABLED 只能是 true 或 false"); }
 if (!/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/i.test(domain)) {
     errors.push("CLASSWORKS_DOMAIN 不是有效的主机名");
 }

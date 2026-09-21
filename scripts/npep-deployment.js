@@ -1,20 +1,10 @@
-import {readFile, writeFile, rename} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {randomUUID} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {UUID} from '../domain/npep/wire.js';
+import {writeAtomic, prepareRestore} from './npep-config.js';
+export {closeBeforeRestore} from './npep-config.js';
 
-async function writeAtomic(path, value) {
-  const temporary = `${path}.${randomUUID()}.tmp`;
-  await writeFile(temporary, JSON.stringify(value, null, 2) + '\n', {mode: 0o600, flag: 'wx'});
-  await rename(temporary, path);
-}
-export async function closeBeforeRestore(path) {
-  const original = JSON.parse(await readFile(path, 'utf8'));
-  if (!UUID.test(original.serverInstanceId) || !UUID.test(original.deploymentEpoch)) throw new Error('Invalid NPEP deployment identity');
-  const closed = {...original, enabled: false, deploymentEpoch: randomUUID()};
-  await writeAtomic(path, closed);
-  return closed;
-}
 export async function activateDeployment(client, path) {
   const config = JSON.parse(await readFile(path, 'utf8'));
   if (config.enabled !== false || !UUID.test(config.serverInstanceId) || !UUID.test(config.deploymentEpoch)) throw new Error('Close/rotate the external NPEP gate before activation');
@@ -35,12 +25,11 @@ export async function activateDeployment(client, path) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const command = process.argv[2], path = process.env.NPEP_DEPLOYMENT_FILE;
-  if (command === 'prepare-restore' && process.env.NPEP_ENABLED !== 'true') process.exit(0);
-  if (!path) throw new Error('NPEP_DEPLOYMENT_FILE must be outside database backups');
-  if (command === 'prepare-restore') await closeBeforeRestore(path);
+  if (command === 'prepare-restore') await prepareRestore(process.env, process.argv[3]);
   else if (command === 'activate' && process.argv.includes('--invalidate-all-old-devices')) {
+    if (!path) throw new Error('NPEP_DEPLOYMENT_FILE must be outside database backups');
     const {prisma} = await import('../utils/prisma.js');
     try { await activateDeployment(prisma, path); } finally { await prisma.$disconnect(); }
-  } else throw new Error('Use prepare-restore, or activate --invalidate-all-old-devices');
+  } else throw new Error('Use prepare-restore <host-enabled>, or activate --invalidate-all-old-devices');
   console.log('NPEP deployment gate operation completed');
 }
