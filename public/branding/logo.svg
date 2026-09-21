@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="169.5 153.5 920 920" role="img" aria-labelledby="title desc">
+<title id="title">NPClassworks — standard</title>
+<desc id="desc">Editable hand-drawn cubic paths. Transparent negative spaces. No embedded images.</desc>
+<path id="shape-1" aria-label="Lower folded sheet" fill="#A94E24" d="M 273 337 C 274 444 315 482 452 524 C 591 567 654 640 654 779 L 654 997 C 654 1010 651 1013 639 1013 L 605 1013 C 414 1013 273 960 273 812 L 273 337 Z"/>
+<path id="shape-2" aria-label="Front sheet" fill="#D97732" d="M 273 337 C 274 444 315 482 452 524 C 481 544 492 570 492 612 L 492 895 C 492 966 526 1007 605 1013 C 414 1013 273 960 273 812 L 273 337 Z"/>
+<path id="shape-3" aria-label="Upper turned page" fill="#D97732" d="M 273 337 L 273 239 C 273 212 284 208 298 220 C 329 247 378 262 432 272 C 504 286 558 326 589 388 C 510 409 469 450 389 454 C 323 452 273 401 273 337 Z"/>
+<path id="shape-4" aria-label="Warm orange ribbon" fill="#F2B56B" d="M 389 454 C 469 450 510 409 589 388 C 642 370 697 360 750 360 C 892 360 986 441 986 579 L 986 974 C 986 996 979 1003 964 1000 C 861 981 793 918 793 812 L 793 646 C 793 500 722 459 536 459 C 474 459 430 459 389 454 Z"/>
+</svg>
