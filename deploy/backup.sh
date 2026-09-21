@@ -20,6 +20,8 @@ done
 
 require_command docker
 require_command sha256sum
+require_command mktemp
+require_command ln
 load_production_env
 ensure_directories
 
@@ -29,11 +31,12 @@ safe_label="$(printf '%s' "$label" | tr -cs 'A-Za-z0-9._-' '_' | sed 's/^_*//;s/
 [[ -n "$safe_label" ]] || safe_label="manual"
 timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 base="npclassworks_${POSTGRES_DB}_${timestamp}_${safe_label}"
-target="$BACKUP_DIR/$base.dump"
-temporary="$target.partial"
-[[ ! -e "$target" && ! -e "$temporary" ]] || die "同名备份已经存在，请稍后重试"
-
+# Atomically reserve a unique name even for same-second, same-label invocations.
+# Keep the readable timestamp/label; never truncate another writer's partial dump.
+temporary="$(mktemp --suffix=.partial "$BACKUP_DIR/${base}_XXXXXXXXXX")"
+target="${temporary%.partial}.dump"
 trap 'rm -f "$temporary"' EXIT
+[[ ! -e "$target" && ! -e "$target.sha256" && ! -e "$target.meta" ]] || die "备份目标已存在，拒绝覆盖"
 compose ps --status running --services | grep -qx postgres || die "PostgreSQL 容器尚未运行"
 log "正在备份 PostgreSQL 数据库 $POSTGRES_DB"
 compose exec -T postgres pg_dump \
@@ -46,7 +49,10 @@ compose exec -T postgres pg_dump \
 
 [[ -s "$temporary" ]] || die "备份文件为空"
 compose exec -T postgres pg_restore --list < "$temporary" >/dev/null
-mv "$temporary" "$target"
+# Both files are in the same directory/filesystem. A hard link publishes the
+# validated dump atomically and fails if a target appeared after the check.
+ln -T -- "$temporary" "$target" || die "无法安全保存备份，拒绝覆盖已有目标"
+rm -f "$temporary"
 (cd "$BACKUP_DIR" && sha256sum "${target##*/}" > "${target##*/}.sha256")
 {
   printf 'created_at=%s\n' "$timestamp"

@@ -23,6 +23,10 @@ test("real deployment scripts restore disposable data and history pages stay bou
     const directory = await mkdtemp(join(tmpdir(), "npclassworks-restore-test-"));
     await mkdir(join(directory, "deploy"));
     await mkdir(join(directory, "scripts"));
+    // Freeze the clock for every nested backup invocation, including pre-restore.
+    // This makes the historical same-second collision deterministic on any runner.
+    const clockFile = join(directory, "fixed-clock.sh");
+    await writeFile(clockFile, "date() { printf '%s\\n' '20990101T000000Z'; }\n");
     await copyFile(join(root, "scripts/npep-config.js"), join(directory, "scripts/npep-config.js"));
     for (const file of ["lib.sh", "backup.sh", "restore.sh"]) {
         // Keep the actual production script logic; only its surrounding paths/config differ.
@@ -43,7 +47,7 @@ test("real deployment scripts restore disposable data and history pages stay bou
     function shell(script, args = [], success = true) {
         const result = spawnSync(bash, [script, ...args], {cwd: directory, encoding: "utf8", timeout: 60000,
             env: {...process.env, ENV_FILE: posix(join(directory, "deploy/test.env")), BACKUP_DIR: posix(join(directory, "backups")),
-                RUNTIME_DIR: posix(join(directory, "runtime")), COMPOSE_PROJECT_NAME: project}});
+                RUNTIME_DIR: posix(join(directory, "runtime")), COMPOSE_PROJECT_NAME: project, BASH_ENV: posix(clockFile)}});
         if (result.error) throw result.error;
         if (success) assert.equal(result.status, 0, result.stdout + result.stderr);
         else assert.notEqual(result.status, 0, "invalid restore must fail");
@@ -114,6 +118,14 @@ test("real deployment scripts restore disposable data and history pages stay bou
             const backupFile = native(backup);
             assert.ok((await readFile(backupFile)).length > 100);
             assert.ok((await readFile(backupFile + ".sha256", "utf8")).length);
+            assert.ok(backupFile.includes("20990101T000000Z"), "backup clock is frozen");
+            const originalDump = await readFile(backupFile);
+            const originalChecksum = await readFile(backupFile + ".sha256");
+            const second = native(shell("deploy/backup.sh", ["--label", mode]).stdout.trim().split(/\r?\n/).at(-1));
+            assert.notEqual(second, backupFile, "same timestamp and label must allocate a new backup");
+            assert.ok((await readFile(second)).length > 100);
+            assert.deepEqual(await readFile(backupFile), originalDump, "earlier dump is never replaced");
+            assert.deepEqual(await readFile(backupFile + ".sha256"), originalChecksum);
             await prisma.publication.update({where: {id: publication.id}, data: {content: "恢复前临时修改"}});
             await prisma.account.update({where: {id: account.id}, data: {name: "恢复前临时账号"}});
             await prisma.classroomScreenBinding.update({where: {id: binding.id}, data: {isActive: false}});
@@ -135,6 +147,7 @@ test("real deployment scripts restore disposable data and history pages stay bou
             shell("deploy/restore.sh", [backup, "--yes"]);
             assert.deepEqual(await snapshot(), expected);
             assert.ok((await readdir(join(directory,"backups"))).some(name => name.includes("pre-restore") && name.endsWith(".dump")));
+            assert.ok(!(await readdir(join(directory,"backups"))).some(name => name.endsWith(".partial")));
         });
         console.log(`Disposable restore evidence retained at ${directory}`);
     } finally {
