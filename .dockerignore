@@ -11,3 +11,16 @@ dist
 build
 coverage
 .DS_Store
+.env.*
+**/.env
+**/.env.*
+deploy/backups
+deploy/runtime
+**/*.dump
+**/*.dump.*
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+**/*.log
+test-results
+playwright-report

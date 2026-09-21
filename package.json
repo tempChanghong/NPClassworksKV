@@ -10,7 +10,7 @@
     "dev": "node --watch --env-file=deploy/.env.debug scripts/dev-server.js",
     "test": "node --test",
     "test:database": "node scripts/run-database-tests.js",
-    "test:deployment:npep": "node scripts/check-npep-container.js",
+    "test:deployment:npep": "node scripts/check-build-permissions.js && node scripts/check-npep-container.js",
     "test:release": "node --test && node scripts/run-database-tests.js",
     "test:phase1": "node --test tests/academicCatalog.test.js",
     "test:phase2": "node --test tests/organizationImport.test.js",

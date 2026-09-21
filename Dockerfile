@@ -22,6 +22,9 @@ WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 RUN pnpm exec prisma generate
+# Checkout may run under a restrictive host umask. Normalize only image contents;
+# keep root ownership and grant the runtime user no additional write permissions.
+RUN chmod -R a+rX /app
 RUN mkdir -p /var/lib/npclassworks-npep && chown node:node /var/lib/npclassworks-npep && chmod 700 /var/lib/npclassworks-npep
 
 USER node

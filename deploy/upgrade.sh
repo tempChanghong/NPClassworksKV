@@ -90,6 +90,8 @@ node "$REPO_ROOT/scripts/check-production-env.js" "$ENV_FILE"
 compose build --pull backend frontend
 compose_application_up -d
 if ! wait_for_backend 45; then
+  # Recreating containers during rollback destroys their original logs.
+  node "$DEPLOY_DIR/capture-failure.js" "$REPO_ROOT" "$ENV_FILE" "$COMPOSE_FILE" "$RUNTIME_DIR" || log "保存失败诊断失败；仍继续既定回退流程"
   if [[ "$rollback_on_failure" == true ]]; then
     log "新版本健康检查失败，正在自动恢复上一组应用镜像"
     bash "$DEPLOY_DIR/rollback.sh" || die "自动回滚也失败，请立即人工检查容器与数据库状态"
