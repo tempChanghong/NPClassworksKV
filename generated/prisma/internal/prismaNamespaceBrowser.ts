@@ -86,7 +86,10 @@ export const ModelName = {
   NotificationScreenDelivery: 'NotificationScreenDelivery',
   AdministrativeClassStudent: 'AdministrativeClassStudent',
   ClassAttendanceDay: 'ClassAttendanceDay',
-  PublicationRevision: 'PublicationRevision'
+  PublicationRevision: 'PublicationRevision',
+  NpepNotificationSnapshot: 'NpepNotificationSnapshot',
+  NpepNotificationExposure: 'NpepNotificationExposure',
+  NpepNotificationReceipt: 'NpepNotificationReceipt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -668,6 +671,41 @@ export const PublicationRevisionScalarFieldEnum = {
 } as const
 
 export type PublicationRevisionScalarFieldEnum = (typeof PublicationRevisionScalarFieldEnum)[keyof typeof PublicationRevisionScalarFieldEnum]
+
+
+export const NpepNotificationSnapshotScalarFieldEnum = {
+  deviceId: 'deviceId',
+  snapshotId: 'snapshotId',
+  fingerprint: 'fingerprint',
+  items: 'items',
+  expiresAt: 'expiresAt'
+} as const
+
+export type NpepNotificationSnapshotScalarFieldEnum = (typeof NpepNotificationSnapshotScalarFieldEnum)[keyof typeof NpepNotificationSnapshotScalarFieldEnum]
+
+
+export const NpepNotificationExposureScalarFieldEnum = {
+  deviceId: 'deviceId',
+  publicationId: 'publicationId',
+  revision: 'revision',
+  exposedAt: 'exposedAt'
+} as const
+
+export type NpepNotificationExposureScalarFieldEnum = (typeof NpepNotificationExposureScalarFieldEnum)[keyof typeof NpepNotificationExposureScalarFieldEnum]
+
+
+export const NpepNotificationReceiptScalarFieldEnum = {
+  deviceId: 'deviceId',
+  eventId: 'eventId',
+  publicationId: 'publicationId',
+  revision: 'revision',
+  stage: 'stage',
+  occurredAt: 'occurredAt',
+  receivedAt: 'receivedAt',
+  digest: 'digest'
+} as const
+
+export type NpepNotificationReceiptScalarFieldEnum = (typeof NpepNotificationReceiptScalarFieldEnum)[keyof typeof NpepNotificationReceiptScalarFieldEnum]
 
 
 export const SortOrder = {

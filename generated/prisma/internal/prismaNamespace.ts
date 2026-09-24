@@ -419,7 +419,10 @@ export const ModelName = {
   NotificationScreenDelivery: 'NotificationScreenDelivery',
   AdministrativeClassStudent: 'AdministrativeClassStudent',
   ClassAttendanceDay: 'ClassAttendanceDay',
-  PublicationRevision: 'PublicationRevision'
+  PublicationRevision: 'PublicationRevision',
+  NpepNotificationSnapshot: 'NpepNotificationSnapshot',
+  NpepNotificationExposure: 'NpepNotificationExposure',
+  NpepNotificationReceipt: 'NpepNotificationReceipt'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -435,7 +438,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepDeployment" | "npepPairing" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision"
+    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepDeployment" | "npepPairing" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision" | "npepNotificationSnapshot" | "npepNotificationExposure" | "npepNotificationReceipt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3103,6 +3106,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NpepNotificationSnapshot: {
+      payload: Prisma.$NpepNotificationSnapshotPayload<ExtArgs>
+      fields: Prisma.NpepNotificationSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNotificationSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNotificationSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNotificationSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNotificationSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.NpepNotificationSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.NpepNotificationSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.NpepNotificationSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNotificationSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNotificationSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        update: {
+          args: Prisma.NpepNotificationSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNotificationSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNotificationSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNotificationSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNotificationSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNotificationSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNotificationSnapshot>
+        }
+        groupBy: {
+          args: Prisma.NpepNotificationSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNotificationSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepNotificationExposure: {
+      payload: Prisma.$NpepNotificationExposurePayload<ExtArgs>
+      fields: Prisma.NpepNotificationExposureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNotificationExposureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNotificationExposureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNotificationExposureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNotificationExposureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        findMany: {
+          args: Prisma.NpepNotificationExposureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>[]
+        }
+        create: {
+          args: Prisma.NpepNotificationExposureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        createMany: {
+          args: Prisma.NpepNotificationExposureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNotificationExposureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNotificationExposureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        update: {
+          args: Prisma.NpepNotificationExposureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNotificationExposureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNotificationExposureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNotificationExposureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNotificationExposureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationExposurePayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNotificationExposureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNotificationExposure>
+        }
+        groupBy: {
+          args: Prisma.NpepNotificationExposureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationExposureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNotificationExposureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationExposureCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepNotificationReceipt: {
+      payload: Prisma.$NpepNotificationReceiptPayload<ExtArgs>
+      fields: Prisma.NpepNotificationReceiptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNotificationReceiptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNotificationReceiptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNotificationReceiptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNotificationReceiptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        findMany: {
+          args: Prisma.NpepNotificationReceiptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>[]
+        }
+        create: {
+          args: Prisma.NpepNotificationReceiptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        createMany: {
+          args: Prisma.NpepNotificationReceiptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNotificationReceiptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNotificationReceiptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        update: {
+          args: Prisma.NpepNotificationReceiptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNotificationReceiptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNotificationReceiptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNotificationReceiptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNotificationReceiptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNotificationReceiptPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNotificationReceiptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNotificationReceipt>
+        }
+        groupBy: {
+          args: Prisma.NpepNotificationReceiptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationReceiptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNotificationReceiptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNotificationReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3707,6 +3932,41 @@ export const PublicationRevisionScalarFieldEnum = {
 export type PublicationRevisionScalarFieldEnum = (typeof PublicationRevisionScalarFieldEnum)[keyof typeof PublicationRevisionScalarFieldEnum]
 
 
+export const NpepNotificationSnapshotScalarFieldEnum = {
+  deviceId: 'deviceId',
+  snapshotId: 'snapshotId',
+  fingerprint: 'fingerprint',
+  items: 'items',
+  expiresAt: 'expiresAt'
+} as const
+
+export type NpepNotificationSnapshotScalarFieldEnum = (typeof NpepNotificationSnapshotScalarFieldEnum)[keyof typeof NpepNotificationSnapshotScalarFieldEnum]
+
+
+export const NpepNotificationExposureScalarFieldEnum = {
+  deviceId: 'deviceId',
+  publicationId: 'publicationId',
+  revision: 'revision',
+  exposedAt: 'exposedAt'
+} as const
+
+export type NpepNotificationExposureScalarFieldEnum = (typeof NpepNotificationExposureScalarFieldEnum)[keyof typeof NpepNotificationExposureScalarFieldEnum]
+
+
+export const NpepNotificationReceiptScalarFieldEnum = {
+  deviceId: 'deviceId',
+  eventId: 'eventId',
+  publicationId: 'publicationId',
+  revision: 'revision',
+  stage: 'stage',
+  occurredAt: 'occurredAt',
+  receivedAt: 'receivedAt',
+  digest: 'digest'
+} as const
+
+export type NpepNotificationReceiptScalarFieldEnum = (typeof NpepNotificationReceiptScalarFieldEnum)[keyof typeof NpepNotificationReceiptScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4178,6 +4438,9 @@ export type GlobalOmitConfig = {
   administrativeClassStudent?: Prisma.AdministrativeClassStudentOmit
   classAttendanceDay?: Prisma.ClassAttendanceDayOmit
   publicationRevision?: Prisma.PublicationRevisionOmit
+  npepNotificationSnapshot?: Prisma.NpepNotificationSnapshotOmit
+  npepNotificationExposure?: Prisma.NpepNotificationExposureOmit
+  npepNotificationReceipt?: Prisma.NpepNotificationReceiptOmit
 }
 
 /* Types for Logging */

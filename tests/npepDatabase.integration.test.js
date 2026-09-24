@@ -37,7 +37,8 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
       ...(method === 'POST' ? {body: raw ?? JSON.stringify(body)} : {})});
     const result = await response.json();
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    if (!response.ok) assert.equal(validate('error', result), true, 'error must have the agreed public shape');
+    if (!response.ok && headers['X-NPEP-Version'] !== '0.2') assert.equal(validate('error', result), true, 'error must have the agreed public shape');
+    if (headers['X-NPEP-Version'] === '0.2') assert.equal(result.protocolVersion, '0.2');
     return {status: response.status, data: result.data, error: result.error};
   }
   const req = extra => ({requestId: randomUUID(), ...extra});
@@ -83,6 +84,103 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
   const sample = (session, sequence = 1) => req({...identity, sessionId: session.sessionId, statusEpoch: session.statusEpoch, sequence, sampleAgeMs: 1,
     status: {appVersion: 'test', mode: 'EXAM', modePhase: 'RUNNING', modeRevision: 1, automaticRecording: 'ENABLED', recording: 'IDLE',
       classIsland: {connection: 'DISCONNECTED', bridgeVersion: null}, examAware: {connection: 'UNKNOWN', bridgeVersion: null}}});
+
+  const requestN2 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.2', ...options.headers}});
+  const notification = (f, extra = {}) => prisma.publication.create({data: {type: 'NOTICE', content: '真实通知正文',
+    status: 'PUBLISHED', publishAt: new Date(Date.now() - 60000), authorAccountId: f.account.id,
+    targets: {create: {workspaceId: f.workspace.id}}, ...extra}});
+  await t.test('N2 old pairing receives bounded pages with all priorities and separate receipts', async () => {
+    const {validateNotification} = await import('../domain/npep/notifications.js');
+    const f = await fixture(), d = await activate(f), other = await fixture();
+    const rows = [];
+    for (let i = 0; i < 23; i++) rows.push(await notification(f, {priority: ['MINOR','NORMAL','IMPORTANT','URGENT'][i % 4],
+      contentJson: {popupEnabled: false}, title: `通知${i}`}));
+    await notification(other, {content: '其他学校秘密'});
+    await notification(f, {status: 'DRAFT'});
+    await notification(f, {status: 'WITHDRAWN'});
+    await notification(f, {publishAt: new Date(Date.now() + 600000)});
+    await notification(f, {expiresAt: new Date(Date.now() - 1000)});
+    assert.equal((await requestN2('/device/notifications')).status, 401);
+    assert.equal((await request('/device/notifications', {auth: d.auth, headers: {'X-NPEP-Version': '0.2'}})).status, 200);
+    const first = await requestN2('/device/notifications', {auth: d.auth});
+    assert.equal(first.status, 200, first.error?.code);
+    assert.equal(validateNotification('snapshot', first.data), true);
+    assert.equal(first.data.items.length, 20);
+    const second = await requestN2(`/device/notifications?cursor=${first.data.nextCursor}`, {auth: d.auth});
+    assert.equal(second.status, 200, second.error?.code);
+    assert.equal(second.data.snapshotId, first.data.snapshotId);
+    assert.equal(second.data.items.length, 3);
+    assert.equal(second.data.nextCursor, null);
+    const items = [...first.data.items, ...second.data.items];
+    assert.equal(new Set(items.map(item => item.publicationId)).size, 23);
+    for (const item of items) assert.equal(item.popupEnabled, item.priority !== 'MINOR');
+    const minor = items.find(item => !item.popupEnabled);
+    const event = {eventId: randomUUID(), publicationId: minor.publicationId, revision: minor.revision,
+      stage: 'DISPLAYED', occurredAt: new Date().toISOString()};
+    const send = events => requestN2('/device/notification-receipts', {auth: d.auth, body: req({events})});
+    assert.equal((await send([event])).data.results[0].status, 'ACCEPTED', 'manual open of a silent notice is valid');
+    assert.equal((await send([event])).data.results[0].status, 'DUPLICATE');
+    assert.equal((await send([{...event, stage: 'DISMISSED'}])).data.results[0].code, 'IDEMPOTENCY_CONFLICT');
+    assert.equal((await send([{...event, eventId: randomUUID(), revision: 999}])).data.results[0].code, 'NOTICE_NOT_AVAILABLE');
+    const dismissed = await send([{...event, eventId: randomUUID(), stage: 'DISMISSED'}]);
+    assert.equal(validateNotification('receiptResponse', dismissed.data), true);
+    assert.equal(dismissed.data.results[0].status, 'ACCEPTED');
+    assert.equal(await prisma.notificationScreenDelivery.count({where: {publicationId: minor.publicationId}}), 0);
+    assert.equal(await prisma.npepNotificationReceipt.count({where: {deviceId: d.deviceId, stage: 'RECEIVED'}}), 0);
+    const {listNotificationScreenDeliveries} = await import('../services/notificationDeliveryService.js');
+    const report = await listNotificationScreenDeliveries({accountId: f.account.id, publicationId: minor.publicationId});
+    assert.equal(report.npepDevices[0].receivedAt, null);
+    assert.ok(report.npepDevices[0].displayedAt);
+    assert.ok(report.npepDevices[0].dismissedAt);
+    assert.equal((await request('/device/me', {auth: d.auth})).status, 200, 'N1 registration remains unchanged');
+    assert.equal((await requestN2('/device/notifications?schoolId=other', {auth: d.auth})).status, 400);
+    assert.equal((await send([{...event, stage: 'ACKNOWLEDGED'}])).status, 400);
+  });
+  await t.test('N2 changed, expired, replaced and foreign snapshot cursors fail explicitly', async () => {
+    const f = await fixture(), d = await activate(f), other = await fixture(), otherDevice = await activate(other);
+    const rows = [];
+    for (let i = 0; i < 21; i++) rows.push(await notification(f));
+    const first = await requestN2('/device/notifications', {auth: d.auth});
+    assert.equal((await requestN2(`/device/notifications?cursor=${first.data.nextCursor}`, {auth: otherDevice.auth})).status, 410);
+    await prisma.publication.update({where: {id: rows[20].id}, data: {content: '已改', revision: {increment: 1}}});
+    assert.equal((await requestN2(`/device/notifications?cursor=${first.data.nextCursor}`, {auth: d.auth})).error.code, 'SNAPSHOT_INVALIDATED');
+    const fresh = await requestN2('/device/notifications', {auth: d.auth});
+    assert.equal((await requestN2(`/device/notifications?cursor=${first.data.nextCursor}`, {auth: d.auth})).error.code, 'SNAPSHOT_EXPIRED');
+    await prisma.npepNotificationSnapshot.update({where: {deviceId: d.deviceId}, data: {expiresAt: new Date(0)}});
+    assert.equal((await requestN2(`/device/notifications?cursor=${fresh.data.nextCursor}`, {auth: d.auth})).status, 410);
+    const after = await requestN2('/device/notifications', {auth: d.auth});
+    await prisma.publication.update({where: {id: rows[0].id}, data: {expiresAt: new Date(0)}});
+    assert.equal((await requestN2(`/device/notifications?cursor=${after.data.nextCursor}`, {auth: d.auth})).status, 409);
+  });
+  await t.test('N2 historical receipts never confirm the new version or bypass revocation', async () => {
+    const f = await fixture(), d = await activate(f), row = await notification(f);
+    await requestN2('/device/notifications', {auth: d.auth});
+    await prisma.publication.update({where: {id: row.id}, data: {revision: 2, status: 'WITHDRAWN'}});
+    const event = {eventId: randomUUID(), publicationId: row.id, revision: 1, stage: 'DISMISSED', occurredAt: new Date().toISOString()};
+    const sent = await requestN2('/device/notification-receipts', {auth: d.auth, body: req({events: [event]})});
+    assert.equal(sent.data.results[0].status, 'ACCEPTED');
+    assert.equal(await prisma.npepNotificationReceipt.count({where: {publicationId: row.id, revision: 2}}), 0);
+    await observer.query('BEGIN');
+    await observer.query('SELECT id FROM "ClassroomScreenBinding" WHERE id=$1 FOR UPDATE', [f.binding.id]);
+    const waiting = requestN2('/device/notification-receipts', {auth: d.auth,
+      body: req({events: [{...event, eventId: randomUUID(), stage: 'RECEIVED'}]})});
+    await delay(100);
+    await observer.query('UPDATE "ClassroomScreenBinding" SET "isActive"=false WHERE id=$1', [f.binding.id]);
+    await observer.query('COMMIT');
+    assert.equal((await waiting).status, 401);
+    assert.equal((await requestN2('/device/notifications', {auth: d.auth})).status, 401);
+    assert.equal(await prisma.npepNotificationReceipt.count({where: {deviceId: d.deviceId}}), 1);
+  });
+  await t.test('N2 oversized contents and overflowing snapshots fail without truncation', async () => {
+    const f = await fixture(), d = await activate(f), long = await notification(f, {content: 'x'.repeat(8001)});
+    assert.equal((await requestN2('/device/notifications', {auth: d.auth})).error.code, 'SNAPSHOT_LIMIT_EXCEEDED');
+    await prisma.publication.delete({where: {id: long.id}});
+    for (let i = 0; i < 501; i++) await notification(f);
+    const response = await requestN2('/device/notifications', {auth: d.auth});
+    assert.equal(response.status, 503);
+    assert.equal(response.error.code, 'SNAPSHOT_LIMIT_EXCEEDED');
+    assert.equal(await prisma.npepNotificationSnapshot.count({where: {deviceId: d.deviceId}}), 0);
+  });
 
   await t.test('strict request boundary and separate auth domains', async () => {
     assert.equal((await request('/info', {headers: {'X-NPEP-Version': 'old'}})).status, 426);
@@ -284,13 +382,13 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     const project = process.env.INTEGRATION_COMPOSE_PROJECT;
     assert.match(project || '', /^npclassworks-(?:integration-\d+|npep-n1)$/);
     const container = `${project}-postgres-1`;
-    const backup = spawnSync('docker', ['exec', container, 'pg_dump', '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), '-Fc', '-t', 'public."NpepDevice"', '-t', 'public."NpepDeployment"'], {maxBuffer: 32 * 1024 * 1024});
+    const backup = spawnSync('docker', ['exec', container, 'pg_dump', '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), '-Fc', '-t', 'public."NpepDevice"', '-t', 'public."NpepDeployment"', '-t', 'public."NpepNotificationSnapshot"', '-t', 'public."NpepNotificationExposure"', '-t', 'public."NpepNotificationReceipt"'], {maxBuffer: 32 * 1024 * 1024});
     assert.equal(backup.status, 0, 'isolated pg_dump must succeed');
     const closed = await closeBeforeRestore(gateFile);
     assert.equal((await request('/device/me', {auth: d.auth})).status, 503);
     await prisma.npepDevice.update({where: {id: d.deviceId}, data: {state: 'REVOKED'}});
     const restored = spawnSync('docker', ['exec', '-i', container, 'pg_restore', '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), '--clean', '--if-exists', '--no-owner', '--no-privileges', '--exit-on-error'], {input: backup.stdout, maxBuffer: 32 * 1024 * 1024});
-    assert.equal(restored.status, 0, 'isolated pg_restore must succeed');
+    assert.equal(restored.status, 0, 'isolated pg_restore must succeed: ' + restored.stderr.toString());
     assert.equal((await prisma.npepDevice.findUnique({where: {id: d.deviceId}})).state, 'ACTIVE', 'the dump really restored the old active credential');
     await writeFile(gateFile, JSON.stringify({...closed, enabled: true}));
     assert.equal((await request('/device/me', {auth: d.auth})).status, 503);

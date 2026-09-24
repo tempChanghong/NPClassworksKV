@@ -377,12 +377,12 @@ export function isClassroomScreenWorkspaceAllowed(binding, workspace) {
     );
 }
 
-export async function resolveClassroomScreenWorkspaces(binding) {
+export async function resolveClassroomScreenWorkspaces(binding, client = prisma) {
     const walkingSubjectIds = binding.administrativeClass.subjectRules
         .filter((rule) => rule.deliveryMode === "COURSE_GROUP")
         .map((rule) => rule.subjectId);
     const courseGroups = walkingSubjectIds.length > 0
-        ? await prisma.workspace.findMany({
+        ? await client.workspace.findMany({
             where: {
                 termId: binding.administrativeClass.termId,
                 gradeId: binding.administrativeClass.gradeId,

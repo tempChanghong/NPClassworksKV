@@ -348,6 +348,9 @@ export type NpepDeviceWhereInput = {
   status?: Prisma.JsonNullableFilter<"NpepDevice">
   createdAt?: Prisma.DateTimeFilter<"NpepDevice"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"NpepDevice"> | Date | string | null
+  notificationSnapshot?: Prisma.XOR<Prisma.NpepNotificationSnapshotNullableScalarRelationFilter, Prisma.NpepNotificationSnapshotWhereInput> | null
+  notificationExposures?: Prisma.NpepNotificationExposureListRelationFilter
+  notificationReceipts?: Prisma.NpepNotificationReceiptListRelationFilter
 }
 
 export type NpepDeviceOrderByWithRelationInput = {
@@ -372,6 +375,9 @@ export type NpepDeviceOrderByWithRelationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotOrderByWithRelationInput
+  notificationExposures?: Prisma.NpepNotificationExposureOrderByRelationAggregateInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptOrderByRelationAggregateInput
 }
 
 export type NpepDeviceWhereUniqueInput = Prisma.AtLeast<{
@@ -399,6 +405,9 @@ export type NpepDeviceWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.JsonNullableFilter<"NpepDevice">
   createdAt?: Prisma.DateTimeFilter<"NpepDevice"> | Date | string
   revokedAt?: Prisma.DateTimeNullableFilter<"NpepDevice"> | Date | string | null
+  notificationSnapshot?: Prisma.XOR<Prisma.NpepNotificationSnapshotNullableScalarRelationFilter, Prisma.NpepNotificationSnapshotWhereInput> | null
+  notificationExposures?: Prisma.NpepNotificationExposureListRelationFilter
+  notificationReceipts?: Prisma.NpepNotificationReceiptListRelationFilter
 }, "id" | "credentialId">
 
 export type NpepDeviceOrderByWithAggregationInput = {
@@ -479,6 +488,9 @@ export type NpepDeviceCreateInput = {
   status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotCreateNestedOneWithoutDeviceInput
+  notificationExposures?: Prisma.NpepNotificationExposureCreateNestedManyWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptCreateNestedManyWithoutDeviceInput
 }
 
 export type NpepDeviceUncheckedCreateInput = {
@@ -503,6 +515,9 @@ export type NpepDeviceUncheckedCreateInput = {
   status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedCreateNestedOneWithoutDeviceInput
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedCreateNestedManyWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedCreateNestedManyWithoutDeviceInput
 }
 
 export type NpepDeviceUpdateInput = {
@@ -527,6 +542,9 @@ export type NpepDeviceUpdateInput = {
   status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUpdateOneWithoutDeviceNestedInput
+  notificationExposures?: Prisma.NpepNotificationExposureUpdateManyWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUpdateManyWithoutDeviceNestedInput
 }
 
 export type NpepDeviceUncheckedUpdateInput = {
@@ -551,6 +569,9 @@ export type NpepDeviceUncheckedUpdateInput = {
   status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedUpdateOneWithoutDeviceNestedInput
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedUpdateManyWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedUpdateManyWithoutDeviceNestedInput
 }
 
 export type NpepDeviceCreateManyInput = {
@@ -707,6 +728,451 @@ export type NpepDeviceSumOrderByAggregateInput = {
   lastSequence?: Prisma.SortOrder
 }
 
+export type NpepDeviceScalarRelationFilter = {
+  is?: Prisma.NpepDeviceWhereInput
+  isNot?: Prisma.NpepDeviceWhereInput
+}
+
+export type NpepDeviceCreateNestedOneWithoutNotificationSnapshotInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationSnapshotInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationSnapshotInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+}
+
+export type NpepDeviceUpdateOneRequiredWithoutNotificationSnapshotNestedInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationSnapshotInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationSnapshotInput
+  upsert?: Prisma.NpepDeviceUpsertWithoutNotificationSnapshotInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpepDeviceUpdateToOneWithWhereWithoutNotificationSnapshotInput, Prisma.NpepDeviceUpdateWithoutNotificationSnapshotInput>, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationSnapshotInput>
+}
+
+export type NpepDeviceCreateNestedOneWithoutNotificationExposuresInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationExposuresInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationExposuresInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+}
+
+export type NpepDeviceUpdateOneRequiredWithoutNotificationExposuresNestedInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationExposuresInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationExposuresInput
+  upsert?: Prisma.NpepDeviceUpsertWithoutNotificationExposuresInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpepDeviceUpdateToOneWithWhereWithoutNotificationExposuresInput, Prisma.NpepDeviceUpdateWithoutNotificationExposuresInput>, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationExposuresInput>
+}
+
+export type NpepDeviceCreateNestedOneWithoutNotificationReceiptsInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationReceiptsInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationReceiptsInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+}
+
+export type NpepDeviceUpdateOneRequiredWithoutNotificationReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationReceiptsInput>
+  connectOrCreate?: Prisma.NpepDeviceCreateOrConnectWithoutNotificationReceiptsInput
+  upsert?: Prisma.NpepDeviceUpsertWithoutNotificationReceiptsInput
+  connect?: Prisma.NpepDeviceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.NpepDeviceUpdateToOneWithWhereWithoutNotificationReceiptsInput, Prisma.NpepDeviceUpdateWithoutNotificationReceiptsInput>, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationReceiptsInput>
+}
+
+export type NpepDeviceCreateWithoutNotificationSnapshotInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationExposures?: Prisma.NpepNotificationExposureCreateNestedManyWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceUncheckedCreateWithoutNotificationSnapshotInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedCreateNestedManyWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceCreateOrConnectWithoutNotificationSnapshotInput = {
+  where: Prisma.NpepDeviceWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationSnapshotInput>
+}
+
+export type NpepDeviceUpsertWithoutNotificationSnapshotInput = {
+  update: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationSnapshotInput>
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationSnapshotInput>
+  where?: Prisma.NpepDeviceWhereInput
+}
+
+export type NpepDeviceUpdateToOneWithWhereWithoutNotificationSnapshotInput = {
+  where?: Prisma.NpepDeviceWhereInput
+  data: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationSnapshotInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationSnapshotInput>
+}
+
+export type NpepDeviceUpdateWithoutNotificationSnapshotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationExposures?: Prisma.NpepNotificationExposureUpdateManyWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUpdateManyWithoutDeviceNestedInput
+}
+
+export type NpepDeviceUncheckedUpdateWithoutNotificationSnapshotInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedUpdateManyWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedUpdateManyWithoutDeviceNestedInput
+}
+
+export type NpepDeviceCreateWithoutNotificationExposuresInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotCreateNestedOneWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceUncheckedCreateWithoutNotificationExposuresInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedCreateNestedOneWithoutDeviceInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceCreateOrConnectWithoutNotificationExposuresInput = {
+  where: Prisma.NpepDeviceWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationExposuresInput>
+}
+
+export type NpepDeviceUpsertWithoutNotificationExposuresInput = {
+  update: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationExposuresInput>
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationExposuresInput>
+  where?: Prisma.NpepDeviceWhereInput
+}
+
+export type NpepDeviceUpdateToOneWithWhereWithoutNotificationExposuresInput = {
+  where?: Prisma.NpepDeviceWhereInput
+  data: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationExposuresInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationExposuresInput>
+}
+
+export type NpepDeviceUpdateWithoutNotificationExposuresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUpdateOneWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUpdateManyWithoutDeviceNestedInput
+}
+
+export type NpepDeviceUncheckedUpdateWithoutNotificationExposuresInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedUpdateOneWithoutDeviceNestedInput
+  notificationReceipts?: Prisma.NpepNotificationReceiptUncheckedUpdateManyWithoutDeviceNestedInput
+}
+
+export type NpepDeviceCreateWithoutNotificationReceiptsInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotCreateNestedOneWithoutDeviceInput
+  notificationExposures?: Prisma.NpepNotificationExposureCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceUncheckedCreateWithoutNotificationReceiptsInput = {
+  id: string
+  installationId: string
+  credentialId: string
+  secretHash: string
+  serverInstanceId: string
+  deploymentEpoch: string
+  schoolId: string
+  administrativeClassId: string
+  screenBindingId: string
+  bindingRevision: number
+  deviceName: string
+  state?: string
+  credentialExpiresAt: Date | string
+  statusEpoch?: number
+  sessionId?: string | null
+  lastSequence?: number
+  lastStatusDigest?: string | null
+  lastSeenAt?: Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  revokedAt?: Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedCreateNestedOneWithoutDeviceInput
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedCreateNestedManyWithoutDeviceInput
+}
+
+export type NpepDeviceCreateOrConnectWithoutNotificationReceiptsInput = {
+  where: Prisma.NpepDeviceWhereUniqueInput
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationReceiptsInput>
+}
+
+export type NpepDeviceUpsertWithoutNotificationReceiptsInput = {
+  update: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationReceiptsInput>
+  create: Prisma.XOR<Prisma.NpepDeviceCreateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedCreateWithoutNotificationReceiptsInput>
+  where?: Prisma.NpepDeviceWhereInput
+}
+
+export type NpepDeviceUpdateToOneWithWhereWithoutNotificationReceiptsInput = {
+  where?: Prisma.NpepDeviceWhereInput
+  data: Prisma.XOR<Prisma.NpepDeviceUpdateWithoutNotificationReceiptsInput, Prisma.NpepDeviceUncheckedUpdateWithoutNotificationReceiptsInput>
+}
+
+export type NpepDeviceUpdateWithoutNotificationReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUpdateOneWithoutDeviceNestedInput
+  notificationExposures?: Prisma.NpepNotificationExposureUpdateManyWithoutDeviceNestedInput
+}
+
+export type NpepDeviceUncheckedUpdateWithoutNotificationReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  installationId?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialId?: Prisma.StringFieldUpdateOperationsInput | string
+  secretHash?: Prisma.StringFieldUpdateOperationsInput | string
+  serverInstanceId?: Prisma.StringFieldUpdateOperationsInput | string
+  deploymentEpoch?: Prisma.StringFieldUpdateOperationsInput | string
+  schoolId?: Prisma.StringFieldUpdateOperationsInput | string
+  administrativeClassId?: Prisma.StringFieldUpdateOperationsInput | string
+  screenBindingId?: Prisma.StringFieldUpdateOperationsInput | string
+  bindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  deviceName?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  credentialExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statusEpoch?: Prisma.FloatFieldUpdateOperationsInput | number
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSequence?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastStatusDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notificationSnapshot?: Prisma.NpepNotificationSnapshotUncheckedUpdateOneWithoutDeviceNestedInput
+  notificationExposures?: Prisma.NpepNotificationExposureUncheckedUpdateManyWithoutDeviceNestedInput
+}
+
+
+/**
+ * Count Type NpepDeviceCountOutputType
+ */
+
+export type NpepDeviceCountOutputType = {
+  notificationExposures: number
+  notificationReceipts: number
+}
+
+export type NpepDeviceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  notificationExposures?: boolean | NpepDeviceCountOutputTypeCountNotificationExposuresArgs
+  notificationReceipts?: boolean | NpepDeviceCountOutputTypeCountNotificationReceiptsArgs
+}
+
+/**
+ * NpepDeviceCountOutputType without action
+ */
+export type NpepDeviceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpepDeviceCountOutputType
+   */
+  select?: Prisma.NpepDeviceCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * NpepDeviceCountOutputType without action
+ */
+export type NpepDeviceCountOutputTypeCountNotificationExposuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpepNotificationExposureWhereInput
+}
+
+/**
+ * NpepDeviceCountOutputType without action
+ */
+export type NpepDeviceCountOutputTypeCountNotificationReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NpepNotificationReceiptWhereInput
+}
 
 
 export type NpepDeviceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -731,6 +1197,10 @@ export type NpepDeviceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   createdAt?: boolean
   revokedAt?: boolean
+  notificationSnapshot?: boolean | Prisma.NpepDevice$notificationSnapshotArgs<ExtArgs>
+  notificationExposures?: boolean | Prisma.NpepDevice$notificationExposuresArgs<ExtArgs>
+  notificationReceipts?: boolean | Prisma.NpepDevice$notificationReceiptsArgs<ExtArgs>
+  _count?: boolean | Prisma.NpepDeviceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["npepDevice"]>
 
 export type NpepDeviceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -806,10 +1276,22 @@ export type NpepDeviceSelectScalar = {
 }
 
 export type NpepDeviceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "installationId" | "credentialId" | "secretHash" | "serverInstanceId" | "deploymentEpoch" | "schoolId" | "administrativeClassId" | "screenBindingId" | "bindingRevision" | "deviceName" | "state" | "credentialExpiresAt" | "statusEpoch" | "sessionId" | "lastSequence" | "lastStatusDigest" | "lastSeenAt" | "status" | "createdAt" | "revokedAt", ExtArgs["result"]["npepDevice"]>
+export type NpepDeviceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  notificationSnapshot?: boolean | Prisma.NpepDevice$notificationSnapshotArgs<ExtArgs>
+  notificationExposures?: boolean | Prisma.NpepDevice$notificationExposuresArgs<ExtArgs>
+  notificationReceipts?: boolean | Prisma.NpepDevice$notificationReceiptsArgs<ExtArgs>
+  _count?: boolean | Prisma.NpepDeviceCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type NpepDeviceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type NpepDeviceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $NpepDevicePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NpepDevice"
-  objects: {}
+  objects: {
+    notificationSnapshot: Prisma.$NpepNotificationSnapshotPayload<ExtArgs> | null
+    notificationExposures: Prisma.$NpepNotificationExposurePayload<ExtArgs>[]
+    notificationReceipts: Prisma.$NpepNotificationReceiptPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     installationId: string
@@ -1226,6 +1708,9 @@ readonly fields: NpepDeviceFieldRefs;
  */
 export interface Prisma__NpepDeviceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  notificationSnapshot<T extends Prisma.NpepDevice$notificationSnapshotArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpepDevice$notificationSnapshotArgs<ExtArgs>>): Prisma.Prisma__NpepNotificationSnapshotClient<runtime.Types.Result.GetResult<Prisma.$NpepNotificationSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notificationExposures<T extends Prisma.NpepDevice$notificationExposuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpepDevice$notificationExposuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpepNotificationExposurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationReceipts<T extends Prisma.NpepDevice$notificationReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NpepDevice$notificationReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NpepNotificationReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1293,6 +1778,10 @@ export type NpepDeviceFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * Filter, which NpepDevice to fetch.
    */
   where: Prisma.NpepDeviceWhereUniqueInput
@@ -1311,6 +1800,10 @@ export type NpepDeviceFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * Filter, which NpepDevice to fetch.
    */
   where: Prisma.NpepDeviceWhereUniqueInput
@@ -1328,6 +1821,10 @@ export type NpepDeviceFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the NpepDevice
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
   /**
    * Filter, which NpepDevice to fetch.
    */
@@ -1377,6 +1874,10 @@ export type NpepDeviceFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * Filter, which NpepDevice to fetch.
    */
   where?: Prisma.NpepDeviceWhereInput
@@ -1425,6 +1926,10 @@ export type NpepDeviceFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * Filter, which NpepDevices to fetch.
    */
   where?: Prisma.NpepDeviceWhereInput
@@ -1467,6 +1972,10 @@ export type NpepDeviceCreateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the NpepDevice
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
   /**
    * The data needed to create a NpepDevice.
    */
@@ -1515,6 +2024,10 @@ export type NpepDeviceUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the NpepDevice
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
   /**
    * The data needed to update a NpepDevice.
    */
@@ -1582,6 +2095,10 @@ export type NpepDeviceUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * The filter to search for the NpepDevice to update in case it exists.
    */
   where: Prisma.NpepDeviceWhereUniqueInput
@@ -1608,6 +2125,10 @@ export type NpepDeviceDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
+  /**
    * Filter which NpepDevice to delete.
    */
   where: Prisma.NpepDeviceWhereUniqueInput
@@ -1628,6 +2149,73 @@ export type NpepDeviceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * NpepDevice.notificationSnapshot
+ */
+export type NpepDevice$notificationSnapshotArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpepNotificationSnapshot
+   */
+  select?: Prisma.NpepNotificationSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpepNotificationSnapshot
+   */
+  omit?: Prisma.NpepNotificationSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepNotificationSnapshotInclude<ExtArgs> | null
+  where?: Prisma.NpepNotificationSnapshotWhereInput
+}
+
+/**
+ * NpepDevice.notificationExposures
+ */
+export type NpepDevice$notificationExposuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpepNotificationExposure
+   */
+  select?: Prisma.NpepNotificationExposureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpepNotificationExposure
+   */
+  omit?: Prisma.NpepNotificationExposureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepNotificationExposureInclude<ExtArgs> | null
+  where?: Prisma.NpepNotificationExposureWhereInput
+  orderBy?: Prisma.NpepNotificationExposureOrderByWithRelationInput | Prisma.NpepNotificationExposureOrderByWithRelationInput[]
+  cursor?: Prisma.NpepNotificationExposureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpepNotificationExposureScalarFieldEnum | Prisma.NpepNotificationExposureScalarFieldEnum[]
+}
+
+/**
+ * NpepDevice.notificationReceipts
+ */
+export type NpepDevice$notificationReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NpepNotificationReceipt
+   */
+  select?: Prisma.NpepNotificationReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NpepNotificationReceipt
+   */
+  omit?: Prisma.NpepNotificationReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepNotificationReceiptInclude<ExtArgs> | null
+  where?: Prisma.NpepNotificationReceiptWhereInput
+  orderBy?: Prisma.NpepNotificationReceiptOrderByWithRelationInput | Prisma.NpepNotificationReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.NpepNotificationReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NpepNotificationReceiptScalarFieldEnum | Prisma.NpepNotificationReceiptScalarFieldEnum[]
+}
+
+/**
  * NpepDevice without action
  */
 export type NpepDeviceDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1639,4 +2227,8 @@ export type NpepDeviceDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the NpepDevice
    */
   omit?: Prisma.NpepDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NpepDeviceInclude<ExtArgs> | null
 }

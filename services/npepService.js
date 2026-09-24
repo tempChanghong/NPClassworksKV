@@ -104,6 +104,7 @@ export function createNpepService(prisma, deploymentProvider) {
   const approved = pair => ({pairingId: pair.id, state: 'APPROVED', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5, approvalId: pair.approvalId, ...pair.approvalSnapshot});
 
   return {
+    withDevice: (auth, operation) => transaction(async (tx, config) => operation(tx, await device(tx, auth, config))),
     async pollRate(identity) {
       const key = `poll:${hash(identity)}`;
       const rows = await prisma.$queryRaw`INSERT INTO "NpepRateLimit" (key, count, "expiresAt")

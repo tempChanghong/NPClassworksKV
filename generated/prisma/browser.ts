@@ -201,3 +201,18 @@ export type ClassAttendanceDay = Prisma.ClassAttendanceDayModel
  * 每次保存产生一条完整、不可变的内容快照；Publication 仅保存当前生效版本。
  */
 export type PublicationRevision = Prisma.PublicationRevisionModel
+/**
+ * Model NpepNotificationSnapshot
+ *
+ */
+export type NpepNotificationSnapshot = Prisma.NpepNotificationSnapshotModel
+/**
+ * Model NpepNotificationExposure
+ *
+ */
+export type NpepNotificationExposure = Prisma.NpepNotificationExposureModel
+/**
+ * Model NpepNotificationReceipt
+ *
+ */
+export type NpepNotificationReceipt = Prisma.NpepNotificationReceiptModel

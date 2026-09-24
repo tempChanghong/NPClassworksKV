@@ -5,6 +5,12 @@ export async function cleanupNpep(client = prisma) {
   return client.$transaction(async tx => {
     const [lock] = await tx.$queryRaw`SELECT pg_try_advisory_xact_lock(781002) AS locked`;
     if (!lock.locked) return;
+    await tx.$executeRaw`DELETE FROM "NpepNotificationSnapshot" WHERE "deviceId" IN
+      (SELECT "deviceId" FROM "NpepNotificationSnapshot" WHERE "expiresAt"<=clock_timestamp() ORDER BY "expiresAt" LIMIT 5000)`;
+    await tx.$executeRaw`DELETE FROM "NpepNotificationReceipt" WHERE ("deviceId","eventId") IN
+      (SELECT "deviceId","eventId" FROM "NpepNotificationReceipt" WHERE "receivedAt"<clock_timestamp()-interval '90 days' ORDER BY "receivedAt" LIMIT 5000)`;
+    await tx.$executeRaw`DELETE FROM "NpepNotificationExposure" WHERE ("deviceId","publicationId","revision") IN
+      (SELECT "deviceId","publicationId","revision" FROM "NpepNotificationExposure" WHERE "exposedAt"<clock_timestamp()-interval '90 days' ORDER BY "exposedAt" LIMIT 5000)`;
     await tx.$executeRaw`UPDATE "NpepPairing" SET "secretHash"=NULL
       WHERE id IN (SELECT id FROM "NpepPairing" WHERE "expiresAt"<=clock_timestamp() AND "secretHash" IS NOT NULL ORDER BY "expiresAt" LIMIT 5000)`;
     await tx.$executeRaw`DELETE FROM "NpepPairing" WHERE id IN

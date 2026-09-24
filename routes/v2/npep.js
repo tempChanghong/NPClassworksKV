@@ -4,20 +4,24 @@ import {verifyAccessToken} from '../../utils/tokenManager.js';
 import {createNpepService} from '../../services/npepService.js';
 import {readDeployment} from '../../domain/npep/deployment.js';
 import {NpepError, UUID, OPAQUE_ID, validate, parseStrictJson, bearer, envelope, fail} from '../../domain/npep/wire.js';
+import {createNpepNotificationService, notificationCursor} from '../../services/npepNotificationService.js';
+import {validateNotification} from '../../domain/npep/notifications.js';
 
 export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true} = {}) {
   const router = express.Router();
   const service = createNpepService(client, deployment);
+  const notifications = createNpepNotificationService(service);
   router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
     try {
-      if (req.get('X-NPEP-Version') !== '0.1') fail(426, 'PROTOCOL_UNSUPPORTED');
+      req.npepVersion = /^\/device\/(notifications|notification-receipts)\/?$/i.test(req.path) ? '0.2' : '0.1';
+      if (req.get('X-NPEP-Version') !== req.npepVersion) fail(426, 'PROTOCOL_UNSUPPORTED');
       deployment();
       if (req.method === 'POST' && !req.is('application/json')) fail(400, 'INVALID_REQUEST');
       next();
     } catch (error) { next(error); }
   });
-  router.use(express.raw({type: 'application/json', limit: 16384, inflate: false}));
+  router.use((req, res, next) => express.raw({type: 'application/json', limit: req.npepVersion === '0.2' ? 65536 : 16384, inflate: false})(req, res, next));
   router.use((req, _res, next) => {
     try {
       if (req.method === 'POST') req.body = parseStrictJson(req.body);
@@ -52,7 +56,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
     try {
       const result = await operation(req);
       const wrapped = Object.hasOwn(result, 'created');
-      res.status(wrapped && result.created ? 201 : 200).json(envelope(req.npepRequestId, wrapped ? result.data : result));
+      res.status(wrapped && result.created ? 201 : 200).json({...envelope(req.npepRequestId, wrapped ? result.data : result), protocolVersion: req.npepVersion});
     } catch (error) { next(error); }
   };
   router.get('/info', send(() => service.info()));
@@ -88,6 +92,21 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   }));
   router.post('/schools/:schoolId/devices/:id/revoke', admin, body('revokeDevice'), send(req => service.revoke(null, req.npepClaims, req.params.schoolId, req.params.id, req.body)));
   router.get('/device/me', send(req => service.me(deviceAuth(req))));
+  router.get('/device/notifications', send(async req => {
+    const auth = deviceAuth(req);
+    if (Object.keys(req.query).some(key => key !== 'cursor') ||
+        (req.query.cursor !== undefined && (typeof req.query.cursor !== 'string' || !notificationCursor.test(req.query.cursor)))) fail(400, 'INVALID_REQUEST');
+    await service.me(auth);
+    await rate(req.query.cursor ? 'notification-pages' : 'notifications', auth.id, req.query.cursor ? 180 : 12, 60);
+    return notifications.snapshot(auth, req.query.cursor);
+  }));
+  router.post('/device/notification-receipts', send(async req => {
+    if (!validateNotification('receiptRequest', req.body)) fail(400, 'INVALID_REQUEST');
+    const auth = deviceAuth(req);
+    await service.me(auth);
+    await rate('notification-receipts', auth.id, 30, 60);
+    return notifications.receipts(auth, req.body.events);
+  }));
   router.post('/device/sessions', body('openSession'), send(async req => {
     const auth = deviceAuth(req);
     await service.me(auth);
@@ -110,7 +129,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
     else if (error.code === 'P2002') safe = new NpepError(409, 'CREDENTIAL_ID_CONFLICT');
     if (safe.retryAfterSeconds) res.set('Retry-After', String(safe.retryAfterSeconds));
     const {data: unused, ...base} = envelope(req.npepRequestId);
-    res.status(safe.status).json({...base, error: {code: safe.code, message: safe.code, retryAfterSeconds: safe.retryAfterSeconds}});
+    res.status(safe.status).json({...base, protocolVersion: req.npepVersion || '0.1', error: {code: safe.code, message: safe.code, retryAfterSeconds: safe.retryAfterSeconds}});
   });
   return router;
 }

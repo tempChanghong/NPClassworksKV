@@ -94,9 +94,19 @@ export async function listNotificationScreenDeliveries({accountId, publicationId
         },
         orderBy: {name: "asc"},
     });
+    const npepDevices = await prisma.npepDevice.findMany({where: {screenBindingId: {in: bindings.map(binding => binding.id)}},
+        select: {id: true, deviceName: true, screenBindingId: true, state: true, lastSeenAt: true}, orderBy: {id: 'asc'}});
+    const stages = await prisma.npepNotificationReceipt.groupBy({by: ['deviceId', 'stage'],
+        where: {publicationId, revision: publication.revision, deviceId: {in: npepDevices.map(device => device.id)}},
+        _min: {receivedAt: true}});
     return {
         publicationId,
         revision: publication.revision,
+        npepDevices: npepDevices.map(device => ({deviceId: device.id, name: device.deviceName, state: device.state,
+            lastSeenAt: device.lastSeenAt, className: bindings.find(binding => binding.id === device.screenBindingId)?.administrativeClass.name || '',
+            receivedAt: stages.find(row => row.deviceId === device.id && row.stage === 'RECEIVED')?._min.receivedAt || null,
+            displayedAt: stages.find(row => row.deviceId === device.id && row.stage === 'DISPLAYED')?._min.receivedAt || null,
+            dismissedAt: stages.find(row => row.deviceId === device.id && row.stage === 'DISMISSED')?._min.receivedAt || null})),
         screens: bindings.map((binding) => ({
             binding: {
                 id: binding.id,

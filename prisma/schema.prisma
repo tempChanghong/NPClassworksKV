@@ -661,6 +661,9 @@ model NpepDevice {
   status Json?
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   revokedAt DateTime? @db.Timestamptz(3)
+  notificationSnapshot NpepNotificationSnapshot?
+  notificationExposures NpepNotificationExposure[]
+  notificationReceipts NpepNotificationReceipt[]
   @@index([schoolId, id])
   @@index([screenBindingId, state])
   @@index([credentialExpiresAt])
@@ -830,4 +833,37 @@ model PublicationRevision {
   @@index([isCertified, purgedAt, createdAt])
   @@index([editorAccountId])
   @@index([certifiedByAccountId])
+}
+
+model NpepNotificationSnapshot {
+  deviceId String @id @db.Uuid
+  snapshotId String @unique @db.Uuid
+  fingerprint String @db.VarChar(64)
+  items Json
+  expiresAt DateTime @db.Timestamptz(3)
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  @@index([expiresAt])
+}
+model NpepNotificationExposure {
+  deviceId String @db.Uuid
+  publicationId String @db.VarChar(191)
+  revision Int
+  exposedAt DateTime @default(now()) @db.Timestamptz(3)
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  @@id([deviceId, publicationId, revision])
+  @@index([exposedAt])
+}
+model NpepNotificationReceipt {
+  deviceId String @db.Uuid
+  eventId String @db.Uuid
+  publicationId String @db.VarChar(191)
+  revision Int
+  stage String @db.VarChar(16)
+  occurredAt DateTime @db.Timestamptz(3)
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+  digest String @db.VarChar(64)
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  @@id([deviceId, eventId])
+  @@index([publicationId, revision, receivedAt])
+  @@index([receivedAt])
 }
