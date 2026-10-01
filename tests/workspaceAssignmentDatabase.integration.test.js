@@ -4,7 +4,13 @@ import test from "node:test";
 
 const shouldRun = process.env.RUN_DATABASE_TESTS === "true";
 
-test("local school login and pending OAuth assignments work together", {skip: !shouldRun}, async () => {
+test("local school login and pending OAuth assignments work together", {skip: !shouldRun}, async (t) => {
+    // The board's default day is Shanghai's calendar, including UTC's previous day.
+    // Pin both the published fixtures and feed clock so CI does not depend on wall time.
+    const feedNow = new Date("2026-09-01T17:00:00.000Z");
+    t.mock.timers.enable({apis: ["Date"], now: feedNow});
+    const fixtureBoardDate = "2026-09-02";
+    const fixturePublishAt = new Date(feedNow.getTime() - 1000).toISOString();
     process.env.BOOTSTRAP_SETUP_KEY = "phase5d-bootstrap-key-that-is-long-enough";
     const [
         {prisma},
@@ -208,6 +214,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         });
         const emptyFeed = await publicationService.listPublishedFeed({
             workspaceIds: [classOneWorkspace.id],
+            now: feedNow,
         });
         assert.deepEqual(emptyFeed.items, []);
         assert.equal(emptyFeed.nextTransitionAt, null);
@@ -220,8 +227,8 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 subjectId: physics.id,
                 title: "数据库集成测试作业",
                 content: "验证教师列表与学生 feed",
-                boardDate: new Date().toISOString().slice(0, 10),
-                publishAt: new Date(Date.now() - 1000).toISOString(),
+                boardDate: fixtureBoardDate,
+                publishAt: fixturePublishAt,
                 targetWorkspaceIds: [classOneWorkspace.id],
             },
         });
@@ -231,6 +238,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.equal(teacherPublications.items.length, 1);
         const populatedFeed = await publicationService.listPublishedFeed({
             workspaceIds: [classOneWorkspace.id],
+            now: feedNow,
         });
         assert.equal(populatedFeed.items.length, 1);
         assert.equal(populatedFeed.items[0].title, "数据库集成测试作业");
@@ -238,6 +246,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         const historicalFeed = await publicationService.listPublishedFeed({
             workspaceIds: [classOneWorkspace.id],
             boardDate: "1999-01-01",
+            now: feedNow,
         });
         assert.equal(historicalFeed.items.length, 0);
         assert.equal((await publicationService.listPublicationRevisions({
@@ -260,8 +269,8 @@ test("local school login and pending OAuth assignments work together", {skip: !s
             input: {
                 subjectId: chinese.id,
                 content: "语文教师以外的任课教师不应看到此项",
-                boardDate: new Date().toISOString().slice(0, 10),
-                publishAt: new Date(Date.now() - 1000).toISOString(),
+                boardDate: fixtureBoardDate,
+                publishAt: fixturePublishAt,
                 targetWorkspaceIds: [classOneWorkspace.id],
             },
         });
@@ -331,8 +340,8 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 subjectId: chinese.id,
                 title: "多班统一布置",
                 content: "老师发布的原始内容",
-                boardDate: new Date().toISOString().slice(0, 10),
-                publishAt: new Date(Date.now() - 1000).toISOString(),
+                boardDate: fixtureBoardDate,
+                publishAt: fixturePublishAt,
                 targetWorkspaceIds: [walkingClassWorkspace.id, classFourWorkspace.id],
             },
         });
@@ -369,6 +378,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
 
         const screenFeed = await publicationService.listPublishedFeed({
             workspaceIds: screenTargets.workspaces.map((workspace) => workspace.id),
+            now: feedNow,
         });
         assert.ok(screenFeed.workspaceIds.includes(walkingClassWorkspace.id));
         assert.ok(screenFeed.workspaceIds.includes(physicsA1Workspace.id));
@@ -379,8 +389,8 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 input: {
                     subjectId: physics.id,
                     content: "不应允许写入无关走班",
-                    boardDate: new Date().toISOString().slice(0, 10),
-                    publishAt: new Date(Date.now() - 1000).toISOString(),
+                    boardDate: fixtureBoardDate,
+                    publishAt: fixturePublishAt,
                     targetWorkspaceIds: [unrelatedPhysicsWorkspace.id],
                 },
             }),
@@ -431,8 +441,8 @@ test("local school login and pending OAuth assignments work together", {skip: !s
                 subjectId: physics.id,
                 title: "大屏未认证作业",
                 content: "版本一",
-                boardDate: new Date().toISOString().slice(0, 10),
-                publishAt: new Date(Date.now() - 1000).toISOString(),
+                boardDate: fixtureBoardDate,
+                publishAt: fixturePublishAt,
                 targetWorkspaceIds: [physicsA1Workspace.id],
             },
         });
@@ -440,7 +450,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.equal(screenPublication.latestActorType, "CLASSROOM_SCREEN");
         const copiedBoard = await publicationService.copyScreenBoardDate({
             screenBinding: authenticatedScreen,
-            sourceBoardDate: new Date().toISOString().slice(0, 10),
+            sourceBoardDate: fixtureBoardDate,
             targetBoardDate: "2099-01-01",
         });
         // Both the earlier class-local assignment and the physics assignment are copied.
@@ -448,7 +458,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         assert.deepEqual(copiedBoard.created.map(item => item.subjectId).sort(), [chinese.id, physics.id].sort());
         const copiedAgain = await publicationService.copyScreenBoardDate({
             screenBinding: authenticatedScreen,
-            sourceBoardDate: new Date().toISOString().slice(0, 10),
+            sourceBoardDate: fixtureBoardDate,
             targetBoardDate: "2099-01-01",
         });
         assert.equal(copiedAgain.createdCount, 0);
