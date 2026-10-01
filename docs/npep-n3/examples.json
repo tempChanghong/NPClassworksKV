@@ -1,0 +1,1771 @@
+{
+  "cases": [
+    {
+      "name": "disabled local policy",
+      "definition": "policyRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "policy": {
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "enabled": false,
+          "supported": true
+        }
+      }
+    },
+    {
+      "name": "independent runtime status",
+      "definition": "statusRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "sequence": 1,
+        "sampleAgeMs": 0,
+        "status": {
+          "runtimeMode": "OTHER",
+          "runtimePhase": "IDLE",
+          "runtimeRevision": 1,
+          "modeRevision": 2,
+          "configurationRevision": 3,
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "remoteExamPause": false,
+          "recording": "IDLE",
+          "desktop": "INTERACTIVE",
+          "noticeOpen": false,
+          "operationId": null,
+          "observedAt": "2026-09-25T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "name": "fixed exam request",
+      "definition": "createRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "EXAM",
+        "scope": "EXAM_MODE",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006"
+      }
+    },
+    {
+      "name": "legacy runtime-only create rejected",
+      "definition": "createRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "EXAM",
+        "scope": "CURRENT_RUNTIME",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006"
+      }
+    },
+    {
+      "name": "legacy history readable",
+      "definition": "operation",
+      "valid": true,
+      "value": {
+        "operationId": "00000000-0000-4000-8000-000000000010",
+        "deviceId": "00000000-0000-4000-8000-000000000003",
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "identity": {
+          "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+          "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+          "deviceId": "00000000-0000-4000-8000-000000000003",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "schoolId": "school-test",
+        "administrativeClassId": "class-test",
+        "screenBindingId": "binding-test",
+        "target": "EXAM",
+        "scope": "CURRENT_RUNTIME",
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "initiator": {
+          "displayName": "测试管理员"
+        },
+        "createdAt": "2026-09-25T00:00:00.000Z",
+        "expiresAt": "2026-09-25T00:05:00.000Z",
+        "state": "PARTIAL",
+        "step": "CLOSE_CLASSISLAND",
+        "reasonCode": "UAC_CANCELLED",
+        "lastEventSequence": 4,
+        "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+        "grant": {
+          "grantId": "00000000-0000-4000-8000-000000000009",
+          "operationId": "00000000-0000-4000-8000-000000000010",
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006",
+          "expectedRuntimeRevision": 1,
+          "expectedModeRevision": 2,
+          "expectedConfigurationRevision": 3,
+          "authorizedAt": "2026-09-25T00:00:00.000Z",
+          "startNotAfter": "2026-09-25T00:00:30.000Z"
+        },
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "resolvedAt": null,
+        "resolutionId": null,
+        "freshness": "CURRENT",
+        "localEndedAt": null
+      }
+    },
+    {
+      "name": "cancel before grant shape",
+      "definition": "cancelRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012"
+      }
+    },
+    {
+      "name": "start request shape",
+      "definition": "startRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3
+      }
+    },
+    {
+      "name": "immutable grant response",
+      "definition": "startResponse",
+      "valid": true,
+      "value": {
+        "grant": {
+          "grantId": "00000000-0000-4000-8000-000000000009",
+          "operationId": "00000000-0000-4000-8000-000000000010",
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006",
+          "expectedRuntimeRevision": 1,
+          "expectedModeRevision": 2,
+          "expectedConfigurationRevision": 3,
+          "authorizedAt": "2026-09-25T00:00:00.000Z",
+          "startNotAfter": "2026-09-25T00:00:30.000Z"
+        },
+        "serverTime": "2026-09-25T00:00:00.000Z"
+      }
+    },
+    {
+      "name": "partial evidence",
+      "definition": "eventsRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "events": [
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "new uploader old execution",
+      "definition": "eventsRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000014",
+          "sessionId": "00000000-0000-4000-8000-000000000015",
+          "statusEpoch": 2,
+          "controlEpoch": "00000000-0000-4000-8000-000000000016"
+        },
+        "events": [
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "UNKNOWN",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UNKNOWN_RESULT",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "local resolve shape",
+      "definition": "resolveRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "resolutionId": "00000000-0000-4000-8000-000000000013",
+        "expectedLastEventSequence": 4,
+        "kind": "LOCAL_END",
+        "noPendingActions": true,
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": false,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "occurredAt": "2026-09-25T00:00:00.000Z"
+      }
+    },
+    {
+      "name": "operation with partial history",
+      "definition": "operation",
+      "valid": true,
+      "value": {
+        "operationId": "00000000-0000-4000-8000-000000000010",
+        "deviceId": "00000000-0000-4000-8000-000000000003",
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "identity": {
+          "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+          "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+          "deviceId": "00000000-0000-4000-8000-000000000003",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "schoolId": "school-test",
+        "administrativeClassId": "class-test",
+        "screenBindingId": "binding-test",
+        "target": "EXAM",
+        "scope": "EXAM_MODE",
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "initiator": {
+          "displayName": "测试管理员"
+        },
+        "createdAt": "2026-09-25T00:00:00.000Z",
+        "expiresAt": "2026-09-25T00:05:00.000Z",
+        "state": "PARTIAL",
+        "step": "CLOSE_CLASSISLAND",
+        "reasonCode": "UAC_CANCELLED",
+        "lastEventSequence": 4,
+        "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+        "grant": {
+          "grantId": "00000000-0000-4000-8000-000000000009",
+          "operationId": "00000000-0000-4000-8000-000000000010",
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006",
+          "expectedRuntimeRevision": 1,
+          "expectedModeRevision": 2,
+          "expectedConfigurationRevision": 3,
+          "authorizedAt": "2026-09-25T00:00:00.000Z",
+          "startNotAfter": "2026-09-25T00:00:30.000Z"
+        },
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "resolvedAt": null,
+        "resolutionId": null,
+        "freshness": "CURRENT",
+        "localEndedAt": null
+      }
+    },
+    {
+      "name": "device unresolved task",
+      "definition": "deviceOperations",
+      "valid": true,
+      "value": {
+        "items": [
+          {
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "requestId": "00000000-0000-4000-8000-000000000008",
+            "identity": {
+              "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+              "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+              "deviceId": "00000000-0000-4000-8000-000000000003",
+              "bindingRevision": 1,
+              "credentialGeneration": 1
+            },
+            "schoolId": "school-test",
+            "administrativeClassId": "class-test",
+            "screenBindingId": "binding-test",
+            "target": "EXAM",
+            "scope": "EXAM_MODE",
+            "consentId": "00000000-0000-4000-8000-000000000007",
+            "policyRevision": 1,
+            "controlEpoch": "00000000-0000-4000-8000-000000000006",
+            "expectedRuntimeRevision": 1,
+            "expectedModeRevision": 2,
+            "expectedConfigurationRevision": 3,
+            "initiator": {
+              "displayName": "测试管理员"
+            },
+            "createdAt": "2026-09-25T00:00:00.000Z",
+            "expiresAt": "2026-09-25T00:05:00.000Z",
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "lastEventSequence": 4,
+            "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+            "grant": {
+              "grantId": "00000000-0000-4000-8000-000000000009",
+              "operationId": "00000000-0000-4000-8000-000000000010",
+              "identity": {
+                "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+                "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+                "deviceId": "00000000-0000-4000-8000-000000000003",
+                "bindingRevision": 1,
+                "credentialGeneration": 1
+              },
+              "consentId": "00000000-0000-4000-8000-000000000007",
+              "policyRevision": 1,
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "expectedRuntimeRevision": 1,
+              "expectedModeRevision": 2,
+              "expectedConfigurationRevision": 3,
+              "authorizedAt": "2026-09-25T00:00:00.000Z",
+              "startNotAfter": "2026-09-25T00:00:30.000Z"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            },
+            "resolvedAt": null,
+            "resolutionId": null,
+            "freshness": "CURRENT",
+            "localEndedAt": null
+          }
+        ],
+        "pollAfterSeconds": 2
+      }
+    },
+    {
+      "name": "empty old device runtime status",
+      "definition": "managementStatus",
+      "valid": true,
+      "value": {
+        "policy": null,
+        "status": null,
+        "receivedAt": null,
+        "sampleAsOf": null,
+        "connectivity": "UNKNOWN",
+        "unresolvedOperationId": null,
+        "controlEpoch": null
+      }
+    },
+    {
+      "name": "extra startup flag",
+      "definition": "createRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "EXAM",
+        "scope": "EXAM_MODE",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006",
+        "AutoStartEnabled": true
+      }
+    },
+    {
+      "name": "daily target supported",
+      "definition": "createRequest",
+      "valid": true,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "DAILY",
+        "scope": "EXAM_MODE",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006"
+      }
+    },
+    {
+      "name": "scheduled scope forbidden",
+      "definition": "createRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "EXAM",
+        "scope": "NEXT_BOOT",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006"
+      }
+    },
+    {
+      "name": "arbitrary path forbidden",
+      "definition": "createRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "target": "EXAM",
+        "scope": "EXAM_MODE",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006",
+        "path": "C:/test.exe"
+      }
+    },
+    {
+      "name": "missing policy revision",
+      "definition": "policyRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "policy": {
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "enabled": true,
+          "supported": true
+        }
+      }
+    },
+    {
+      "name": "fractional sequence",
+      "definition": "statusRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "sequence": 1.5,
+        "sampleAgeMs": 0,
+        "status": {
+          "runtimeMode": "OTHER",
+          "runtimePhase": "IDLE",
+          "runtimeRevision": 1,
+          "modeRevision": 2,
+          "configurationRevision": 3,
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "remoteExamPause": false,
+          "recording": "IDLE",
+          "desktop": "INTERACTIVE",
+          "noticeOpen": false,
+          "operationId": null,
+          "observedAt": "2026-09-25T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "name": "unsafe sequence",
+      "definition": "statusRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "sequence": 9007199254740992,
+        "sampleAgeMs": 0,
+        "status": {
+          "runtimeMode": "OTHER",
+          "runtimePhase": "IDLE",
+          "runtimeRevision": 1,
+          "modeRevision": 2,
+          "configurationRevision": 3,
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "remoteExamPause": false,
+          "recording": "IDLE",
+          "desktop": "INTERACTIVE",
+          "noticeOpen": false,
+          "operationId": null,
+          "observedAt": "2026-09-25T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "name": "expired age shape",
+      "definition": "statusRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "sequence": 1,
+        "sampleAgeMs": 60001,
+        "status": {
+          "runtimeMode": "OTHER",
+          "runtimePhase": "IDLE",
+          "runtimeRevision": 1,
+          "modeRevision": 2,
+          "configurationRevision": 3,
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "remoteExamPause": false,
+          "recording": "IDLE",
+          "desktop": "INTERACTIVE",
+          "noticeOpen": false,
+          "operationId": null,
+          "observedAt": "2026-09-25T00:00:00.000Z"
+        }
+      }
+    },
+    {
+      "name": "device cannot self authorize",
+      "definition": "eventsRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "events": [
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "START_AUTHORIZED",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "empty event batch",
+      "definition": "eventsRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "events": []
+      }
+    },
+    {
+      "name": "oversized event batch",
+      "definition": "eventsRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "events": [
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          },
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "startup write evidence forbidden",
+      "definition": "eventsRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "events": [
+          {
+            "eventId": "00000000-0000-4000-8000-000000000011",
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "sequence": 4,
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "occurredAt": "2026-09-25T00:00:00.000Z",
+            "execution": {
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "grantId": "00000000-0000-4000-8000-000000000009"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "ENABLED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "remote resolution forbidden",
+      "definition": "resolveRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "resolutionId": "00000000-0000-4000-8000-000000000013",
+        "expectedLastEventSequence": 4,
+        "kind": "REMOTE_FORCE",
+        "noPendingActions": true,
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "occurredAt": "2026-09-25T00:00:00.000Z"
+      }
+    },
+    {
+      "name": "pending action cannot resolve",
+      "definition": "resolveRequest",
+      "valid": false,
+      "value": {
+        "requestId": "00000000-0000-4000-8000-000000000012",
+        "context": {
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "resolutionId": "00000000-0000-4000-8000-000000000013",
+        "expectedLastEventSequence": 4,
+        "kind": "LOCAL_END",
+        "noPendingActions": false,
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "occurredAt": "2026-09-25T00:00:00.000Z"
+      }
+    },
+    {
+      "name": "utf16 author overflow",
+      "definition": "operation",
+      "valid": false,
+      "value": {
+        "operationId": "00000000-0000-4000-8000-000000000010",
+        "deviceId": "00000000-0000-4000-8000-000000000003",
+        "requestId": "00000000-0000-4000-8000-000000000008",
+        "identity": {
+          "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+          "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+          "deviceId": "00000000-0000-4000-8000-000000000003",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "schoolId": "school-test",
+        "administrativeClassId": "class-test",
+        "screenBindingId": "binding-test",
+        "target": "EXAM",
+        "scope": "EXAM_MODE",
+        "consentId": "00000000-0000-4000-8000-000000000007",
+        "policyRevision": 1,
+        "controlEpoch": "00000000-0000-4000-8000-000000000006",
+        "expectedRuntimeRevision": 1,
+        "expectedModeRevision": 2,
+        "expectedConfigurationRevision": 3,
+        "initiator": {
+          "displayName": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+        },
+        "createdAt": "2026-09-25T00:00:00.000Z",
+        "expiresAt": "2026-09-25T00:05:00.000Z",
+        "state": "PARTIAL",
+        "step": "CLOSE_CLASSISLAND",
+        "reasonCode": "UAC_CANCELLED",
+        "lastEventSequence": 4,
+        "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+        "grant": {
+          "grantId": "00000000-0000-4000-8000-000000000009",
+          "operationId": "00000000-0000-4000-8000-000000000010",
+          "identity": {
+            "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+            "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "bindingRevision": 1,
+            "credentialGeneration": 1
+          },
+          "consentId": "00000000-0000-4000-8000-000000000007",
+          "policyRevision": 1,
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006",
+          "expectedRuntimeRevision": 1,
+          "expectedModeRevision": 2,
+          "expectedConfigurationRevision": 3,
+          "authorizedAt": "2026-09-25T00:00:00.000Z",
+          "startNotAfter": "2026-09-25T00:00:30.000Z"
+        },
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        },
+        "resolvedAt": null,
+        "resolutionId": null,
+        "freshness": "CURRENT",
+        "localEndedAt": null
+      }
+    },
+    {
+      "name": "more than one unresolved task",
+      "definition": "deviceOperations",
+      "valid": false,
+      "value": {
+        "items": [
+          {
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "requestId": "00000000-0000-4000-8000-000000000008",
+            "identity": {
+              "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+              "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+              "deviceId": "00000000-0000-4000-8000-000000000003",
+              "bindingRevision": 1,
+              "credentialGeneration": 1
+            },
+            "schoolId": "school-test",
+            "administrativeClassId": "class-test",
+            "screenBindingId": "binding-test",
+            "target": "EXAM",
+            "scope": "EXAM_MODE",
+            "consentId": "00000000-0000-4000-8000-000000000007",
+            "policyRevision": 1,
+            "controlEpoch": "00000000-0000-4000-8000-000000000006",
+            "expectedRuntimeRevision": 1,
+            "expectedModeRevision": 2,
+            "expectedConfigurationRevision": 3,
+            "initiator": {
+              "displayName": "测试管理员"
+            },
+            "createdAt": "2026-09-25T00:00:00.000Z",
+            "expiresAt": "2026-09-25T00:05:00.000Z",
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "lastEventSequence": 4,
+            "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+            "grant": {
+              "grantId": "00000000-0000-4000-8000-000000000009",
+              "operationId": "00000000-0000-4000-8000-000000000010",
+              "identity": {
+                "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+                "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+                "deviceId": "00000000-0000-4000-8000-000000000003",
+                "bindingRevision": 1,
+                "credentialGeneration": 1
+              },
+              "consentId": "00000000-0000-4000-8000-000000000007",
+              "policyRevision": 1,
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "expectedRuntimeRevision": 1,
+              "expectedModeRevision": 2,
+              "expectedConfigurationRevision": 3,
+              "authorizedAt": "2026-09-25T00:00:00.000Z",
+              "startNotAfter": "2026-09-25T00:00:30.000Z"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            },
+            "resolvedAt": null,
+            "resolutionId": null,
+            "freshness": "CURRENT",
+            "localEndedAt": null
+          },
+          {
+            "operationId": "00000000-0000-4000-8000-000000000010",
+            "deviceId": "00000000-0000-4000-8000-000000000003",
+            "requestId": "00000000-0000-4000-8000-000000000008",
+            "identity": {
+              "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+              "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+              "deviceId": "00000000-0000-4000-8000-000000000003",
+              "bindingRevision": 1,
+              "credentialGeneration": 1
+            },
+            "schoolId": "school-test",
+            "administrativeClassId": "class-test",
+            "screenBindingId": "binding-test",
+            "target": "EXAM",
+            "scope": "EXAM_MODE",
+            "consentId": "00000000-0000-4000-8000-000000000007",
+            "policyRevision": 1,
+            "controlEpoch": "00000000-0000-4000-8000-000000000006",
+            "expectedRuntimeRevision": 1,
+            "expectedModeRevision": 2,
+            "expectedConfigurationRevision": 3,
+            "initiator": {
+              "displayName": "测试管理员"
+            },
+            "createdAt": "2026-09-25T00:00:00.000Z",
+            "expiresAt": "2026-09-25T00:05:00.000Z",
+            "state": "PARTIAL",
+            "step": "CLOSE_CLASSISLAND",
+            "reasonCode": "UAC_CANCELLED",
+            "lastEventSequence": 4,
+            "progressReceivedAt": "2026-09-25T00:00:00.000Z",
+            "grant": {
+              "grantId": "00000000-0000-4000-8000-000000000009",
+              "operationId": "00000000-0000-4000-8000-000000000010",
+              "identity": {
+                "serverInstanceId": "00000000-0000-4000-8000-000000000001",
+                "deploymentEpoch": "00000000-0000-4000-8000-000000000002",
+                "deviceId": "00000000-0000-4000-8000-000000000003",
+                "bindingRevision": 1,
+                "credentialGeneration": 1
+              },
+              "consentId": "00000000-0000-4000-8000-000000000007",
+              "policyRevision": 1,
+              "runId": "00000000-0000-4000-8000-000000000004",
+              "sessionId": "00000000-0000-4000-8000-000000000005",
+              "statusEpoch": 1,
+              "controlEpoch": "00000000-0000-4000-8000-000000000006",
+              "expectedRuntimeRevision": 1,
+              "expectedModeRevision": 2,
+              "expectedConfigurationRevision": 3,
+              "authorizedAt": "2026-09-25T00:00:00.000Z",
+              "startNotAfter": "2026-09-25T00:00:30.000Z"
+            },
+            "evidence": {
+              "examAware": "READY",
+              "classIsland": "RUNNING",
+              "remoteExamPause": true,
+              "startup": "NOT_REQUESTED",
+              "sideEffects": "APPLIED",
+              "alreadySatisfied": false,
+              "observedAt": "2026-09-25T00:00:00.000Z",
+              "configurationRevision": 3
+            },
+            "resolvedAt": null,
+            "resolutionId": null,
+            "freshness": "CURRENT",
+            "localEndedAt": null
+          }
+        ],
+        "pollAfterSeconds": 2
+      }
+    },
+    {
+      "name": "missing original grant",
+      "definition": "event",
+      "valid": false,
+      "value": {
+        "eventId": "00000000-0000-4000-8000-000000000011",
+        "operationId": "00000000-0000-4000-8000-000000000010",
+        "sequence": 4,
+        "state": "PARTIAL",
+        "step": "CLOSE_CLASSISLAND",
+        "reasonCode": "UAC_CANCELLED",
+        "occurredAt": "2026-09-25T00:00:00.000Z",
+        "execution": {
+          "runId": "00000000-0000-4000-8000-000000000004",
+          "sessionId": "00000000-0000-4000-8000-000000000005",
+          "statusEpoch": 1,
+          "controlEpoch": "00000000-0000-4000-8000-000000000006"
+        },
+        "evidence": {
+          "examAware": "READY",
+          "classIsland": "RUNNING",
+          "remoteExamPause": true,
+          "startup": "NOT_REQUESTED",
+          "sideEffects": "APPLIED",
+          "alreadySatisfied": false,
+          "observedAt": "2026-09-25T00:00:00.000Z",
+          "configurationRevision": 3
+        }
+      }
+    }
+  ],
+  "semanticCasesNotExecuted": [
+    "delayed enabled policy cannot replace newer disabled policy",
+    "cancel and start serialize",
+    "expired issued grant retains UNKNOWN unresolved slot",
+    "new upload session cannot replay old execution grant",
+    "repeated requestId never refreshes expiry",
+    "PARTIAL local resolution preserves outcome",
+    "sequence gap rejected before projection",
+    "demotion before start prevents grant",
+    "revoked credentials cannot resolve old operation",
+    "status replay does not refresh sampleAsOf"
+  ]
+}

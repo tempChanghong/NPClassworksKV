@@ -1,0 +1,881 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NPEP 0.5 local exam plan delivery",
+  "definitions": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "credentialGeneration": {
+          "const": 1
+        }
+      },
+      "required": [
+        "serverInstanceId",
+        "deploymentEpoch",
+        "deviceId",
+        "bindingRevision",
+        "credentialGeneration"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/definitions/identity"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "identity",
+        "runId",
+        "sessionId",
+        "statusEpoch",
+        "controlEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "reason": {
+      "type": "string",
+      "pattern": "^[A-Z_]{1,64}$"
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "preparationId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "examName": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "exams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "start": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "end": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "alertTime": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "name",
+              "start",
+              "end",
+              "alertTime"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "preparationId",
+        "sha256",
+        "examName",
+        "message",
+        "exams"
+      ],
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "state": {
+          "enum": [
+            "preparing",
+            "opening",
+            "ready",
+            "closing",
+            "closed",
+            "failed"
+          ]
+        },
+        "examName": {
+          "type": "string",
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "examName"
+      ],
+      "additionalProperties": false
+    },
+    "player": {
+      "type": "object",
+      "properties": {
+        "known": {
+          "type": "boolean"
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/session"
+          },
+          "maxItems": 8
+        },
+        "lastSession": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/session"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "known",
+        "sessions",
+        "lastSession"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "consentId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "blockReason": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "player": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/player"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "preparedId": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "enabled",
+        "consentId",
+        "policyRevision",
+        "revision",
+        "available",
+        "blockReason",
+        "player",
+        "preparedId"
+      ],
+      "additionalProperties": false
+    },
+    "reportRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "sequence",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "ack": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "const": true
+        }
+      },
+      "required": [
+        "accepted"
+      ],
+      "additionalProperties": false
+    },
+    "createRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "consentId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "fileName": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "dataBase64": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32768,
+          "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "consentId",
+        "policyRevision",
+        "revision",
+        "fileName",
+        "dataBase64"
+      ],
+      "additionalProperties": false
+    },
+    "startRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "preparationId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "requestId",
+        "preparationId",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "cancelRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        }
+      },
+      "required": [
+        "requestId"
+      ],
+      "additionalProperties": false
+    },
+    "deviceRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        }
+      },
+      "required": [
+        "requestId",
+        "context"
+      ],
+      "additionalProperties": false
+    },
+    "grant": {
+      "type": "object",
+      "properties": {
+        "grantId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "operationId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "startNotAfter": {
+          "$ref": "#/definitions/utc"
+        }
+      },
+      "required": [
+        "grantId",
+        "operationId",
+        "startNotAfter"
+      ],
+      "additionalProperties": false
+    },
+    "resultRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "stage": {
+          "enum": [
+            "prepare",
+            "start"
+          ]
+        },
+        "state": {
+          "enum": [
+            "PREPARED",
+            "STARTED",
+            "FAILED",
+            "UNKNOWN"
+          ]
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/summary"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sessionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 128
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasonCode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grantId": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "stage",
+        "state",
+        "summary",
+        "sessionId",
+        "reasonCode",
+        "grantId"
+      ],
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "consentId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "fileName": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "dataBase64": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 32768
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "createdAt": {
+          "$ref": "#/definitions/utc"
+        },
+        "expiresAt": {
+          "$ref": "#/definitions/utc"
+        },
+        "state": {
+          "enum": [
+            "QUEUED",
+            "PREPARED",
+            "START_REQUESTED",
+            "START_AUTHORIZED",
+            "STARTED",
+            "FAILED",
+            "UNKNOWN",
+            "EXPIRED",
+            "CANCELLED"
+          ]
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/summary"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sessionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 128
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasonCode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grant": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/grant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operationId",
+        "requestId",
+        "context",
+        "consentId",
+        "policyRevision",
+        "revision",
+        "fileName",
+        "sha256",
+        "dataBase64",
+        "createdAt",
+        "expiresAt",
+        "state",
+        "summary",
+        "sessionId",
+        "reasonCode",
+        "grant"
+      ],
+      "additionalProperties": false
+    },
+    "poll": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/operation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "item"
+      ],
+      "additionalProperties": false
+    },
+    "grantResponse": {
+      "type": "object",
+      "properties": {
+        "grant": {
+          "$ref": "#/definitions/grant"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        }
+      },
+      "required": [
+        "grant",
+        "serverTime"
+      ],
+      "additionalProperties": false
+    },
+    "management": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/context"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/status"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receivedAt": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/utc"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "online": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/operation"
+          },
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "context",
+        "status",
+        "receivedAt",
+        "online",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "errorEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "$ref": "#/definitions/reason"
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "retryAfterSeconds": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 3600
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryAfterSeconds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "ackEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "data": {
+          "$ref": "#/definitions/ack"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "operationEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "data": {
+          "$ref": "#/definitions/operation"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "pollEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "data": {
+          "$ref": "#/definitions/poll"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "grantResponseEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "data": {
+          "$ref": "#/definitions/grantResponse"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "managementEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.5"
+        },
+        "requestId": {
+          "$ref": "#/definitions/uuid"
+        },
+        "serverTime": {
+          "$ref": "#/definitions/utc"
+        },
+        "data": {
+          "$ref": "#/definitions/management"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

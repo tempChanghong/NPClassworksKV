@@ -104,6 +104,50 @@ export function createNpepService(prisma, deploymentProvider) {
   const approved = pair => ({pairingId: pair.id, state: 'APPROVED', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5, approvalId: pair.approvalId, ...pair.approvalSnapshot});
 
   return {
+    withScheduleAdmin: (claims, schoolId, operation) => transaction(async (tx, config) => {
+      await schoolLock(tx, schoolId);
+      await administrator(tx, claims, schoolId);
+      return operation(tx, config);
+    }),
+    // Screen credentials authorize only the device bound to that exact screen.
+    withNoiseScreen: (token, operation) => prisma.$transaction(async tx => {
+      if (!token || token.length > 512) fail(401, 'SCREEN_TOKEN_INVALID');
+      const initial = await tx.classroomScreenBinding.findUnique({where: {tokenHash: hash(token)}});
+      if (!initial) fail(401, 'SCREEN_TOKEN_INVALID');
+      await schoolLock(tx, initial.schoolId);
+      const current = await binding(tx, initial.id, initial.schoolId);
+      if (current.tokenHash !== hash(token) || current.credentialVersion !== initial.credentialVersion) fail(401, 'SCREEN_TOKEN_INVALID');
+      const linked = await tx.npepDevice.findFirst({where: {screenBindingId: current.id, state: 'ACTIVE', credentialExpiresAt: {gt: new Date()}}});
+      if (!linked) return operation(tx, null);
+      const config = deploymentProvider();
+      await assertDeployment(tx, config);
+      const result = await operation(tx, await device(tx, {id: linked.credentialId, hash: linked.secretHash}, config));
+      const latest = deploymentProvider();
+      if (digest(latest) !== digest(config)) fail(503, 'TEMPORARILY_UNAVAILABLE');
+      return result;
+    }, {timeout: 9000, maxWait: 5000}),
+    // N3 start checks the original initiator before taking the device lock. School is
+    // locked first, matching existing membership changes and avoiding lock inversion.
+    withRuntimeDevice: (auth, operation, initiator = null) => transaction(async (tx, config) => {
+      const initial = await tx.npepDevice.findUnique({where: {credentialId: auth.id}});
+      if (!hashMatches(auth.hash, initial?.secretHash)) fail(401, 'AUTH_INVALID');
+      deviceValid(initial, config);
+      await schoolLock(tx, initial.schoolId);
+      if (initiator) {
+        const claims = await initiator(tx, initial);
+        try { await administrator(tx, claims, initial.schoolId, true); }
+        catch (error) { if (error instanceof NpepError) fail(403, 'INITIATOR_NO_LONGER_AUTHORIZED'); throw error; }
+      }
+      return operation(tx, await device(tx, auth, config));
+    }),
+    withRuntimeAdmin: (claims, schoolId, id, operation) => transaction(async (tx, config) => {
+      await schoolLock(tx, schoolId);
+      await administrator(tx, claims, schoolId);
+      const initial = await tx.npepDevice.findUnique({where: {id}});
+      if (!initial || initial.schoolId !== schoolId) fail(404, 'NOT_FOUND');
+      const current = await device(tx, {id: initial.credentialId, hash: initial.secretHash}, config);
+      return operation(tx, current);
+    }),
     withDevice: (auth, operation) => transaction(async (tx, config) => operation(tx, await device(tx, auth, config))),
     async pollRate(identity) {
       const key = `poll:${hash(identity)}`;

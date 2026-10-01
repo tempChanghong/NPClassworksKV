@@ -602,6 +602,49 @@ model ClassroomScreenBinding {
 
 // NPEP authorization is deliberately separate from school business export and
 // browser credentials. Deployment identity also lives OUTSIDE database backups.
+model NpepNoiseDevice {
+  deviceId String @id @db.Uuid
+  data Json
+}
+
+model NpepNoiseScheduleDevice {
+  deviceId String @id @db.Uuid
+  data Json
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+}
+
+model NpepExamPlanDevice {
+  deviceId String @id @db.Uuid
+  data Json
+}
+
+model NpepExamPlan {
+  id String @id @db.Uuid
+  deviceId String @db.Uuid
+  requestId String @db.Uuid
+  createdAt DateTime @db.Timestamptz(3)
+  data Json
+  @@unique([deviceId, requestId], map: "NpepExamPlan_request")
+  @@index([deviceId, createdAt(sort: Desc), id(sort: Desc)], map: "NpepExamPlan_history")
+}
+
+model NpepRuntimePolicy {
+  deviceId String @id @db.Uuid
+  data Json
+}
+
+model NpepRuntimeOperation {
+  id String @id @db.Uuid
+  deviceId String @db.Uuid
+  requestId String @db.Uuid
+  createdAt DateTime @db.Timestamptz(3)
+  resolvedAt DateTime? @db.Timestamptz(3)
+  data Json
+  @@unique([deviceId, requestId], map: "NpepRuntimeOperation_request")
+  @@index([deviceId, createdAt(sort: Desc), id(sort: Desc)], map: "NpepRuntimeOperation_history")
+  // One unresolved operation per device is enforced by the partial SQL index.
+}
+
 model NpepDeployment {
   id String @id
   serverInstanceId String @db.Uuid
@@ -662,6 +705,7 @@ model NpepDevice {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   revokedAt DateTime? @db.Timestamptz(3)
   notificationSnapshot NpepNotificationSnapshot?
+  noiseScheduleState NpepNoiseScheduleDevice?
   notificationExposures NpepNotificationExposure[]
   notificationReceipts NpepNotificationReceipt[]
   @@index([schoolId, id])
@@ -691,6 +735,29 @@ model NpepAudit {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   @@index([createdAt])
   @@index([schoolId, createdAt])
+}
+
+model NpepNoiseSchedulePolicy {
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  targetType String @db.VarChar(8)
+  targetId String @db.VarChar(191)
+  revision Int
+  policy Json @db.JsonB
+  updatedBy String @db.VarChar(191)
+  updatedAt DateTime @default(now()) @db.Timestamptz(3)
+  @@id([schoolId, termId, targetType, targetId])
+  @@index([schoolId, termId])
+}
+
+model NpepNoiseScheduleRequest {
+  schoolId String @db.VarChar(191)
+  requestId String @db.Uuid
+  actorId String @db.VarChar(191)
+  digest String @db.VarChar(64)
+  result Json @db.JsonB
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@id([schoolId, requestId])
 }
 
 model NpepRateLimit {

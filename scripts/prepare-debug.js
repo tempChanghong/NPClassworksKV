@@ -11,8 +11,10 @@ function assertSafeDebugDatabase() {
     if (!new Set(["127.0.0.1", "localhost"]).has(databaseUrl.hostname)) {
         throw new Error("调试数据库必须位于 localhost 或 127.0.0.1");
     }
-    if (databaseUrl.port !== "55432" || databaseUrl.pathname !== "/classworks_debug") {
-        throw new Error("调试数据库必须使用 127.0.0.1:55432/classworks_debug");
+    if (!["", "5432", "55432"].includes(databaseUrl.port) || databaseUrl.pathname !== "/classworks_debug" ||
+        !["postgres:", "postgresql:"].includes(databaseUrl.protocol) || databaseUrl.hash ||
+        [...databaseUrl.searchParams].some(([key, value]) => key !== "schema" || value !== "public")) {
+        throw new Error("调试数据库必须使用本机 5432 或 55432 端口的 classworks_debug，不能覆盖连接地址。");
     }
     if (!process.env.BOOTSTRAP_SETUP_KEY) {
         throw new Error("BOOTSTRAP_SETUP_KEY 未设置，请先运行 pnpm run debug:init");
