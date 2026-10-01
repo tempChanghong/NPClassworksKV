@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./images/官网用星火动力反色.svg">
-    <img src="./images/星火动力0702.svg" width="112" alt="星火动力 NOVARK POWER">
+    <source media="(prefers-color-scheme: dark)" srcset="./public/branding/logo-mono-light.svg">
+    <img src="./public/branding/logo.svg" width="112" alt="NPClassworksKV 应用图标">
   </picture>
 </p>
 
@@ -18,7 +18,7 @@
 
 NPClassworksKV 是 [NPClassworks](https://github.com/tempChanghong/NPClassworks) 的配套后端，负责学校组织结构、账号与权限、作业和通知、历史版本、班级大屏设备以及 Socket.IO 实时同步。它源自 Classworks 后端体系，现已针对多行政班、选科定班和走班教学进行了扩展。
 
-当前发布候选：**v1.2.0 · Hitori（后藤一里）**，与同一产品发布中的 NPClassworks 前端保持一致。按正式版准备，[发版草稿](docs/release-v1.2.0.md)待审核。
+当前版本：**[v1.2.0 · Hitori（后藤一里）](https://github.com/tempChanghong/NPClassworksKV/releases/tag/v1.2.0)**，与同一产品发布中的 NPClassworks 前端保持一致。更新范围与升级方法见[发版说明](docs/release-v1.2.0.md)。
 
 ## 主要能力
 
@@ -136,7 +136,7 @@ NPClassworksKV 是 Classworks 生态的衍生后端，不是 Classworks 官方�
 
 项目维护与部署支持：**星火动力（NOVARK POWER）**。
 
-品牌素材位于 [`images`](./images)；反色版本用于深色背景，请勿改变图形比例。
+应用图标位于 [`public/branding`](./public/branding)，深色背景使用白色单色版；与前端共用的可编辑母版见 [NPClassworks 图标资源](https://github.com/tempChanghong/NPClassworks/tree/main/images/branding)。星火动力维护方素材仍保留在 [`images`](./images)。请勿改变图形比例。
 
 ## 开源协议
 
