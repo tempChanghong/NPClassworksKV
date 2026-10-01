@@ -1,8 +1,8 @@
 {
   "name": "ClassworksKV",
-  "version": "1.1.0",
-  "codename": "Ikuyo",
-  "codenameZh": "喜多郁代",
+  "version": "1.2.0",
+  "codename": "Hitori",
+  "codenameZh": "后藤一里",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "scripts": {
