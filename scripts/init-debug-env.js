@@ -26,11 +26,11 @@ const backendEnv = [
     "PORT=3000",
     "BASE_URL=http://localhost:3000",
     "FRONTEND_URL=http://localhost:3031",
-    "DEBUG_POSTGRES_PORT=55432",
+    "DEBUG_POSTGRES_PORT=5432",
     "POSTGRES_USER=classworks_debug",
     "POSTGRES_DB=classworks_debug",
     `POSTGRES_PASSWORD=${postgresPassword}`,
-    `DATABASE_URL=postgresql://classworks_debug:${postgresPassword}@127.0.0.1:55432/classworks_debug?schema=public`,
+    `DATABASE_URL=postgresql://classworks_debug:${postgresPassword}@127.0.0.1:5432/classworks_debug?schema=public`,
     "JWT_ALG=HS256",
     `JWT_SECRET=${secret()}`,
     `REFRESH_TOKEN_SECRET=${secret()}`,
@@ -51,4 +51,4 @@ const frontendEnv = [
 
 writeNewFile(backendEnvPath, backendEnv);
 writeNewFile(frontendEnvPath, frontendEnv);
-console.log("调试环境文件已就绪。下一步运行 pnpm run debug:db:up 和 pnpm run debug:prepare。");
+console.log("配置文件已就绪；请在原生 PostgreSQL 中创建开发角色和数据库，核对 deploy/.env.debug 的连接信息。详见 ../NPClassworks/docs/local-development.md。");

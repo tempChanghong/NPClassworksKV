@@ -36,7 +36,7 @@ try {
         "--test",
         "--test-concurrency=1",
         "tests/npepDatabase.integration.test.js",
-        "tests/managementDatabase.integration.test.js",
+        ...(process.argv.includes('--npep') ? [] : ["tests/managementDatabase.integration.test.js",
         "tests/classRosterDatabase.integration.test.js",
         "tests/reviewBoundariesDatabase.integration.test.js",
         "tests/organizationConsistencyDatabase.integration.test.js",
@@ -51,7 +51,7 @@ try {
         "tests/sessionRevocationDatabase.integration.test.js",
         "tests/accountSessionDatabase.integration.test.js",
         "tests/publicationRevisionCleanupDatabase.integration.test.js",
-        "tests/backupRestoreDatabase.integration.test.js",
+        "tests/backupRestoreDatabase.integration.test.js"]),
     ], testEnv);
     console.log("真实 PostgreSQL 集成测试通过。");
 } finally {

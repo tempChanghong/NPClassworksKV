@@ -5,6 +5,17 @@ export async function cleanupNpep(client = prisma) {
   return client.$transaction(async tx => {
     const [lock] = await tx.$queryRaw`SELECT pg_try_advisory_xact_lock(781002) AS locked`;
     if (!lock.locked) return;
+    await tx.$executeRaw`UPDATE "NpepNoiseScheduleDevice" n SET data=jsonb_set(n.data,'{sessions}',
+      COALESCE((SELECT jsonb_agg(s) FROM jsonb_array_elements(n.data->'sessions') s
+        WHERE (s->>'receivedAt')::timestamptz >= clock_timestamp()-interval '30 days'),'[]'::jsonb))
+      WHERE n."deviceId" IN (SELECT "deviceId" FROM "NpepNoiseScheduleDevice" n2
+        WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(n2.data->'sessions') s WHERE (s->>'receivedAt')::timestamptz < clock_timestamp()-interval '30 days') LIMIT 500)`;
+    // Retention also runs for offline devices, not only when their screen is opened.
+    await tx.$executeRaw`UPDATE "NpepNoiseDevice" n SET data=jsonb_set(n.data,'{reports}',
+      COALESCE((SELECT jsonb_agg(r) FROM jsonb_array_elements(n.data->'reports') r
+        WHERE (r->>'receivedAt')::timestamptz >= clock_timestamp()-interval '30 days'),'[]'::jsonb))
+      WHERE n."deviceId" IN (SELECT "deviceId" FROM "NpepNoiseDevice" n2
+        WHERE EXISTS (SELECT 1 FROM jsonb_array_elements(n2.data->'reports') r WHERE (r->>'receivedAt')::timestamptz < clock_timestamp()-interval '30 days') LIMIT 500)`;
     await tx.$executeRaw`DELETE FROM "NpepNotificationSnapshot" WHERE "deviceId" IN
       (SELECT "deviceId" FROM "NpepNotificationSnapshot" WHERE "expiresAt"<=clock_timestamp() ORDER BY "expiresAt" LIMIT 5000)`;
     await tx.$executeRaw`DELETE FROM "NpepNotificationReceipt" WHERE ("deviceId","eventId") IN

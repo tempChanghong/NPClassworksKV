@@ -1,0 +1,1602 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NPEP N3 0.4 documentation draft - NOT deployed",
+  "description": "Shape only. Strings additionally limited by UTF-16 code units. Authorization, ordering, expiry, transitions and effects require semantic validation.",
+  "definitions": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "reason": {
+      "enum": [
+        "INVALID_REQUEST",
+        "UNSUPPORTED_TARGET",
+        "UNSUPPORTED_SCOPE",
+        "AUTH_INVALID",
+        "AUTH_REVOKED",
+        "CREDENTIAL_EXPIRED",
+        "SCHOOL_ADMIN_REQUIRED",
+        "INITIATOR_NO_LONGER_AUTHORIZED",
+        "NOT_FOUND",
+        "CONTROL_DISABLED",
+        "POLICY_CHANGED",
+        "POLICY_STALE",
+        "CLIENT_UNSUPPORTED",
+        "DEVICE_OFFLINE",
+        "DESKTOP_UNAVAILABLE",
+        "NOTICE_OPEN",
+        "RECORDING_BUSY",
+        "STATE_CHANGED",
+        "OPERATION_BUSY",
+        "RECOVERY_REQUIRED",
+        "CONFIGURATION_DRIFT",
+        "SESSION_SUPERSEDED",
+        "START_ALREADY_AUTHORIZED",
+        "IDEMPOTENCY_CONFLICT",
+        "SEQUENCE_CONFLICT",
+        "SEQUENCE_GAP",
+        "INVALID_TRANSITION",
+        "EXPIRED",
+        "PAYLOAD_TOO_LARGE",
+        "PROTOCOL_UNSUPPORTED",
+        "RATE_LIMITED",
+        "TEMPORARILY_UNAVAILABLE",
+        "EXAMAWARE_NOT_READY",
+        "CLASSISLAND_EXIT_UNAVAILABLE",
+        "UAC_CANCELLED",
+        "STORAGE_UNAVAILABLE",
+        "UNKNOWN_RESULT",
+        "CLASSISLAND_TASK_REQUIRED",
+        "STARTUP_NOT_READY",
+        "MODE_CONTROL_UNAVAILABLE",
+        "HOST_NOT_ELEVATED",
+        "RECORDING_SAVE_FAILED",
+        "RECORDING_SAVE_TIMEOUT",
+        "CLASSISLAND_CONFIGURATION_REQUIRED",
+        "EXAMAWARE_CONFIGURATION_REQUIRED",
+        "INVALID_LOCAL_EXECUTABLE",
+        "CLASSISLAND_EXECUTABLE_INVALID",
+        "EXAMAWARE_EXECUTABLE_INVALID",
+        "EXAMAWARE_EXECUTABLE_UNREADABLE",
+        "EXAMAWARE_IDENTITY_UNAVAILABLE",
+        "CLASSISLAND_IDENTITY_UNAVAILABLE",
+        "HISTORY_FULL",
+        "EXAMAWARE_PRESENTING",
+        "EXAMAWARE_EXIT_FAILED",
+        "CLASSISLAND_NOT_READY"
+      ]
+    },
+    "step": {
+      "anyOf": [
+        {
+          "enum": [
+            "PAUSE_RECORDING",
+            "PREPARE_EXAM",
+            "SET_STARTUP",
+            "CLOSE_CLASSISLAND",
+            "VERIFY",
+            "CLOSE_EXAM",
+            "START_CLASSISLAND"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "bindingRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "credentialGeneration": {
+          "const": 1
+        }
+      },
+      "required": [
+        "serverInstanceId",
+        "deploymentEpoch",
+        "deviceId",
+        "bindingRevision",
+        "credentialGeneration"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/definitions/identity"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "identity",
+        "runId",
+        "sessionId",
+        "statusEpoch",
+        "controlEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "supported": {
+          "type": "boolean"
+        },
+        "pairedExamControl": {
+          "type": "boolean"
+        },
+        "remoteDailyControl": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "consentId",
+        "policyRevision",
+        "enabled",
+        "supported"
+      ],
+      "additionalProperties": false
+    },
+    "policyRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "policy": {
+          "$ref": "#/definitions/policy"
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "policyResponse": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "enum": [
+            "APPLIED",
+            "DUPLICATE"
+          ]
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "disposition",
+        "consentId",
+        "policyRevision",
+        "receivedAt"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "runtimeMode": {
+          "enum": [
+            "UNKNOWN",
+            "OTHER",
+            "EXAM",
+            "DAILY"
+          ]
+        },
+        "runtimePhase": {
+          "enum": [
+            "UNKNOWN",
+            "IDLE",
+            "SWITCHING",
+            "WAITING_LOCAL",
+            "EXAM_READY",
+            "RECOVERY_REQUIRED"
+          ]
+        },
+        "runtimeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "modeRevision": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "configurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "remoteExamPause": {
+          "type": "boolean"
+        },
+        "recording": {
+          "enum": [
+            "IDLE",
+            "STARTING",
+            "RECORDING",
+            "PAUSED",
+            "FINALIZING",
+            "UNKNOWN"
+          ]
+        },
+        "desktop": {
+          "enum": [
+            "INTERACTIVE",
+            "LOCKED",
+            "SECURE_DESKTOP",
+            "UNKNOWN"
+          ]
+        },
+        "noticeOpen": {
+          "type": "boolean"
+        },
+        "operationId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "reasonCode": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "step": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "runtimeMode",
+        "runtimePhase",
+        "runtimeRevision",
+        "modeRevision",
+        "configurationRevision",
+        "consentId",
+        "policyRevision",
+        "remoteExamPause",
+        "recording",
+        "desktop",
+        "noticeOpen",
+        "operationId",
+        "observedAt"
+      ],
+      "additionalProperties": false
+    },
+    "statusRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sampleAgeMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60000
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "sequence",
+        "sampleAgeMs",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "statusResponse": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "enum": [
+            "APPLIED",
+            "DUPLICATE"
+          ]
+        },
+        "acceptedSequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "nextPollSeconds": {
+          "enum": [
+            2,
+            10
+          ]
+        }
+      },
+      "required": [
+        "disposition",
+        "acceptedSequence",
+        "receivedAt",
+        "nextPollSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "createRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "target": {
+          "enum": [
+            "EXAM",
+            "DAILY"
+          ]
+        },
+        "scope": {
+          "const": "EXAM_MODE"
+        },
+        "expectedRuntimeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedModeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedConfigurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "requestId",
+        "target",
+        "scope",
+        "expectedRuntimeRevision",
+        "expectedModeRevision",
+        "expectedConfigurationRevision",
+        "consentId",
+        "policyRevision",
+        "controlEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "cancelRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "requestId"
+      ],
+      "additionalProperties": false
+    },
+    "startRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "expectedRuntimeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedModeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedConfigurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "consentId",
+        "policyRevision",
+        "expectedRuntimeRevision",
+        "expectedModeRevision",
+        "expectedConfigurationRevision"
+      ],
+      "additionalProperties": false
+    },
+    "grant": {
+      "type": "object",
+      "properties": {
+        "grantId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "identity": {
+          "$ref": "#/definitions/identity"
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "expectedRuntimeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedModeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedConfigurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "authorizedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "startNotAfter": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "grantId",
+        "operationId",
+        "identity",
+        "consentId",
+        "policyRevision",
+        "runId",
+        "sessionId",
+        "statusEpoch",
+        "controlEpoch",
+        "expectedRuntimeRevision",
+        "expectedModeRevision",
+        "expectedConfigurationRevision",
+        "authorizedAt",
+        "startNotAfter"
+      ],
+      "additionalProperties": false
+    },
+    "startResponse": {
+      "type": "object",
+      "properties": {
+        "grant": {
+          "$ref": "#/definitions/grant"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "grant",
+        "serverTime"
+      ],
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sessionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "statusEpoch": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "grantId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "runId",
+        "sessionId",
+        "statusEpoch",
+        "controlEpoch",
+        "grantId"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "examAware": {
+          "enum": [
+            "READY",
+            "NOT_READY",
+            "UNKNOWN",
+            "EXITED"
+          ]
+        },
+        "classIsland": {
+          "enum": [
+            "EXITED",
+            "RUNNING",
+            "UNKNOWN",
+            "READY"
+          ]
+        },
+        "remoteExamPause": {
+          "type": "boolean"
+        },
+        "startup": {
+          "enum": [
+            "NOT_REQUESTED",
+            "EXAM_MODE_APPLIED",
+            "UNKNOWN",
+            "DAILY_MODE_APPLIED"
+          ]
+        },
+        "sideEffects": {
+          "enum": [
+            "NONE",
+            "POSSIBLE",
+            "APPLIED"
+          ]
+        },
+        "alreadySatisfied": {
+          "type": "boolean"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "configurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "examAware",
+        "classIsland",
+        "remoteExamPause",
+        "startup",
+        "sideEffects",
+        "alreadySatisfied",
+        "observedAt",
+        "configurationRevision"
+      ],
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "state": {
+          "enum": [
+            "RECEIVED",
+            "CHECKING",
+            "RUNNING",
+            "WAITING_LOCAL",
+            "SUCCEEDED",
+            "REJECTED",
+            "FAILED",
+            "PARTIAL",
+            "UNKNOWN"
+          ]
+        },
+        "step": {
+          "$ref": "#/definitions/step"
+        },
+        "reasonCode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "execution": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/execution"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "eventId",
+        "operationId",
+        "sequence",
+        "state",
+        "step",
+        "reasonCode",
+        "occurredAt",
+        "execution",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "eventsRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "$ref": "#/definitions/event"
+          }
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "events"
+      ],
+      "additionalProperties": false
+    },
+    "eventsResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "status": {
+                "enum": [
+                  "ACCEPTED",
+                  "DUPLICATE",
+                  "REJECTED"
+                ]
+              },
+              "code": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/reason"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "acceptedSequence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "eventId",
+              "status",
+              "code",
+              "acceptedSequence"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "results"
+      ],
+      "additionalProperties": false
+    },
+    "resolveRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "context": {
+          "$ref": "#/definitions/context"
+        },
+        "resolutionId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "expectedLastEventSequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "kind": {
+          "const": "LOCAL_END"
+        },
+        "noPendingActions": {
+          "const": true
+        },
+        "evidence": {
+          "$ref": "#/definitions/evidence"
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "requestId",
+        "context",
+        "resolutionId",
+        "expectedLastEventSequence",
+        "kind",
+        "noPendingActions",
+        "evidence",
+        "occurredAt"
+      ],
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "identity": {
+          "$ref": "#/definitions/identity"
+        },
+        "schoolId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "administrativeClassId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "screenBindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 191
+        },
+        "target": {
+          "enum": [
+            "EXAM",
+            "DAILY"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "EXAM_MODE",
+            "CURRENT_RUNTIME"
+          ]
+        },
+        "consentId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "policyRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "controlEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "expectedRuntimeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedModeRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "expectedConfigurationRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "initiator": {
+          "type": "object",
+          "properties": {
+            "displayName": {
+              "type": "string",
+              "minLength": 0,
+              "maxLength": 120
+            }
+          },
+          "required": [
+            "displayName"
+          ],
+          "additionalProperties": false
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "state": {
+          "enum": [
+            "QUEUED",
+            "RECEIVED",
+            "CHECKING",
+            "START_AUTHORIZED",
+            "RUNNING",
+            "WAITING_LOCAL",
+            "SUCCEEDED",
+            "REJECTED",
+            "FAILED",
+            "PARTIAL",
+            "CANCELLED",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
+        },
+        "step": {
+          "$ref": "#/definitions/step"
+        },
+        "reasonCode": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lastEventSequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "progressReceivedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grant": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/grant"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resolvedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resolutionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "freshness": {
+          "enum": [
+            "CURRENT",
+            "STALE",
+            "UNKNOWN"
+          ]
+        },
+        "localEndedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "operationId",
+        "deviceId",
+        "requestId",
+        "identity",
+        "schoolId",
+        "administrativeClassId",
+        "screenBindingId",
+        "target",
+        "scope",
+        "consentId",
+        "policyRevision",
+        "controlEpoch",
+        "expectedRuntimeRevision",
+        "expectedModeRevision",
+        "expectedConfigurationRevision",
+        "initiator",
+        "createdAt",
+        "expiresAt",
+        "state",
+        "step",
+        "reasonCode",
+        "lastEventSequence",
+        "progressReceivedAt",
+        "grant",
+        "evidence",
+        "resolvedAt",
+        "resolutionId",
+        "freshness",
+        "localEndedAt"
+      ],
+      "additionalProperties": false
+    },
+    "deviceOperations": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "$ref": "#/definitions/operation"
+          }
+        },
+        "pollAfterSeconds": {
+          "enum": [
+            2,
+            10
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "pollAfterSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "operationList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "$ref": "#/definitions/operation"
+          }
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    },
+    "managementStatus": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/policy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/status"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receivedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sampleAsOf": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "connectivity": {
+          "enum": [
+            "ONLINE",
+            "OFFLINE",
+            "UNKNOWN"
+          ]
+        },
+        "unresolvedOperationId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "controlEpoch": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "policy",
+        "status",
+        "receivedAt",
+        "sampleAsOf",
+        "connectivity",
+        "unresolvedOperationId",
+        "controlEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "errorEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "$ref": "#/definitions/reason"
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "retryAfterSeconds": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 3600
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryAfterSeconds"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "policyResponseEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/policyResponse"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "statusResponseEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/statusResponse"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "startResponseEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/startResponse"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "eventsResponseEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/eventsResponse"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "operationEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/operation"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "deviceOperationsEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/deviceOperations"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "operationListEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/operationList"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "managementStatusEnvelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "0.4"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverTime": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "data": {
+          "$ref": "#/definitions/managementStatus"
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "serverTime",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,344 @@
+[
+  {
+    "name": "initial status",
+    "definition": "status",
+    "expected": true,
+    "value": {
+      "capability": "noise.schedule",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": null,
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "exchange request",
+    "definition": "exchangeRequest",
+    "expected": true,
+    "value": {
+      "requestId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+      "context": {
+        "identity": {
+          "serverInstanceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deploymentEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deviceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "sessionId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "statusEpoch": 1,
+        "controlEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a"
+      },
+      "sequence": 1,
+      "status": {
+        "capability": "noise.schedule",
+        "version": null,
+        "source": "None",
+        "owner": "None",
+        "reason": "NOT_ELIGIBLE",
+        "schoolNow": null,
+        "clockReady": false,
+        "dateNeedsReview": false,
+        "window": null,
+        "next": null,
+        "sessionId": null,
+        "leaseRemainingSeconds": 0,
+        "receipt": null
+      }
+    }
+  },
+  {
+    "name": "disabled response",
+    "definition": "exchangeResponse",
+    "expected": true,
+    "value": {
+      "policy": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source": "Disabled",
+        "rules": []
+      },
+      "leaseSeconds": 86400,
+      "confirmed": true,
+      "command": null
+    }
+  },
+  {
+    "name": "invalid calendar",
+    "definition": "status",
+    "expected": false,
+    "value": {
+      "capability": "noise.schedule",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": "2026-02-30T19:00:00.000",
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "timezone forbidden",
+    "definition": "status",
+    "expected": false,
+    "value": {
+      "capability": "noise.schedule",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": "2026-10-01T19:00:00.000Z",
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "old calendar unsupported",
+    "definition": "status",
+    "expected": false,
+    "value": {
+      "capability": "noise.schedule",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": "1999-10-01T19:00:00.000",
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "valid school calendar",
+    "definition": "status",
+    "expected": true,
+    "value": {
+      "capability": "noise.schedule",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": "2026-10-01T19:00:00.000",
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "lease cannot exceed 24h",
+    "definition": "exchangeResponse",
+    "expected": false,
+    "value": {
+      "policy": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source": "Disabled",
+        "rules": []
+      },
+      "leaseSeconds": 86401,
+      "confirmed": true,
+      "command": null
+    }
+  },
+  {
+    "name": "lease type strict",
+    "definition": "exchangeResponse",
+    "expected": false,
+    "value": {
+      "policy": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source": "Disabled",
+        "rules": []
+      },
+      "leaseSeconds": "86400",
+      "confirmed": true,
+      "command": null
+    }
+  },
+  {
+    "name": "explicit capability required",
+    "definition": "status",
+    "expected": false,
+    "value": {
+      "capability": "device.status",
+      "version": null,
+      "source": "None",
+      "owner": "None",
+      "reason": "NOT_ELIGIBLE",
+      "schoolNow": null,
+      "clockReady": false,
+      "dateNeedsReview": false,
+      "window": null,
+      "next": null,
+      "sessionId": null,
+      "leaseRemainingSeconds": 0,
+      "receipt": null
+    }
+  },
+  {
+    "name": "extra capture field forbidden",
+    "definition": "exchangeRequest",
+    "expected": false,
+    "value": {
+      "requestId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+      "context": {
+        "identity": {
+          "serverInstanceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deploymentEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deviceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "sessionId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "statusEpoch": 1,
+        "controlEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a"
+      },
+      "sequence": 1,
+      "status": {
+        "capability": "noise.schedule",
+        "version": null,
+        "source": "None",
+        "owner": "None",
+        "reason": "NOT_ELIGIBLE",
+        "schoolNow": null,
+        "clockReady": false,
+        "dateNeedsReview": false,
+        "window": null,
+        "next": null,
+        "sessionId": null,
+        "leaseRemainingSeconds": 0,
+        "receipt": null
+      },
+      "rawAudio": []
+    }
+  },
+  {
+    "name": "positive sequence required",
+    "definition": "exchangeRequest",
+    "expected": false,
+    "value": {
+      "requestId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+      "context": {
+        "identity": {
+          "serverInstanceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deploymentEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deviceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "sessionId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "statusEpoch": 1,
+        "controlEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a"
+      },
+      "sequence": 0,
+      "status": {
+        "capability": "noise.schedule",
+        "version": null,
+        "source": "None",
+        "owner": "None",
+        "reason": "NOT_ELIGIBLE",
+        "schoolNow": null,
+        "clockReady": false,
+        "dateNeedsReview": false,
+        "window": null,
+        "next": null,
+        "sessionId": null,
+        "leaseRemainingSeconds": 0,
+        "receipt": null
+      }
+    }
+  },
+  {
+    "name": "sequence type strict",
+    "definition": "exchangeRequest",
+    "expected": false,
+    "value": {
+      "requestId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+      "context": {
+        "identity": {
+          "serverInstanceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deploymentEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "deviceId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "sessionId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+        "statusEpoch": 1,
+        "controlEpoch": "b11475f8-5047-44de-97a4-6e4978b19c8a"
+      },
+      "sequence": "1",
+      "status": {
+        "capability": "noise.schedule",
+        "version": null,
+        "source": "None",
+        "owner": "None",
+        "reason": "NOT_ELIGIBLE",
+        "schoolNow": null,
+        "clockReady": false,
+        "dateNeedsReview": false,
+        "window": null,
+        "next": null,
+        "sessionId": null,
+        "leaseRemainingSeconds": 0,
+        "receipt": null
+      }
+    }
+  },
+  {
+    "name": "version fingerprint strict",
+    "definition": "exchangeResponse",
+    "expected": false,
+    "value": {
+      "policy": {
+        "version": "local-row-revision",
+        "source": "Disabled",
+        "rules": []
+      },
+      "leaseSeconds": 86400,
+      "confirmed": true,
+      "command": null
+    }
+  },
+  {
+    "name": "resume calendar carrier",
+    "definition": "resumeRequest",
+    "expected": true,
+    "value": {
+      "requestId": "b11475f8-5047-44de-97a4-6e4978b19c8a",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-01T19:00:00.000",
+        "end": "2026-10-01T20:00:00.000"
+      }
+    }
+  }
+]

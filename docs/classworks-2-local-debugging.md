@@ -1,5 +1,9 @@
 # Classworks 2.0 本地完整调试
 
+2026-09-26：新的 Windows 原生开发流程见 [统一启动说明](../../NPClassworks/docs/local-development.md)。在前端目录执行 `pnpm dev` 可一起启动前后端，不使用 Docker。以下 Compose 流程为历史记录，不再作为本机推荐入口。
+
+NPEduTools 联调另需在本仓库执行 `pnpm debug:npep`，初始化本机 `classworks_debug` 的 NPEP 身份及启用配置，再重启统一 `pnpm dev`。命令可重复运行，保留已有身份与配对；详见统一启动说明的“学校互联联调”章节。
+
 调试环境固定使用独立的 `npclassworks-debug` Compose 项目、`postgres-debug-data` 卷和 `classworks_debug` 数据库，不接触未来生产数据。
 
 ## 初始化与启动

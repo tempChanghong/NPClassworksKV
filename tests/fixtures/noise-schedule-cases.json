@@ -1,0 +1,3011 @@
+{
+  "validation": [
+    {
+      "name": "absent",
+      "policy": null,
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "valid weekly",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "class inherit",
+      "policy": {
+        "mode": "Inherit",
+        "rules": []
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "grade cannot inherit",
+      "policy": {
+        "mode": "Inherit",
+        "rules": []
+      },
+      "grade": true,
+      "expected": "INVALID_MODE"
+    },
+    {
+      "name": "disabled",
+      "policy": {
+        "mode": "Disabled",
+        "rules": []
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "unknown mode",
+      "policy": {
+        "mode": "Auto",
+        "rules": []
+      },
+      "grade": false,
+      "expected": "INVALID_MODE"
+    },
+    {
+      "name": "nonempty inherited rules",
+      "policy": {
+        "mode": "Inherit",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "UNEXPECTED_RULES"
+    },
+    {
+      "name": "nonempty disabled rules",
+      "policy": {
+        "mode": "Disabled",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "UNEXPECTED_RULES"
+    },
+    {
+      "name": "empty override",
+      "policy": {
+        "mode": "Override",
+        "rules": []
+      },
+      "grade": false,
+      "expected": "EMPTY_RULES"
+    },
+    {
+      "name": "null rules",
+      "policy": {
+        "mode": "Override",
+        "rules": null
+      },
+      "grade": false,
+      "expected": "INVALID_RULES"
+    },
+    {
+      "name": "32 duplicate rules merge",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "33 rules rejected",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULES"
+    },
+    {
+      "name": "empty days",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "duplicate days",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1,
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "day zero",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              0
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "day eight",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              8
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "noncanonical hour",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "9:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "invalid minute",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:60",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "end 24 rejected",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "21:00",
+            "end": "24:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "null rule",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          null
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_RULE"
+    },
+    {
+      "name": "equal time rejected",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "19:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_DURATION"
+    },
+    {
+      "name": "181 minutes rejected",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "22:01"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "INVALID_DURATION"
+    },
+    {
+      "name": "three hours allowed",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "22:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "overnight allowed",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "23:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "overlap too long",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "20:00",
+            "end": "23:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "MERGED_WINDOW_TOO_LONG"
+    },
+    {
+      "name": "adjacency too long",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "21:00",
+            "end": "23:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "MERGED_WINDOW_TOO_LONG"
+    },
+    {
+      "name": "week boundary too long",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              7
+            ],
+            "start": "22:30",
+            "end": "00:30"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "00:00",
+            "end": "02:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": "MERGED_WINDOW_TOO_LONG"
+    },
+    {
+      "name": "all weekdays allowed",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    },
+    {
+      "name": "one minute midnight",
+      "policy": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              7
+            ],
+            "start": "23:59",
+            "end": "00:00"
+          }
+        ]
+      },
+      "grade": false,
+      "expected": null
+    }
+  ],
+  "resolution": [
+    {
+      "name": "unconfigured",
+      "grade": null,
+      "classroom": null,
+      "expected": {
+        "source": "None",
+        "rules": []
+      }
+    },
+    {
+      "name": "inherit absent grade",
+      "grade": null,
+      "classroom": {
+        "mode": "Inherit",
+        "rules": []
+      },
+      "expected": {
+        "source": "None",
+        "rules": []
+      }
+    },
+    {
+      "name": "implicit inherit",
+      "grade": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "classroom": null,
+      "expected": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "explicit inherit",
+      "grade": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "classroom": {
+        "mode": "Inherit",
+        "rules": []
+      },
+      "expected": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "class override",
+      "grade": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "classroom": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              2
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "expected": {
+        "source": "Class",
+        "rules": [
+          {
+            "days": [
+              2
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "class disabled",
+      "grade": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "classroom": {
+        "mode": "Disabled",
+        "rules": []
+      },
+      "expected": {
+        "source": "Disabled",
+        "rules": []
+      }
+    },
+    {
+      "name": "grade disabled",
+      "grade": {
+        "mode": "Disabled",
+        "rules": []
+      },
+      "classroom": {
+        "mode": "Inherit",
+        "rules": []
+      },
+      "expected": {
+        "source": "Disabled",
+        "rules": []
+      }
+    },
+    {
+      "name": "class may override disabled grade",
+      "grade": {
+        "mode": "Disabled",
+        "rules": []
+      },
+      "classroom": {
+        "mode": "Override",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "expected": {
+        "source": "Class",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      }
+    }
+  ],
+  "windows": [
+    {
+      "name": "before window",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T18:59:59",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "start inclusive",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T19:00:00",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "inside",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T20:59:59",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "ClassIsland fractional start",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T19:00:00.0000001",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "ClassIsland fractional end exclusive",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T21:00:00.0000000",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "end exclusive",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T21:00:00",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "next day no catch up",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-29T01:00:00",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "no rules",
+      "policy": {
+        "source": "Grade",
+        "rules": []
+      },
+      "now": "2026-09-28T19:00:00",
+      "expected": {
+        "current": null,
+        "next": null
+      }
+    },
+    {
+      "name": "overnight start day",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "23:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "now": "2026-09-29T00:30:00",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T23:00:00",
+          "end": "2026-09-29T01:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T23:00:00",
+          "end": "2026-10-06T01:00:00"
+        }
+      }
+    },
+    {
+      "name": "Sunday Monday merge",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              7
+            ],
+            "start": "23:00",
+            "end": "00:30"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "00:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T00:30:00",
+      "expected": {
+        "current": {
+          "start": "2026-09-27T23:00:00",
+          "end": "2026-09-28T01:00:00"
+        },
+        "next": {
+          "start": "2026-10-04T23:00:00",
+          "end": "2026-10-05T01:00:00"
+        }
+      }
+    },
+    {
+      "name": "Sunday ahead full next window",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              7
+            ],
+            "start": "23:00",
+            "end": "00:30"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "00:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "now": "2026-10-04T22:59:59",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-10-04T23:00:00",
+          "end": "2026-10-05T01:00:00"
+        }
+      }
+    },
+    {
+      "name": "adjacent merged",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "20:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "20:00",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T19:30:00",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "overlap merged",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "20:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "19:30",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T19:30:00",
+      "expected": {
+        "current": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        },
+        "next": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "separated stay separate",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "20:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "20:01",
+            "end": "21:00"
+          }
+        ]
+      },
+      "now": "2026-09-28T20:00:00",
+      "expected": {
+        "current": null,
+        "next": {
+          "start": "2026-09-28T20:01:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "year boundary",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              4
+            ],
+            "start": "23:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "now": "2027-01-01T00:00:00",
+      "expected": {
+        "current": {
+          "start": "2026-12-31T23:00:00",
+          "end": "2027-01-01T01:00:00"
+        },
+        "next": {
+          "start": "2027-01-07T23:00:00",
+          "end": "2027-01-08T01:00:00"
+        }
+      }
+    },
+    {
+      "name": "leap day",
+      "policy": {
+        "source": "Grade",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "23:00",
+            "end": "01:00"
+          }
+        ]
+      },
+      "now": "2028-02-29T00:30:00",
+      "expected": {
+        "current": {
+          "start": "2028-02-28T23:00:00",
+          "end": "2028-02-29T01:00:00"
+        },
+        "next": {
+          "start": "2028-03-06T23:00:00",
+          "end": "2028-03-07T01:00:00"
+        }
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "name": "admit",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Start",
+        "reason": "WINDOW_ACTIVE",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "already scheduled",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Keep",
+        "reason": "WINDOW_ACTIVE",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "unpaired wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": false,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "NOT_ELIGIBLE",
+        "window": null
+      }
+    },
+    {
+      "name": "revoked auto stops",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": false,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "NOT_ELIGIBLE",
+        "window": null
+      }
+    },
+    {
+      "name": "expired cache wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": false,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "POLICY_EXPIRED",
+        "window": null
+      }
+    },
+    {
+      "name": "expired auto stops",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": false,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "POLICY_EXPIRED",
+        "window": null
+      }
+    },
+    {
+      "name": "disabled policy stops auto",
+      "input": {
+        "policy": {
+          "source": "Disabled",
+          "rules": []
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "DISABLED",
+        "window": null
+      }
+    },
+    {
+      "name": "no policy wait",
+      "input": {
+        "policy": {
+          "source": "None",
+          "rules": []
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "DISABLED",
+        "window": null
+      }
+    },
+    {
+      "name": "exam wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": true,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "EXAM_PAUSED",
+        "window": null
+      }
+    },
+    {
+      "name": "exam stops auto",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": true,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "EXAM_PAUSED",
+        "window": null
+      }
+    },
+    {
+      "name": "stale wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": false,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "stale stops auto",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": false,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "warming wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": false,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "warming stops auto",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": false,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "date review wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": true
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "date review stops auto",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": true
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "missing wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": null,
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "missing stops auto",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": null,
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "SCHOOL_CLOCK_UNAVAILABLE",
+        "window": null
+      }
+    },
+    {
+      "name": "after end auto stops",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T21:00:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Schedule",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Stop",
+        "reason": "OUTSIDE_WINDOW",
+        "window": null
+      }
+    },
+    {
+      "name": "before window wait",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T18:00:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "OUTSIDE_WINDOW",
+        "window": null
+      }
+    },
+    {
+      "name": "mic not selected",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": false,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "MICROPHONE_NOT_CONFIGURED",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "operation busy",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": true,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "CAPTURE_BUSY",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "manual session keeps ownership despite exam",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": true,
+        "owner": "Manual",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "MANUAL_ACTIVE",
+        "window": null
+      }
+    },
+    {
+      "name": "manual session despite lease expiry",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": false,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Manual",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "MANUAL_ACTIVE",
+        "window": null
+      }
+    },
+    {
+      "name": "manual session despite disconnected clock",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": false,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Manual",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "MANUAL_ACTIVE",
+        "window": null
+      }
+    },
+    {
+      "name": "manual session despite revocation",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": false,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "Manual",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "MANUAL_ACTIVE",
+        "window": null
+      }
+    },
+    {
+      "name": "manual stop prevents next poll restart",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": [
+          {
+            "kind": "Skipped",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": null
+          }
+        ]
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "WINDOW_SKIPPED",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "skip survives updated overlapping rules",
+      "input": {
+        "policy": {
+          "source": "Class",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:15",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": [
+          {
+            "kind": "Skipped",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": null
+          }
+        ]
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "WINDOW_SKIPPED",
+        "window": {
+          "start": "2026-09-28T19:15:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "next week after skip allowed",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-10-05T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": [
+          {
+            "kind": "Skipped",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": null
+          }
+        ]
+      },
+      "expected": {
+        "action": "Start",
+        "reason": "WINDOW_ACTIVE",
+        "window": {
+          "start": "2026-10-05T19:00:00",
+          "end": "2026-10-05T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "explicit clear skip allows retry",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": []
+      },
+      "expected": {
+        "action": "Start",
+        "reason": "WINDOW_ACTIVE",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "failed window does not spin",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": [
+          {
+            "kind": "Failed",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": "mic-1"
+          }
+        ]
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "WINDOW_FAILED",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "changed mic permits retry",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-2",
+        "blocks": [
+          {
+            "kind": "Failed",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": "mic-1"
+          }
+        ]
+      },
+      "expected": {
+        "action": "Start",
+        "reason": "WINDOW_ACTIVE",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    },
+    {
+      "name": "exam return still respects skip",
+      "input": {
+        "policy": {
+          "source": "Grade",
+          "rules": [
+            {
+              "days": [
+                1
+              ],
+              "start": "19:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        "clock": {
+          "now": "2026-09-28T19:30:00",
+          "fresh": true,
+          "canStart": true,
+          "dateNeedsReview": false
+        },
+        "eligible": true,
+        "leaseValid": true,
+        "microphoneConfigured": true,
+        "examBlocked": false,
+        "owner": "None",
+        "captureBusy": false,
+        "microphoneKey": "mic-1",
+        "blocks": [
+          {
+            "kind": "Skipped",
+            "window": {
+              "start": "2026-09-28T19:00:00",
+              "end": "2026-09-28T21:00:00"
+            },
+            "microphoneKey": null
+          }
+        ]
+      },
+      "expected": {
+        "action": "Wait",
+        "reason": "WINDOW_SKIPPED",
+        "window": {
+          "start": "2026-09-28T19:00:00",
+          "end": "2026-09-28T21:00:00"
+        }
+      }
+    }
+  ],
+  "leases": [
+    {
+      "name": "valid offline cache",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": true
+    },
+    {
+      "name": "exact lease expiry",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 86401000
+      },
+      "expected": false
+    },
+    {
+      "name": "one ms before expiry",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 86400999
+      },
+      "expected": true
+    },
+    {
+      "name": "restart invalidates lease",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "22222222-2222-4222-8222-222222222222",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "scope changed",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-2/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "policy revision changed",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 4,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "monotonic reset",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 999
+      },
+      "expected": false
+    },
+    {
+      "name": "too long lease",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400001
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "zero lease",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 0
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "negative confirmed clock",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": -1,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "negative revision",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": -1,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": -1,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "unsafe revision",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 9007199254740992,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "school-1/class-1/term-1",
+        "revision": 9007199254740992,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "empty scope",
+      "lease": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "11111111-1111-4111-8111-111111111111",
+        "scope": "",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    },
+    {
+      "name": "empty host identity",
+      "lease": {
+        "hostId": "00000000-0000-0000-0000-000000000000",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "confirmedAtMs": 1000,
+        "lifetimeMs": 86400000
+      },
+      "current": {
+        "hostId": "00000000-0000-0000-0000-000000000000",
+        "scope": "school-1/class-1/term-1",
+        "revision": 3,
+        "elapsedMs": 2000
+      },
+      "expected": false
+    }
+  ]
+}

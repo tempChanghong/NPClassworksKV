@@ -7,10 +7,14 @@ import {join} from 'node:path';
 import {spawn, spawnSync} from 'node:child_process';
 import {setTimeout as delay} from 'node:timers/promises';
 import {validate} from '../domain/npep/wire.js';
+import {validateRuntime} from '../domain/npep/runtimeControl.js';
+import {hash} from '../domain/npep/wire.js';
 import {readDeployment} from '../domain/npep/deployment.js';
 import {closeBeforeRestore, activateDeployment} from '../scripts/npep-deployment.js';
+import {verifyNoiseScheduleDatabase} from './helpers/noiseScheduleDatabase.js';
+import {verifyNoiseScheduleRuntimeDatabase} from './helpers/noiseScheduleRuntimeDatabase.js';
 
-test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {skip: process.env.RUN_DATABASE_TESTS !== 'true', timeout: 120000}, async t => {
+test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {skip: process.env.RUN_DATABASE_TESTS !== 'true', timeout: 360000}, async t => {
   const url = new URL(process.env.DATABASE_URL);
   assert.ok(['localhost', '127.0.0.1'].includes(url.hostname));
   assert.match(url.pathname, /^\/npclassworks_test(?:_[a-z0-9_]+)?$/);
@@ -37,7 +41,9 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
       ...(method === 'POST' ? {body: raw ?? JSON.stringify(body)} : {})});
     const result = await response.json();
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    if (!response.ok && headers['X-NPEP-Version'] !== '0.2') assert.equal(validate('error', result), true, 'error must have the agreed public shape');
+    if (!response.ok && headers['X-NPEP-Version'] === '0.4') assert.equal(validateRuntime('errorEnvelope', result), true, 'N3 error shape');
+    else if (!response.ok && result.protocolVersion !== '0.7' && !['0.2', '0.6'].includes(headers['X-NPEP-Version'])) assert.equal(validate('error', result), true, 'error must have the agreed public shape');
+    if (headers['X-NPEP-Version'] === '0.7') assert.equal(result.protocolVersion, '0.7');
     if (headers['X-NPEP-Version'] === '0.2') assert.equal(result.protocolVersion, '0.2');
     return {status: response.status, data: result.data, error: result.error};
   }
@@ -86,9 +92,101 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
       classIsland: {connection: 'DISCONNECTED', bridgeVersion: null}, examAware: {connection: 'UNKNOWN', bridgeVersion: null}}});
 
   const requestN2 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.2', ...options.headers}});
+  await t.test('Noise screen authentication isolation and actual .NET HTTP/PostgreSQL monitoring', {skip: !process.env.NPEP_N3_ACCEPTANCE_DLL, timeout: 120000}, async () => {
+    const f = await fixture(), other = await fixture();
+    const screenToken = secret(), otherToken = secret();
+    await prisma.classroomScreenBinding.update({where: {id: f.binding.id}, data: {tokenHash: hash(screenToken)}});
+    await prisma.classroomScreenBinding.update({where: {id: other.binding.id}, data: {tokenHash: hash(otherToken)}});
+    const n6 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.6', ...options.headers}});
+    assert.equal((await n6('/screen/noise', {auth: f.admin})).status, 401, 'account token is not a screen credential');
+    assert.equal((await n6('/screen/noise', {headers: {'X-Classworks-Screen-Token': screenToken}})).data.provider, 'browser');
+    const file = join(directory, 'noise-fixture.json');
+    await writeFile(file, JSON.stringify({kind: 'NOISE_DISPOSABLE_DATABASE', origin: origin.replace('/api/v2/npep', ''),
+      adminToken: f.admin, screenToken, schoolId: f.school.id, screenBindingId: f.binding.id}));
+    const child = spawn('dotnet', [process.env.NPEP_N3_ACCEPTANCE_DLL, '--noise-http', file, join(directory, 'desktop-noise')], {windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']});
+    let output = ''; child.stdout.on('data', c => { output += c; }); child.stderr.on('data', c => { output += c; });
+    const code = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', resolve); });
+    assert.equal(code, 0, output); assert.match(output, /PASS NOISE/);
+    const a = (await n6('/screen/noise', {headers: {'X-Classworks-Screen-Token': screenToken}})).data;
+    assert.equal(a.reports.length, 1);
+    assert.equal((await n6('/screen/noise', {headers: {'X-Classworks-Screen-Token': otherToken}})).data.reports.length, 0);
+    await prisma.classroomScreenBinding.update({where: {id: f.binding.id}, data: {tokenHash: hash(secret()), credentialVersion: {increment: 1}}});
+    assert.equal((await n6('/screen/noise', {headers: {'X-Classworks-Screen-Token': screenToken}})).status, 401);
+  });
+  await t.test('N3 real HTTP/SQL policy, atomic create, initiator recheck, grant, partial result and local end', async () => {
+    const f = await fixture(), d = await activate(f), session = await open(d), other = await fixture();
+    const n3 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.4', ...options.headers}});
+    const context = {identity: {...identity, deviceId: d.deviceId, bindingRevision: d.bindingRevision, credentialGeneration: 1},
+      runId: session.body.runId, sessionId: session.sessionId, statusEpoch: session.statusEpoch, controlEpoch: randomUUID()};
+    const policy = {consentId: randomUUID(), policyRevision: 1, enabled: true, supported: true, pairedExamControl: true};
+    const deviceRequest = extra => ({auth: d.auth, body: req({context, ...extra})});
+    assert.equal((await n3('/device/runtime-control-policy', deviceRequest({policy}))).status, 200);
+    const status = {runtimeMode: 'OTHER', runtimePhase: 'IDLE', runtimeRevision: 0, modeRevision: 0, configurationRevision: 0,
+      consentId: policy.consentId, policyRevision: 1, remoteExamPause: false, recording: 'IDLE', desktop: 'INTERACTIVE', noticeOpen: false,
+      operationId: null, observedAt: new Date().toISOString()};
+    assert.equal((await n3('/device/runtime-status', deviceRequest({sequence: 1, sampleAgeMs: 0, status}))).status, 200);
+    const base = `/schools/${f.school.id}/devices/${d.deviceId}/runtime-operations`;
+    const create = req({target: 'EXAM', scope: 'EXAM_MODE', expectedRuntimeRevision: 0, expectedModeRevision: 0,
+      expectedConfigurationRevision: 0, consentId: policy.consentId, policyRevision: 1, controlEpoch: context.controlEpoch});
+    assert.equal((await n3(base, {auth: other.admin, body: create})).status, 403);
+    assert.equal((await n3(base, {auth: f.admin, body: {...create, autoStart: true}})).status, 400);
+    const both = await Promise.all([n3(base, {auth: f.admin, body: create}), n3(base, {auth: f.admin, body: create})]);
+    assert.deepEqual(both.map(r => r.status).sort(), [200, 201]);
+    const op = both[0].data; assert.equal(both[1].data.operationId, op.operationId); assert.equal(validateRuntime('operation', op), true);
+    const coalesced = await n3(base, {auth: f.admin, body: {...create, requestId: randomUUID()}});
+    assert.equal(coalesced.status, 200); assert.equal(coalesced.data.operationId, op.operationId);
+    const startBody = {...create, context}; delete startBody.target; delete startBody.scope; delete startBody.controlEpoch;
+    await prisma.schoolMember.update({where: {schoolId_accountId: {schoolId: f.school.id, accountId: f.account.id}}, data: {role: 'VIEWER'}});
+    assert.equal((await n3(`/device/runtime-operations/${op.operationId}/start`, {auth: d.auth, body: startBody})).error.code, 'INITIATOR_NO_LONGER_AUTHORIZED');
+    await prisma.schoolMember.update({where: {schoolId_accountId: {schoolId: f.school.id, accountId: f.account.id}}, data: {role: 'ADMIN'}});
+    const started = await n3(`/device/runtime-operations/${op.operationId}/start`, {auth: d.auth, body: startBody});
+    assert.equal(started.status, 200, started.error?.code); assert.equal(validateRuntime('startResponse', started.data), true);
+    assert.equal((await n3(`${base}/${op.operationId}/cancel`, {auth: f.admin, body: req({})})).status, 409);
+    const evidence = {examAware: 'READY', classIsland: 'RUNNING', remoteExamPause: true, startup: 'EXAM_MODE_APPLIED', sideEffects: 'POSSIBLE',
+      alreadySatisfied: false, observedAt: new Date().toISOString(), configurationRevision: 0};
+    const event = {eventId: randomUUID(), operationId: op.operationId, sequence: 1, state: 'PARTIAL', step: 'CLOSE_CLASSISLAND', reasonCode: 'UAC_CANCELLED',
+      occurredAt: new Date().toISOString(), evidence, execution: Object.fromEntries(['runId', 'sessionId', 'statusEpoch', 'controlEpoch', 'grantId'].map(k => [k, started.data.grant[k]]))};
+    assert.equal((await n3('/device/runtime-operation-events', deviceRequest({events: [event]}))).data.results[0].status, 'ACCEPTED');
+    assert.equal((await n3('/device/runtime-operation-events', deviceRequest({events: [event]}))).data.results[0].status, 'DUPLICATE');
+    const ended = await n3(`/device/runtime-operations/${op.operationId}/resolve`, deviceRequest({resolutionId: randomUUID(),
+      expectedLastEventSequence: 1, kind: 'LOCAL_END', noPendingActions: true, evidence: {...evidence, remoteExamPause: false}, occurredAt: new Date().toISOString()}));
+    assert.equal(ended.status, 200, ended.error?.code); assert.equal(ended.data.state, 'PARTIAL'); assert.ok(ended.data.localEndedAt);
+    const rows = await observer.query('SELECT "resolvedAt" FROM "NpepRuntimeOperation" WHERE id=$1', [op.operationId]);
+    assert.ok(rows.rows[0].resolvedAt);
+  });
   const notification = (f, extra = {}) => prisma.publication.create({data: {type: 'NOTICE', content: '真实通知正文',
     status: 'PUBLISHED', publishAt: new Date(Date.now() - 60000), authorAccountId: f.account.id,
     targets: {create: {workspaceId: f.workspace.id}}, ...extra}});
+  await t.test('N3 actual .NET transport through real HTTP/PostgreSQL (simulated OS effects)', {skip: !process.env.NPEP_N3_ACCEPTANCE_DLL, timeout: 180000}, async () => {
+    const f = await fixture();
+    const file = join(directory, 'n3-http-fixture.json');
+    await writeFile(file, JSON.stringify({kind: 'N3_DISPOSABLE_DATABASE', origin: origin.replace('/api/v2/npep', ''),
+      schoolId: f.school.id, screenBindingId: f.binding.id, adminToken: f.admin}), {mode: 0o600});
+    const child = spawn('dotnet', [process.env.NPEP_N3_ACCEPTANCE_DLL, '--control-http', file, join(directory, 'desktop')],
+      {windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: process.env});
+    let output = '';
+    child.stdout.on('data', chunk => { output += chunk; });
+    child.stderr.on('data', chunk => { output += chunk; });
+    const timer = setTimeout(() => child.kill(), 170000);
+    try {
+      const code = await new Promise((resolve, reject) => { child.on('error', reject); child.on('close', resolve); });
+      assert.equal(code, 0, output);
+      console.log(output.trim());
+    } finally { clearTimeout(timer); }
+  });
+  await t.test('N4 actual .NET prepare/explicit start over HTTP/PostgreSQL (simulated player)', {skip: !process.env.NPEP_N3_ACCEPTANCE_DLL, timeout: 150000}, async () => {
+    const f = await fixture();
+    const file = join(directory, 'n4-http-fixture.json');
+    await writeFile(file, JSON.stringify({kind: 'N4_DISPOSABLE_DATABASE', origin: origin.replace('/api/v2/npep', ''),
+      schoolId: f.school.id, screenBindingId: f.binding.id, adminToken: f.admin}), {mode: 0o600});
+    const child = spawn('dotnet', [process.env.NPEP_N3_ACCEPTANCE_DLL, '--plan-http', file, join(directory, 'desktop-plans')],
+      {windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: process.env});
+    let output = '';
+    child.stdout.on('data', chunk => { output += chunk; }); child.stderr.on('data', chunk => { output += chunk; });
+    const timer = setTimeout(() => child.kill(), 140000);
+    try { const code = await new Promise((resolve, reject) => { child.on('error', reject); child.on('close', resolve); }); assert.equal(code, 0, output); console.log(output.trim()); }
+    finally { clearTimeout(timer); }
+  });
   await t.test('N2 old pairing receives bounded pages with all priorities and separate receipts', async () => {
     const {validateNotification} = await import('../domain/npep/notifications.js');
     const f = await fixture(), d = await activate(f), other = await fixture();
@@ -377,17 +475,30 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     await cleanupNpep(prisma);
     assert.equal(await prisma.npepPairing.findUnique({where: {id: p.pairingId}}), null);
   });
+  await verifyNoiseScheduleDatabase(t, {fixture, request, prisma, req, activate});
+  await verifyNoiseScheduleRuntimeDatabase(t, {fixture,request,prisma,req,activate,open,identity,directory,origin});
   await t.test('external epoch blocks restored authorization rows and explicit recovery revokes them', async () => {
     const f = await fixture(), d = await activate(f);
     const project = process.env.INTEGRATION_COMPOSE_PROJECT;
-    assert.match(project || '', /^npclassworks-(?:integration-\d+|npep-n1)$/);
+    const native = process.env.INTEGRATION_NATIVE_POSTGRES === 'true';
+    if (!native) assert.match(project || '', /^npclassworks-(?:integration-\d+|npep-n1)$/);
     const container = `${project}-postgres-1`;
-    const backup = spawnSync('docker', ['exec', container, 'pg_dump', '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), '-Fc', '-t', 'public."NpepDevice"', '-t', 'public."NpepDeployment"', '-t', 'public."NpepNotificationSnapshot"', '-t', 'public."NpepNotificationExposure"', '-t', 'public."NpepNotificationReceipt"'], {maxBuffer: 32 * 1024 * 1024});
+    function pgTool(name, args, input) {
+      if (native) {
+        assert.ok(process.env.NPEP_TEST_PG_BIN, 'native PostgreSQL bin required');
+        return spawnSync(join(process.env.NPEP_TEST_PG_BIN, name + (process.platform === 'win32' ? '.exe' : '')),
+          ['-h', url.hostname, '-p', url.port, '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), ...args],
+          {env: {...process.env, PGPASSWORD: decodeURIComponent(url.password)}, input, windowsHide: true, maxBuffer: 32 * 1024 * 1024});
+      }
+      return spawnSync('docker', ['exec', ...(input ? ['-i'] : []), container, name, '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), ...args],
+        {input, maxBuffer: 32 * 1024 * 1024});
+    }
+    const backup = pgTool('pg_dump', ['-Fc', '-t', 'public."NpepDevice"', '-t', 'public."NpepDeployment"', '-t', 'public."NpepNotificationSnapshot"', '-t', 'public."NpepNotificationExposure"', '-t', 'public."NpepNotificationReceipt"', '-t', 'public."NpepNoiseDevice"', '-t', 'public."NpepNoiseScheduleDevice"']);
     assert.equal(backup.status, 0, 'isolated pg_dump must succeed');
     const closed = await closeBeforeRestore(gateFile);
     assert.equal((await request('/device/me', {auth: d.auth})).status, 503);
     await prisma.npepDevice.update({where: {id: d.deviceId}, data: {state: 'REVOKED'}});
-    const restored = spawnSync('docker', ['exec', '-i', container, 'pg_restore', '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), '--clean', '--if-exists', '--no-owner', '--no-privileges', '--exit-on-error'], {input: backup.stdout, maxBuffer: 32 * 1024 * 1024});
+    const restored = pgTool('pg_restore', ['--clean', '--if-exists', '--no-owner', '--no-privileges', '--exit-on-error'], backup.stdout);
     assert.equal(restored.status, 0, 'isolated pg_restore must succeed: ' + restored.stderr.toString());
     assert.equal((await prisma.npepDevice.findUnique({where: {id: d.deviceId}})).state, 'ACTIVE', 'the dump really restored the old active credential');
     await writeFile(gateFile, JSON.stringify({...closed, enabled: true}));

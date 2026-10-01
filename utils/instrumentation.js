@@ -43,5 +43,5 @@ if (process.env.AXIOM_TOKEN && process.env.AXIOM_DATASET) {
     // Starting the OpenTelemetry SDK to begin collecting telemetry data
     sdk.start();
 } else {
-    console.log("❌未设置 Axiom 遥测");
+    console.log("Axiom 遥测未启用（可选，不影响服务运行）");
 }
