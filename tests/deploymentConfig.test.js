@@ -149,8 +149,8 @@ test("upgrade retains previous images and database while rollback is explicit", 
     assert.match(upgrade, /rollback-state\.env/);
     assert.match(rollback, /--restore-database/);
     assert.match(rollback, /--force-recreate/);
-    assert.match(timer, /OnCalendar=\*-\*-\* 03:30:00/);
-    assert.match(timer, /Persistent=true/);
+    assert.match(timer, /已停用/);
+    assert.doesNotMatch(timer, /ExecStart=|systemctl|cat > \/etc/);
 });
 
 test("push deployment fetches both repositories and uses the signed deployment agent without SSH credentials", () => {
@@ -160,8 +160,11 @@ test("push deployment fetches both repositories and uses the signed deployment a
     assert.match(upgrade, /--backend-ref/);
     assert.match(upgrade, /--frontend-ref/);
     assert.match(upgrade, /flock -w 900 9/);
-    assert.match(ciDeploy, /--backend-ref origin\/main/);
-    assert.match(ciDeploy, /--frontend-ref origin\/main/);
+    assert.match(ciDeploy, /--backend-ref "\$1"/);
+    assert.match(ciDeploy, /--frontend-ref "\$2"/);
+    assert.doesNotMatch(ciDeploy, /origin\/main/);
+    assert.match(workflow, /BACKEND_COMMIT: \$\{\{ needs\.fullstack\.outputs\.backend_commit \}\}/);
+    assert.match(workflow, /FRONTEND_COMMIT: \$\{\{ needs\.fullstack\.outputs\.frontend_commit \}\}/);
     assert.match(ciDeploy, /--rollback-on-failure/);
     assert.match(workflow, /push:[\s\S]*branches: \["main"\]/);
     assert.match(workflow, /DEPLOY_AGENT_URL/);

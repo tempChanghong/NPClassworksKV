@@ -9,9 +9,10 @@ Type=simple
 User=deploy
 Group=deploy
 SupplementaryGroups=docker
-WorkingDirectory=/opt/npclassworks/NPClassworksKV
+WorkingDirectory=/
 EnvironmentFile=/etc/npclassworks-deploy-agent.env
-ExecStart=/usr/bin/node /opt/npclassworks/NPClassworksKV/deploy/agent/server.js
+# Retired checkout-hosted service. Migrate to the protected NPEssentials boundary.
+ExecStart=/usr/bin/false
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30

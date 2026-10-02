@@ -101,8 +101,8 @@ pnpm run deploy:shared:up
 # 手动备份；输出最终 .dump 路径，并同时生成 SHA-256 与元数据
 bash deploy/backup.sh
 
-# 安装每天 03:30 执行的 systemd 计时器
-sudo bash deploy/install-backup-timer.sh
+# 旧工作区 systemd 计时器安装器已停用。
+# 定时异地备份使用 NPEssentials 的直接 PostgreSQL 调度。
 
 # 恢复前会再备份一次当前数据库；--yes 用于确认替换数据
 bash deploy/restore.sh deploy/backups/npclassworks_xxx.dump --yes
