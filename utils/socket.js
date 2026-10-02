@@ -8,6 +8,7 @@ import {Server} from "socket.io";
 import {prisma} from "./prisma.js";
 import {getAllowedOrigins} from "./corsConfig.js";
 import {socketConnectionsGauge} from "./metrics.js";
+import {canReceiveWorkspaceEvent, socketCredentials} from "../services/socketEventAuthorization.js";
 
 let io = null;
 
@@ -28,9 +29,19 @@ export function initSocket(server) {
         socketConnectionsGauge.inc();
         socket.once("disconnect", () => socketConnectionsGauge.dec());
         socket.data.workspaceIds = new Set();
+        socket.data.credentials = socketCredentials(socket.handshake.auth);
+        socket.data.leaveGeneration = 0;
+        socket.data.credentialGeneration = 0;
+        socket.on("update-credentials", payload => {
+            socket.data.credentialGeneration++;
+            socket.data.credentials = socketCredentials(payload);
+        });
 
         socket.on("join-workspaces", async (payload) => {
             try {
+                const generation = socket.data.leaveGeneration;
+                socket.data.credentialGeneration++;
+                socket.data.credentials = socketCredentials(payload?.credentials || socket.data.credentials);
                 const requestedIds = [...new Set(
                     (Array.isArray(payload?.workspaceIds) ? payload.workspaceIds : [])
                         .filter((id) => typeof id === "string" && id.trim())
@@ -45,6 +56,7 @@ export function initSocket(server) {
                     select: {id: true},
                 });
                 const joinedIds = workspaces.map((workspace) => workspace.id);
+                if (!socket.connected || generation !== socket.data.leaveGeneration) return;
                 const joinedIdSet = new Set(joinedIds);
                 for (const workspaceId of joinedIds) {
                     socket.join(`workspace:${workspaceId}`);
@@ -61,6 +73,7 @@ export function initSocket(server) {
         });
 
         socket.on("leave-workspaces", (payload) => {
+            socket.data.leaveGeneration++;
             const ids = Array.isArray(payload?.workspaceIds)
                 ? payload.workspaceIds
                 : Array.from(socket.data.workspaceIds || []);
@@ -79,7 +92,7 @@ export function getIO() {
     return io;
 }
 
-export function broadcastWorkspaceEvent(workspaceIds, type, content = null) {
+export async function broadcastWorkspaceEvent(workspaceIds, type, content = null, {wasPublished = false} = {}) {
     if (!io || !Array.isArray(workspaceIds) || typeof type !== "string") return;
     const timestamp = new Date().toISOString();
     const eventPayload = {
@@ -95,9 +108,25 @@ export function broadcastWorkspaceEvent(workspaceIds, type, content = null) {
             note: "Workspace feed invalidation",
         },
     };
-    for (const workspaceId of new Set(workspaceIds.filter(Boolean))) {
-        io.to(`workspace:${workspaceId}`).emit(type.trim(), eventPayload);
-    }
+    const ids = [...new Set(workspaceIds.filter(Boolean))];
+    const rooms = ids.map(id => `workspace:${id}`);
+    if (!rooms.length) return;
+    try {
+        const sockets = await io.in(rooms).fetchSockets();
+        for (const socket of sockets) {
+            const joinedIds = ids.filter(id => socket.rooms.has(`workspace:${id}`));
+            if (!joinedIds.length) continue;
+            const generation = socket.data.credentialGeneration;
+            const authorized = await canReceiveWorkspaceEvent(socket.data.credentials || {}, joinedIds, type, content);
+            if (generation !== socket.data.credentialGeneration || !joinedIds.some(id => socket.rooms.has(`workspace:${id}`))) continue;
+            if (authorized) {
+                if (joinedIds.some(id => socket.rooms.has(`workspace:${id}`))) socket.emit(type.trim(), eventPayload);
+            } else if (type.startsWith("publication.") && (content?.status === "PUBLISHED" || wasPublished)) {
+                // Public feeds need only a refresh signal, never internal publication metadata.
+                socket.emit("publication.feed.changed", {});
+            }
+        }
+    } catch (error) {console.error("workspace event delivery failed:", error?.name || "Error");}
 }
 
 export default {initSocket, getIO, broadcastWorkspaceEvent};

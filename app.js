@@ -22,6 +22,7 @@ import {register, httpMetrics} from "./utils/metrics.js";
 import {prisma} from "./utils/prisma.js";
 import cors from "cors";
 import {createHttpCorsOptions} from "./utils/corsConfig.js";
+import {metricsAuth} from "./middleware/metricsAuth.js";
 
 var app = express();
 app.use(httpMetrics);
@@ -112,20 +113,8 @@ app.get("/ready", async (req, res) => {
 });
 
 // Prometheus metrics endpoint with token auth
-app.get("/metrics", async (req, res) => {
+app.get("/metrics", metricsAuth, async (req, res) => {
     try {
-        // 检查 token 验证
-        const metricsToken = process.env.METRICS_TOKEN;
-        if (metricsToken) {
-            const providedToken = req.headers.authorization?.replace('Bearer ', '') || req.query.token;
-            if (!providedToken || providedToken !== metricsToken) {
-                return res.status(401).json({
-                    error: "Unauthorized",
-                    message: "Valid metrics token required"
-                });
-            }
-        }
-
         res.set("Content-Type", register.contentType);
         res.end(await register.metrics());
     } catch (err) {

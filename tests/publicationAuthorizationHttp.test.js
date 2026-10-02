@@ -148,3 +148,55 @@ test("weekly HTTP feeds keep classroom token scope and pass bounded date filters
     assert.equal((await fetch(publicUrl.replace("2026-09-07", "2026-02-30"))).status, 422);
     assert.equal((await fetch(publicUrl.replace("weekView=board", "weekView=bad"))).status, 422);
 });
+
+for (const status of ["DRAFT", "SCHEDULED"]) test(`screens cannot read, edit, restore or inspect history of ${status} teacher content`, async () => {
+    const item = items.find(p => p.id === "published");
+    item.status = status; item.revision = 2;
+    item.targets = [{workspaceId: "class-a", workspace: workspaces[0]}];
+    const headers = {"X-Classworks-Screen-Token": "screen-token", "Content-Type": "application/json", "If-Match": '"2"'};
+    const url = origin + "/api/v2/classroom-screens/publications/published";
+    for (const [suffix, method, body] of [["", "GET"], ["/revisions", "GET"], ["", "PATCH", {content: "forced publish"}], ["/restore", "POST", {sourceRevision: 1}]]) {
+        const response = await fetch(url + suffix, {method, headers, ...(body ? {body: JSON.stringify(body)} : {})});
+        assert.equal(response.status, 409);
+        assert.equal((await response.json()).code, "SCREEN_PUBLICATION_NOT_EDITABLE");
+    }
+    assert.equal(writes, 0);
+});
+
+test("revision history checks each historical target/status and advances past hidden rows", async t => {
+    const foreign = {id: "foreign", type: "ADMIN_CLASS", isActive: true, term: {schoolId: "foreign-school", school: {id: "foreign-school", teacherAuthMode: "LOCAL_PIN"}}};
+    workspaces.push(foreign);
+    const rows = [
+        {revision: 5, snapshot: {type: "ASSIGNMENT", status: "PUBLISHED", targetWorkspaceIds: ["foreign"], content: "foreign content"}},
+        {revision: 4, snapshot: {type: "ASSIGNMENT", status: "DRAFT", targetWorkspaceIds: ["group"], content: "private draft"}},
+        {revision: 3, snapshot: {type: "ASSIGNMENT", status: "PUBLISHED", targetWorkspaceIds: ["group"], content: "allowed history"}},
+    ];
+    const previous = prisma.publicationRevision.findMany;
+    prisma.publicationRevision.findMany = async () => rows;
+    t.after(() => {prisma.publicationRevision.findMany = previous;});
+    const page = (await (await get("/api/v2/publications/published/revisions?limit=2")).json()).data;
+    assert.deepEqual(page.items, []); assert.equal(page.nextBeforeRevision, 4);
+    const legacy = (await (await get("/api/v2/publications/published/revisions")).json()).data;
+    assert.deepEqual(legacy.map(r => r.revision), [3]);
+    items.find(p => p.id === "published").targets = [{workspaceId: "class-a", workspace: workspaces[0]}];
+    rows[1].snapshot.targetWorkspaceIds = ["class-a"];
+    rows[2].snapshot.targetWorkspaceIds = ["class-a"];
+    const response = await fetch(origin + "/api/v2/classroom-screens/publications/published/revisions", {headers: {"X-Classworks-Screen-Token": "screen-token"}});
+    assert.equal(response.status, 200);
+    assert.deepEqual((await response.json()).data.map(r => r.revision), [3]);
+});
+
+test("a screen cannot directly restore a hidden draft/scheduled revision of currently published content", async () => {
+    const item = items.find(p => p.id === "published");
+    item.revision = 2; item.targets = [{workspaceId: "class-a", workspace: workspaces[0]}];
+    history.snapshot = {type: "ASSIGNMENT", targetWorkspaceIds: ["class-a"]};
+    for (const status of ["DRAFT", "SCHEDULED"]) {
+        history.snapshot.status = status;
+        const response = await fetch(origin + "/api/v2/classroom-screens/publications/published/restore", {
+            method: "POST", headers: {"X-Classworks-Screen-Token": "screen-token", "Content-Type": "application/json", "If-Match": '"2"'},
+            body: JSON.stringify({sourceRevision: 1})});
+        assert.equal(response.status, 409);
+        assert.equal((await response.json()).code, "SCREEN_PUBLICATION_NOT_EDITABLE");
+    }
+    assert.equal(writes, 0);
+});

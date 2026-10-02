@@ -331,6 +331,8 @@ export async function validateAccountToken(decoded) {
         throw new Error('Account not found');
     }
 
+    if (account.localDisabled) throw new Error('Account disabled');
+
     // 验证令牌版本
     if (account.tokenVersion !== decoded.tokenVersion) {
         throw new Error('Token version mismatch');

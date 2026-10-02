@@ -68,7 +68,9 @@ export const jwtAuth = async (req, res, next) => {
                     where: {id: decoded.accountId},
                 });
 
-                if (!account) {
+                // Legacy tokens have neither a session nor a version. Only the
+                // original, never-revoked version can use this compatibility path.
+                if (!account || account.tokenVersion !== 1 || account.localDisabled) {
                     return next(errors.createError(401, "账户不存在"));
                 }
 

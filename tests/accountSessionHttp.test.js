@@ -7,6 +7,7 @@ import {jwtAuth} from "../middleware/jwt-auth.js";
 import {generateTokenPair, refreshAccessToken, verifyAccessToken} from "../utils/tokenManager.js";
 
 import accountRouter from "../routes/accounts.js";
+import {generateAccountToken as generateLegacyToken} from "../utils/jwt.js";
 
 const account = {id: "session-owner", provider: "test", tokenVersion: 1};
 let server, origin, sessions;
@@ -81,4 +82,17 @@ test("pre-session access tokens remain compatible until their existing account/v
     assert.equal((await request(token)).status, 200);
     account.tokenVersion++;
     try { assert.equal((await request(token)).status, 401); } finally { account.tokenVersion--; }
+});
+
+test("legacy tokens cannot bypass account-wide revocation or disabled state", async () => {
+    const legacy = generateLegacyToken(account);
+    assert.equal((await request(legacy)).status, 200);
+    account.tokenVersion++;
+    try { assert.equal((await request(legacy)).status, 401); } finally { account.tokenVersion--; }
+    account.localDisabled = true;
+    try {
+        assert.equal((await request(legacy)).status, 401);
+        const modern = await generateTokenPair(account);
+        assert.equal((await request(modern.accessToken)).status, 401);
+    } finally { delete account.localDisabled; }
 });
