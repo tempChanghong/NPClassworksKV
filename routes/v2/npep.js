@@ -57,6 +57,10 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
     } catch (error) { next(error); }
   });
   const rate = async (...args) => { if (rateLimits) await service.rate(...args); };
+  const deviceRate = async (auth, scope, limit, seconds) => {
+    await service.preflightDevice(auth);
+    await rate(scope, auth.id, limit, seconds);
+  };
   const body = name => (req, _res, next) => {
     if (validate(name, req.body)) return next();
     const caps = req.body?.requestedCapabilities || req.body?.capabilities;
@@ -95,7 +99,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.post('/screen/noise-schedule/resume',noQuery,scheduleWire('resumeRequest'),send(req=>scheduleRuntime.resume(screenToken(req),req.body)));
   router.get('/schools/:schoolId/devices/:id/noise-schedule',admin,noQuery,send(req=>scheduleRuntime.management(req.npepClaims,req.params.schoolId,req.params.id)));
   router.post('/device/noise-schedule',noQuery,scheduleWire('exchangeRequest'),send(async req=>{
-    const auth=deviceAuth(req); await service.me(auth); await rate('noise-schedule',auth.id,40,60);
+    const auth=deviceAuth(req); await deviceRate(auth,'noise-schedule',40,60); await service.me(auth);
     return scheduleRuntime.exchange(auth,req.body);
   }));
   router.get('/schools/:schoolId/noise-schedules', admin, (req, _res, next) => next(validateScheduleQuery(req.query) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
@@ -108,13 +112,13 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.get('/schools/:schoolId/devices/:id/noise', admin, noQuery, send(req => noise.management(req.npepClaims, req.params.schoolId, req.params.id)));
   router.post('/device/noise-exchange', noiseBody('exchangeRequest'), send(async req => {
     const auth = deviceAuth(req);
-    await service.me(auth); await rate('noise-exchange', auth.id, 40, 60);
+    await deviceRate(auth, 'noise-exchange', 40, 60); await service.me(auth);
     return noise.exchange(auth, req.body);
   }));
   const runtimeSend = work => send(async req => {
     const auth = deviceAuth(req);
+    await deviceRate(auth, 'runtime-device', 60, 60);
     await service.me(auth);
-    await rate('runtime-device', auth.id, 60, 60);
     return work(req, auth);
   });
   router.post('/device/runtime-control-policy', runtimeBody('policyRequest'), runtimeSend((req, auth) => runtime.policy(auth, req.body)));
@@ -137,10 +141,9 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.post('/schools/:schoolId/devices/:id/runtime-operations', admin, runtimeBody('createRequest'), send(req => runtime.create(req.npepClaims, req.params.schoolId, req.params.id, req.body)));
   router.post('/schools/:schoolId/devices/:id/runtime-operations/:operationId/cancel', admin, runtimeBody('cancelRequest'), send(req => runtime.cancel(req.npepClaims, req.params.schoolId, req.params.id, req.params.operationId)));
   router.post('/pairings', body('createPairing'), send(async req => {
-    // Socket address deliberately ignores arbitrary forwarded headers. Deployments
-    // behind a proxy have a conservative shared quota until trusted proxies are configured.
-    await rate('create-minute', req.socket.remoteAddress, 5, 60);
-    await rate('create-hour', req.socket.remoteAddress, 30, 3600);
+    // Express only honors forwarded addresses according to configured trust proxy.
+    await rate('create-minute', req.ip, 5, 60);
+    await rate('create-hour', req.ip, 30, 3600);
     return service.create(req.body);
   }));
   router.get('/pairings/:id', send(async req => {
@@ -167,32 +170,36 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
     return service.list(req.npepClaims, req.params.schoolId, {limit, cursor: req.query.cursor});
   }));
   router.post('/schools/:schoolId/devices/:id/revoke', admin, body('revokeDevice'), send(req => service.revoke(null, req.npepClaims, req.params.schoolId, req.params.id, req.body)));
-  router.get('/device/me', send(req => service.me(deviceAuth(req))));
+  router.get('/device/me', send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'device-me', 60, 60);
+    return service.me(auth);
+  }));
   router.get('/device/notifications', send(async req => {
     const auth = deviceAuth(req);
     if (Object.keys(req.query).some(key => key !== 'cursor') ||
         (req.query.cursor !== undefined && (typeof req.query.cursor !== 'string' || !notificationCursor.test(req.query.cursor)))) fail(400, 'INVALID_REQUEST');
+    await deviceRate(auth, req.query.cursor ? 'notification-pages' : 'notifications', req.query.cursor ? 180 : 12, 60);
     await service.me(auth);
-    await rate(req.query.cursor ? 'notification-pages' : 'notifications', auth.id, req.query.cursor ? 180 : 12, 60);
     return notifications.snapshot(auth, req.query.cursor);
   }));
   router.post('/device/notification-receipts', send(async req => {
     if (!validateNotification('receiptRequest', req.body)) fail(400, 'INVALID_REQUEST');
     const auth = deviceAuth(req);
+    await deviceRate(auth, 'notification-receipts', 30, 60);
     await service.me(auth);
-    await rate('notification-receipts', auth.id, 30, 60);
     return notifications.receipts(auth, req.body.events);
   }));
   router.post('/device/sessions', body('openSession'), send(async req => {
     const auth = deviceAuth(req);
+    await deviceRate(auth, 'session', 30, 60);
     await service.me(auth);
-    await rate('session', auth.id, 30, 60);
     return service.session(auth, req.body);
   }));
   router.post('/device/status', body('reportStatus'), send(async req => {
     const auth = deviceAuth(req);
+    await deviceRate(auth, 'status', 12, 60);
     await service.me(auth);
-    await rate('status', auth.id, 12, 60);
     return service.status(auth, req.body);
   }));
   router.post('/device/revoke', body('revokeDevice'), send(req => service.revoke(deviceAuth(req), null, null, null, req.body)));

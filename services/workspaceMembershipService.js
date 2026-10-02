@@ -1,6 +1,7 @@
 import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 import {getResponsibilityWorkspaceIds} from "./staffAuthorizationService.js";
+import {assertAccountSchoolScope} from "./schoolAccountPolicy.js";
 
 const WORKSPACE_ROLES = new Set(["OWNER", "TEACHER", "ASSISTANT", "VIEWER"]);
 
@@ -45,12 +46,13 @@ async function resolveAccount({accountId, email}) {
 }
 
 export async function upsertWorkspaceMember({managerAccountId, workspaceId, accountId, email, role}) {
-    await getManagedWorkspace(managerAccountId, workspaceId);
+    const workspace = await getManagedWorkspace(managerAccountId, workspaceId);
     if (!WORKSPACE_ROLES.has(role)) {
         throw authorizationError("无效的教学空间角色", "INVALID_WORKSPACE_ROLE", 400, {role});
     }
     const account = await resolveAccount({accountId, email});
     if (!account) throw authorizationError("未找到需要添加的教师账户", "ACCOUNT_NOT_FOUND", 404);
+    await assertAccountSchoolScope(account, workspace.term.schoolId);
 
     const membership = await prisma.workspaceMember.upsert({
         where: {workspaceId_accountId: {workspaceId, accountId: account.id}},

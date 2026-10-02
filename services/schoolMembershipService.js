@@ -2,6 +2,7 @@ import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
 
 import {lockSchoolManagement, assertOwnerTargetChange} from "./schoolOwnerPolicy.js";
+import {assertAccountSchoolScope} from "./schoolAccountPolicy.js";
 
 const SCHOOL_ROLES = new Set(["OWNER", "ADMIN", "MANAGER", "VIEWER"]);
 
@@ -45,6 +46,7 @@ export async function upsertSchoolMember({managerAccountId, schoolId, accountId,
         const manager = await lockSchoolManagement(tx, managerAccountId, schoolId);
         const account = await resolveAccount({accountId, email}, tx);
         if (!account) throw authorizationError("未找到需要添加的账户", "ACCOUNT_NOT_FOUND", 404);
+        await assertAccountSchoolScope(account, schoolId, tx);
         await assertOwnerTargetChange(tx, {manager, schoolId, accountId: account.id, nextRole: role});
         return tx.schoolMember.upsert({
             where: {schoolId_accountId: {schoolId, accountId: account.id}},

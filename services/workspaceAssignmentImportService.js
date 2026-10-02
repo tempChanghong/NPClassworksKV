@@ -4,6 +4,7 @@ import {
     validateWorkspaceAssignmentImport,
 } from "../domain/workspaceAssignmentImport.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
+import {assertAccountSchoolScope} from "./schoolAccountPolicy.js";
 
 async function resolveManagedTerm({managerAccountId, schoolId, termId}) {
     if (!schoolId) throw authorizationError("需要提供学校", "SCHOOL_REQUIRED", 400);
@@ -22,7 +23,7 @@ async function findAccountsByNormalizedEmail(emails) {
     if (emails.length === 0) return new Map();
     const accounts = await prisma.account.findMany({
         where: {email: {in: emails, mode: "insensitive"}},
-        select: {id: true, email: true, name: true, avatarUrl: true},
+        select: {id: true, email: true, name: true, avatarUrl: true, provider: true, providerId: true},
     });
     const result = new Map();
     for (const account of accounts) {
@@ -100,6 +101,9 @@ export async function importWorkspaceAssignments({
     if (dryRun) return preview;
 
     const counters = await prisma.$transaction(async (tx) => {
+        for (const accounts of accountsByEmail.values()) {
+            for (const account of accounts) await assertAccountSchoolScope(account, schoolId, tx);
+        }
         let memberships = 0;
         let invitations = 0;
         for (const assignment of validation.normalized.assignments) {

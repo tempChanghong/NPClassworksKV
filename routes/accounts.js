@@ -1,5 +1,8 @@
 import {Router} from "express";
 import crypto from "crypto";
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import {OAuthStateStore} from "../domain/oauthState.js";
 import {generateState, getCallbackURL, oauthProviders} from "../config/oauth.js";
 import {generateTokenPair, refreshAccessToken, revokeAllTokens, revokeRefreshToken} from "../utils/jwt.js";
 import {jwtAuth} from "../middleware/jwt-auth.js";
@@ -21,6 +24,7 @@ import {
 } from "../services/accountPreferenceService.js";
 
 const router = Router();
+router.use(cookieParser());
 
 // UUID device-account binding belonged to Classworks 1. Keep the historical
 // database relation for migration compatibility, but make its HTTP surface
@@ -33,7 +37,11 @@ router.use((req, res, next) => {
 });
 
 // 存储OAuth state，防止CSRF攻击（生产环境应使用Redis等）
-const oauthStates = new Map();
+const oauthStates = new OAuthStateStore();
+const oauthHandoffs = new OAuthStateStore({ttlMs: 60000});
+const oauthInitiationLimiter = rateLimit({windowMs: 300000, limit: 30, standardHeaders: "draft-7", legacyHeaders: false});
+const stateCookie = state => `np-oauth-${state}`;
+const stateCookieOptions = {httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/accounts/oauth"};
 
 function sendLocalTokenPair(res, result, message) {
     return res.json({
@@ -214,9 +222,34 @@ router.get("/oauth/providers", (req, res) => {
  * Query参数:
  * - redirect_uri: 前端回调地址（可选）
  */
-router.get("/oauth/:provider", (req, res) => {
+router.post("/oauth/exchange", oauthInitiationLimiter, async (req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    const {code, verifier} = req.body || {};
+    if (typeof code !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(code)
+        || typeof verifier !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(verifier)) {
+        return res.status(401).json({code: "OAUTH_HANDOFF_INVALID"});
+    }
+    const challenge = crypto.createHash("sha256").update(verifier).digest("base64url");
+    const handoff = oauthHandoffs.consume(code, "handoff", challenge);
+    if (!handoff) return res.status(401).json({code: "OAUTH_HANDOFF_INVALID"});
+    try {
+        const account = await prisma.account.findUnique({where: {id: handoff.accountId}});
+        if (!account || account.localDisabled || account.tokenVersion !== handoff.tokenVersion) {
+            return res.status(401).json({code: "OAUTH_HANDOFF_INVALID"});
+        }
+        const tokens = await generateTokenPair(account);
+        return res.json({access_token: tokens.accessToken, refresh_token: tokens.refreshToken,
+            expires_in: tokens.accessTokenExpiresIn});
+    } catch (error) {next(error);}
+});
+
+router.get("/oauth/:provider", oauthInitiationLimiter, (req, res) => {
     const {provider} = req.params;
     const {redirect_uri} = req.query;
+    const handoffChallenge = req.query.handoff_challenge;
+    if (typeof handoffChallenge !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(handoffChallenge)) {
+        return res.status(400).json({code: "OAUTH_HANDOFF_CHALLENGE_REQUIRED", message: "请更新客户端后重新登录"});
+    }
 
     const providerConfig = oauthProviders[provider];
     if (!providerConfig) {
@@ -246,19 +279,16 @@ router.get("/oauth/:provider", (req, res) => {
     }
 
     // 保存state和redirect_uri（5分钟过期）
-    oauthStates.set(state, {
+    const browserBinding = crypto.randomBytes(32).toString("base64url");
+    if (!oauthStates.set(state, {
         provider,
         redirect_uri,
         timestamp: Date.now(),
         codeVerifier,
-    });
-
-    // 清理过期的state（超过5分钟）
-    for (const [key, value] of oauthStates.entries()) {
-        if (Date.now() - value.timestamp > 5 * 60 * 1000) {
-            oauthStates.delete(key);
-        }
-    }
+        browserBinding,
+        handoffChallenge,
+    })) return res.status(503).json({success: false, code: "OAUTH_BUSY", message: "登录请求繁忙，请稍后重试"});
+    res.cookie(stateCookie(state), browserBinding, {...stateCookieOptions, maxAge: 300000});
 
     // 构建授权URL
     const params = new URLSearchParams({
@@ -305,8 +335,8 @@ router.get("/oauth/:provider/callback", async (req, res) => {
     }
 
     // 验证state
-    const stateData = oauthStates.get(state);
-    if (!stateData || stateData.provider !== provider) {
+    const stateData = typeof state === "string" ? oauthStates.consume(state, provider, req.cookies?.[stateCookie(state)]) : null;
+    if (!stateData) {
         const frontendBaseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
         const errorUrl = new URL(frontendBaseUrl);
         errorUrl.searchParams.append("error", "invalid_state");
@@ -316,7 +346,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
     }
 
     // 删除已使用的state
-    oauthStates.delete(state);
+    res.clearCookie(stateCookie(state), stateCookieOptions);
 
     const providerConfig = oauthProviders[provider];
 
@@ -396,7 +426,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
         } else if (provider === "zerocat") {
             normalizedUser = {
                 providerId: userData.openid,
-                email: userData.email_verified ? userData.email : null,
+                email: userData.email_verified === true ? userData.email : null,
                 name: userData.nickname || userData.username,
                 avatarUrl: userData.avatar,
             };
@@ -404,7 +434,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
             // 厚浪云（Logto）标准OIDC用户信息
             normalizedUser = {
                 providerId: userData.sub,
-                email: userData.email_verified ? userData.email : null,
+                email: userData.email_verified === true ? userData.email : null,
                 name: userData.name || userData.preferred_username || userData.nickname,
                 avatarUrl: userData.picture,
             };
@@ -412,7 +442,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
             // STCN（Casdoor）标准OIDC用户信息
             normalizedUser = {
                 providerId: userData.sub,
-                email: userData.email_verified ? userData.email : userData.email || null,
+                email: userData.email_verified === true ? userData.email : null,
                 name: userData.name || userData.preferred_username || userData.nickname,
                 avatarUrl: userData.picture,
             };
@@ -420,7 +450,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
             // Dlass（Casdoor）标准OIDC用户信息
             normalizedUser = {
                 providerId: userData.sub,
-                email: userData.email_verified ? userData.email : userData.email || null,
+                email: userData.email_verified === true ? userData.email : null,
                 name: userData.name || userData.preferred_username || userData.nickname,
                 avatarUrl: userData.picture,
             };
@@ -449,7 +479,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
             account = await prisma.account.update({
                 where: {id: account.id},
                 data: {
-                    email: normalizedUser.email || account.email,
+                    email: normalizedUser.email || null,
                     name: normalizedUser.name || account.name,
                     avatarUrl: normalizedUser.avatarUrl || account.avatarUrl,
                     providerData: userData,
@@ -475,17 +505,18 @@ router.get("/oauth/:provider/callback", async (req, res) => {
         }
 
         // 5. 认领管理员在教师首次登录前按邮箱预分配的教学空间。
-        await claimWorkspaceInvitations({accountId: account.id, email: account.email});
+        await claimWorkspaceInvitations({accountId: account.id, email: normalizedUser.email});
 
-        // 6. 生成令牌对（访问令牌 + 刷新令牌）
-        const tokens = await generateTokenPair(account);
+        // Only the initiating browser can redeem this short-lived, single-use code.
+        // Do not create a session or put bearer credentials in a redirect URL.
+        const handoffCode = crypto.randomBytes(32).toString("base64url");
+        if (!oauthHandoffs.set(handoffCode, {provider: "handoff", browserBinding: stateData.handoffChallenge,
+            accountId: account.id, tokenVersion: account.tokenVersion})) throw new Error("登录请求繁忙，请稍后重试");
 
         // 7. 重定向到前端根路径，携带JWT token
         const frontendBaseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
         const callbackUrl = new URL(frontendBaseUrl);
-        callbackUrl.searchParams.append("access_token", tokens.accessToken);
-        callbackUrl.searchParams.append("refresh_token", tokens.refreshToken);
-        callbackUrl.searchParams.append("expires_in", tokens.accessTokenExpiresIn);
+        callbackUrl.searchParams.append("oauth_code", handoffCode);
         callbackUrl.searchParams.append("provider", provider);
         // 附带展示信息，便于前端显示品牌与名称
         const pconf = oauthProviders[provider] || {};
@@ -495,6 +526,7 @@ router.get("/oauth/:provider/callback", async (req, res) => {
         }
         callbackUrl.searchParams.append("success", "true");
 
+        res.set("Cache-Control", "no-store");
         res.redirect(callbackUrl.toString());
 
     } catch (error) {

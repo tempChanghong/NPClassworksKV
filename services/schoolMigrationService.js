@@ -4,6 +4,7 @@ import {promisify} from "node:util";
 import packageJson from "../package.json" with {type: "json"};
 import {prisma} from "../utils/prisma.js";
 import {assertSchoolManager, authorizationError} from "./academicAuthorizationService.js";
+import {isSchoolLocalAccount} from "./schoolAccountPolicy.js";
 
 const FORMAT = "npclassworks-school-transfer";
 const FORMAT_VERSION = 1;
@@ -204,6 +205,11 @@ async function collectSchoolData(client, schoolId) {
             localPasswordHash: true, localDisabled: true, lastLoginAt: true,
         },
     });
+    // Historical authors/audit references can bypass membership mutation checks.
+    // Refuse inconsistent packages before serializing any foreign credentials.
+    if (accounts.some((account) => account.provider === "school-local" && !isSchoolLocalAccount(account, school))) {
+        throw migrationError("迁移数据引用了其他学校的本地账户，请先清理跨学校关联", "MIGRATION_FOREIGN_LOCAL_ACCOUNT", 409);
+    }
     return {
         accounts: accounts.map((account) => ({
             ...account,

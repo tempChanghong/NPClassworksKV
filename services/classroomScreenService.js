@@ -66,15 +66,36 @@ async function requireAdministrativeClass(schoolId, administrativeClassId) {
 
 async function registerLoginFailure(binding) {
     if (!binding) return;
-    const failures = binding.loginFailures + 1;
-    await prisma.classroomScreenBinding.update({
-        where: {id: binding.id},
-        data: {
-            loginFailures: failures >= MAX_LOGIN_FAILURES ? 0 : failures,
-            lockedUntil: failures >= MAX_LOGIN_FAILURES
-                ? new Date(Date.now() + LOCK_MINUTES * 60 * 1000)
-                : binding.lockedUntil,
-        },
+    await prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT "id" FROM "ClassroomScreenBinding" WHERE "id" = ${binding.id} FOR UPDATE`;
+        const current = await tx.classroomScreenBinding.findUnique({where: {id: binding.id}});
+        if (!current || current.credentialVersion !== binding.credentialVersion) return;
+        if (current.lockedUntil && current.lockedUntil > new Date()) return;
+        const failures = current.loginFailures + 1;
+        await tx.classroomScreenBinding.update({
+            where: {id: binding.id},
+            data: {
+                loginFailures: failures >= MAX_LOGIN_FAILURES ? 0 : failures,
+                lockedUntil: failures >= MAX_LOGIN_FAILURES
+                    ? new Date(Date.now() + LOCK_MINUTES * 60 * 1000) : null,
+            },
+        });
+    });
+}
+
+async function withVerifiedScreen(binding, action) {
+    return prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT "id" FROM "ClassroomScreenBinding" WHERE "id" = ${binding.id} FOR UPDATE`;
+        const current = await tx.classroomScreenBinding.findUnique({where: {id: binding.id}, include: screenInclude});
+        if (!current || !current.isActive || current.credentialVersion !== binding.credentialVersion
+            || current.pinHash !== binding.pinHash || current.tokenHash !== binding.tokenHash
+            || current.loginCode !== binding.loginCode || current.administrativeClassId !== binding.administrativeClassId) {
+            throw screenError("大屏凭据已变更，请重新登录", "SCREEN_LOGIN_FAILED", 401);
+        }
+        if (current.lockedUntil && current.lockedUntil > new Date()) {
+            throw screenError("错误次数过多，请15分钟后重试", "SCREEN_ACCOUNT_LOCKED", 429);
+        }
+        return action(tx, current);
     });
 }
 
@@ -146,6 +167,7 @@ export async function configureClassroomScreenAccount({
             loginCode: cleanLoginCode,
             pinHash: await bcrypt.hash(pin, BCRYPT_ROUNDS),
             credentialVersion: {increment: 1},
+            tokenHash: tokenHash(randomBytes(32).toString("base64url")),
             loginFailures: 0,
             lockedUntil: null,
         },
@@ -201,6 +223,11 @@ export async function updateClassroomScreenAccount({
         data.credentialVersion = {increment: 1};
     }
     if (isActive !== undefined) data.isActive = Boolean(isActive);
+    if (data.pinHash || (data.loginCode !== undefined && data.loginCode !== binding.loginCode)
+        || (data.administrativeClassId !== undefined && data.administrativeClassId !== binding.administrativeClassId)) {
+        data.credentialVersion = {increment: 1};
+        data.tokenHash = tokenHash(randomBytes(32).toString("base64url"));
+    }
 
     const updated = await prisma.classroomScreenBinding.update({
         where: {id: bindingId},
@@ -265,17 +292,22 @@ export async function loginClassroomScreen({schoolCode, loginCode, pin, deviceFi
         throw screenError("当前设备已绑定其他大屏账号，请联系管理员升级或解除原绑定", "SCREEN_DEVICE_ALREADY_BOUND", 409);
     }
     const rawToken = randomBytes(32).toString("base64url");
-    const updated = await prisma.classroomScreenBinding.update({
-        where: {id: binding.id},
-        data: {
-            deviceFingerprint: cleanFingerprint,
-            tokenHash: tokenHash(rawToken),
-            loginFailures: 0,
-            lockedUntil: null,
-            activatedAt: binding.activatedAt || new Date(),
-            lastUsedAt: new Date(),
-        },
-        include: screenInclude,
+    const updated = await withVerifiedScreen(binding, async (tx, current) => {
+        if (current.deviceFingerprint && current.deviceFingerprint !== cleanFingerprint) {
+            throw screenError("该大屏账号已绑定其他设备", "SCREEN_DEVICE_MISMATCH", 409);
+        }
+        return tx.classroomScreenBinding.update({
+            where: {id: binding.id},
+            data: {
+                deviceFingerprint: cleanFingerprint,
+                tokenHash: tokenHash(rawToken),
+                loginFailures: 0,
+                lockedUntil: null,
+                activatedAt: current.activatedAt || new Date(),
+                lastUsedAt: new Date(),
+            },
+            include: screenInclude,
+        });
     });
     return {binding: publicScreenBinding(updated), token: rawToken};
 }
@@ -291,10 +323,9 @@ export async function verifyClassroomScreenPin(binding, pin) {
         await registerLoginFailure(binding);
         throw screenError("大屏 PIN 不正确", "SCREEN_PIN_INCORRECT", 401);
     }
-    await prisma.classroomScreenBinding.update({
-        where: {id: binding.id},
-        data: {loginFailures: 0, lockedUntil: null},
-    });
+    await withVerifiedScreen(binding, (tx) => tx.classroomScreenBinding.update({
+        where: {id: binding.id}, data: {loginFailures: 0, lockedUntil: null},
+    }));
     return {verified: true};
 }
 

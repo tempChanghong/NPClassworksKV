@@ -10,7 +10,7 @@ import screenRouter from "../routes/v2/classroom-screens.js";
 let server, origin, members, school, binding, writes;
 const restore = [];
 const hash = value => createHash("sha256").update(value).digest("hex");
-const accounts = new Map(["owner", "admin"].map(id => [id, {id, provider: "school-local", tokenVersion: 1}]));
+const accounts = new Map(["owner", "admin"].map(id => [id, {id, provider: "school-local", providerId: `TEST:${id}`, localUsername: id, tokenVersion: 1}]));
 function stub(object, key, implementation) {
     const previous = object[key]; object[key] = implementation;
     restore.push(() => { object[key] = previous; });

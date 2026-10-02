@@ -176,14 +176,14 @@ async function assertSubjectMatchesTargets(subjectId, workspaces) {
     }
 }
 
-function emitPublicationEvent(type, publication, workspaceIds) {
+function emitPublicationEvent(type, publication, workspaceIds, previousStatus = null) {
     broadcastWorkspaceEvent(workspaceIds, type, {
         publicationId: publication.id,
         publicationType: publication.type,
         status: publication.status,
         revision: publication.revision,
         updatedAt: publication.updatedAt,
-    });
+    }, {wasPublished: previousStatus === PUBLICATION_STATUSES.PUBLISHED});
 }
 
 async function getPublicationOrThrow(id, client = prisma) {
@@ -569,8 +569,13 @@ export async function listPublishedFeed({workspaceIds, boardDate, weekStart, wee
     };
 }
 
-async function loadRevisionPage(publicationId, include, page) {
-    if (page === undefined) return prisma.publicationRevision.findMany({where: {publicationId}, orderBy: {revision: "desc"}, include});
+async function loadRevisionPage(publicationId, include, page, canRead) {
+    const visible = async rows => {
+        const items = [];
+        for (const row of rows) if (await canRead(row)) items.push(row);
+        return items;
+    };
+    if (page === undefined) return visible(await prisma.publicationRevision.findMany({where: {publicationId}, orderBy: {revision: "desc"}, include}));
     const integer = (value, fallback) => {
         if (value === undefined) return fallback;
         if (typeof value !== "string" && typeof value !== "number") return NaN;
@@ -587,8 +592,21 @@ async function loadRevisionPage(publicationId, include, page) {
         where: {publicationId, ...(before === undefined ? {} : {revision: {lt: before}})},
         orderBy: {revision: "desc"}, take: limit + 1, include,
     });
-    const items = rows.slice(0, limit);
-    return {items, nextBeforeRevision: rows.length > limit ? items.at(-1).revision : null};
+    const scanned = rows.slice(0, limit);
+    const items = await visible(scanned);
+    // Advance by scanned rows, including hidden revisions; avoid stalled empty pages.
+    return {items, nextBeforeRevision: rows.length > limit ? scanned.at(-1).revision : null};
+}
+
+async function historicalPublication(publication, row) {
+    const snapshot = row.snapshot;
+    if (!snapshot || !Array.isArray(snapshot.targetWorkspaceIds) || !snapshot.targetWorkspaceIds.length
+        || !snapshot.targetWorkspaceIds.every(id => typeof id === "string" && id)) return null;
+    const ids = [...new Set(snapshot.targetWorkspaceIds)];
+    const workspaces = await loadPublicationWorkspaces(ids);
+    if (workspaces.length !== ids.length) return null;
+    return {...publication, type: snapshot.type, status: snapshot.status,
+        targets: workspaces.map(workspace => ({workspaceId: workspace.id, workspace}))};
 }
 
 export async function listPublicationRevisions({accountId, publicationId, page}) {
@@ -604,7 +622,12 @@ export async function listPublicationRevisions({accountId, publicationId, page})
                 administrativeClass: {select: {id: true, code: true, name: true}},
             },
         },
-    }, page);
+    }, page, async row => {
+        const historical = await historicalPublication(publication, row);
+        if (!historical) return publication.authorAccountId === accountId;
+        try {await assertCanReadPublication(accountId, historical); return true;}
+        catch (error) {if (error.statusCode === 403) return false; throw error;}
+    });
 }
 
 export async function certifyPublication({accountId, publicationId, expectedRevision}) {
@@ -730,6 +753,7 @@ export async function restorePublicationRevision({
         "publication.restored",
         publication,
         [...new Set([...existing.targets, ...publication.targets].map((target) => target.workspaceId))],
+        existing.status,
     );
     return publication;
 }
@@ -744,6 +768,9 @@ function assertScreenCanWriteWorkspaces(screenBinding, workspaces) {
 }
 
 function assertScreenCanAccessPublication(screenBinding, publication) {
+    if (publication.status !== PUBLICATION_STATUSES.PUBLISHED) {
+        throw publicationError("大屏只能访问已发布的作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
+    }
     if (publication.targets.some((target) => (
         isClassroomScreenWorkspaceAllowed(screenBinding, target.workspace)
     ))) return;
@@ -1102,6 +1129,7 @@ export async function updateScreenPublication({screenBinding, publicationId, exp
         "publication.updated",
         publication,
         [...new Set([...oldTargetIds, ...normalized.targetWorkspaceIds])],
+        existing.status,
     );
     return publication;
 }
@@ -1116,7 +1144,12 @@ export async function listScreenPublicationRevisions({screenBinding, publication
         editor: {select: {id: true, name: true}},
         certifiedBy: {select: {id: true, name: true}},
         screenBinding: {select: {id: true, name: true}},
-    }, page);
+    }, page, async row => {
+        const historical = await historicalPublication(publication, row);
+        if (!historical || historical.type !== PUBLICATION_TYPES.ASSIGNMENT) return false;
+        try {assertScreenCanAccessPublication(screenBinding, historical); return true;}
+        catch (error) {if ([403, 409].includes(error.statusCode)) return false; throw error;}
+    });
 }
 
 export async function getScreenPublication({screenBinding, publicationId}) {
@@ -1141,6 +1174,7 @@ export async function restoreScreenPublicationRevision({
     if (existing.type !== PUBLICATION_TYPES.ASSIGNMENT) {
         throw publicationError("大屏只能恢复作业", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
     }
+    assertScreenCanAccessPublication(screenBinding, existing);
     assertScreenCanWriteWorkspaces(
         screenBinding,
         existing.targets.map((target) => target.workspace),
@@ -1154,6 +1188,9 @@ export async function restoreScreenPublicationRevision({
     }
     if (source.snapshot?.status === PUBLICATION_STATUSES.WITHDRAWN) {
         throw publicationError("撤回记录不能恢复", "WITHDRAWN_REVISION_NOT_RESTORABLE", 409);
+    }
+    if (source.snapshot?.status !== PUBLICATION_STATUSES.PUBLISHED) {
+        throw publicationError("大屏不能恢复未发布的教师内容", "SCREEN_PUBLICATION_NOT_EDITABLE", 409);
     }
     const targetWorkspaceIds = Array.isArray(source.snapshot?.targetWorkspaceIds)
         ? source.snapshot.targetWorkspaceIds
@@ -1215,6 +1252,7 @@ export async function restoreScreenPublicationRevision({
         "publication.restored",
         publication,
         [...new Set([...existing.targets, ...publication.targets].map((target) => target.workspaceId))],
+        existing.status,
     );
     return publication;
 }
@@ -1315,6 +1353,7 @@ export async function updatePublication({accountId, publicationId, expectedRevis
         "publication.updated",
         publication,
         [...new Set([...oldTargetIds, ...normalized.targetWorkspaceIds])],
+        existing.status,
     );
     return publication;
 }
@@ -1380,6 +1419,7 @@ export async function withdrawPublication({accountId, publicationId, expectedRev
         "publication.withdrawn",
         publication,
         publication.targets.map((target) => target.workspaceId),
+        existing.status,
     );
     return publication;
 }

@@ -1,4 +1,5 @@
 // OAuth 提供者配置
+import {randomBytes} from "node:crypto";
 export const oauthProviders = {
     github: {
         clientId: process.env.GITHUB_CLIENT_ID,
@@ -95,6 +96,5 @@ export function getCallbackURL(provider) {
 
 // 生成随机state参数
 export function generateState() {
-    return Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
+    return randomBytes(32).toString("base64url");
 }

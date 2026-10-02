@@ -69,7 +69,7 @@ export const authLimiter = rateLimit({
 });
 
 // 校园网络通常由大量设备共用一个公网 IP。这里仅拦截明显的全局撞库，
-// 日常输错由下方“设备 + 账号”限流处理，避免少量误输影响整个学校。
+// 日常输错由下方“可信来源 IP + 账号”限流处理。
 export const localAuthLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 300,
@@ -87,15 +87,13 @@ function normalizeLocalAuthKeyPart(value, fallback) {
 }
 
 export function getLocalLoginSourceKey(req) {
-    const deviceId = normalizeLocalAuthKeyPart(req.headers?.["x-classworks-device-id"], "");
-    const source = deviceId || `ip-${getClientIp(req)}`;
+    const source = `ip-${getClientIp(req)}`;
     const schoolCode = normalizeLocalAuthKeyPart(req.body?.schoolCode, "unknown-school");
     const username = normalizeLocalAuthKeyPart(req.body?.username, "unknown-account");
     return `local-login:${source}:${schoolCode}:${username}`;
 }
 
-// 登录失败限制只作用于“本设备 + 本账号”。它不会把账号写成全局锁定状态，
-// 因此恶意用户无法通过故意输错让教师在其他设备或网络上无法登录。
+// 未认证的设备 ID 不可作为限流身份。限制来源 IP + 账号，保留不同账号/网络的独立桶。
 export const localLoginSourceLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 8,

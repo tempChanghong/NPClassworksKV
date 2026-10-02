@@ -104,6 +104,15 @@ export function createNpepService(prisma, deploymentProvider) {
   const approved = pair => ({pairingId: pair.id, state: 'APPROVED', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5, approvalId: pair.approvalId, ...pair.approvalSnapshot});
 
   return {
+    // Cheap credential preflight before admission control. The operation still
+    // performs full transactional authorization after the limiter admits it.
+    async preflightDevice(auth) {
+      const config = deploymentProvider();
+      await assertDeployment(prisma, config);
+      const current = await prisma.npepDevice.findUnique({where: {credentialId: auth.id}});
+      if (!hashMatches(auth.hash, current?.secretHash)) fail(401, 'AUTH_INVALID');
+      deviceValid(current, config);
+    },
     withScheduleAdmin: (claims, schoolId, operation) => transaction(async (tx, config) => {
       await schoolLock(tx, schoolId);
       await administrator(tx, claims, schoolId);
