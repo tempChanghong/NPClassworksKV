@@ -35,9 +35,6 @@ jobs:
   fullstack:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    outputs:
-      backend_commit: ${{ steps.tested_revisions.outputs.backend_commit }}
-      frontend_commit: ${{ steps.tested_revisions.outputs.frontend_commit }}
     steps:
       # Checkout the frontend explicitly: the triggering repository is the backend.
       - name: Checkout frontend main
@@ -54,13 +51,11 @@ jobs:
           path: .contract-backend
           persist-credentials: false
       - name: Record and verify the tested revisions
-        id: tested_revisions
         shell: bash
         run: |
           frontend_sha="$(git rev-parse HEAD)"
           backend_sha="$(git -C .contract-backend rev-parse HEAD)"
           test "$backend_sha" = "$GITHUB_SHA"
-          printf 'backend_commit=%s\nfrontend_commit=%s\n' "$backend_sha" "$frontend_sha" >> "$GITHUB_OUTPUT"
           mkdir -p test-results/fullstack-metadata
           jq -n --arg frontend "$frontend_sha" --arg backend "$backend_sha" \
             '{frontend: $frontend, backend: $backend}' \
@@ -109,8 +104,6 @@ jobs:
         env:
           DEPLOY_AGENT_URL: ${{ secrets.DEPLOY_AGENT_URL }}
           DEPLOY_AGENT_SECRET: ${{ secrets.DEPLOY_AGENT_SECRET }}
-          BACKEND_COMMIT: ${{ needs.fullstack.outputs.backend_commit }}
-          FRONTEND_COMMIT: ${{ needs.fullstack.outputs.frontend_commit }}
         run: |
           test -n "$DEPLOY_AGENT_URL"
           test -n "$DEPLOY_AGENT_SECRET"
@@ -118,9 +111,7 @@ jobs:
             --arg repository "$GITHUB_REPOSITORY" \
             --arg commit "$GITHUB_SHA" \
             --arg runId "$GITHUB_RUN_ID" \
-            --arg backendCommit "$BACKEND_COMMIT" \
-            --arg frontendCommit "$FRONTEND_COMMIT" \
-            '{action:"upgrade", repository:$repository, commit:$commit, runId:$runId, backendCommit:$backendCommit, frontendCommit:$frontendCommit}')"
+            '{action:"upgrade", repository:$repository, commit:$commit, runId:$runId}')"
           timestamp="$(date +%s)"
           nonce="$(openssl rand -hex 24)"
           signature="$(DEPLOY_BODY="$body" DEPLOY_TIMESTAMP="$timestamp" DEPLOY_NONCE="$nonce" node <<'NODE'
