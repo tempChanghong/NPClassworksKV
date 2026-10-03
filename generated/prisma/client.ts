@@ -164,6 +164,36 @@ export type PublicationTarget = Prisma.PublicationTargetModel
  */
 export type ClassroomScreenBinding = Prisma.ClassroomScreenBindingModel
 /**
+ * Model NpepNoiseDevice
+ *
+ */
+export type NpepNoiseDevice = Prisma.NpepNoiseDeviceModel
+/**
+ * Model NpepNoiseScheduleDevice
+ *
+ */
+export type NpepNoiseScheduleDevice = Prisma.NpepNoiseScheduleDeviceModel
+/**
+ * Model NpepExamPlanDevice
+ *
+ */
+export type NpepExamPlanDevice = Prisma.NpepExamPlanDeviceModel
+/**
+ * Model NpepExamPlan
+ *
+ */
+export type NpepExamPlan = Prisma.NpepExamPlanModel
+/**
+ * Model NpepRuntimePolicy
+ *
+ */
+export type NpepRuntimePolicy = Prisma.NpepRuntimePolicyModel
+/**
+ * Model NpepRuntimeOperation
+ *
+ */
+export type NpepRuntimeOperation = Prisma.NpepRuntimeOperationModel
+/**
  * Model NpepDeployment
  *
  */
@@ -173,6 +203,11 @@ export type NpepDeployment = Prisma.NpepDeploymentModel
  *
  */
 export type NpepPairing = Prisma.NpepPairingModel
+/**
+ * Model NpepScreenPairingTicket
+ *
+ */
+export type NpepScreenPairingTicket = Prisma.NpepScreenPairingTicketModel
 /**
  * Model NpepDevice
  *
@@ -188,6 +223,16 @@ export type NpepSessionReceipt = Prisma.NpepSessionReceiptModel
  *
  */
 export type NpepAudit = Prisma.NpepAuditModel
+/**
+ * Model NpepNoiseSchedulePolicy
+ *
+ */
+export type NpepNoiseSchedulePolicy = Prisma.NpepNoiseSchedulePolicyModel
+/**
+ * Model NpepNoiseScheduleRequest
+ *
+ */
+export type NpepNoiseScheduleRequest = Prisma.NpepNoiseScheduleRequestModel
 /**
  * Model NpepRateLimit
  *

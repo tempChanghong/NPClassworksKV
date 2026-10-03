@@ -30,12 +30,14 @@ export type ClassroomScreenBindingAvgAggregateOutputType = {
   loginFailures: number | null
   credentialVersion: number | null
   npepBindingRevision: number | null
+  npepPairingRevision: number | null
 }
 
 export type ClassroomScreenBindingSumAggregateOutputType = {
   loginFailures: number | null
   credentialVersion: number | null
   npepBindingRevision: number | null
+  npepPairingRevision: number | null
 }
 
 export type ClassroomScreenBindingMinAggregateOutputType = {
@@ -52,6 +54,8 @@ export type ClassroomScreenBindingMinAggregateOutputType = {
   lockedUntil: Date | null
   credentialVersion: number | null
   npepBindingRevision: number | null
+  npepPairingEnabled: boolean | null
+  npepPairingRevision: number | null
   activatedAt: Date | null
   lastUsedAt: Date | null
   lastHeartbeatAt: Date | null
@@ -74,6 +78,8 @@ export type ClassroomScreenBindingMaxAggregateOutputType = {
   lockedUntil: Date | null
   credentialVersion: number | null
   npepBindingRevision: number | null
+  npepPairingEnabled: boolean | null
+  npepPairingRevision: number | null
   activatedAt: Date | null
   lastUsedAt: Date | null
   lastHeartbeatAt: Date | null
@@ -96,6 +102,8 @@ export type ClassroomScreenBindingCountAggregateOutputType = {
   lockedUntil: number
   credentialVersion: number
   npepBindingRevision: number
+  npepPairingEnabled: number
+  npepPairingRevision: number
   activatedAt: number
   lastUsedAt: number
   lastHeartbeatAt: number
@@ -111,12 +119,14 @@ export type ClassroomScreenBindingAvgAggregateInputType = {
   loginFailures?: true
   credentialVersion?: true
   npepBindingRevision?: true
+  npepPairingRevision?: true
 }
 
 export type ClassroomScreenBindingSumAggregateInputType = {
   loginFailures?: true
   credentialVersion?: true
   npepBindingRevision?: true
+  npepPairingRevision?: true
 }
 
 export type ClassroomScreenBindingMinAggregateInputType = {
@@ -133,6 +143,8 @@ export type ClassroomScreenBindingMinAggregateInputType = {
   lockedUntil?: true
   credentialVersion?: true
   npepBindingRevision?: true
+  npepPairingEnabled?: true
+  npepPairingRevision?: true
   activatedAt?: true
   lastUsedAt?: true
   lastHeartbeatAt?: true
@@ -155,6 +167,8 @@ export type ClassroomScreenBindingMaxAggregateInputType = {
   lockedUntil?: true
   credentialVersion?: true
   npepBindingRevision?: true
+  npepPairingEnabled?: true
+  npepPairingRevision?: true
   activatedAt?: true
   lastUsedAt?: true
   lastHeartbeatAt?: true
@@ -177,6 +191,8 @@ export type ClassroomScreenBindingCountAggregateInputType = {
   lockedUntil?: true
   credentialVersion?: true
   npepBindingRevision?: true
+  npepPairingEnabled?: true
+  npepPairingRevision?: true
   activatedAt?: true
   lastUsedAt?: true
   lastHeartbeatAt?: true
@@ -287,6 +303,8 @@ export type ClassroomScreenBindingGroupByOutputType = {
   lockedUntil: Date | null
   credentialVersion: number
   npepBindingRevision: number
+  npepPairingEnabled: boolean
+  npepPairingRevision: number
   activatedAt: Date | null
   lastUsedAt: Date | null
   lastHeartbeatAt: Date | null
@@ -333,6 +351,8 @@ export type ClassroomScreenBindingWhereInput = {
   lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   npepBindingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
+  npepPairingEnabled?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  npepPairingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
@@ -365,6 +385,8 @@ export type ClassroomScreenBindingOrderByWithRelationInput = {
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingEnabled?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHeartbeatAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -402,6 +424,8 @@ export type ClassroomScreenBindingWhereUniqueInput = Prisma.AtLeast<{
   lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   npepBindingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
+  npepPairingEnabled?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  npepPairingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
@@ -434,6 +458,8 @@ export type ClassroomScreenBindingOrderByWithAggregationInput = {
   lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingEnabled?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastHeartbeatAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -465,6 +491,8 @@ export type ClassroomScreenBindingScalarWhereWithAggregatesInput = {
   lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   credentialVersion?: Prisma.IntWithAggregatesFilter<"ClassroomScreenBinding"> | number
   npepBindingRevision?: Prisma.FloatWithAggregatesFilter<"ClassroomScreenBinding"> | number
+  npepPairingEnabled?: Prisma.BoolWithAggregatesFilter<"ClassroomScreenBinding"> | boolean
+  npepPairingRevision?: Prisma.FloatWithAggregatesFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
   lastHeartbeatAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ClassroomScreenBinding"> | Date | string | null
@@ -486,6 +514,8 @@ export type ClassroomScreenBindingCreateInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -517,6 +547,8 @@ export type ClassroomScreenBindingUncheckedCreateInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -544,6 +576,8 @@ export type ClassroomScreenBindingUpdateInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -575,6 +609,8 @@ export type ClassroomScreenBindingUncheckedUpdateInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -604,6 +640,8 @@ export type ClassroomScreenBindingCreateManyInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -625,6 +663,8 @@ export type ClassroomScreenBindingUpdateManyMutationInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -647,6 +687,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -695,6 +737,8 @@ export type ClassroomScreenBindingCountOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingEnabled?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   lastHeartbeatAt?: Prisma.SortOrder
@@ -708,6 +752,7 @@ export type ClassroomScreenBindingAvgOrderByAggregateInput = {
   loginFailures?: Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
 }
 
 export type ClassroomScreenBindingMaxOrderByAggregateInput = {
@@ -724,6 +769,8 @@ export type ClassroomScreenBindingMaxOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingEnabled?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   lastHeartbeatAt?: Prisma.SortOrder
@@ -746,6 +793,8 @@ export type ClassroomScreenBindingMinOrderByAggregateInput = {
   lockedUntil?: Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingEnabled?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
   lastHeartbeatAt?: Prisma.SortOrder
@@ -758,6 +807,7 @@ export type ClassroomScreenBindingSumOrderByAggregateInput = {
   loginFailures?: Prisma.SortOrder
   credentialVersion?: Prisma.SortOrder
   npepBindingRevision?: Prisma.SortOrder
+  npepPairingRevision?: Prisma.SortOrder
 }
 
 export type ClassroomScreenBindingScalarRelationFilter = {
@@ -1003,6 +1053,8 @@ export type ClassroomScreenBindingCreateWithoutCreatedByInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1033,6 +1085,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutCreatedByInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1090,6 +1144,8 @@ export type ClassroomScreenBindingScalarWhereInput = {
   lockedUntil?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   credentialVersion?: Prisma.IntFilter<"ClassroomScreenBinding"> | number
   npepBindingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
+  npepPairingEnabled?: Prisma.BoolFilter<"ClassroomScreenBinding"> | boolean
+  npepPairingRevision?: Prisma.FloatFilter<"ClassroomScreenBinding"> | number
   activatedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastUsedAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
   lastHeartbeatAt?: Prisma.DateTimeNullableFilter<"ClassroomScreenBinding"> | Date | string | null
@@ -1111,6 +1167,8 @@ export type ClassroomScreenBindingCreateWithoutSchoolInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1140,6 +1198,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutSchoolInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1193,6 +1253,8 @@ export type ClassroomScreenBindingCreateWithoutAdministrativeClassInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1222,6 +1284,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAdministrativeClassInput
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1275,6 +1339,8 @@ export type ClassroomScreenBindingCreateWithoutLatestPublicationsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1305,6 +1371,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutLatestPublicationsInput 
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1347,6 +1415,8 @@ export type ClassroomScreenBindingUpdateWithoutLatestPublicationsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1377,6 +1447,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutLatestPublicationsInput 
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1403,6 +1475,8 @@ export type ClassroomScreenBindingCreateWithoutAuditLogsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1433,6 +1507,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAuditLogsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1475,6 +1551,8 @@ export type ClassroomScreenBindingUpdateWithoutAuditLogsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1505,6 +1583,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAuditLogsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1531,6 +1611,8 @@ export type ClassroomScreenBindingCreateWithoutCommandsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1561,6 +1643,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutCommandsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1603,6 +1687,8 @@ export type ClassroomScreenBindingUpdateWithoutCommandsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1633,6 +1719,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutCommandsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1659,6 +1747,8 @@ export type ClassroomScreenBindingCreateWithoutNotificationDeliveriesInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1689,6 +1779,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutNotificationDeliveriesIn
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1731,6 +1823,8 @@ export type ClassroomScreenBindingUpdateWithoutNotificationDeliveriesInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1761,6 +1855,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutNotificationDeliveriesIn
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1787,6 +1883,8 @@ export type ClassroomScreenBindingCreateWithoutAttendanceDaysUpdatedInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1817,6 +1915,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutAttendanceDaysUpdatedInp
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1859,6 +1959,8 @@ export type ClassroomScreenBindingUpdateWithoutAttendanceDaysUpdatedInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1889,6 +1991,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAttendanceDaysUpdatedInp
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1915,6 +2019,8 @@ export type ClassroomScreenBindingCreateWithoutPublicationRevisionsInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1945,6 +2051,8 @@ export type ClassroomScreenBindingUncheckedCreateWithoutPublicationRevisionsInpu
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -1987,6 +2095,8 @@ export type ClassroomScreenBindingUpdateWithoutPublicationRevisionsInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2017,6 +2127,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutPublicationRevisionsInpu
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2045,6 +2157,8 @@ export type ClassroomScreenBindingCreateManyCreatedByInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -2065,6 +2179,8 @@ export type ClassroomScreenBindingUpdateWithoutCreatedByInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2095,6 +2211,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutCreatedByInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2123,6 +2241,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutCreatedByInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2144,6 +2264,8 @@ export type ClassroomScreenBindingCreateManySchoolInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -2165,6 +2287,8 @@ export type ClassroomScreenBindingUpdateWithoutSchoolInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2194,6 +2318,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutSchoolInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2222,6 +2348,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutSchoolInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2244,6 +2372,8 @@ export type ClassroomScreenBindingCreateManyAdministrativeClassInput = {
   lockedUntil?: Date | string | null
   credentialVersion?: number
   npepBindingRevision?: number
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: number
   activatedAt?: Date | string | null
   lastUsedAt?: Date | string | null
   lastHeartbeatAt?: Date | string | null
@@ -2265,6 +2395,8 @@ export type ClassroomScreenBindingUpdateWithoutAdministrativeClassInput = {
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2294,6 +2426,8 @@ export type ClassroomScreenBindingUncheckedUpdateWithoutAdministrativeClassInput
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2322,6 +2456,8 @@ export type ClassroomScreenBindingUncheckedUpdateManyWithoutAdministrativeClassI
   lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   credentialVersion?: Prisma.IntFieldUpdateOperationsInput | number
   npepBindingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
+  npepPairingEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  npepPairingRevision?: Prisma.FloatFieldUpdateOperationsInput | number
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastHeartbeatAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2421,6 +2557,8 @@ export type ClassroomScreenBindingSelect<ExtArgs extends runtime.Types.Extension
   lockedUntil?: boolean
   credentialVersion?: boolean
   npepBindingRevision?: boolean
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
   lastHeartbeatAt?: boolean
@@ -2454,6 +2592,8 @@ export type ClassroomScreenBindingSelectCreateManyAndReturn<ExtArgs extends runt
   lockedUntil?: boolean
   credentialVersion?: boolean
   npepBindingRevision?: boolean
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
   lastHeartbeatAt?: boolean
@@ -2480,6 +2620,8 @@ export type ClassroomScreenBindingSelectUpdateManyAndReturn<ExtArgs extends runt
   lockedUntil?: boolean
   credentialVersion?: boolean
   npepBindingRevision?: boolean
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
   lastHeartbeatAt?: boolean
@@ -2506,6 +2648,8 @@ export type ClassroomScreenBindingSelectScalar = {
   lockedUntil?: boolean
   credentialVersion?: boolean
   npepBindingRevision?: boolean
+  npepPairingEnabled?: boolean
+  npepPairingRevision?: boolean
   activatedAt?: boolean
   lastUsedAt?: boolean
   lastHeartbeatAt?: boolean
@@ -2515,7 +2659,7 @@ export type ClassroomScreenBindingSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "loginCode" | "pinHash" | "tokenHash" | "isActive" | "loginFailures" | "lockedUntil" | "credentialVersion" | "npepBindingRevision" | "activatedAt" | "lastUsedAt" | "lastHeartbeatAt" | "runtimeStatus" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
+export type ClassroomScreenBindingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "schoolId" | "administrativeClassId" | "deviceFingerprint" | "name" | "loginCode" | "pinHash" | "tokenHash" | "isActive" | "loginFailures" | "lockedUntil" | "credentialVersion" | "npepBindingRevision" | "npepPairingEnabled" | "npepPairingRevision" | "activatedAt" | "lastUsedAt" | "lastHeartbeatAt" | "runtimeStatus" | "createdByAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["classroomScreenBinding"]>
 export type ClassroomScreenBindingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   school?: boolean | Prisma.SchoolDefaultArgs<ExtArgs>
   administrativeClass?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -2566,6 +2710,8 @@ export type $ClassroomScreenBindingPayload<ExtArgs extends runtime.Types.Extensi
     lockedUntil: Date | null
     credentialVersion: number
     npepBindingRevision: number
+    npepPairingEnabled: boolean
+    npepPairingRevision: number
     activatedAt: Date | null
     lastUsedAt: Date | null
     lastHeartbeatAt: Date | null
@@ -3018,6 +3164,8 @@ export interface ClassroomScreenBindingFieldRefs {
   readonly lockedUntil: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly credentialVersion: Prisma.FieldRef<"ClassroomScreenBinding", 'Int'>
   readonly npepBindingRevision: Prisma.FieldRef<"ClassroomScreenBinding", 'Float'>
+  readonly npepPairingEnabled: Prisma.FieldRef<"ClassroomScreenBinding", 'Boolean'>
+  readonly npepPairingRevision: Prisma.FieldRef<"ClassroomScreenBinding", 'Float'>
   readonly activatedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly lastUsedAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>
   readonly lastHeartbeatAt: Prisma.FieldRef<"ClassroomScreenBinding", 'DateTime'>

@@ -75,11 +75,20 @@ export const ModelName = {
   Publication: 'Publication',
   PublicationTarget: 'PublicationTarget',
   ClassroomScreenBinding: 'ClassroomScreenBinding',
+  NpepNoiseDevice: 'NpepNoiseDevice',
+  NpepNoiseScheduleDevice: 'NpepNoiseScheduleDevice',
+  NpepExamPlanDevice: 'NpepExamPlanDevice',
+  NpepExamPlan: 'NpepExamPlan',
+  NpepRuntimePolicy: 'NpepRuntimePolicy',
+  NpepRuntimeOperation: 'NpepRuntimeOperation',
   NpepDeployment: 'NpepDeployment',
   NpepPairing: 'NpepPairing',
+  NpepScreenPairingTicket: 'NpepScreenPairingTicket',
   NpepDevice: 'NpepDevice',
   NpepSessionReceipt: 'NpepSessionReceipt',
   NpepAudit: 'NpepAudit',
+  NpepNoiseSchedulePolicy: 'NpepNoiseSchedulePolicy',
+  NpepNoiseScheduleRequest: 'NpepNoiseScheduleRequest',
   NpepRateLimit: 'NpepRateLimit',
   AuditLog: 'AuditLog',
   ClassroomScreenCommand: 'ClassroomScreenCommand',
@@ -459,6 +468,8 @@ export const ClassroomScreenBindingScalarFieldEnum = {
   lockedUntil: 'lockedUntil',
   credentialVersion: 'credentialVersion',
   npepBindingRevision: 'npepBindingRevision',
+  npepPairingEnabled: 'npepPairingEnabled',
+  npepPairingRevision: 'npepPairingRevision',
   activatedAt: 'activatedAt',
   lastUsedAt: 'lastUsedAt',
   lastHeartbeatAt: 'lastHeartbeatAt',
@@ -469,6 +480,61 @@ export const ClassroomScreenBindingScalarFieldEnum = {
 } as const
 
 export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const NpepNoiseDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepNoiseDeviceScalarFieldEnum = (typeof NpepNoiseDeviceScalarFieldEnum)[keyof typeof NpepNoiseDeviceScalarFieldEnum]
+
+
+export const NpepNoiseScheduleDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepNoiseScheduleDeviceScalarFieldEnum = (typeof NpepNoiseScheduleDeviceScalarFieldEnum)[keyof typeof NpepNoiseScheduleDeviceScalarFieldEnum]
+
+
+export const NpepExamPlanDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepExamPlanDeviceScalarFieldEnum = (typeof NpepExamPlanDeviceScalarFieldEnum)[keyof typeof NpepExamPlanDeviceScalarFieldEnum]
+
+
+export const NpepExamPlanScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  data: 'data'
+} as const
+
+export type NpepExamPlanScalarFieldEnum = (typeof NpepExamPlanScalarFieldEnum)[keyof typeof NpepExamPlanScalarFieldEnum]
+
+
+export const NpepRuntimePolicyScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepRuntimePolicyScalarFieldEnum = (typeof NpepRuntimePolicyScalarFieldEnum)[keyof typeof NpepRuntimePolicyScalarFieldEnum]
+
+
+export const NpepRuntimeOperationScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  resolvedAt: 'resolvedAt',
+  data: 'data'
+} as const
+
+export type NpepRuntimeOperationScalarFieldEnum = (typeof NpepRuntimeOperationScalarFieldEnum)[keyof typeof NpepRuntimeOperationScalarFieldEnum]
 
 
 export const NpepDeploymentScalarFieldEnum = {
@@ -502,6 +568,9 @@ export const NpepPairingScalarFieldEnum = {
   approverSessionId: 'approverSessionId',
   approverTokenVersion: 'approverTokenVersion',
   approvalSnapshot: 'approvalSnapshot',
+  approvalSource: 'approvalSource',
+  preauthorizationRevision: 'preauthorizationRevision',
+  screenCredentialVersion: 'screenCredentialVersion',
   confirmRequestId: 'confirmRequestId',
   confirmDigest: 'confirmDigest',
   deviceId: 'deviceId',
@@ -509,6 +578,26 @@ export const NpepPairingScalarFieldEnum = {
 } as const
 
 export type NpepPairingScalarFieldEnum = (typeof NpepPairingScalarFieldEnum)[keyof typeof NpepPairingScalarFieldEnum]
+
+
+export const NpepScreenPairingTicketScalarFieldEnum = {
+  id: 'id',
+  userCode: 'userCode',
+  requestId: 'requestId',
+  schoolId: 'schoolId',
+  screenBindingId: 'screenBindingId',
+  bindingRevision: 'bindingRevision',
+  authorizationRevision: 'authorizationRevision',
+  credentialVersion: 'credentialVersion',
+  serverInstanceId: 'serverInstanceId',
+  deploymentEpoch: 'deploymentEpoch',
+  state: 'state',
+  expiresAt: 'expiresAt',
+  claimedPairingId: 'claimedPairingId',
+  createdAt: 'createdAt'
+} as const
+
+export type NpepScreenPairingTicketScalarFieldEnum = (typeof NpepScreenPairingTicketScalarFieldEnum)[keyof typeof NpepScreenPairingTicketScalarFieldEnum]
 
 
 export const NpepDeviceScalarFieldEnum = {
@@ -561,6 +650,32 @@ export const NpepAuditScalarFieldEnum = {
 } as const
 
 export type NpepAuditScalarFieldEnum = (typeof NpepAuditScalarFieldEnum)[keyof typeof NpepAuditScalarFieldEnum]
+
+
+export const NpepNoiseSchedulePolicyScalarFieldEnum = {
+  schoolId: 'schoolId',
+  termId: 'termId',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  revision: 'revision',
+  policy: 'policy',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpepNoiseSchedulePolicyScalarFieldEnum = (typeof NpepNoiseSchedulePolicyScalarFieldEnum)[keyof typeof NpepNoiseSchedulePolicyScalarFieldEnum]
+
+
+export const NpepNoiseScheduleRequestScalarFieldEnum = {
+  schoolId: 'schoolId',
+  requestId: 'requestId',
+  actorId: 'actorId',
+  digest: 'digest',
+  result: 'result',
+  createdAt: 'createdAt'
+} as const
+
+export type NpepNoiseScheduleRequestScalarFieldEnum = (typeof NpepNoiseScheduleRequestScalarFieldEnum)[keyof typeof NpepNoiseScheduleRequestScalarFieldEnum]
 
 
 export const NpepRateLimitScalarFieldEnum = {

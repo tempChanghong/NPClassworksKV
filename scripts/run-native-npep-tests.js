@@ -8,6 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {randomBytes} from 'node:crypto';
 import net from 'node:net';
 import {Client} from 'pg';
+import {preparePairingUpgrade} from '../tests/helpers/pairingUpgrade.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const suffix = process.platform === 'win32' ? '.exe' : '';
@@ -83,7 +84,10 @@ try {
   await admin.connect();
   try { await admin.query('CREATE DATABASE npclassworks_test'); } finally { await admin.end(); }
   console.log(`Native isolated NPEP PostgreSQL ready on loopback port ${port}.`);
+  env.NPEP_PAIRING_UPGRADE_FIXTURE = await preparePairingUpgrade({root,directory,env,run});
   run(process.execPath, ['node_modules/prisma/build/index.js', 'migrate', 'deploy'], env);
+  run(process.execPath, ['--test', 'tests/npepPairingUpgrade.integration.test.js'], env);
+  delete env.NPEP_PAIRING_UPGRADE_FIXTURE;
   run(process.execPath, ['--test', '--test-concurrency=1', 'tests/npepDatabase.integration.test.js'], env);
   passed = true;
 } finally {

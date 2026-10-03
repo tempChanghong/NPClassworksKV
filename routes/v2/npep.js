@@ -3,7 +3,7 @@ import {prisma} from '../../utils/prisma.js';
 import {verifyAccessToken} from '../../utils/tokenManager.js';
 import {createNpepService} from '../../services/npepService.js';
 import {readDeployment} from '../../domain/npep/deployment.js';
-import {NpepError, UUID, OPAQUE_ID, validate, parseStrictJson, bearer, envelope, fail} from '../../domain/npep/wire.js';
+import {NpepError, UUID, OPAQUE_ID, validate, parseStrictJson, bearer, envelope, fail, hash as hashScreenToken} from '../../domain/npep/wire.js';
 import {createNpepNotificationService, notificationCursor} from '../../services/npepNotificationService.js';
 import {validateNotification} from '../../domain/npep/notifications.js';
 import {validateRuntime} from '../../domain/npep/runtimeControl.js';
@@ -94,6 +94,28 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const noQuery = (req, _res, next) => next(Object.keys(req.query).length ? new NpepError(400, 'INVALID_REQUEST') : undefined);
   const noiseBody = name => (req, _res, next) => next(validateNoise(name, req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   const screenToken = req => req.get('X-Classworks-Screen-Token') || '';
+  router.get('/screen/pairing', noQuery, send(req => service.screenPairingStatus(screenToken(req))));
+  router.post('/screen/pairing', noQuery, body('issueScreenPairing'), send(async req => {
+    const token = screenToken(req);
+    // Validate the screen before charging its bucket; no token is ever logged.
+    await service.screenPairingStatus(token);
+    await rate('screen-pairing', hashScreenToken(token), 10, 60);
+    return service.issueScreenPairing(token, req.body);
+  }));
+  router.post('/pairings/claim', noQuery, body('claimScreenPairing'), send(async req => {
+    await rate('screen-claim-ip', req.ip, 20, 60);
+    await rate('screen-claim-global', 'all', 300, 60);
+    return service.claimScreenPairing(req.body);
+  }));
+  router.get('/schools/:schoolId/pairing-access', admin, noQuery, send(req => service.pairingAccess(req.npepClaims, req.params.schoolId)));
+  router.post('/schools/:schoolId/pairing-access/preview', admin, noQuery, body('previewPairingAccessBatch'),
+    send(req => service.previewPairingAccessBatch(req.npepClaims, req.params.schoolId, req.body)));
+  router.post('/schools/:schoolId/pairing-access/batch', admin, noQuery, body('setPairingAccessBatch'),
+    send(req => service.setPairingAccessBatch(req.npepClaims, req.params.schoolId, req.body)));
+  router.post('/schools/:schoolId/screen-bindings/:bindingId/pairing-access', admin, noQuery, body('setScreenPairingAccess'), send(req => {
+    if (!OPAQUE_ID.test(req.params.bindingId)) fail(400, 'INVALID_REQUEST');
+    return service.setPairingAccess(req.npepClaims, req.params.schoolId, req.params.bindingId, req.body);
+  }));
   const scheduleWire = name => (req,_res,next) => next(validateNoiseScheduleWire(name,req.body)?undefined:new NpepError(400,'INVALID_REQUEST'));
   router.get('/screen/noise-schedule',noQuery,send(req=>scheduleRuntime.screen(screenToken(req))));
   router.post('/screen/noise-schedule/resume',noQuery,scheduleWire('resumeRequest'),send(req=>scheduleRuntime.resume(screenToken(req),req.body)));

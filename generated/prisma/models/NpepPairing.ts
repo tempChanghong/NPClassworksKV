@@ -28,10 +28,14 @@ export type AggregateNpepPairing = {
 
 export type NpepPairingAvgAggregateOutputType = {
   approverTokenVersion: number | null
+  preauthorizationRevision: number | null
+  screenCredentialVersion: number | null
 }
 
 export type NpepPairingSumAggregateOutputType = {
   approverTokenVersion: number | null
+  preauthorizationRevision: number | null
+  screenCredentialVersion: number | null
 }
 
 export type NpepPairingMinAggregateOutputType = {
@@ -55,6 +59,9 @@ export type NpepPairingMinAggregateOutputType = {
   approverId: string | null
   approverSessionId: string | null
   approverTokenVersion: number | null
+  approvalSource: string | null
+  preauthorizationRevision: number | null
+  screenCredentialVersion: number | null
   confirmRequestId: string | null
   confirmDigest: string | null
   deviceId: string | null
@@ -82,6 +89,9 @@ export type NpepPairingMaxAggregateOutputType = {
   approverId: string | null
   approverSessionId: string | null
   approverTokenVersion: number | null
+  approvalSource: string | null
+  preauthorizationRevision: number | null
+  screenCredentialVersion: number | null
   confirmRequestId: string | null
   confirmDigest: string | null
   deviceId: string | null
@@ -110,6 +120,9 @@ export type NpepPairingCountAggregateOutputType = {
   approverSessionId: number
   approverTokenVersion: number
   approvalSnapshot: number
+  approvalSource: number
+  preauthorizationRevision: number
+  screenCredentialVersion: number
   confirmRequestId: number
   confirmDigest: number
   deviceId: number
@@ -120,10 +133,14 @@ export type NpepPairingCountAggregateOutputType = {
 
 export type NpepPairingAvgAggregateInputType = {
   approverTokenVersion?: true
+  preauthorizationRevision?: true
+  screenCredentialVersion?: true
 }
 
 export type NpepPairingSumAggregateInputType = {
   approverTokenVersion?: true
+  preauthorizationRevision?: true
+  screenCredentialVersion?: true
 }
 
 export type NpepPairingMinAggregateInputType = {
@@ -147,6 +164,9 @@ export type NpepPairingMinAggregateInputType = {
   approverId?: true
   approverSessionId?: true
   approverTokenVersion?: true
+  approvalSource?: true
+  preauthorizationRevision?: true
+  screenCredentialVersion?: true
   confirmRequestId?: true
   confirmDigest?: true
   deviceId?: true
@@ -174,6 +194,9 @@ export type NpepPairingMaxAggregateInputType = {
   approverId?: true
   approverSessionId?: true
   approverTokenVersion?: true
+  approvalSource?: true
+  preauthorizationRevision?: true
+  screenCredentialVersion?: true
   confirmRequestId?: true
   confirmDigest?: true
   deviceId?: true
@@ -202,6 +225,9 @@ export type NpepPairingCountAggregateInputType = {
   approverSessionId?: true
   approverTokenVersion?: true
   approvalSnapshot?: true
+  approvalSource?: true
+  preauthorizationRevision?: true
+  screenCredentialVersion?: true
   confirmRequestId?: true
   confirmDigest?: true
   deviceId?: true
@@ -317,6 +343,9 @@ export type NpepPairingGroupByOutputType = {
   approverSessionId: string | null
   approverTokenVersion: number | null
   approvalSnapshot: runtime.JsonValue | null
+  approvalSource: string
+  preauthorizationRevision: number | null
+  screenCredentialVersion: number | null
   confirmRequestId: string | null
   confirmDigest: string | null
   deviceId: string | null
@@ -368,6 +397,9 @@ export type NpepPairingWhereInput = {
   approverSessionId?: Prisma.StringNullableFilter<"NpepPairing"> | string | null
   approverTokenVersion?: Prisma.IntNullableFilter<"NpepPairing"> | number | null
   approvalSnapshot?: Prisma.JsonNullableFilter<"NpepPairing">
+  approvalSource?: Prisma.StringFilter<"NpepPairing"> | string
+  preauthorizationRevision?: Prisma.FloatNullableFilter<"NpepPairing"> | number | null
+  screenCredentialVersion?: Prisma.IntNullableFilter<"NpepPairing"> | number | null
   confirmRequestId?: Prisma.UuidNullableFilter<"NpepPairing"> | string | null
   confirmDigest?: Prisma.StringNullableFilter<"NpepPairing"> | string | null
   deviceId?: Prisma.UuidNullableFilter<"NpepPairing"> | string | null
@@ -396,6 +428,9 @@ export type NpepPairingOrderByWithRelationInput = {
   approverSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   approverTokenVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   approvalSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalSource?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrderInput | Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmDigest?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -428,6 +463,9 @@ export type NpepPairingWhereUniqueInput = Prisma.AtLeast<{
   approverSessionId?: Prisma.StringNullableFilter<"NpepPairing"> | string | null
   approverTokenVersion?: Prisma.IntNullableFilter<"NpepPairing"> | number | null
   approvalSnapshot?: Prisma.JsonNullableFilter<"NpepPairing">
+  approvalSource?: Prisma.StringFilter<"NpepPairing"> | string
+  preauthorizationRevision?: Prisma.FloatNullableFilter<"NpepPairing"> | number | null
+  screenCredentialVersion?: Prisma.IntNullableFilter<"NpepPairing"> | number | null
   confirmRequestId?: Prisma.UuidNullableFilter<"NpepPairing"> | string | null
   confirmDigest?: Prisma.StringNullableFilter<"NpepPairing"> | string | null
   deviceId?: Prisma.UuidNullableFilter<"NpepPairing"> | string | null
@@ -456,6 +494,9 @@ export type NpepPairingOrderByWithAggregationInput = {
   approverSessionId?: Prisma.SortOrderInput | Prisma.SortOrder
   approverTokenVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   approvalSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvalSource?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrderInput | Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmRequestId?: Prisma.SortOrderInput | Prisma.SortOrder
   confirmDigest?: Prisma.SortOrderInput | Prisma.SortOrder
   deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -492,6 +533,9 @@ export type NpepPairingScalarWhereWithAggregatesInput = {
   approverSessionId?: Prisma.StringNullableWithAggregatesFilter<"NpepPairing"> | string | null
   approverTokenVersion?: Prisma.IntNullableWithAggregatesFilter<"NpepPairing"> | number | null
   approvalSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"NpepPairing">
+  approvalSource?: Prisma.StringWithAggregatesFilter<"NpepPairing"> | string
+  preauthorizationRevision?: Prisma.FloatNullableWithAggregatesFilter<"NpepPairing"> | number | null
+  screenCredentialVersion?: Prisma.IntNullableWithAggregatesFilter<"NpepPairing"> | number | null
   confirmRequestId?: Prisma.UuidNullableWithAggregatesFilter<"NpepPairing"> | string | null
   confirmDigest?: Prisma.StringNullableWithAggregatesFilter<"NpepPairing"> | string | null
   deviceId?: Prisma.UuidNullableWithAggregatesFilter<"NpepPairing"> | string | null
@@ -520,6 +564,9 @@ export type NpepPairingCreateInput = {
   approverSessionId?: string | null
   approverTokenVersion?: number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: string
+  preauthorizationRevision?: number | null
+  screenCredentialVersion?: number | null
   confirmRequestId?: string | null
   confirmDigest?: string | null
   deviceId?: string | null
@@ -548,6 +595,9 @@ export type NpepPairingUncheckedCreateInput = {
   approverSessionId?: string | null
   approverTokenVersion?: number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: string
+  preauthorizationRevision?: number | null
+  screenCredentialVersion?: number | null
   confirmRequestId?: string | null
   confirmDigest?: string | null
   deviceId?: string | null
@@ -576,6 +626,9 @@ export type NpepPairingUpdateInput = {
   approverSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approverTokenVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: Prisma.StringFieldUpdateOperationsInput | string
+  preauthorizationRevision?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  screenCredentialVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   confirmRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -604,6 +657,9 @@ export type NpepPairingUncheckedUpdateInput = {
   approverSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approverTokenVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: Prisma.StringFieldUpdateOperationsInput | string
+  preauthorizationRevision?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  screenCredentialVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   confirmRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -632,6 +688,9 @@ export type NpepPairingCreateManyInput = {
   approverSessionId?: string | null
   approverTokenVersion?: number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: string
+  preauthorizationRevision?: number | null
+  screenCredentialVersion?: number | null
   confirmRequestId?: string | null
   confirmDigest?: string | null
   deviceId?: string | null
@@ -660,6 +719,9 @@ export type NpepPairingUpdateManyMutationInput = {
   approverSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approverTokenVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: Prisma.StringFieldUpdateOperationsInput | string
+  preauthorizationRevision?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  screenCredentialVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   confirmRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -688,6 +750,9 @@ export type NpepPairingUncheckedUpdateManyInput = {
   approverSessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approverTokenVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvalSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  approvalSource?: Prisma.StringFieldUpdateOperationsInput | string
+  preauthorizationRevision?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  screenCredentialVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   confirmRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmDigest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -721,6 +786,9 @@ export type NpepPairingCountOrderByAggregateInput = {
   approverSessionId?: Prisma.SortOrder
   approverTokenVersion?: Prisma.SortOrder
   approvalSnapshot?: Prisma.SortOrder
+  approvalSource?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrder
   confirmRequestId?: Prisma.SortOrder
   confirmDigest?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -729,6 +797,8 @@ export type NpepPairingCountOrderByAggregateInput = {
 
 export type NpepPairingAvgOrderByAggregateInput = {
   approverTokenVersion?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrder
 }
 
 export type NpepPairingMaxOrderByAggregateInput = {
@@ -752,6 +822,9 @@ export type NpepPairingMaxOrderByAggregateInput = {
   approverId?: Prisma.SortOrder
   approverSessionId?: Prisma.SortOrder
   approverTokenVersion?: Prisma.SortOrder
+  approvalSource?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrder
   confirmRequestId?: Prisma.SortOrder
   confirmDigest?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -779,6 +852,9 @@ export type NpepPairingMinOrderByAggregateInput = {
   approverId?: Prisma.SortOrder
   approverSessionId?: Prisma.SortOrder
   approverTokenVersion?: Prisma.SortOrder
+  approvalSource?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrder
   confirmRequestId?: Prisma.SortOrder
   confirmDigest?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
@@ -787,6 +863,16 @@ export type NpepPairingMinOrderByAggregateInput = {
 
 export type NpepPairingSumOrderByAggregateInput = {
   approverTokenVersion?: Prisma.SortOrder
+  preauthorizationRevision?: Prisma.SortOrder
+  screenCredentialVersion?: Prisma.SortOrder
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 
@@ -813,6 +899,9 @@ export type NpepPairingSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   approverSessionId?: boolean
   approverTokenVersion?: boolean
   approvalSnapshot?: boolean
+  approvalSource?: boolean
+  preauthorizationRevision?: boolean
+  screenCredentialVersion?: boolean
   confirmRequestId?: boolean
   confirmDigest?: boolean
   deviceId?: boolean
@@ -841,6 +930,9 @@ export type NpepPairingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   approverSessionId?: boolean
   approverTokenVersion?: boolean
   approvalSnapshot?: boolean
+  approvalSource?: boolean
+  preauthorizationRevision?: boolean
+  screenCredentialVersion?: boolean
   confirmRequestId?: boolean
   confirmDigest?: boolean
   deviceId?: boolean
@@ -869,6 +961,9 @@ export type NpepPairingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   approverSessionId?: boolean
   approverTokenVersion?: boolean
   approvalSnapshot?: boolean
+  approvalSource?: boolean
+  preauthorizationRevision?: boolean
+  screenCredentialVersion?: boolean
   confirmRequestId?: boolean
   confirmDigest?: boolean
   deviceId?: boolean
@@ -897,13 +992,16 @@ export type NpepPairingSelectScalar = {
   approverSessionId?: boolean
   approverTokenVersion?: boolean
   approvalSnapshot?: boolean
+  approvalSource?: boolean
+  preauthorizationRevision?: boolean
+  screenCredentialVersion?: boolean
   confirmRequestId?: boolean
   confirmDigest?: boolean
   deviceId?: boolean
   createdAt?: boolean
 }
 
-export type NpepPairingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "installationId" | "requestId" | "createDigest" | "secretHash" | "userCode" | "deviceName" | "appVersion" | "serverInstanceId" | "deploymentEpoch" | "state" | "expiresAt" | "schoolId" | "screenBindingId" | "approvalId" | "approvalRequestId" | "approvalDigest" | "approverId" | "approverSessionId" | "approverTokenVersion" | "approvalSnapshot" | "confirmRequestId" | "confirmDigest" | "deviceId" | "createdAt", ExtArgs["result"]["npepPairing"]>
+export type NpepPairingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "installationId" | "requestId" | "createDigest" | "secretHash" | "userCode" | "deviceName" | "appVersion" | "serverInstanceId" | "deploymentEpoch" | "state" | "expiresAt" | "schoolId" | "screenBindingId" | "approvalId" | "approvalRequestId" | "approvalDigest" | "approverId" | "approverSessionId" | "approverTokenVersion" | "approvalSnapshot" | "approvalSource" | "preauthorizationRevision" | "screenCredentialVersion" | "confirmRequestId" | "confirmDigest" | "deviceId" | "createdAt", ExtArgs["result"]["npepPairing"]>
 
 export type $NpepPairingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NpepPairing"
@@ -930,6 +1028,9 @@ export type $NpepPairingPayload<ExtArgs extends runtime.Types.Extensions.Interna
     approverSessionId: string | null
     approverTokenVersion: number | null
     approvalSnapshot: runtime.JsonValue | null
+    approvalSource: string
+    preauthorizationRevision: number | null
+    screenCredentialVersion: number | null
     confirmRequestId: string | null
     confirmDigest: string | null
     deviceId: string | null
@@ -1378,6 +1479,9 @@ export interface NpepPairingFieldRefs {
   readonly approverSessionId: Prisma.FieldRef<"NpepPairing", 'String'>
   readonly approverTokenVersion: Prisma.FieldRef<"NpepPairing", 'Int'>
   readonly approvalSnapshot: Prisma.FieldRef<"NpepPairing", 'Json'>
+  readonly approvalSource: Prisma.FieldRef<"NpepPairing", 'String'>
+  readonly preauthorizationRevision: Prisma.FieldRef<"NpepPairing", 'Float'>
+  readonly screenCredentialVersion: Prisma.FieldRef<"NpepPairing", 'Int'>
   readonly confirmRequestId: Prisma.FieldRef<"NpepPairing", 'String'>
   readonly confirmDigest: Prisma.FieldRef<"NpepPairing", 'String'>
   readonly deviceId: Prisma.FieldRef<"NpepPairing", 'String'>

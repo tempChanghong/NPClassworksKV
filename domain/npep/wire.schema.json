@@ -979,7 +979,11 @@
                 "PAYLOAD_TOO_LARGE",
                 "PROTOCOL_UNSUPPORTED",
                 "RATE_LIMITED",
-                "TEMPORARILY_UNAVAILABLE"
+                "TEMPORARILY_UNAVAILABLE",
+                "SCREEN_TOKEN_INVALID",
+                "SCREEN_PAIRING_DISABLED",
+                "PREAUTHORIZATION_CHANGED",
+                "PAIRING_CODE_UNAVAILABLE"
               ]
             },
             "message": {
@@ -1337,6 +1341,231 @@
         "requestId",
         "serverTime",
         "data"
+      ],
+      "additionalProperties": false
+    },
+    "claimScreenPairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "serverInstanceId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deploymentEpoch": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "installationId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "deviceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "appVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "pairingSecret": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+        },
+        "requestedCapabilities": {
+          "type": "array",
+          "items": {
+            "const": "device.status"
+          },
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "userCode": {
+          "type": "string",
+          "pattern": "^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$"
+        }
+      },
+      "required": [
+        "requestId",
+        "serverInstanceId",
+        "deploymentEpoch",
+        "installationId",
+        "deviceName",
+        "appVersion",
+        "pairingSecret",
+        "requestedCapabilities",
+        "userCode"
+      ],
+      "additionalProperties": false
+    },
+    "issueScreenPairing": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      },
+      "required": [
+        "requestId"
+      ],
+      "additionalProperties": false
+    },
+    "setScreenPairingAccess": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "requestId",
+        "enabled",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "previewPairingAccessBatch": {
+      "type": "object",
+      "properties": {
+        "targetId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Za-z0-9_.:-]{1,191}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "termId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,191}$"
+        },
+        "targetType": {
+          "enum": [
+            "SCHOOL",
+            "GRADE"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "targetType": {
+                "const": "SCHOOL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "targetId": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "targetId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "requestId",
+        "termId",
+        "targetType",
+        "targetId",
+        "enabled"
+      ],
+      "additionalProperties": false
+    },
+    "setPairingAccessBatch": {
+      "type": "object",
+      "properties": {
+        "targetId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Za-z0-9_.:-]{1,191}$"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "termId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]{1,191}$"
+        },
+        "targetType": {
+          "enum": [
+            "SCHOOL",
+            "GRADE"
+          ]
+        },
+        "previewDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "targetType": {
+                "const": "SCHOOL"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "targetId": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "targetId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "requestId",
+        "termId",
+        "targetType",
+        "targetId",
+        "enabled",
+        "previewDigest"
       ],
       "additionalProperties": false
     }

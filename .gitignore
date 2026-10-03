@@ -150,3 +150,4 @@ deploy/.env.production
 deploy/.env.debug
 deploy/backups/
 deploy/runtime/
+.artifacts/
