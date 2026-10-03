@@ -408,11 +408,20 @@ export const ModelName = {
   Publication: 'Publication',
   PublicationTarget: 'PublicationTarget',
   ClassroomScreenBinding: 'ClassroomScreenBinding',
+  NpepNoiseDevice: 'NpepNoiseDevice',
+  NpepNoiseScheduleDevice: 'NpepNoiseScheduleDevice',
+  NpepExamPlanDevice: 'NpepExamPlanDevice',
+  NpepExamPlan: 'NpepExamPlan',
+  NpepRuntimePolicy: 'NpepRuntimePolicy',
+  NpepRuntimeOperation: 'NpepRuntimeOperation',
   NpepDeployment: 'NpepDeployment',
   NpepPairing: 'NpepPairing',
+  NpepScreenPairingTicket: 'NpepScreenPairingTicket',
   NpepDevice: 'NpepDevice',
   NpepSessionReceipt: 'NpepSessionReceipt',
   NpepAudit: 'NpepAudit',
+  NpepNoiseSchedulePolicy: 'NpepNoiseSchedulePolicy',
+  NpepNoiseScheduleRequest: 'NpepNoiseScheduleRequest',
   NpepRateLimit: 'NpepRateLimit',
   AuditLog: 'AuditLog',
   ClassroomScreenCommand: 'ClassroomScreenCommand',
@@ -438,7 +447,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepDeployment" | "npepPairing" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision" | "npepNotificationSnapshot" | "npepNotificationExposure" | "npepNotificationReceipt"
+    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepNoiseDevice" | "npepNoiseScheduleDevice" | "npepExamPlanDevice" | "npepExamPlan" | "npepRuntimePolicy" | "npepRuntimeOperation" | "npepDeployment" | "npepPairing" | "npepScreenPairingTicket" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepNoiseSchedulePolicy" | "npepNoiseScheduleRequest" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision" | "npepNotificationSnapshot" | "npepNotificationExposure" | "npepNotificationReceipt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2218,6 +2227,450 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NpepNoiseDevice: {
+      payload: Prisma.$NpepNoiseDevicePayload<ExtArgs>
+      fields: Prisma.NpepNoiseDeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNoiseDeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNoiseDeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNoiseDeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNoiseDeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        findMany: {
+          args: Prisma.NpepNoiseDeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>[]
+        }
+        create: {
+          args: Prisma.NpepNoiseDeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        createMany: {
+          args: Prisma.NpepNoiseDeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNoiseDeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNoiseDeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        update: {
+          args: Prisma.NpepNoiseDeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNoiseDeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNoiseDeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNoiseDeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNoiseDeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDevicePayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNoiseDeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNoiseDevice>
+        }
+        groupBy: {
+          args: Prisma.NpepNoiseDeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseDeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNoiseDeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseDeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepNoiseScheduleDevice: {
+      payload: Prisma.$NpepNoiseScheduleDevicePayload<ExtArgs>
+      fields: Prisma.NpepNoiseScheduleDeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNoiseScheduleDeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNoiseScheduleDeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNoiseScheduleDeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNoiseScheduleDeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        findMany: {
+          args: Prisma.NpepNoiseScheduleDeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>[]
+        }
+        create: {
+          args: Prisma.NpepNoiseScheduleDeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        createMany: {
+          args: Prisma.NpepNoiseScheduleDeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNoiseScheduleDeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNoiseScheduleDeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        update: {
+          args: Prisma.NpepNoiseScheduleDeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNoiseScheduleDeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNoiseScheduleDeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNoiseScheduleDeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNoiseScheduleDeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleDevicePayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNoiseScheduleDeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNoiseScheduleDevice>
+        }
+        groupBy: {
+          args: Prisma.NpepNoiseScheduleDeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseScheduleDeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNoiseScheduleDeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseScheduleDeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepExamPlanDevice: {
+      payload: Prisma.$NpepExamPlanDevicePayload<ExtArgs>
+      fields: Prisma.NpepExamPlanDeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepExamPlanDeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepExamPlanDeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        findFirst: {
+          args: Prisma.NpepExamPlanDeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepExamPlanDeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        findMany: {
+          args: Prisma.NpepExamPlanDeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>[]
+        }
+        create: {
+          args: Prisma.NpepExamPlanDeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        createMany: {
+          args: Prisma.NpepExamPlanDeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepExamPlanDeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>[]
+        }
+        delete: {
+          args: Prisma.NpepExamPlanDeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        update: {
+          args: Prisma.NpepExamPlanDeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepExamPlanDeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepExamPlanDeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepExamPlanDeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepExamPlanDeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanDevicePayload>
+        }
+        aggregate: {
+          args: Prisma.NpepExamPlanDeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepExamPlanDevice>
+        }
+        groupBy: {
+          args: Prisma.NpepExamPlanDeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepExamPlanDeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepExamPlanDeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepExamPlanDeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepExamPlan: {
+      payload: Prisma.$NpepExamPlanPayload<ExtArgs>
+      fields: Prisma.NpepExamPlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepExamPlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepExamPlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepExamPlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepExamPlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        findMany: {
+          args: Prisma.NpepExamPlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>[]
+        }
+        create: {
+          args: Prisma.NpepExamPlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        createMany: {
+          args: Prisma.NpepExamPlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepExamPlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepExamPlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        update: {
+          args: Prisma.NpepExamPlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepExamPlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepExamPlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepExamPlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepExamPlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepExamPlanPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepExamPlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepExamPlan>
+        }
+        groupBy: {
+          args: Prisma.NpepExamPlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepExamPlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepExamPlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepExamPlanCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepRuntimePolicy: {
+      payload: Prisma.$NpepRuntimePolicyPayload<ExtArgs>
+      fields: Prisma.NpepRuntimePolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepRuntimePolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepRuntimePolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepRuntimePolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepRuntimePolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        findMany: {
+          args: Prisma.NpepRuntimePolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>[]
+        }
+        create: {
+          args: Prisma.NpepRuntimePolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        createMany: {
+          args: Prisma.NpepRuntimePolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepRuntimePolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepRuntimePolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        update: {
+          args: Prisma.NpepRuntimePolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepRuntimePolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepRuntimePolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepRuntimePolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepRuntimePolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimePolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepRuntimePolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepRuntimePolicy>
+        }
+        groupBy: {
+          args: Prisma.NpepRuntimePolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepRuntimePolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepRuntimePolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepRuntimePolicyCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepRuntimeOperation: {
+      payload: Prisma.$NpepRuntimeOperationPayload<ExtArgs>
+      fields: Prisma.NpepRuntimeOperationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepRuntimeOperationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepRuntimeOperationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepRuntimeOperationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepRuntimeOperationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        findMany: {
+          args: Prisma.NpepRuntimeOperationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>[]
+        }
+        create: {
+          args: Prisma.NpepRuntimeOperationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        createMany: {
+          args: Prisma.NpepRuntimeOperationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepRuntimeOperationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepRuntimeOperationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        update: {
+          args: Prisma.NpepRuntimeOperationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepRuntimeOperationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepRuntimeOperationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepRuntimeOperationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepRuntimeOperationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepRuntimeOperationPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepRuntimeOperationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepRuntimeOperation>
+        }
+        groupBy: {
+          args: Prisma.NpepRuntimeOperationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepRuntimeOperationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepRuntimeOperationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepRuntimeOperationCountAggregateOutputType> | number
+        }
+      }
+    }
     NpepDeployment: {
       payload: Prisma.$NpepDeploymentPayload<ExtArgs>
       fields: Prisma.NpepDeploymentFieldRefs
@@ -2363,6 +2816,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.NpepPairingCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.NpepPairingCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepScreenPairingTicket: {
+      payload: Prisma.$NpepScreenPairingTicketPayload<ExtArgs>
+      fields: Prisma.NpepScreenPairingTicketFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepScreenPairingTicketFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepScreenPairingTicketFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepScreenPairingTicketFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepScreenPairingTicketFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        findMany: {
+          args: Prisma.NpepScreenPairingTicketFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>[]
+        }
+        create: {
+          args: Prisma.NpepScreenPairingTicketCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        createMany: {
+          args: Prisma.NpepScreenPairingTicketCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepScreenPairingTicketCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepScreenPairingTicketDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        update: {
+          args: Prisma.NpepScreenPairingTicketUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepScreenPairingTicketDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepScreenPairingTicketUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepScreenPairingTicketUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepScreenPairingTicketUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepScreenPairingTicketPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepScreenPairingTicketAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepScreenPairingTicket>
+        }
+        groupBy: {
+          args: Prisma.NpepScreenPairingTicketGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepScreenPairingTicketGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepScreenPairingTicketCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepScreenPairingTicketCountAggregateOutputType> | number
         }
       }
     }
@@ -2585,6 +3112,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.NpepAuditCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.NpepAuditCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepNoiseSchedulePolicy: {
+      payload: Prisma.$NpepNoiseSchedulePolicyPayload<ExtArgs>
+      fields: Prisma.NpepNoiseSchedulePolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNoiseSchedulePolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNoiseSchedulePolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNoiseSchedulePolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNoiseSchedulePolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        findMany: {
+          args: Prisma.NpepNoiseSchedulePolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>[]
+        }
+        create: {
+          args: Prisma.NpepNoiseSchedulePolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        createMany: {
+          args: Prisma.NpepNoiseSchedulePolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNoiseSchedulePolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNoiseSchedulePolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        update: {
+          args: Prisma.NpepNoiseSchedulePolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNoiseSchedulePolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNoiseSchedulePolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNoiseSchedulePolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNoiseSchedulePolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseSchedulePolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNoiseSchedulePolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNoiseSchedulePolicy>
+        }
+        groupBy: {
+          args: Prisma.NpepNoiseSchedulePolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseSchedulePolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNoiseSchedulePolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseSchedulePolicyCountAggregateOutputType> | number
+        }
+      }
+    }
+    NpepNoiseScheduleRequest: {
+      payload: Prisma.$NpepNoiseScheduleRequestPayload<ExtArgs>
+      fields: Prisma.NpepNoiseScheduleRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNoiseScheduleRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNoiseScheduleRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNoiseScheduleRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNoiseScheduleRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        findMany: {
+          args: Prisma.NpepNoiseScheduleRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>[]
+        }
+        create: {
+          args: Prisma.NpepNoiseScheduleRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        createMany: {
+          args: Prisma.NpepNoiseScheduleRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNoiseScheduleRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNoiseScheduleRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        update: {
+          args: Prisma.NpepNoiseScheduleRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNoiseScheduleRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNoiseScheduleRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNoiseScheduleRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNoiseScheduleRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseScheduleRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNoiseScheduleRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNoiseScheduleRequest>
+        }
+        groupBy: {
+          args: Prisma.NpepNoiseScheduleRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseScheduleRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNoiseScheduleRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseScheduleRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -3718,6 +4393,8 @@ export const ClassroomScreenBindingScalarFieldEnum = {
   lockedUntil: 'lockedUntil',
   credentialVersion: 'credentialVersion',
   npepBindingRevision: 'npepBindingRevision',
+  npepPairingEnabled: 'npepPairingEnabled',
+  npepPairingRevision: 'npepPairingRevision',
   activatedAt: 'activatedAt',
   lastUsedAt: 'lastUsedAt',
   lastHeartbeatAt: 'lastHeartbeatAt',
@@ -3728,6 +4405,61 @@ export const ClassroomScreenBindingScalarFieldEnum = {
 } as const
 
 export type ClassroomScreenBindingScalarFieldEnum = (typeof ClassroomScreenBindingScalarFieldEnum)[keyof typeof ClassroomScreenBindingScalarFieldEnum]
+
+
+export const NpepNoiseDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepNoiseDeviceScalarFieldEnum = (typeof NpepNoiseDeviceScalarFieldEnum)[keyof typeof NpepNoiseDeviceScalarFieldEnum]
+
+
+export const NpepNoiseScheduleDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepNoiseScheduleDeviceScalarFieldEnum = (typeof NpepNoiseScheduleDeviceScalarFieldEnum)[keyof typeof NpepNoiseScheduleDeviceScalarFieldEnum]
+
+
+export const NpepExamPlanDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepExamPlanDeviceScalarFieldEnum = (typeof NpepExamPlanDeviceScalarFieldEnum)[keyof typeof NpepExamPlanDeviceScalarFieldEnum]
+
+
+export const NpepExamPlanScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  data: 'data'
+} as const
+
+export type NpepExamPlanScalarFieldEnum = (typeof NpepExamPlanScalarFieldEnum)[keyof typeof NpepExamPlanScalarFieldEnum]
+
+
+export const NpepRuntimePolicyScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepRuntimePolicyScalarFieldEnum = (typeof NpepRuntimePolicyScalarFieldEnum)[keyof typeof NpepRuntimePolicyScalarFieldEnum]
+
+
+export const NpepRuntimeOperationScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  requestId: 'requestId',
+  createdAt: 'createdAt',
+  resolvedAt: 'resolvedAt',
+  data: 'data'
+} as const
+
+export type NpepRuntimeOperationScalarFieldEnum = (typeof NpepRuntimeOperationScalarFieldEnum)[keyof typeof NpepRuntimeOperationScalarFieldEnum]
 
 
 export const NpepDeploymentScalarFieldEnum = {
@@ -3761,6 +4493,9 @@ export const NpepPairingScalarFieldEnum = {
   approverSessionId: 'approverSessionId',
   approverTokenVersion: 'approverTokenVersion',
   approvalSnapshot: 'approvalSnapshot',
+  approvalSource: 'approvalSource',
+  preauthorizationRevision: 'preauthorizationRevision',
+  screenCredentialVersion: 'screenCredentialVersion',
   confirmRequestId: 'confirmRequestId',
   confirmDigest: 'confirmDigest',
   deviceId: 'deviceId',
@@ -3768,6 +4503,26 @@ export const NpepPairingScalarFieldEnum = {
 } as const
 
 export type NpepPairingScalarFieldEnum = (typeof NpepPairingScalarFieldEnum)[keyof typeof NpepPairingScalarFieldEnum]
+
+
+export const NpepScreenPairingTicketScalarFieldEnum = {
+  id: 'id',
+  userCode: 'userCode',
+  requestId: 'requestId',
+  schoolId: 'schoolId',
+  screenBindingId: 'screenBindingId',
+  bindingRevision: 'bindingRevision',
+  authorizationRevision: 'authorizationRevision',
+  credentialVersion: 'credentialVersion',
+  serverInstanceId: 'serverInstanceId',
+  deploymentEpoch: 'deploymentEpoch',
+  state: 'state',
+  expiresAt: 'expiresAt',
+  claimedPairingId: 'claimedPairingId',
+  createdAt: 'createdAt'
+} as const
+
+export type NpepScreenPairingTicketScalarFieldEnum = (typeof NpepScreenPairingTicketScalarFieldEnum)[keyof typeof NpepScreenPairingTicketScalarFieldEnum]
 
 
 export const NpepDeviceScalarFieldEnum = {
@@ -3820,6 +4575,32 @@ export const NpepAuditScalarFieldEnum = {
 } as const
 
 export type NpepAuditScalarFieldEnum = (typeof NpepAuditScalarFieldEnum)[keyof typeof NpepAuditScalarFieldEnum]
+
+
+export const NpepNoiseSchedulePolicyScalarFieldEnum = {
+  schoolId: 'schoolId',
+  termId: 'termId',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  revision: 'revision',
+  policy: 'policy',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpepNoiseSchedulePolicyScalarFieldEnum = (typeof NpepNoiseSchedulePolicyScalarFieldEnum)[keyof typeof NpepNoiseSchedulePolicyScalarFieldEnum]
+
+
+export const NpepNoiseScheduleRequestScalarFieldEnum = {
+  schoolId: 'schoolId',
+  requestId: 'requestId',
+  actorId: 'actorId',
+  digest: 'digest',
+  result: 'result',
+  createdAt: 'createdAt'
+} as const
+
+export type NpepNoiseScheduleRequestScalarFieldEnum = (typeof NpepNoiseScheduleRequestScalarFieldEnum)[keyof typeof NpepNoiseScheduleRequestScalarFieldEnum]
 
 
 export const NpepRateLimitScalarFieldEnum = {
@@ -4426,11 +5207,20 @@ export type GlobalOmitConfig = {
   publication?: Prisma.PublicationOmit
   publicationTarget?: Prisma.PublicationTargetOmit
   classroomScreenBinding?: Prisma.ClassroomScreenBindingOmit
+  npepNoiseDevice?: Prisma.NpepNoiseDeviceOmit
+  npepNoiseScheduleDevice?: Prisma.NpepNoiseScheduleDeviceOmit
+  npepExamPlanDevice?: Prisma.NpepExamPlanDeviceOmit
+  npepExamPlan?: Prisma.NpepExamPlanOmit
+  npepRuntimePolicy?: Prisma.NpepRuntimePolicyOmit
+  npepRuntimeOperation?: Prisma.NpepRuntimeOperationOmit
   npepDeployment?: Prisma.NpepDeploymentOmit
   npepPairing?: Prisma.NpepPairingOmit
+  npepScreenPairingTicket?: Prisma.NpepScreenPairingTicketOmit
   npepDevice?: Prisma.NpepDeviceOmit
   npepSessionReceipt?: Prisma.NpepSessionReceiptOmit
   npepAudit?: Prisma.NpepAuditOmit
+  npepNoiseSchedulePolicy?: Prisma.NpepNoiseSchedulePolicyOmit
+  npepNoiseScheduleRequest?: Prisma.NpepNoiseScheduleRequestOmit
   npepRateLimit?: Prisma.NpepRateLimitOmit
   auditLog?: Prisma.AuditLogOmit
   classroomScreenCommand?: Prisma.ClassroomScreenCommandOmit

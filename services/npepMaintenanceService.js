@@ -24,6 +24,8 @@ export async function cleanupNpep(client = prisma) {
       (SELECT "deviceId","publicationId","revision" FROM "NpepNotificationExposure" WHERE "exposedAt"<clock_timestamp()-interval '90 days' ORDER BY "exposedAt" LIMIT 5000)`;
     await tx.$executeRaw`UPDATE "NpepPairing" SET "secretHash"=NULL
       WHERE id IN (SELECT id FROM "NpepPairing" WHERE "expiresAt"<=clock_timestamp() AND "secretHash" IS NOT NULL ORDER BY "expiresAt" LIMIT 5000)`;
+    await tx.$executeRaw`DELETE FROM "NpepScreenPairingTicket" WHERE id IN
+      (SELECT id FROM "NpepScreenPairingTicket" WHERE "expiresAt"<clock_timestamp()-interval '24 hours' ORDER BY "expiresAt" LIMIT 5000)`;
     await tx.$executeRaw`DELETE FROM "NpepPairing" WHERE id IN
       (SELECT id FROM "NpepPairing" WHERE "expiresAt"<clock_timestamp()-interval '24 hours' ORDER BY "expiresAt" LIMIT 5000)`;
     await tx.$executeRaw`DELETE FROM "NpepSessionReceipt" WHERE "sessionId" IN

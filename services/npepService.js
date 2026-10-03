@@ -2,6 +2,7 @@ import {randomUUID, randomInt} from 'node:crypto';
 import {Prisma} from '../generated/prisma/client.ts';
 import {assertDeployment, assertInstance} from '../domain/npep/deployment.js';
 import {NpepError, fail, capabilities, secretHash, hashMatches, digest, displayText, hash} from '../domain/npep/wire.js';
+import {createScreenPairing, assertScreenAdmission} from './npepScreenPairing.js';
 
 const DAY = 86400000;
 const expired = date => new Date(date).getTime() <= Date.now();
@@ -104,6 +105,7 @@ export function createNpepService(prisma, deploymentProvider) {
   const approved = pair => ({pairingId: pair.id, state: 'APPROVED', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5, approvalId: pair.approvalId, ...pair.approvalSnapshot});
 
   return {
+    ...createScreenPairing({transaction, schoolLock, administrator, binding, available, audit, pairValid, approved}),
     // Cheap credential preflight before admission control. The operation still
     // performs full transactional authorization after the limiter admits it.
     async preflightDevice(auth) {
@@ -237,7 +239,13 @@ export function createNpepService(prisma, deploymentProvider) {
     }),
     poll: (id, auth) => transaction(async (tx, config) => {
       const pair = await pairing(tx, id, auth, config, false);
-      if (pair.state === 'APPROVED') return approved(pair);
+      if (pair.state === 'APPROVED') {
+        if (pair.approvalSource === 'SCREEN') {
+          await schoolLock(tx, pair.schoolId);
+          assertScreenAdmission(await binding(tx, pair.screenBindingId, pair.schoolId, pair.approvalSnapshot.bindingRevision), pair);
+        }
+        return approved(pair);
+      }
       if (pair.state === 'ACTIVATED') return {pairingId: id, state: 'ACTIVATED', deviceId: pair.deviceId};
       if (pair.state === 'CANCELLED') return {pairingId: id, state: 'CANCELLED'};
       return {pairingId: id, state: 'PENDING', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5};
@@ -247,8 +255,9 @@ export function createNpepService(prisma, deploymentProvider) {
       const initial = await pairing(tx, id, auth, config, false);
       conflict(['APPROVED', 'ACTIVATED'].includes(initial.state), 'PAIRING_STATE_CONFLICT');
       await schoolLock(tx, initial.schoolId);
-      if (initial.state === 'APPROVED') await administrator(tx, context(initial), initial.schoolId, true);
+      if (initial.state === 'APPROVED' && initial.approvalSource !== 'SCREEN') await administrator(tx, context(initial), initial.schoolId, true);
       const currentBinding = await binding(tx, initial.screenBindingId, initial.schoolId, initial.approvalSnapshot.bindingRevision);
+      if (initial.state === 'APPROVED' && initial.approvalSource === 'SCREEN') assertScreenAdmission(currentBinding, initial);
       const pair = await pairing(tx, id, auth, config);
       conflict(pair.approvalId === body.approvalId, 'PAIRING_STATE_CONFLICT');
       if (pair.state === 'ACTIVATED') {
@@ -261,7 +270,8 @@ export function createNpepService(prisma, deploymentProvider) {
       conflict(secretHash(body.deviceSecret) !== pair.secretHash, 'IDEMPOTENCY_CONFLICT');
       await available(tx, currentBinding.id);
       if (await tx.npepDevice.findUnique({where: {credentialId: body.credentialId}})) fail(409, 'CREDENTIAL_ID_CONFLICT');
-      await administrator(tx, context(pair), pair.schoolId, true);
+      if (pair.approvalSource === 'SCREEN') assertScreenAdmission(currentBinding, pair);
+      else await administrator(tx, context(pair), pair.schoolId, true);
       pairValid(pair, config);
       const created = await tx.npepDevice.create({data: {
         id: randomUUID(), installationId: pair.installationId, credentialId: body.credentialId, secretHash: secretHash(body.deviceSecret),

@@ -12,6 +12,8 @@ import {hash} from '../domain/npep/wire.js';
 import {readDeployment} from '../domain/npep/deployment.js';
 import {closeBeforeRestore, activateDeployment} from '../scripts/npep-deployment.js';
 import {verifyNoiseScheduleDatabase} from './helpers/noiseScheduleDatabase.js';
+import {verifyScreenPairingDatabase} from './helpers/screenPairingDatabase.js';
+import {verifyPairingBatchDatabase} from './helpers/pairingBatchDatabase.js';
 import {verifyNoiseScheduleRuntimeDatabase} from './helpers/noiseScheduleRuntimeDatabase.js';
 
 test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {skip: process.env.RUN_DATABASE_TESTS !== 'true', timeout: 360000}, async t => {
@@ -476,6 +478,8 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     assert.equal(await prisma.npepPairing.findUnique({where: {id: p.pairingId}}), null);
   });
   await verifyNoiseScheduleDatabase(t, {fixture, request, prisma, req, activate});
+  await verifyScreenPairingDatabase(t, {fixture, request, prisma, req, identity, activate, directory, origin});
+  await verifyPairingBatchDatabase(t, {fixture, request, prisma, req, identity, activate});
   await verifyNoiseScheduleRuntimeDatabase(t, {fixture,request,prisma,req,activate,open,identity,directory,origin});
   await t.test('external epoch blocks restored authorization rows and explicit recovery revokes them', async () => {
     const f = await fixture(), d = await activate(f);

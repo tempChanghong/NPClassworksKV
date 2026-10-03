@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import {randomBytes, randomUUID} from 'node:crypto';
 import {parseStrictJson, validate, digest, bearer, secretHash, displayText} from '../domain/npep/wire.js';
 
+test('Batch pairing requires explicit school/grade scope, boolean action and a valid preview digest', () => {
+  const body = {requestId:randomUUID(),termId:'term',targetType:'SCHOOL',targetId:null,enabled:true};
+  assert.equal(validate('previewPairingAccessBatch',body),true);
+  assert.equal(validate('previewPairingAccessBatch',{...body,targetType:'GRADE',targetId:'grade'}),true);
+  for (const extra of [{targetId:'grade'},{targetType:'GRADE',targetId:null},{targetType:'ALL'},{termId:''},{enabled:'true'},{unexpected:true}]) {
+    assert.equal(validate('previewPairingAccessBatch',{...body,...extra}),false);
+  }
+  assert.equal(validate('setPairingAccessBatch',{...body,previewDigest:'a'.repeat(64)}),true);
+  assert.equal(validate('setPairingAccessBatch',body),false);
+  assert.equal(validate('setPairingAccessBatch',{...body,previewDigest:'bad'}),false);
+});
+
 test('NPEP rejects duplicate/escaped keys, malformed UTF8, lone surrogates and deep JSON', () => {
   for (const value of ['{"a":1,"a":2}', '{"a":1,"\\u0061":2}', '{"a":{"x":1,"x":2}}', '[1,]', '"\\ud800"', '['.repeat(40) + '0' + ']'.repeat(40)]) {
     assert.throws(() => parseStrictJson(Buffer.from(value)), {code: 'INVALID_REQUEST'});
