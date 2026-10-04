@@ -17,6 +17,7 @@ import {verifyPairingBatchDatabase} from './helpers/pairingBatchDatabase.js';
 import {verifyNoiseScheduleRuntimeDatabase} from './helpers/noiseScheduleRuntimeDatabase.js';
 import {verifyNoiseManagementDatabase} from './helpers/noiseManagementDatabase.js';
 import {verifyNoiseDisplayPresenceDatabase} from './helpers/noiseDisplayPresenceDatabase.js';
+import {verifyDeviceOverviewDatabase} from './helpers/deviceOverviewDatabase.js';
 
 test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {skip: process.env.RUN_DATABASE_TESTS !== 'true', timeout: 360000}, async t => {
   const url = new URL(process.env.DATABASE_URL);
@@ -101,6 +102,7 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     status: {appVersion: 'test', mode: 'EXAM', modePhase: 'RUNNING', modeRevision: 1, automaticRecording: 'ENABLED', recording: 'IDLE',
       classIsland: {connection: 'DISCONNECTED', bridgeVersion: null}, examAware: {connection: 'UNKNOWN', bridgeVersion: null}}});
 
+  await verifyDeviceOverviewDatabase(t, {fixture, request, prisma, activate, open, sample});
   await verifyNoiseManagementDatabase(t, {fixture, request, prisma, req, activate, open, identity});
   await verifyNoiseDisplayPresenceDatabase(t, {fixture, request, prisma, req, activate, open, identity});
 

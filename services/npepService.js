@@ -3,6 +3,7 @@ import {Prisma} from '../generated/prisma/client.ts';
 import {assertDeployment, assertInstance} from '../domain/npep/deployment.js';
 import {NpepError, fail, capabilities, secretHash, hashMatches, digest, displayText, hash} from '../domain/npep/wire.js';
 import {createScreenPairing, assertScreenAdmission} from './npepScreenPairing.js';
+import {buildDeviceOverview} from '../domain/npep/deviceOverview.js';
 
 const DAY = 86400000;
 const expired = date => new Date(date).getTime() <= Date.now();
@@ -353,6 +354,18 @@ export function createNpepService(prisma, deploymentProvider) {
         await audit(tx, 'DEVICE_REVOKED', current.id, current.schoolId, claims?.accountId);
       }
       return {deviceId: current.id, state: 'REVOKED'};
+    }),
+    overview: (claims, schoolId, query) => transaction(async (tx, config) => {
+      await schoolLock(tx, schoolId);
+      await administrator(tx, claims, schoolId);
+      const records = await tx.npepDevice.findMany({where: {schoolId}, orderBy: {id: 'asc'},
+        select: {id: true, schoolId: true, administrativeClassId: true, screenBindingId: true, bindingRevision: true,
+          deviceName: true, state: true, credentialExpiresAt: true, lastSeenAt: true, status: true,
+          serverInstanceId: true, deploymentEpoch: true}});
+      const bindings = await tx.classroomScreenBinding.findMany({where: {schoolId}, select: {id: true, name: true,
+        administrativeClassId: true, isActive: true, npepBindingRevision: true,
+        administrativeClass: {select: {name: true, isActive: true, type: true, term: {select: {status: true, schoolId: true}}}}}});
+      return buildDeviceOverview(records, bindings, config, query);
     }),
     list: (claims, schoolId, {limit, cursor}) => transaction(async (tx, config) => {
       await schoolLock(tx, schoolId);

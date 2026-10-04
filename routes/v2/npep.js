@@ -3,6 +3,7 @@ import {prisma} from '../../utils/prisma.js';
 import {verifyAccessToken} from '../../utils/tokenManager.js';
 import {createNpepService} from '../../services/npepService.js';
 import {readDeployment} from '../../domain/npep/deployment.js';
+import {readOverviewQuery} from '../../domain/npep/deviceOverview.js';
 import {NpepError, UUID, OPAQUE_ID, validate, parseStrictJson, bearer, envelope, fail, hash as hashScreenToken} from '../../domain/npep/wire.js';
 import {createNpepNotificationService, notificationCursor} from '../../services/npepNotificationService.js';
 import {validateNotification} from '../../domain/npep/notifications.js';
@@ -248,6 +249,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   }));
   router.post('/schools/:schoolId/pairings/:id/approve', admin, body('approvePairing'), send(req => service.approve(req.npepClaims, req.params.schoolId, req.params.id, req.body)));
   router.post('/schools/:schoolId/pairings/:id/cancel', admin, body('cancelPairing'), send(req => service.cancel(req.params.id, null, req.npepClaims, req.params.schoolId)));
+  router.get('/schools/:schoolId/device-overview', admin, send(req => service.overview(req.npepClaims, req.params.schoolId, readOverviewQuery(req.query))));
   router.get('/schools/:schoolId/devices', admin, send(req => {
     const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
     if (Object.keys(req.query).some(key => !['limit', 'cursor'].includes(key)) || !Number.isInteger(limit) || limit < 1 || limit > 100 ||
