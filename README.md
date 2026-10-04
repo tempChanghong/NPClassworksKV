@@ -18,7 +18,7 @@
 
 NPClassworksKV 是 [NPClassworks](https://github.com/tempChanghong/NPClassworks) 的配套后端，负责学校组织结构、账号与权限、作业和通知、历史版本、班级大屏设备以及 Socket.IO 实时同步。它源自 Classworks 后端体系，现已针对多行政班、选科定班和走班教学进行了扩展。
 
-当前版本：**[v1.2.0 · Hitori（后藤一里）](https://github.com/tempChanghong/NPClassworksKV/releases/tag/v1.2.0)**，与同一产品发布中的 NPClassworks 前端保持一致。更新范围与升级方法见[发版说明](docs/release-v1.2.0.md)。
+本次版本：**v1.2.5 · Hitori（后藤一里）**，与同一产品发布中的 NPClassworks 前端保持一致。更新范围与升级方法见[发版说明](docs/release-v1.2.5.md)，下载见[发布页](https://github.com/tempChanghong/NPClassworksKV/releases)。
 
 ## 主要能力
 
