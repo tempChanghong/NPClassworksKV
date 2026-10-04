@@ -6,10 +6,17 @@ import {validateNoise} from '../domain/npep/noise.js';
 import {identityOf} from '../domain/npep/runtimeControl.js';
 
 function fixture() {
-  const d = {id: randomUUID(), serverInstanceId: randomUUID(), deploymentEpoch: randomUUID(), bindingRevision: 1, sessionId: randomUUID(), statusEpoch: 1};
+  const d = {id: randomUUID(), screenBindingId: randomUUID(), serverInstanceId: randomUUID(),
+    deploymentEpoch: randomUUID(), bindingRevision: 1, sessionId: randomUUID(), statusEpoch: 1};
   const context = {identity: identityOf(d), sessionId: d.sessionId, statusEpoch: 1, runId: randomUUID(), controlEpoch: randomUUID()};
   let data = {status: null, commands: [], reports: []};
-  const tx = {npepSessionReceipt: {findUnique: async () => ({deviceId: d.id, runId: context.runId, statusEpoch: 1})}};
+  let scheduled = null;
+  const tx = {
+    $queryRaw: async strings => strings[0].includes('NpepNoiseScheduleDevice') && scheduled ? [{data: scheduled}] : [],
+    npepSessionReceipt: {findUnique: async () => ({deviceId: d.id, runId: context.runId, statusEpoch: 1})},
+    classroomScreenBinding: {findUnique: async () => ({credentialVersion: 1})},
+    npepNoiseScheduleDevice: {findUnique: async () => ({data: scheduled})},
+  };
   const base = {withRuntimeDevice: (_a, f) => f(tx, d), withNoiseScreen: (_s, f) => f(tx, d), withRuntimeAdmin: (_c, _s, _d, f) => f(tx, d)};
   const repo = {read: async () => structuredClone(data), save: async (_tx, _id, value) => { data = structuredClone(value); }};
   const service = createNpepNoiseService(base, repo);
@@ -17,7 +24,8 @@ function fixture() {
     startedAt: null, currentDbfs: null, quality: 'Waiting', summary: null, algorithm: 'pcm-energy-v1', uploadError: null};
   const body = {requestId: randomUUID(), context, sequence: 1, status, receipts: [], reports: []};
   const command = () => ({requestId: randomUUID(), action: 'START', instanceId: status.instanceId, revision: status.revision, sessionId: status.sessionId, durationSeconds: 10800});
-  return {service, d, context, status, body, command, data: () => data};
+  return {service, d, context, status, body, command, data: () => data,
+    schedule: value => { scheduled = value; }};
 }
 
 test('noise control accepts only bounded statistics, never arbitrary audio or paths', () => {
@@ -63,4 +71,19 @@ test('stop targets the reported session and starts require a configured micropho
   await f.service.exchange('device', {...f.body, sequence: 2});
   await assert.rejects(f.service.create('screen', {...f.command(), action: 'STOP', sessionId: randomUUID()}), {code: 'STATE_CHANGED'});
   assert.equal((await f.service.create('screen', {...f.command(), action: 'STOP'})).command.sessionId, f.status.sessionId);
+});
+
+test('scheduled STOP rejects the legacy route and requires a binding-scoped management grant', async () => {
+  const f = fixture();
+  f.status.state = 'Active';
+  f.status.sessionId = randomUUID();
+  f.schedule({status: {owner: 'Schedule', reason: 'WINDOW_ACTIVE', sessionId: f.status.sessionId,
+    window: {start: '2026-10-04T19:00:00.000', end: '2026-10-04T20:00:00.000'}}});
+  await f.service.exchange('device', f.body);
+  const stop = {...f.command(), action: 'STOP'};
+  await assert.rejects(f.service.create('screen', stop), {code: 'MANAGEMENT_REQUIRED'});
+  const granted = await f.service.create('screen', stop,
+    {bindingId: f.d.screenBindingId, credentialVersion: 1});
+  assert.equal(granted.managementGrant.sessionId, stop.sessionId);
+  assert.equal(granted.command.action, 'STOP');
 });

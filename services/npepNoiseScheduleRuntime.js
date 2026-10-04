@@ -88,6 +88,8 @@ export function createNpepNoiseScheduleRuntime(base,repo=noiseScheduleRuntimeRep
         a.sessions.push({sessionId:b.status.sessionId,window:b.status.window,version:b.status.version,receivedAt:new Date().toISOString()});
       const policy=await repo.policy(tx,d);
       Object.assign(a,{context:b.context,sequence:b.sequence,digest:digest(b),status:b.status,receivedAt:new Date().toISOString()});
+      if (b.status.reason === 'EXAM_PAUSED')
+        await tx.npepNoiseDisplayReturn.deleteMany({where:{screenBindingId:d.screenBindingId}});
       clean(a);
       a.reply={policy,leaseSeconds:86400,confirmed:true,command:a.commands.find(c=>!c.receipt)?.command??null};
       await repo.save(tx,d.id,a); return a.reply;

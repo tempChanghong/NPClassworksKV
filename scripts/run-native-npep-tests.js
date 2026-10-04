@@ -72,11 +72,14 @@ for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => {
 try {
   const desktopOption = process.argv.indexOf('--desktop-root');
   if (desktopOption >= 0 && !process.argv[desktopOption + 1]) throw new Error('--desktop-root requires a path');
-  const desktopRoot = resolve(desktopOption >= 0 ? process.argv[desktopOption + 1] : join(root, '../NPEduTools'));
-  const artifacts = join(desktopRoot, '.artifacts/n3-tests');
-  run('dotnet', ['build', join(desktopRoot, 'tests/NPEduTools.Npep.Acceptance/NPEduTools.Npep.Acceptance.csproj'), '--artifacts-path', artifacts, '--verbosity', 'quiet'], env);
-  env.NPEP_N3_ACCEPTANCE_DLL = join(artifacts, 'bin/NPEduTools.Npep.Acceptance/debug/NPEduTools.Npep.Acceptance.dll');
-  await access(env.NPEP_N3_ACCEPTANCE_DLL);
+  if (process.argv.includes('--skip-desktop')) delete env.NPEP_N3_ACCEPTANCE_DLL;
+  else {
+    const desktopRoot = resolve(desktopOption >= 0 ? process.argv[desktopOption + 1] : join(root, '../NPEduTools'));
+    const artifacts = join(desktopRoot, '.artifacts/n3-tests');
+    run('dotnet', ['build', join(desktopRoot, 'tests/NPEduTools.Npep.Acceptance/NPEduTools.Npep.Acceptance.csproj'), '--artifacts-path', artifacts, '--verbosity', 'quiet'], env);
+    env.NPEP_N3_ACCEPTANCE_DLL = join(artifacts, 'bin/NPEduTools.Npep.Acceptance/debug/NPEduTools.Npep.Acceptance.dll');
+    await access(env.NPEP_N3_ACCEPTANCE_DLL);
+  }
   run(join(bin, 'initdb' + suffix), ['-D', data, '-U', 'npclassworks_test', '--pwfile', passwordFile, '--auth=scram-sha-256', '--encoding=UTF8', '--locale=C'], env, true);
   run(join(bin, 'pg_ctl' + suffix), ['-D', data, '-l', join(directory, 'postgres.log'), '-o', `-h 127.0.0.1 -p ${port}`, '-w', '-t', '30', 'start'], env, true);
   started = true;

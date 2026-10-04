@@ -2,6 +2,7 @@ import {randomUUID} from 'node:crypto';
 import {digest, fail} from '../domain/npep/wire.js';
 import {identityOf, requireSame} from '../domain/npep/runtimeControl.js';
 import {noiseRepository} from './npepNoiseRepository.js';
+import {scheduledStopProtected} from './npepNoiseManagementService.js';
 
 const active = s => ['Starting', 'Active', 'Stopping'].includes(s?.state);
 const now = () => new Date().toISOString();
@@ -21,11 +22,21 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
   return {
     screen: token => base.withNoiseScreen(token, view),
     management: (claims, school, id) => base.withRuntimeAdmin(claims, school, id, view),
-    create: (token, b) => base.withNoiseScreen(token, async (tx, d) => {
+    create: (token, b, grant = null) => base.withNoiseScreen(token, async (tx, d) => {
       if (!d) fail(409, 'NO_NATIVE_DEVICE');
       const a = await repo.read(tx, d.id); clean(a);
+      const protectedStop = b.action === 'STOP' && await scheduledStopProtected(tx, d, b.sessionId);
       const old = a.commands.find(c => c.requestId === b.requestId);
-      if (old) { requireSame(old.digest, digest(b), 'IDEMPOTENCY_CONFLICT'); return old; }
+      if (old) {
+        requireSame(old.digest, digest(b), 'IDEMPOTENCY_CONFLICT');
+        if (protectedStop && !old.managementGrant) fail(403, 'MANAGEMENT_REQUIRED');
+        return old;
+      }
+      if (protectedStop) {
+        const binding = await tx.classroomScreenBinding.findUnique({where: {id: d.screenBindingId}});
+        if (!grant || grant.bindingId !== d.screenBindingId
+          || grant.credentialVersion !== binding?.credentialVersion) fail(403, 'MANAGEMENT_REQUIRED');
+      }
       if (!online(a, d)) fail(409, 'DEVICE_OFFLINE');
       requireSame([b.instanceId, b.revision, b.sessionId], [a.status.instanceId, a.status.revision, a.status.sessionId]);
       if (b.action === 'START' && (active(a.status) || !a.status.configured)) fail(409, active(a.status) ? 'NOISE_BUSY' : 'MICROPHONE_NOT_CONFIGURED');
@@ -33,7 +44,11 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
       if (a.commands.some(c => !c.receipt)) fail(409, 'COMMAND_PENDING');
       const command = {commandId: randomUUID(), action: b.action, instanceId: b.instanceId, revision: b.revision,
         sessionId: b.sessionId, durationSeconds: b.durationSeconds, expiresAt: new Date(Date.now() + 30000).toISOString()};
-      const record = {command, requestId: b.requestId, digest: digest(b), receipt: null, context: a.context};
+      const schedule = protectedStop ? await tx.npepNoiseScheduleDevice.findUnique({where: {deviceId: d.id}}) : null;
+      const record = {command, requestId: b.requestId, digest: digest(b), receipt: null, context: a.context,
+        ...(protectedStop ? {managementGrant: {instanceId: b.instanceId, revision: b.revision,
+          sessionId: b.sessionId, window: schedule?.data?.status?.window || null,
+          bindingId: d.screenBindingId, credentialVersion: grant.credentialVersion}} : {})};
       a.commands.push(record); await repo.save(tx, d.id, a); return record;
     }),
     exchange: (auth, b) => base.withRuntimeDevice(auth, async (tx, d) => {

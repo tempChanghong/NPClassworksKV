@@ -16,6 +16,11 @@ import {createNpepNoiseScheduleService} from '../../services/npepNoiseScheduleSe
 import {validateScheduleQuery, validateScheduleWrite} from '../../domain/npep/noiseSchedules.js';
 import {createNpepNoiseScheduleRuntime} from '../../services/npepNoiseScheduleRuntime.js';
 import {validateNoiseScheduleWire} from '../../domain/npep/noiseScheduleWire.js';
+import {validateDisplayReturn, validateDisplaySetting} from '../../domain/npep/noiseDisplay.js';
+import {createNpepNoiseDisplayService} from '../../services/npepNoiseDisplayService.js';
+import {validateNoiseManagement} from '../../domain/npep/noiseManagement.js';
+import {createNpepNoiseManagementService} from '../../services/npepNoiseManagementService.js';
+import {authenticateClassroomScreen} from '../../services/classroomScreenService.js';
 
 export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true} = {}) {
   const router = express.Router();
@@ -26,6 +31,8 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const noise = createNpepNoiseService(service);
   const schedules = createNpepNoiseScheduleService(service);
   const scheduleRuntime = createNpepNoiseScheduleRuntime(service);
+  const noiseDisplay = createNpepNoiseDisplayService(service);
+  const noiseManagement = createNpepNoiseManagementService(service, noise);
   router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
     // Early protocol/parser errors must still correlate with the caller's request.
@@ -38,6 +45,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
       if (/^\/(?:device\/noise-exchange|screen\/noise(?:\/commands)?|schools\/[^/]+\/devices\/[^/]+\/noise)\/?$/i.test(req.path)) req.npepVersion = '0.6';
       if (/^\/schools\/[^/]+\/noise-schedules(?:\/preview)?\/?$/i.test(req.path)) req.npepVersion = '0.7';
       if (/^\/(?:device\/noise-schedule|screen\/noise-schedule(?:\/resume)?|schools\/[^/]+\/devices\/[^/]+\/noise-schedule)\/?$/i.test(req.path)) req.npepVersion = '0.7';
+      if (/^\/(?:screen\/noise-display(?:\/return)?|schools\/[^/]+\/noise-display-settings|device\/noise-management\/(?:status|authorize)|screen\/noise-management\/commands)\/?$/i.test(req.path)) req.npepVersion = '0.8';
       if (req.get('X-NPEP-Version') !== req.npepVersion) fail(426, 'PROTOCOL_UNSUPPORTED');
       if (req.method === 'POST' && !req.is('application/json')) fail(400, 'INVALID_REQUEST');
       next();
@@ -118,6 +126,17 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   }));
   const scheduleWire = name => (req,_res,next) => next(validateNoiseScheduleWire(name,req.body)?undefined:new NpepError(400,'INVALID_REQUEST'));
   router.get('/screen/noise-schedule',noQuery,send(req=>scheduleRuntime.screen(screenToken(req))));
+  router.get('/screen/noise-display', noQuery, send(req => noiseDisplay.screen(screenToken(req))));
+  router.post('/screen/noise-display/return', noQuery,
+    (req, _res, next) => next(validateDisplayReturn(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => noiseDisplay.startReturn(screenToken(req), req.body)));
+  router.get('/schools/:schoolId/noise-display-settings', admin,
+    (req, _res, next) => next(Object.keys(req.query).every(key => key === 'termId')
+      && (!req.query.termId || OPAQUE_ID.test(req.query.termId)) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => noiseDisplay.listSettings(req.npepClaims, req.params.schoolId, req.query.termId)));
+  router.post('/schools/:schoolId/noise-display-settings', admin, noQuery,
+    (req, _res, next) => next(validateDisplaySetting(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => noiseDisplay.saveSetting(req.npepClaims, req.params.schoolId, req.body)));
   router.post('/screen/noise-schedule/resume',noQuery,scheduleWire('resumeRequest'),send(req=>scheduleRuntime.resume(screenToken(req),req.body)));
   router.get('/schools/:schoolId/devices/:id/noise-schedule',admin,noQuery,send(req=>scheduleRuntime.management(req.npepClaims,req.params.schoolId,req.params.id)));
   router.post('/device/noise-schedule',noQuery,scheduleWire('exchangeRequest'),send(async req=>{
@@ -131,6 +150,26 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.post('/schools/:schoolId/noise-schedules', admin, noQuery, scheduleBody, send(req => schedules.save(req.npepClaims, req.params.schoolId, req.body)));
   router.get('/screen/noise', noQuery, send(req => noise.screen(screenToken(req))));
   router.post('/screen/noise/commands', noiseBody('createRequest'), send(req => noise.create(screenToken(req), req.body)));
+  const managementBody = name => (req, _res, next) => next(validateNoiseManagement(name, req.body)
+    ? undefined : new NpepError(400, 'INVALID_REQUEST'));
+  router.post('/screen/noise-management/commands', managementBody('screenStop'), send(async req => {
+    const token = screenToken(req);
+    let binding;
+    try { binding = await authenticateClassroomScreen(token); }
+    catch { fail(401, 'SCREEN_TOKEN_INVALID'); }
+    await rate('screen-noise-management', binding.id, 10, 60);
+    return noiseManagement.screenStop(token, req.body);
+  }));
+  router.post('/device/noise-management/status', managementBody('status'), send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'noise-management-status', 40, 60);
+    return noiseManagement.status(auth, req.body);
+  }));
+  router.post('/device/noise-management/authorize', managementBody('authorize'), send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'noise-management-authorize', 40, 60);
+    return noiseManagement.authorize(auth, req.body);
+  }));
   router.get('/schools/:schoolId/devices/:id/noise', admin, noQuery, send(req => noise.management(req.npepClaims, req.params.schoolId, req.params.id)));
   router.post('/device/noise-exchange', noiseBody('exchangeRequest'), send(async req => {
     const auth = deviceAuth(req);
