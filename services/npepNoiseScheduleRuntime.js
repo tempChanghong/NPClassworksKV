@@ -35,8 +35,11 @@ export const noiseScheduleRuntimeRepository = {
 };
 
 export function createNpepNoiseScheduleRuntime(base,repo=noiseScheduleRuntimeRepository) {
-  const fresh=(a,d)=>!!a.status && a.context?.sessionId===d.sessionId && a.context?.statusEpoch===d.statusEpoch &&
-    digest(a.context.identity)===digest(identityOf(d)) && Date.now()-Date.parse(a.receivedAt)<15000;
+  const fresh=(a,d)=>{
+    const age=Date.now()-Date.parse(a.receivedAt);
+    return !!a.status && a.context?.sessionId===d.sessionId && a.context?.statusEpoch===d.statusEpoch &&
+      digest(a.context.identity)===digest(identityOf(d)) && age>=0 && age<15000;
+  };
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.expiresAt)<=Date.now()) c.receipt={commandId:c.command.commandId,outcome:'UNKNOWN'};
     a.commands=a.commands.slice(-32);

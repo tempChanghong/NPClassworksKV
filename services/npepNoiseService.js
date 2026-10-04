@@ -7,7 +7,10 @@ import {scheduledStopProtected} from './npepNoiseManagementService.js';
 const active = s => ['Starting', 'Active', 'Stopping'].includes(s?.state);
 const now = () => new Date().toISOString();
 export function createNpepNoiseService(base, repo = noiseRepository) {
-  const online = (a, d) => !!a.status && a.context.sessionId === d.sessionId && a.context.statusEpoch === d.statusEpoch && Date.now() - Date.parse(a.receivedAt) < 15000;
+  const online = (a, d) => {
+    const age = Date.now() - Date.parse(a.receivedAt);
+    return !!a.status && a.context.sessionId === d.sessionId && a.context.statusEpoch === d.statusEpoch && age >= 0 && age < 15000;
+  };
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.command.expiresAt) <= Date.now()) c.receipt = {commandId: c.command.commandId, outcome: 'UNKNOWN', reason: 'COMMAND_EXPIRED'};
     a.commands = a.commands.slice(-64);

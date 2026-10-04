@@ -105,6 +105,29 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
   await verifyNoiseDisplayPresenceDatabase(t, {fixture, request, prisma, req, activate, open, identity});
 
   const requestN2 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.2', ...options.headers}});
+  await t.test('Noise lost report acknowledgement and replacement Host deduplicate through HTTP/SQL', async () => {
+    const f = await fixture(), d = await activate(f), session = await open(d);
+    const n6 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.6', ...options.headers}});
+    const context = {identity: {...identity, deviceId: d.deviceId, bindingRevision: d.bindingRevision, credentialGeneration: 1},
+      runId: session.body.runId, sessionId: session.sessionId, statusEpoch: session.statusEpoch, controlEpoch: randomUUID()};
+    const report = {sessionId: randomUUID(), startedAt: new Date().toISOString(), endedAt: new Date().toISOString(),
+      deviceName: '模拟统计', algorithm: 'pcm-energy-v1', outcome: 'Stopped',
+      summary: {elapsedSeconds: 2, sampledSeconds: 0, coverage: 0, energyMeanDbfs: null, peakDbfs: null, clippedPercent: 0, frames: 0}};
+    const status = {instanceId: randomUUID(), revision: 0, sessionId: null, state: 'Idle', deviceName: null, configured: true,
+      startedAt: null, currentDbfs: null, quality: 'Waiting', summary: null, algorithm: 'pcm-energy-v1', uploadError: null};
+    const body = req({context, sequence: 1, status, receipts: [], reports: [report]});
+    // Ignore the first acknowledgement after commit, as when the connection drops on the response.
+    assert.equal((await n6('/device/noise-exchange', {auth: d.auth, body})).status, 200);
+    assert.deepEqual((await n6('/device/noise-exchange', {auth: d.auth, body})).data.acceptedReports, [report.sessionId]);
+    const replacement = await open(d, session.statusEpoch);
+    const retried = req({...body, context: {...context, runId: replacement.body.runId,
+      sessionId: replacement.sessionId, statusEpoch: replacement.statusEpoch}});
+    assert.deepEqual((await n6('/device/noise-exchange', {auth: d.auth, body: retried})).data.acceptedReports, [report.sessionId]);
+    assert.equal((await n6('/device/noise-exchange', {auth: d.auth, body})).error.code, 'SESSION_SUPERSEDED');
+    const view = await n6(`/schools/${f.school.id}/devices/${d.deviceId}/noise`, {auth: f.admin});
+    assert.equal(view.status, 200); assert.equal(view.data.reports.length, 1);
+    assert.equal(view.data.reports[0].sessionId, report.sessionId);
+  });
   await t.test('Noise screen authentication isolation and actual .NET HTTP/PostgreSQL monitoring', {skip: !process.env.NPEP_N3_ACCEPTANCE_DLL, timeout: 120000}, async () => {
     const f = await fixture(), other = await fixture();
     const screenToken = secret(), otherToken = secret();
@@ -131,7 +154,7 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     const n3 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.4', ...options.headers}});
     const context = {identity: {...identity, deviceId: d.deviceId, bindingRevision: d.bindingRevision, credentialGeneration: 1},
       runId: session.body.runId, sessionId: session.sessionId, statusEpoch: session.statusEpoch, controlEpoch: randomUUID()};
-    const policy = {consentId: randomUUID(), policyRevision: 1, enabled: true, supported: true, pairedExamControl: true};
+    const policy = {consentId: randomUUID(), policyRevision: 1, enabled: true, supported: true, pairedExamControl: true, remoteDailyControl: true};
     const deviceRequest = extra => ({auth: d.auth, body: req({context, ...extra})});
     assert.equal((await n3('/device/runtime-control-policy', deviceRequest({policy}))).status, 200);
     const status = {runtimeMode: 'OTHER', runtimePhase: 'IDLE', runtimeRevision: 0, modeRevision: 0, configurationRevision: 0,
@@ -146,7 +169,8 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     const both = await Promise.all([n3(base, {auth: f.admin, body: create}), n3(base, {auth: f.admin, body: create})]);
     assert.deepEqual(both.map(r => r.status).sort(), [200, 201]);
     const op = both[0].data; assert.equal(both[1].data.operationId, op.operationId); assert.equal(validateRuntime('operation', op), true);
-    const coalesced = await n3(base, {auth: f.admin, body: {...create, requestId: randomUUID()}});
+    const coalescedBody = {...create, requestId: randomUUID()};
+    const coalesced = await n3(base, {auth: f.admin, body: coalescedBody});
     assert.equal(coalesced.status, 200); assert.equal(coalesced.data.operationId, op.operationId);
     const startBody = {...create, context}; delete startBody.target; delete startBody.scope; delete startBody.controlEpoch;
     await prisma.schoolMember.update({where: {schoolId_accountId: {schoolId: f.school.id, accountId: f.account.id}}, data: {role: 'VIEWER'}});
@@ -166,6 +190,24 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     assert.equal(ended.status, 200, ended.error?.code); assert.equal(ended.data.state, 'PARTIAL'); assert.ok(ended.data.localEndedAt);
     const rows = await observer.query('SELECT "resolvedAt" FROM "NpepRuntimeOperation" WHERE id=$1', [op.operationId]);
     assert.ok(rows.rows[0].resolvedAt);
+    const daily = await n3(base, {auth: f.admin, body: {...create, requestId: randomUUID(), target: 'DAILY'}});
+    assert.equal(daily.status, 201);
+    const dailyGrant = await n3(`/device/runtime-operations/${daily.data.operationId}/start`, {auth: d.auth, body: {...startBody, requestId: randomUUID()}});
+    assert.equal(dailyGrant.status, 200);
+    const dailyEvent = {...event, eventId: randomUUID(), operationId: daily.data.operationId, state: 'SUCCEEDED', step: 'VERIFY', reasonCode: null,
+      evidence: {...evidence, examAware: 'EXITED', classIsland: 'READY', remoteExamPause: false, startup: 'DAILY_MODE_APPLIED', sideEffects: 'APPLIED'},
+      execution: Object.fromEntries(['runId', 'sessionId', 'statusEpoch', 'controlEpoch', 'grantId'].map(k => [k, dailyGrant.data.grant[k]]))};
+    assert.equal((await n3('/device/runtime-operation-events', deviceRequest({events: [dailyEvent]}))).data.results[0].status, 'ACCEPTED');
+    const replay = await n3(base, {auth: f.admin, body: coalescedBody});
+    assert.equal(replay.status, 200); assert.equal(replay.data.operationId, op.operationId);
+    assert.equal((await n3('/device/runtime-operations', {auth: d.auth})).data.items.length, 0);
+    assert.equal((await n3(base, {auth: f.admin, body: {...coalescedBody, target: 'DAILY'}})).error.code, 'IDEMPOTENCY_CONFLICT');
+    // Reconstruct the service with no process-local request map; the alias must survive in SQL.
+    const {createNpepRuntimeService} = await import('../services/npepRuntimeService.js');
+    const restarted = createNpepRuntimeService(createNpepService(prisma, deployment));
+    const afterRestart = await restarted.create({accountId: f.account.id, sessionId: f.session.id,
+      tokenVersion: f.account.tokenVersion, exp: Math.floor(Date.now() / 1000) + 3600}, f.school.id, d.deviceId, coalescedBody);
+    assert.equal(afterRestart.created, false); assert.equal(afterRestart.data.operationId, op.operationId);
   });
   const notification = (f, extra = {}) => prisma.publication.create({data: {type: 'NOTICE', content: '真实通知正文',
     status: 'PUBLISHED', publishAt: new Date(Date.now() - 60000), authorAccountId: f.account.id,

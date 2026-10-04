@@ -31,7 +31,8 @@ export function requireReady(p, body, now = Date.now()) {
     [p.policy.consentId, p.policy.policyRevision, p.context.controlEpoch], 'POLICY_CHANGED');
 }
 export function operationView(op, now = Date.now()) {
-  return {...op.view, freshness: !op.view.progressReceivedAt ? 'UNKNOWN' : now - Date.parse(op.view.progressReceivedAt) <= 60000 ? 'CURRENT' : 'STALE'};
+  const age = now - Date.parse(op.view.progressReceivedAt);
+  return {...op.view, freshness: !op.view.progressReceivedAt ? 'UNKNOWN' : age >= 0 && age <= 60000 ? 'CURRENT' : 'STALE'};
 }
 
 export function applyRuntimeEvent(op, event, now = new Date().toISOString()) {
