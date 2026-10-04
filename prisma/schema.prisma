@@ -827,6 +827,27 @@ model NpepNoiseDisplaySettingRequest {
   @@id([schoolId, requestId])
 }
 
+/// A server-observed browser tab heartbeat, scoped to its active native schedule window.
+model NpepNoiseDisplayPresence {
+  screenBindingId   String   @db.VarChar(191)
+  displaySessionId  String   @db.Uuid
+  credentialVersion Int
+  deviceId          String   @db.Uuid
+  instanceId        String   @db.Uuid
+  revision          Int
+  captureSessionId  String   @db.Uuid
+  windowStart       String   @db.VarChar(32)
+  windowEnd         String   @db.VarChar(32)
+  state             String   @db.VarChar(24)
+  sequence          Int
+  requestId         String   @db.Uuid
+  digest            String   @db.VarChar(64)
+  receivedAt        DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([screenBindingId, displaySessionId])
+  @@index([screenBindingId, receivedAt])
+}
+
 model NpepNoiseManagementDevice {
   deviceId String @id @db.Uuid
   data     Json   @db.JsonB

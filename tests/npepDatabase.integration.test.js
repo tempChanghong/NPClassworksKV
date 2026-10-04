@@ -16,6 +16,7 @@ import {verifyScreenPairingDatabase} from './helpers/screenPairingDatabase.js';
 import {verifyPairingBatchDatabase} from './helpers/pairingBatchDatabase.js';
 import {verifyNoiseScheduleRuntimeDatabase} from './helpers/noiseScheduleRuntimeDatabase.js';
 import {verifyNoiseManagementDatabase} from './helpers/noiseManagementDatabase.js';
+import {verifyNoiseDisplayPresenceDatabase} from './helpers/noiseDisplayPresenceDatabase.js';
 
 test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {skip: process.env.RUN_DATABASE_TESTS !== 'true', timeout: 360000}, async t => {
   const url = new URL(process.env.DATABASE_URL);
@@ -45,11 +46,14 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
     const result = await response.json();
     assert.equal(response.headers.get('cache-control'), 'no-store');
     if (!response.ok && headers['X-NPEP-Version'] === '0.4') assert.equal(validateRuntime('errorEnvelope', result), true, 'N3 error shape');
-    else if (!response.ok && !['0.7', '0.8'].includes(result.protocolVersion)
+    else if (!response.ok && !['0.7', '0.8', '0.9'].includes(result.protocolVersion)
       && !['0.2', '0.6'].includes(headers['X-NPEP-Version']))
       assert.equal(validate('error', result), true, 'error must have the agreed public shape');
     if (headers['X-NPEP-Version'] === '0.7') assert.equal(result.protocolVersion, '0.7');
-    if (headers['X-NPEP-Version'] === '0.8') assert.equal(result.protocolVersion, '0.8');
+    if (headers['X-NPEP-Version'] === '0.8' && response.status !== 426)
+      assert.equal(result.protocolVersion, '0.8');
+    if (headers['X-NPEP-Version'] === '0.9' && response.status !== 426)
+      assert.equal(result.protocolVersion, '0.9');
     if (headers['X-NPEP-Version'] === '0.2') assert.equal(result.protocolVersion, '0.2');
     return {status: response.status, data: result.data, error: result.error};
   }
@@ -98,6 +102,7 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
       classIsland: {connection: 'DISCONNECTED', bridgeVersion: null}, examAware: {connection: 'UNKNOWN', bridgeVersion: null}}});
 
   await verifyNoiseManagementDatabase(t, {fixture, request, prisma, req, activate, open, identity});
+  await verifyNoiseDisplayPresenceDatabase(t, {fixture, request, prisma, req, activate, open, identity});
 
   const requestN2 = (path, options = {}) => request(path, {...options, headers: {'X-NPEP-Version': '0.2', ...options.headers}});
   await t.test('Noise screen authentication isolation and actual .NET HTTP/PostgreSQL monitoring', {skip: !process.env.NPEP_N3_ACCEPTANCE_DLL, timeout: 120000}, async () => {

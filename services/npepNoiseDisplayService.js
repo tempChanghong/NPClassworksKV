@@ -7,7 +7,8 @@ import {noiseScheduleRuntimeRepository} from './npepNoiseScheduleRuntime.js';
 const windowMatches = (a, b) => a?.start === b?.start && a?.end === b?.end;
 const recent = (value, now) => !!value && Number.isFinite(Date.parse(value))
   && now - Date.parse(value) >= 0 && now - Date.parse(value) < 15000;
-const exposeReturn = (value, now) => value ? {
+const exposeReturn = (value, now, includeRequestId = false) => value ? {
+  ...(includeRequestId ? {requestId: value.requestId} : {}),
   window: {start: value.windowStart, end: value.windowEnd},
   startedAt: value.startedAt.toISOString(), expiresAt: value.expiresAt.toISOString(),
   returnMinutes: value.returnMinutes, remainingSeconds: Math.max(0, Math.ceil((value.expiresAt.getTime() - now) / 1000)),
@@ -37,6 +38,46 @@ export function createNpepNoiseDisplayService(base, repository = noiseScheduleRe
       || !windowMatches(s.window, requestedWindow)) fail(409, 'DISPLAY_SESSION_CHANGED');
     return s.window;
   }
+  async function lease(tx, binding, window) {
+    return tx.npepNoiseDisplayReturn.findUnique({where: {
+      screenBindingId_windowStart_windowEnd: {screenBindingId: binding.id,
+        windowStart: window.start, windowEnd: window.end},
+    }});
+  }
+  async function startReturnInTx(tx, d, body) {
+    if (!d) fail(409, 'NO_NATIVE_DEVICE');
+    const now = Date.now(), settings = await context(tx, d);
+    const window = await activeWindow(tx, d, body.window, now);
+    const key = {screenBindingId: settings.binding.id, windowStart: window.start, windowEnd: window.end};
+    const previous = await lease(tx, settings.binding, window);
+    if (previous?.credentialVersion === settings.binding.credentialVersion
+      && (previous.requestId === body.requestId || previous.expiresAt.getTime() > now))
+      return {settings, row: previous, now};
+    const claimed = body.offlineStartedAt && Date.parse(body.offlineStartedAt);
+    if (body.offlineStartedAt && (!claimed || claimed > now || claimed < now - 3600000))
+      fail(409, 'OFFLINE_RETURN_UNCONFIRMED');
+    const startedAt = claimed || now;
+    // A remembered offline policy can only shorten the currently configured limit.
+    const returnMinutes = body.returnMinutes === undefined
+      ? settings.returnMinutes : Math.min(body.returnMinutes, settings.returnMinutes);
+    const row = await tx.npepNoiseDisplayReturn.upsert({where: {screenBindingId_windowStart_windowEnd: key},
+      create: {...key, credentialVersion: settings.binding.credentialVersion, requestId: body.requestId,
+        startedAt: new Date(startedAt), expiresAt: new Date(startedAt + returnMinutes * 60000),
+        returnMinutes},
+      update: {credentialVersion: settings.binding.credentialVersion, requestId: body.requestId,
+        startedAt: new Date(startedAt), expiresAt: new Date(startedAt + returnMinutes * 60000),
+        returnMinutes}});
+    return {settings, row, now};
+  }
+  async function deviceView(tx, d, window) {
+    const now = Date.now(), settings = await context(tx, d);
+    await activeWindow(tx, d, window, now);
+    const row = await lease(tx, settings.binding, window);
+    return {supported: true, serverNow: new Date(now).toISOString(),
+      returnMinutes: settings.returnMinutes,
+      activeReturn: row?.credentialVersion === settings.binding.credentialVersion
+        && row.expiresAt.getTime() > now ? exposeReturn(row, now, true) : null};
+  }
   async function view(tx, d) {
     if (!d) return {supported: false, serverNow: new Date().toISOString(), returnMinutes: 10,
       source: 'Default', activeReturn: null};
@@ -50,38 +91,23 @@ export function createNpepNoiseDisplayService(base, repository = noiseScheduleRe
       && status.clockReady && !status.dateNeedsReview && status.sessionId
       && status.sessionId === noise.status?.sessionId && noise.status?.state === 'Active';
     const window = active ? status.window : null;
-    const row = window && await tx.npepNoiseDisplayReturn.findUnique({where: {
-      screenBindingId_windowStart_windowEnd: {screenBindingId: settings.binding.id, windowStart: window.start, windowEnd: window.end},
-    }});
+    const row = window && await lease(tx, settings.binding, window);
     return {supported: true, serverNow: new Date(now).toISOString(), returnMinutes: settings.returnMinutes,
       source: settings.source, activeReturn: row?.credentialVersion === settings.binding.credentialVersion
         ? exposeReturn(row, now) : null};
   }
   return {
+    activeWindow,
+    deviceView,
+    startForDevice: async (tx, d, body) => {
+      const {settings, row, now} = await startReturnInTx(tx, d, body);
+      return {supported: true, serverNow: new Date(now).toISOString(),
+        returnMinutes: settings.returnMinutes,
+        activeReturn: exposeReturn(row, now, true)};
+    },
     screen: token => base.withNoiseScreen(token, view),
     startReturn: (token, body) => base.withNoiseScreen(token, async (tx, d) => {
-      if (!d) fail(409, 'NO_NATIVE_DEVICE');
-      const now = Date.now(), settings = await context(tx, d);
-      const window = await activeWindow(tx, d, body.window, now);
-      const key = {screenBindingId: settings.binding.id, windowStart: window.start, windowEnd: window.end};
-      const previous = await tx.npepNoiseDisplayReturn.findUnique({where: {screenBindingId_windowStart_windowEnd: key}});
-      if (previous?.credentialVersion === settings.binding.credentialVersion
-        && (previous.requestId === body.requestId || previous.expiresAt.getTime() > now))
-        return {...await view(tx, d), activeReturn: exposeReturn(previous, now)};
-      const claimed = body.offlineStartedAt && Date.parse(body.offlineStartedAt);
-      if (body.offlineStartedAt && (!claimed || claimed > now || claimed < now - 3600000))
-        fail(409, 'OFFLINE_RETURN_UNCONFIRMED');
-      const startedAt = claimed || now;
-      // A remembered offline policy can only shorten the currently configured limit.
-      const returnMinutes = body.returnMinutes === undefined
-        ? settings.returnMinutes : Math.min(body.returnMinutes, settings.returnMinutes);
-      const row = await tx.npepNoiseDisplayReturn.upsert({where: {screenBindingId_windowStart_windowEnd: key},
-        create: {...key, credentialVersion: settings.binding.credentialVersion, requestId: body.requestId,
-          startedAt: new Date(startedAt), expiresAt: new Date(startedAt + returnMinutes * 60000),
-          returnMinutes},
-        update: {credentialVersion: settings.binding.credentialVersion, requestId: body.requestId,
-          startedAt: new Date(startedAt), expiresAt: new Date(startedAt + returnMinutes * 60000),
-          returnMinutes}});
+      const {row, now} = await startReturnInTx(tx, d, body);
       return {...await view(tx, d), activeReturn: exposeReturn(row, now)};
     }),
     listSettings: (claims, schoolId, termId) => base.withScheduleAdmin(claims, schoolId, async (tx, config) => {

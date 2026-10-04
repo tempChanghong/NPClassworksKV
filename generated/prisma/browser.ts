@@ -227,6 +227,11 @@ export type NpepNoiseDisplayReturn = Prisma.NpepNoiseDisplayReturnModel
  */
 export type NpepNoiseDisplaySettingRequest = Prisma.NpepNoiseDisplaySettingRequestModel
 /**
+ * Model NpepNoiseDisplayPresence
+ * A server-observed browser tab heartbeat, scoped to its active native schedule window.
+ */
+export type NpepNoiseDisplayPresence = Prisma.NpepNoiseDisplayPresenceModel
+/**
  * Model NpepNoiseManagementDevice
  *
  */

@@ -425,6 +425,7 @@ export const ModelName = {
   NpepNoiseDisplaySetting: 'NpepNoiseDisplaySetting',
   NpepNoiseDisplayReturn: 'NpepNoiseDisplayReturn',
   NpepNoiseDisplaySettingRequest: 'NpepNoiseDisplaySettingRequest',
+  NpepNoiseDisplayPresence: 'NpepNoiseDisplayPresence',
   NpepNoiseManagementDevice: 'NpepNoiseManagementDevice',
   NpepRateLimit: 'NpepRateLimit',
   AuditLog: 'AuditLog',
@@ -451,7 +452,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepNoiseDevice" | "npepNoiseScheduleDevice" | "npepExamPlanDevice" | "npepExamPlan" | "npepRuntimePolicy" | "npepRuntimeOperation" | "npepDeployment" | "npepPairing" | "npepScreenPairingTicket" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepNoiseSchedulePolicy" | "npepNoiseScheduleRequest" | "npepNoiseDisplaySetting" | "npepNoiseDisplayReturn" | "npepNoiseDisplaySettingRequest" | "npepNoiseManagementDevice" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision" | "npepNotificationSnapshot" | "npepNotificationExposure" | "npepNotificationReceipt"
+    modelProps: "account" | "accountPreference" | "accountSession" | "appInstall" | "autoAuth" | "device" | "kVStore" | "school" | "instanceSetup" | "schoolMember" | "academicTerm" | "grade" | "subject" | "workspace" | "workspaceSourceClass" | "administrativeClassSubject" | "workspaceMember" | "teachingAssignment" | "gradeLeadership" | "administrativeClassLeadership" | "workspaceMemberInvite" | "publication" | "publicationTarget" | "classroomScreenBinding" | "npepNoiseDevice" | "npepNoiseScheduleDevice" | "npepExamPlanDevice" | "npepExamPlan" | "npepRuntimePolicy" | "npepRuntimeOperation" | "npepDeployment" | "npepPairing" | "npepScreenPairingTicket" | "npepDevice" | "npepSessionReceipt" | "npepAudit" | "npepNoiseSchedulePolicy" | "npepNoiseScheduleRequest" | "npepNoiseDisplaySetting" | "npepNoiseDisplayReturn" | "npepNoiseDisplaySettingRequest" | "npepNoiseDisplayPresence" | "npepNoiseManagementDevice" | "npepRateLimit" | "auditLog" | "classroomScreenCommand" | "notificationScreenDelivery" | "administrativeClassStudent" | "classAttendanceDay" | "publicationRevision" | "npepNotificationSnapshot" | "npepNotificationExposure" | "npepNotificationReceipt"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3489,6 +3490,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    NpepNoiseDisplayPresence: {
+      payload: Prisma.$NpepNoiseDisplayPresencePayload<ExtArgs>
+      fields: Prisma.NpepNoiseDisplayPresenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NpepNoiseDisplayPresenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NpepNoiseDisplayPresenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        findFirst: {
+          args: Prisma.NpepNoiseDisplayPresenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NpepNoiseDisplayPresenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        findMany: {
+          args: Prisma.NpepNoiseDisplayPresenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>[]
+        }
+        create: {
+          args: Prisma.NpepNoiseDisplayPresenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        createMany: {
+          args: Prisma.NpepNoiseDisplayPresenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NpepNoiseDisplayPresenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>[]
+        }
+        delete: {
+          args: Prisma.NpepNoiseDisplayPresenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        update: {
+          args: Prisma.NpepNoiseDisplayPresenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        deleteMany: {
+          args: Prisma.NpepNoiseDisplayPresenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NpepNoiseDisplayPresenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NpepNoiseDisplayPresenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>[]
+        }
+        upsert: {
+          args: Prisma.NpepNoiseDisplayPresenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NpepNoiseDisplayPresencePayload>
+        }
+        aggregate: {
+          args: Prisma.NpepNoiseDisplayPresenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNpepNoiseDisplayPresence>
+        }
+        groupBy: {
+          args: Prisma.NpepNoiseDisplayPresenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseDisplayPresenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NpepNoiseDisplayPresenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NpepNoiseDisplayPresenceCountAggregateOutputType> | number
+        }
+      }
+    }
     NpepNoiseManagementDevice: {
       payload: Prisma.$NpepNoiseManagementDevicePayload<ExtArgs>
       fields: Prisma.NpepNoiseManagementDeviceFieldRefs
@@ -4943,6 +5018,26 @@ export const NpepNoiseDisplaySettingRequestScalarFieldEnum = {
 export type NpepNoiseDisplaySettingRequestScalarFieldEnum = (typeof NpepNoiseDisplaySettingRequestScalarFieldEnum)[keyof typeof NpepNoiseDisplaySettingRequestScalarFieldEnum]
 
 
+export const NpepNoiseDisplayPresenceScalarFieldEnum = {
+  screenBindingId: 'screenBindingId',
+  displaySessionId: 'displaySessionId',
+  credentialVersion: 'credentialVersion',
+  deviceId: 'deviceId',
+  instanceId: 'instanceId',
+  revision: 'revision',
+  captureSessionId: 'captureSessionId',
+  windowStart: 'windowStart',
+  windowEnd: 'windowEnd',
+  state: 'state',
+  sequence: 'sequence',
+  requestId: 'requestId',
+  digest: 'digest',
+  receivedAt: 'receivedAt'
+} as const
+
+export type NpepNoiseDisplayPresenceScalarFieldEnum = (typeof NpepNoiseDisplayPresenceScalarFieldEnum)[keyof typeof NpepNoiseDisplayPresenceScalarFieldEnum]
+
+
 export const NpepNoiseManagementDeviceScalarFieldEnum = {
   deviceId: 'deviceId',
   data: 'data'
@@ -5572,6 +5667,7 @@ export type GlobalOmitConfig = {
   npepNoiseDisplaySetting?: Prisma.NpepNoiseDisplaySettingOmit
   npepNoiseDisplayReturn?: Prisma.NpepNoiseDisplayReturnOmit
   npepNoiseDisplaySettingRequest?: Prisma.NpepNoiseDisplaySettingRequestOmit
+  npepNoiseDisplayPresence?: Prisma.NpepNoiseDisplayPresenceOmit
   npepNoiseManagementDevice?: Prisma.NpepNoiseManagementDeviceOmit
   npepRateLimit?: Prisma.NpepRateLimitOmit
   auditLog?: Prisma.AuditLogOmit

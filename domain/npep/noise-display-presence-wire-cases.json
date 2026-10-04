@@ -1,0 +1,69 @@
+{
+  "protocolVersion": "0.9",
+  "screenPresence": {
+    "requestId": "11111111-1111-4111-8111-111111111111",
+    "displaySessionId": "22222222-2222-4222-8222-222222222222",
+    "sequence": 1,
+    "state": "DISPLAY_VISIBLE",
+    "instanceId": "33333333-3333-4333-8333-333333333333",
+    "revision": 2,
+    "captureSessionId": "44444444-4444-4444-8444-444444444444",
+    "window": {"start": "2026-10-04T19:00:00.000", "end": "2026-10-04T20:00:00.000"}
+  },
+  "deviceObserve": {
+    "requestId": "55555555-5555-4555-8555-555555555555",
+    "context": {
+      "identity": {
+        "serverInstanceId": "66666666-6666-4666-8666-666666666666",
+        "deploymentEpoch": "77777777-7777-4777-8777-777777777777",
+        "deviceId": "88888888-8888-4888-8888-888888888888",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "runId": "99999999-9999-4999-8999-999999999999",
+      "sessionId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "statusEpoch": 1,
+      "controlEpoch": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+    },
+    "instanceId": "33333333-3333-4333-8333-333333333333",
+    "revision": 2,
+    "captureSessionId": "44444444-4444-4444-8444-444444444444",
+    "window": {"start": "2026-10-04T19:00:00.000", "end": "2026-10-04T20:00:00.000"}
+  },
+  "deviceReturn": {
+    "requestId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    "context": {
+      "identity": {
+        "serverInstanceId": "66666666-6666-4666-8666-666666666666",
+        "deploymentEpoch": "77777777-7777-4777-8777-777777777777",
+        "deviceId": "88888888-8888-4888-8888-888888888888",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "runId": "99999999-9999-4999-8999-999999999999",
+      "sessionId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "statusEpoch": 1,
+      "controlEpoch": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+    },
+    "instanceId": "33333333-3333-4333-8333-333333333333",
+    "revision": 2,
+    "captureSessionId": "44444444-4444-4444-8444-444444444444",
+    "window": {"start": "2026-10-04T19:00:00.000", "end": "2026-10-04T20:00:00.000"},
+    "offlineStartedAt": "2026-10-04T19:01:00.000Z",
+    "returnMinutes": 10
+  },
+  "deviceReply": {
+    "supported": true,
+    "serverNow": "2026-10-04T19:02:00.000Z",
+    "returnMinutes": 10,
+    "presence": {"state": "RETURNING", "ageMs": 0},
+    "activeReturn": {
+      "requestId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "window": {"start": "2026-10-04T19:00:00.000", "end": "2026-10-04T20:00:00.000"},
+      "startedAt": "2026-10-04T19:01:00.000Z",
+      "expiresAt": "2026-10-04T19:11:00.000Z",
+      "returnMinutes": 10,
+      "remainingSeconds": 540
+    }
+  }
+}

@@ -18,6 +18,8 @@ import {createNpepNoiseScheduleRuntime} from '../../services/npepNoiseScheduleRu
 import {validateNoiseScheduleWire} from '../../domain/npep/noiseScheduleWire.js';
 import {validateDisplayReturn, validateDisplaySetting} from '../../domain/npep/noiseDisplay.js';
 import {createNpepNoiseDisplayService} from '../../services/npepNoiseDisplayService.js';
+import {validateNoiseDisplayPresence} from '../../domain/npep/noiseDisplayPresence.js';
+import {createNpepNoiseDisplayPresenceService} from '../../services/npepNoiseDisplayPresenceService.js';
 import {validateNoiseManagement} from '../../domain/npep/noiseManagement.js';
 import {createNpepNoiseManagementService} from '../../services/npepNoiseManagementService.js';
 import {authenticateClassroomScreen} from '../../services/classroomScreenService.js';
@@ -32,6 +34,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const schedules = createNpepNoiseScheduleService(service);
   const scheduleRuntime = createNpepNoiseScheduleRuntime(service);
   const noiseDisplay = createNpepNoiseDisplayService(service);
+  const noiseDisplayPresence = createNpepNoiseDisplayPresenceService(service, noiseDisplay);
   const noiseManagement = createNpepNoiseManagementService(service, noise);
   router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
@@ -46,6 +49,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
       if (/^\/schools\/[^/]+\/noise-schedules(?:\/preview)?\/?$/i.test(req.path)) req.npepVersion = '0.7';
       if (/^\/(?:device\/noise-schedule|screen\/noise-schedule(?:\/resume)?|schools\/[^/]+\/devices\/[^/]+\/noise-schedule)\/?$/i.test(req.path)) req.npepVersion = '0.7';
       if (/^\/(?:screen\/noise-display(?:\/return)?|schools\/[^/]+\/noise-display-settings|device\/noise-management\/(?:status|authorize)|screen\/noise-management\/commands)\/?$/i.test(req.path)) req.npepVersion = '0.8';
+      if (/^\/(?:screen\/noise-display\/presence|device\/noise-display\/(?:observe|return))\/?$/i.test(req.path)) req.npepVersion = '0.9';
       if (req.get('X-NPEP-Version') !== req.npepVersion) fail(426, 'PROTOCOL_UNSUPPORTED');
       if (req.method === 'POST' && !req.is('application/json')) fail(400, 'INVALID_REQUEST');
       next();
@@ -130,6 +134,26 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.post('/screen/noise-display/return', noQuery,
     (req, _res, next) => next(validateDisplayReturn(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
     send(req => noiseDisplay.startReturn(screenToken(req), req.body)));
+  const displayPresenceBody = name => (req, _res, next) => next(validateNoiseDisplayPresence(name, req.body)
+    ? undefined : new NpepError(400, 'INVALID_REQUEST'));
+  router.post('/screen/noise-display/presence', noQuery, displayPresenceBody('screenPresence'), send(async req => {
+    const token = screenToken(req);
+    let binding;
+    try { binding = await authenticateClassroomScreen(token); }
+    catch { fail(401, 'SCREEN_TOKEN_INVALID'); }
+    await rate('screen-noise-display-presence', binding.id, 180, 60);
+    return noiseDisplayPresence.screenPresence(token, req.body);
+  }));
+  router.post('/device/noise-display/observe', noQuery, displayPresenceBody('observe'), send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'noise-display-observe', 30, 60);
+    return noiseDisplayPresence.observe(auth, req.body);
+  }));
+  router.post('/device/noise-display/return', noQuery, displayPresenceBody('deviceReturn'), send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'noise-display-return', 10, 60);
+    return noiseDisplayPresence.deviceReturn(auth, req.body);
+  }));
   router.get('/schools/:schoolId/noise-display-settings', admin,
     (req, _res, next) => next(Object.keys(req.query).every(key => key === 'termId')
       && (!req.query.termId || OPAQUE_ID.test(req.query.termId)) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
