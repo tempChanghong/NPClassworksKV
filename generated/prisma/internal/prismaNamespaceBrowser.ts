@@ -89,6 +89,11 @@ export const ModelName = {
   NpepAudit: 'NpepAudit',
   NpepNoiseSchedulePolicy: 'NpepNoiseSchedulePolicy',
   NpepNoiseScheduleRequest: 'NpepNoiseScheduleRequest',
+  NpepNoiseDisplaySetting: 'NpepNoiseDisplaySetting',
+  NpepNoiseDisplayReturn: 'NpepNoiseDisplayReturn',
+  NpepNoiseDisplaySettingRequest: 'NpepNoiseDisplaySettingRequest',
+  NpepNoiseDisplayPresence: 'NpepNoiseDisplayPresence',
+  NpepNoiseManagementDevice: 'NpepNoiseManagementDevice',
   NpepRateLimit: 'NpepRateLimit',
   AuditLog: 'AuditLog',
   ClassroomScreenCommand: 'ClassroomScreenCommand',
@@ -676,6 +681,74 @@ export const NpepNoiseScheduleRequestScalarFieldEnum = {
 } as const
 
 export type NpepNoiseScheduleRequestScalarFieldEnum = (typeof NpepNoiseScheduleRequestScalarFieldEnum)[keyof typeof NpepNoiseScheduleRequestScalarFieldEnum]
+
+
+export const NpepNoiseDisplaySettingScalarFieldEnum = {
+  schoolId: 'schoolId',
+  termId: 'termId',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  returnMinutes: 'returnMinutes',
+  revision: 'revision',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NpepNoiseDisplaySettingScalarFieldEnum = (typeof NpepNoiseDisplaySettingScalarFieldEnum)[keyof typeof NpepNoiseDisplaySettingScalarFieldEnum]
+
+
+export const NpepNoiseDisplayReturnScalarFieldEnum = {
+  screenBindingId: 'screenBindingId',
+  windowStart: 'windowStart',
+  windowEnd: 'windowEnd',
+  credentialVersion: 'credentialVersion',
+  requestId: 'requestId',
+  startedAt: 'startedAt',
+  expiresAt: 'expiresAt',
+  returnMinutes: 'returnMinutes'
+} as const
+
+export type NpepNoiseDisplayReturnScalarFieldEnum = (typeof NpepNoiseDisplayReturnScalarFieldEnum)[keyof typeof NpepNoiseDisplayReturnScalarFieldEnum]
+
+
+export const NpepNoiseDisplaySettingRequestScalarFieldEnum = {
+  schoolId: 'schoolId',
+  requestId: 'requestId',
+  actorId: 'actorId',
+  digest: 'digest',
+  result: 'result',
+  createdAt: 'createdAt'
+} as const
+
+export type NpepNoiseDisplaySettingRequestScalarFieldEnum = (typeof NpepNoiseDisplaySettingRequestScalarFieldEnum)[keyof typeof NpepNoiseDisplaySettingRequestScalarFieldEnum]
+
+
+export const NpepNoiseDisplayPresenceScalarFieldEnum = {
+  screenBindingId: 'screenBindingId',
+  displaySessionId: 'displaySessionId',
+  credentialVersion: 'credentialVersion',
+  deviceId: 'deviceId',
+  instanceId: 'instanceId',
+  revision: 'revision',
+  captureSessionId: 'captureSessionId',
+  windowStart: 'windowStart',
+  windowEnd: 'windowEnd',
+  state: 'state',
+  sequence: 'sequence',
+  requestId: 'requestId',
+  digest: 'digest',
+  receivedAt: 'receivedAt'
+} as const
+
+export type NpepNoiseDisplayPresenceScalarFieldEnum = (typeof NpepNoiseDisplayPresenceScalarFieldEnum)[keyof typeof NpepNoiseDisplayPresenceScalarFieldEnum]
+
+
+export const NpepNoiseManagementDeviceScalarFieldEnum = {
+  deviceId: 'deviceId',
+  data: 'data'
+} as const
+
+export type NpepNoiseManagementDeviceScalarFieldEnum = (typeof NpepNoiseManagementDeviceScalarFieldEnum)[keyof typeof NpepNoiseManagementDeviceScalarFieldEnum]
 
 
 export const NpepRateLimitScalarFieldEnum = {

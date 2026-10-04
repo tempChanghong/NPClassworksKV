@@ -234,6 +234,31 @@ export type NpepNoiseSchedulePolicy = Prisma.NpepNoiseSchedulePolicyModel
  */
 export type NpepNoiseScheduleRequest = Prisma.NpepNoiseScheduleRequestModel
 /**
+ * Model NpepNoiseDisplaySetting
+ * Presentation-only timeout; it never changes the 0.7 capture policy.
+ */
+export type NpepNoiseDisplaySetting = Prisma.NpepNoiseDisplaySettingModel
+/**
+ * Model NpepNoiseDisplayReturn
+ * A classroom screen's current temporary board return for one schedule window.
+ */
+export type NpepNoiseDisplayReturn = Prisma.NpepNoiseDisplayReturnModel
+/**
+ * Model NpepNoiseDisplaySettingRequest
+ *
+ */
+export type NpepNoiseDisplaySettingRequest = Prisma.NpepNoiseDisplaySettingRequestModel
+/**
+ * Model NpepNoiseDisplayPresence
+ * A server-observed browser tab heartbeat, scoped to its active native schedule window.
+ */
+export type NpepNoiseDisplayPresence = Prisma.NpepNoiseDisplayPresenceModel
+/**
+ * Model NpepNoiseManagementDevice
+ *
+ */
+export type NpepNoiseManagementDevice = Prisma.NpepNoiseManagementDeviceModel
+/**
  * Model NpepRateLimit
  *
  */

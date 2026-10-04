@@ -786,6 +786,73 @@ model NpepNoiseScheduleRequest {
   @@id([schoolId, requestId])
 }
 
+/// Presentation-only timeout; it never changes the 0.7 capture policy.
+model NpepNoiseDisplaySetting {
+  schoolId      String   @db.VarChar(191)
+  termId        String   @db.VarChar(191)
+  targetType    String   @db.VarChar(8)
+  targetId      String   @db.VarChar(191)
+  returnMinutes Int
+  revision      Int
+  updatedBy     String   @db.VarChar(191)
+  updatedAt     DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, termId, targetType, targetId])
+  @@index([schoolId, termId])
+}
+
+/// A classroom screen's current temporary board return for one schedule window.
+model NpepNoiseDisplayReturn {
+  screenBindingId   String   @db.VarChar(191)
+  windowStart       String   @db.VarChar(32)
+  windowEnd         String   @db.VarChar(32)
+  credentialVersion Int
+  requestId         String   @db.Uuid
+  startedAt         DateTime @db.Timestamptz(3)
+  expiresAt         DateTime @db.Timestamptz(3)
+  returnMinutes     Int
+
+  @@id([screenBindingId, windowStart, windowEnd])
+  @@index([expiresAt])
+}
+
+model NpepNoiseDisplaySettingRequest {
+  schoolId  String   @db.VarChar(191)
+  requestId String   @db.Uuid
+  actorId   String   @db.VarChar(191)
+  digest    String   @db.VarChar(64)
+  result    Json     @db.JsonB
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, requestId])
+}
+
+/// A server-observed browser tab heartbeat, scoped to its active native schedule window.
+model NpepNoiseDisplayPresence {
+  screenBindingId   String   @db.VarChar(191)
+  displaySessionId  String   @db.Uuid
+  credentialVersion Int
+  deviceId          String   @db.Uuid
+  instanceId        String   @db.Uuid
+  revision          Int
+  captureSessionId  String   @db.Uuid
+  windowStart       String   @db.VarChar(32)
+  windowEnd         String   @db.VarChar(32)
+  state             String   @db.VarChar(24)
+  sequence          Int
+  requestId         String   @db.Uuid
+  digest            String   @db.VarChar(64)
+  receivedAt        DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([screenBindingId, displaySessionId])
+  @@index([screenBindingId, receivedAt])
+}
+
+model NpepNoiseManagementDevice {
+  deviceId String @id @db.Uuid
+  data     Json   @db.JsonB
+}
+
 model NpepRateLimit {
   key String @id @db.VarChar(160)
   count Int

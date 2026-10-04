@@ -3,6 +3,7 @@ import {randomUUID} from 'node:crypto';
 import {writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {spawn} from 'node:child_process';
+import bcrypt from 'bcrypt';
 import {hash} from '../../domain/npep/wire.js';
 export async function verifyNoiseScheduleRuntimeDatabase(t,{fixture,request,prisma,req,activate,open,identity,directory,origin}) {
   const policy={mode:'Override',rules:[{days:[4],start:'19:00',end:'20:00'}]};
@@ -37,11 +38,12 @@ export async function verifyNoiseScheduleRuntimeDatabase(t,{fixture,request,pris
     const other=await fixture(); assert.equal((await n7(management,{auth:other.admin})).status,403);
   });
   await t.test('N4.3c actual .NET scheduler and 0.6/0.7 transport through disposable SQL', {skip:!process.env.NPEP_N3_ACCEPTANCE_DLL,timeout:120000},async()=>{
-    const f=await setup(),screenToken=randomUUID();
-    await prisma.classroomScreenBinding.update({where:{id:f.binding.id},data:{tokenHash:hash(screenToken)}});
+    const f=await setup(),screenToken=randomUUID(),screenPin='725316';
+    await prisma.classroomScreenBinding.update({where:{id:f.binding.id},
+      data:{tokenHash:hash(screenToken),pinHash:await bcrypt.hash(screenPin,10)}});
     const file=join(directory,'noise-schedule-fixture.json');
     await writeFile(file,JSON.stringify({kind:'NOISE_SCHEDULE_DISPOSABLE_DATABASE',origin:origin.replace('/api/v2/npep',''),adminToken:f.admin,
-      screenToken,schoolId:f.school.id,screenBindingId:f.binding.id}));
+      screenToken,screenPin,schoolId:f.school.id,screenBindingId:f.binding.id}));
     const child=spawn('dotnet',[process.env.NPEP_N3_ACCEPTANCE_DLL,'--noise-schedule-http',file,join(directory,'desktop-schedule')],{windowsHide:true,stdio:['ignore','pipe','pipe']});
     let output='';child.stdout.on('data',c=>{output+=c;});child.stderr.on('data',c=>{output+=c;});
     const code=await new Promise((done,reject)=>{child.once('error',reject);child.once('exit',done);});
