@@ -55,3 +55,13 @@ test('saved/applied/active separate; policy edits and old Host never report curr
   await assert.rejects(f.service.resume('screen',{requestId:randomUUID(),version,window}),{code:'SCHEDULE_VERSION_CONFLICT'});
   f.d.sessionId=randomUUID(); assert.equal((await f.service.screen('screen')).online,false);
 });
+
+test('server clock rollback invalidates schedule freshness and prevents resume from an old observation',async t=>{
+  const at=Date.parse('2026-10-01T11:30:00.000Z');
+  t.mock.timers.enable({apis:['Date'],now:at});
+  const f=fixture(); await f.service.exchange({},request());
+  t.mock.timers.setTime(at-60000);
+  await assert.rejects(f.service.resume('screen',{requestId:randomUUID(),version,window}),{code:'DEVICE_OFFLINE'});
+  const view=await f.service.screen('screen');
+  assert.equal(view.online,false); assert.equal(view.applied,false);
+});

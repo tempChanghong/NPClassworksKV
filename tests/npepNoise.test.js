@@ -13,7 +13,7 @@ function fixture() {
   let scheduled = null;
   const tx = {
     $queryRaw: async strings => strings[0].includes('NpepNoiseScheduleDevice') && scheduled ? [{data: scheduled}] : [],
-    npepSessionReceipt: {findUnique: async () => ({deviceId: d.id, runId: context.runId, statusEpoch: 1})},
+    npepSessionReceipt: {findUnique: async () => ({deviceId: d.id, runId: context.runId, statusEpoch: context.statusEpoch})},
     classroomScreenBinding: {findUnique: async () => ({credentialVersion: 1})},
     npepNoiseScheduleDevice: {findUnique: async () => ({data: scheduled})},
   };
@@ -25,7 +25,7 @@ function fixture() {
   const body = {requestId: randomUUID(), context, sequence: 1, status, receipts: [], reports: []};
   const command = () => ({requestId: randomUUID(), action: 'START', instanceId: status.instanceId, revision: status.revision, sessionId: status.sessionId, durationSeconds: 10800});
   return {service, d, context, status, body, command, data: () => data,
-    schedule: value => { scheduled = value; }};
+    restartService: () => createNpepNoiseService(base, repo), schedule: value => { scheduled = value; }};
 }
 
 test('noise control accepts only bounded statistics, never arbitrary audio or paths', () => {
@@ -64,6 +64,41 @@ test('reports deduplicate, reject altered retries, and preserve no-signal as nul
   assert.equal((await f.service.screen('screen')).reports.length, 1);
   await assert.rejects(f.service.exchange('device', {...b, sequence: 3, reports: [{...report, outcome: 'Faulted'}]}), {code: 'IDEMPOTENCY_CONFLICT'});
 });
+
+test('lost report acknowledgement survives a service restart and a replacement Host without duplicate rows', async () => {
+  const f = fixture();
+  const report = {sessionId: randomUUID(), startedAt: new Date().toISOString(), endedAt: new Date().toISOString(),
+    deviceName: '模拟统计', algorithm: 'pcm-energy-v1', outcome: 'Stopped',
+    summary: {elapsedSeconds: 2, sampledSeconds: 0, coverage: 0, energyMeanDbfs: null, peakDbfs: null, clippedPercent: 0, frames: 0}};
+  const body = {...f.body, reports: [report]};
+  await f.service.exchange('device', body); // The server commits, but the client loses this response.
+  const receivedAt = f.data().receivedAt;
+  const restarted = f.restartService();
+  const retry = await restarted.exchange('device', body);
+  assert.deepEqual(retry.acceptedReports, [report.sessionId]);
+  assert.equal(f.data().receivedAt, receivedAt);
+  const oldContext = structuredClone(f.context);
+  Object.assign(f.context, {sessionId: randomUUID(), runId: randomUUID(), statusEpoch: 2});
+  Object.assign(f.d, {sessionId: f.context.sessionId, statusEpoch: 2});
+  assert.deepEqual((await restarted.exchange('device', body)).acceptedReports, [report.sessionId]);
+  assert.equal((await restarted.screen('screen')).reports.length, 1);
+  await assert.rejects(restarted.exchange('device', {...body, context: oldContext}), {code: 'SESSION_SUPERSEDED'});
+});
+
+test('a delayed active sample cannot overwrite a newer stopped sample or resurrect its command', async () => {
+  const f = fixture();
+  await f.service.exchange('device', f.body);
+  const start = await f.service.create('screen', f.command());
+  const active = {...f.status, state: 'Active', sessionId: randomUUID(), revision: 1};
+  const stopped = {...active, state: 'Stopped', revision: 2};
+  await f.service.exchange('device', {...f.body, sequence: 3, status: stopped,
+    receipts: [{commandId: start.command.commandId, outcome: 'ACCEPTED', reason: null}]});
+  await assert.rejects(f.service.exchange('device', {...f.body, sequence: 2, status: active}), {code: 'SEQUENCE_CONFLICT'});
+  const view = await f.service.screen('screen');
+  assert.equal(view.status.state, 'Stopped');
+  assert.equal(view.commands[0].receipt.outcome, 'ACCEPTED');
+  assert.equal((await f.service.exchange('device', {...f.body, sequence: 4, status: stopped})).command, null);
+});
 test('stop targets the reported session and starts require a configured microphone', async () => {
   const f = fixture(); f.status.configured = false; await f.service.exchange('device', f.body);
   await assert.rejects(f.service.create('screen', f.command()), {code: 'MICROPHONE_NOT_CONFIGURED'});
@@ -86,4 +121,14 @@ test('scheduled STOP rejects the legacy route and requires a binding-scoped mana
     {bindingId: f.d.screenBindingId, credentialVersion: 1});
   assert.equal(granted.managementGrant.sessionId, stop.sessionId);
   assert.equal(granted.command.action, 'STOP');
+});
+
+test('server clock rollback invalidates noise freshness and prevents commands from an old observation', async t => {
+  const at = Date.parse('2026-10-04T10:00:00.000Z');
+  t.mock.timers.enable({apis: ['Date'], now: at});
+  const f = fixture();
+  await f.service.exchange('device', f.body);
+  t.mock.timers.setTime(at - 60000);
+  await assert.rejects(f.service.create('screen', f.command()), {code: 'DEVICE_OFFLINE'});
+  assert.equal((await f.service.screen('screen')).online, false);
 });

@@ -3,6 +3,8 @@ import {fail, digest, displayText} from '../domain/npep/wire.js';
 import {identityOf, requireSame, requireReady, operationView, fresh, applyRuntimeEvent} from '../domain/npep/runtimeControl.js';
 import {runtimeRepository} from './npepRuntimeRepository.js';
 
+const MAX_COALESCED_REQUESTS = 256;
+
 export function createNpepRuntimeService(service, repo = runtimeRepository) {
   const now = () => new Date().toISOString();
   async function context(tx, device, c) {
@@ -88,7 +90,10 @@ export function createNpepRuntimeService(service, repo = runtimeRepository) {
       if (body.scope !== 'EXAM_MODE' || !['EXAM', 'DAILY'].includes(body.target)) fail(400, 'UNSUPPORTED_SCOPE');
       const previous = await repo.byRequest(tx, id, body.requestId);
       if (previous) {
-        requireSame([previous.createDigest, previous.claims.accountId, previous.claims.sessionId], [digest(body), claims.accountId, claims.sessionId], 'IDEMPOTENCY_CONFLICT');
+        const request = previous.view.requestId === body.requestId
+          ? {createDigest: previous.createDigest, ...previous.claims}
+          : previous.coalescedRequests.find(r => r.requestId === body.requestId);
+        requireSame([request.createDigest, request.accountId, request.sessionId], [digest(body), claims.accountId, claims.sessionId], 'IDEMPOTENCY_CONFLICT');
         return {created: false, data: operationView(previous)};
       }
       const p = await repo.policy(tx, id);
@@ -98,6 +103,13 @@ export function createNpepRuntimeService(service, repo = runtimeRepository) {
       const active = await pending(tx, device);
       if (active) {
         if (active.view.target !== body.target) fail(409, 'OPERATION_BUSY');
+        // Persist every accepted request ID, including requests merged into another execution.
+        // Never evict an alias: a delayed retry must not become a new opposite-mode transition.
+        active.coalescedRequests ??= [];
+        if (active.coalescedRequests.length >= MAX_COALESCED_REQUESTS) fail(409, 'OPERATION_BUSY');
+        active.coalescedRequests.push({requestId: body.requestId, createDigest: digest(body),
+          accountId: claims.accountId, sessionId: claims.sessionId});
+        await repo.saveOperation(tx, active);
         return {created: false, data: operationView(active)};
       }
       if (!Number.isFinite(claims.exp) || claims.exp * 1000 <= Date.now()) fail(401, 'AUTH_INVALID');
