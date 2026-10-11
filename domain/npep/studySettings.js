@@ -19,6 +19,7 @@ export function defaultStudySettings() {
   return {
     schedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null,
       rules: [{days: [], start: '19:00', end: '21:30'}], exceptions: []},
+    examSchedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null, rules: [], exceptions: []},
     presentation: {noiseDisplay: 'StatusTrend', temporaryHideSeconds: 180},
     homework: {enabled: true, sourceMode: 'OwnClass', sourceClassIds: [], rotationSeconds: 60},
     noise: {enabled: true, redLineDbfs: null, mediumLineDbfs: null, disciplineCooldownSeconds: 600, highContinuousSeconds: 3},
@@ -42,11 +43,12 @@ export function validateStudyPolicy(policy, grade = false) {
     || grade && policy.mode === 'Inherit') return 'INVALID_MODE';
   if (policy.mode !== 'Override') return policy.settings === null ? null : 'UNEXPECTED_SETTINGS';
   const s = policy.settings;
-  if (!exact(s, ['schedule', 'presentation', 'homework', 'noise', 'photos'])) return 'INVALID_SETTINGS';
+  const keys = ['schedule', 'presentation', 'homework', 'noise', 'photos'];
+  if (!(exact(s, keys) || exact(s, [...keys, 'examSchedule']))) return 'INVALID_SETTINGS';
   const {schedule: t, presentation: p, homework: h, noise: n, photos: f} = s;
   if (!exact(t, ['timeZone', 'effectiveFrom', 'effectiveTo', 'rules', 'exceptions']) || t.timeZone !== 'Asia/Shanghai'
-    || !validStudyDate(t.effectiveFrom) || t.effectiveTo !== null && (!validStudyDate(t.effectiveTo) || t.effectiveTo < t.effectiveFrom)) return 'INVALID_DATES';
-  const ruleError = validateNoisePolicy({mode: 'Override', rules: t.rules}, true);
+    || !(validStudyDate(t.effectiveFrom) || Array.isArray(t.rules) && !t.rules.length && t.effectiveFrom === '') || t.effectiveTo !== null && (!validStudyDate(t.effectiveTo) || t.effectiveTo < t.effectiveFrom)) return 'INVALID_DATES';
+  const ruleError = validateNoisePolicy({mode: Array.isArray(t.rules) && !t.rules.length ? 'Disabled' : 'Override', rules: t.rules}, true);
   if (ruleError) return ruleError;
   if (!Array.isArray(t.exceptions) || t.exceptions.length > 366) return 'INVALID_CALENDAR';
   const dates = new Set();
@@ -64,11 +66,11 @@ export function validateStudyPolicy(policy, grade = false) {
     || h.sourceMode === 'OwnClass' && h.sourceClassIds.length || h.enabled && h.sourceMode === 'SelectedClasses' && !h.sourceClassIds.length
     || !integer(h.rotationSeconds, 15, 600)) return 'INVALID_HOMEWORK';
   const level = value => value === null || typeof value === 'number' && Number.isFinite(value) && value >= -90 && value <= 0;
-  const keys = ['enabled', 'redLineDbfs', 'mediumLineDbfs', 'disciplineCooldownSeconds', 'highContinuousSeconds'];
+  const noiseKeys = ['enabled', 'redLineDbfs', 'mediumLineDbfs', 'disciplineCooldownSeconds', 'highContinuousSeconds'];
   const e = n?.estimated;
   const high = e ? e.highDbA : n?.redLineDbfs, medium = e ? e.mediumDbA : n?.mediumLineDbfs;
   const acoustic = value => value === null || Number.isFinite(value) && value >= 30 && value <= 130;
-  if (!(exact(n, keys) || exact(n, [...keys, 'estimated'])) || typeof n.enabled !== 'boolean'
+  if (!(exact(n, noiseKeys) || exact(n, [...noiseKeys, 'estimated'])) || typeof n.enabled !== 'boolean'
     || e != null && (!exact(e, ['highDbA', 'mediumDbA']) || !acoustic(e.highDbA) || !acoustic(e.mediumDbA))
     || !level(n.redLineDbfs) || !level(n.mediumLineDbfs)
     || !integer(n.disciplineCooldownSeconds, 1, 86400) || !integer(n.highContinuousSeconds, 1, 10)
@@ -92,6 +94,11 @@ export function validateStudyPolicy(policy, grade = false) {
       else previous = {...span};
       if (previous.end - previous.start > 180 * 60000) return 'MERGED_WINDOW_TOO_LONG';
     }
+  }
+  if (Object.hasOwn(s, 'examSchedule')) {
+    const {examSchedule, ...shared} = s;
+    const error = validateStudyPolicy({mode: 'Override', settings: {...shared, schedule: examSchedule}}, grade);
+    if (error) return error;
   }
   return null;
 }
@@ -122,9 +129,13 @@ export function resolveStudyPolicy(grade, classroom) {
 
 // School calendar arithmetic, never the browser/Windows wall clock. Date boundaries
 // and holiday substitutions apply to the start date, including cross-midnight windows.
-export function studyWindowsForDate(settings, date) {
+export function studyScheduleForMode(settings, mode = 'Daily') {
+  return mode === 'Exam' ? settings?.examSchedule : settings?.schedule;
+}
+
+export function studyWindowsForDate(settings, date, mode = 'Daily') {
   if (!validStudyDate(date)) throw new Error('INVALID_DATES');
-  const t = settings?.schedule;
+  const t = studyScheduleForMode(settings, mode);
   if (!t || date < t.effectiveFrom || t.effectiveTo && date > t.effectiveTo) return [];
   const special = t.exceptions.find(e => e.date === date);
   if (special?.kind === 'Skip') return [];

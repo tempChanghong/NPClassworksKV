@@ -44,7 +44,8 @@ export function createNpepStudySettingsService(base, repo = studySettingsReposit
     const items = affected.slice(0, 50).map(({sourceIds, ...item}) => ({...item,
       homeworkSources: sources.filter(source => source.sourceClassIds.some(id => sourceIds.includes(id)))
         .map(source => ({...source, sourceClassIds: source.sourceClassIds.filter(id => sourceIds.includes(id))})),
-      windows: body.previewDate ? studyWindowsForDate(item.effective.settings, body.previewDate) : []}));
+      windows: body.previewDate ? studyWindowsForDate(item.effective.settings, body.previewDate) : [],
+      examWindows: body.previewDate ? studyWindowsForDate(item.effective.settings, body.previewDate, "Exam") : []}));
     return {termId: body.termId, targetType: body.targetType, targetId: body.targetId, baseRevision: body.expectedRevision,
       policy: body.policy, totalClasses: selected.length, changedClasses, pairedDevices, items, truncated: selected.length > 50,
       previewFingerprint: digest({targetType: body.targetType, targetId: body.targetId, policy: body.policy,

@@ -58,7 +58,7 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
     const carrier = new Date(`${status.schoolNow.slice(0, 10)}T00:00:00Z`);
     const spans = [-1, 0, 1].flatMap(offset => {
       const date = new Date(carrier); date.setUTCDate(date.getUTCDate() + offset);
-      return studyWindowsForDate(settings, date.toISOString().slice(0, 10));
+      return studyWindowsForDate(settings, date.toISOString().slice(0, 10), status.mode ?? "Daily");
     }).map(window => ({start: Date.parse(`${window.start}Z`), end: Date.parse(`${window.end}Z`)})).sort((a, b) => a.start - b.start);
     const merged = [];
     for (const window of spans) {
@@ -107,7 +107,7 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
       ? receipt.status.phase === 'Outside' && receipt.status.schoolNow >= s.window.end
         && Date.parse(`${receipt.status.schoolNow}Z`) - Date.parse(`${s.window.end}Z`) < 5000
       : receipt.status.phase === s.phase && digest(receipt.status.window) === digest(s.window));
-    const currentClaim = fresh && receipt.status.version === current.version && p?.version === current.version
+    const currentClaim = (s?.mode ?? "Daily") === (receipt?.status?.mode ?? "Daily") && fresh && receipt.status.version === current.version && p?.version === current.version
       && digest(p.context) === digest(receipt.context);
     const presentationFresh = !!currentClaim && stageMatches && age >= 0 && age < 5000 && remaining > 0 && remaining <= 5000;
     return {presentation: s ?? null, presentationVersion: p?.version ?? null,
@@ -167,7 +167,7 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
         if (body.sequence !== old.sequence || old.digest !== digest(body)) fail(409, 'SEQUENCE_CONFLICT');
         return {confirmed: false, version: current.version}; // Replay never renews observed freshness.
       }
-      const state = {...old, execution: old?.execution ?? null, context: body.context, sequence: body.sequence, digest: digest(body), status: body.status, receivedAt: new Date().toISOString()};
+      const state = {...old, execution: (old?.status?.mode ?? "Daily") === (body.status.mode ?? "Daily") ? old?.execution ?? null : null, context: body.context, sequence: body.sequence, digest: digest(body), status: body.status, receivedAt: new Date().toISOString()};
       await repo.saveReceipt(tx, device.id, state);
       return {confirmed: true, version: current.version};
     }),
@@ -183,15 +183,16 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
       const receipt = await repo.receipt(tx, device.id);
       if (!receipt || !Number.isFinite(Date.parse(receipt.receivedAt)) || digest(receipt.context) !== digest(body.context) || receipt.status.version !== current.version
         || Date.now() - Date.parse(receipt.receivedAt) < 0 || Date.now() - Date.parse(receipt.receivedAt) >= 15000) fail(409, 'STUDY_NOT_APPLIED');
+      if ((receipt.status.mode ?? 'Daily') !== (body.status.mode ?? 'Daily')) fail(409, 'STATE_CHANGED');
       const old = receipt.execution;
       if (old && digest(old.context) === digest(body.context) && body.sequence <= old.sequence) {
         if (body.sequence !== old.sequence || old.digest !== digest(body)) fail(409, 'SEQUENCE_CONFLICT');
-        return {confirmed: false, version: current.version, leaseSeconds: 86400};
+        return {confirmed: false, version: current.version, leaseSeconds: 86400, ...(body.status.mode === 'Exam' ? {mode: 'Exam'} : {})};
       }
       receipt.execution = {context: body.context, sequence: body.sequence, digest: digest(body), version: body.version,
         status: body.status, receivedAt: new Date().toISOString()};
       await repo.saveReceipt(tx, device.id, receipt);
-      return {confirmed: true, version: current.version, leaseSeconds: 86400};
+      return {confirmed: true, version: current.version, leaseSeconds: 86400, ...(body.status.mode === 'Exam' ? {mode: 'Exam'} : {})};
     }),
     resume: (claims, schoolId, id, body) => base.withRuntimeAdmin(claims, schoolId, id, async (tx, device) => {
       const current = await configuration(tx, device), receipt = await repo.receipt(tx, device.id);
@@ -217,7 +218,7 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
       if (receipt.commands.some(record => !record.receipt)) fail(409, 'COMMAND_PENDING');
       const record = {requestId: body.requestId, actorId: claims.accountId, digest: digest(body), context: receipt.context,
         expiresAt: new Date(Date.now() + 30000).toISOString(),
-        command: {commandId: randomUUID(), version: body.version, window: body.window}, receipt: null};
+        command: {commandId: randomUUID(), version: body.version, window: body.window, ...(status.mode === "Exam" ? {mode: "Exam"} : {})}, receipt: null};
       receipt.commands.push(record); receipt.commands = receipt.commands.slice(-32);
       await repo.saveReceipt(tx, device.id, receipt);
       return {...record, remainingMs: remainingMs(record)}; // Request acceptance is not device application or capture.
@@ -254,7 +255,8 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
       const execution = receipt?.execution;
       const executionAge = execution ? Date.now() - Date.parse(execution.receivedAt) : Infinity;
       const executionFresh = fresh && executionAge >= 0 && executionAge < 15000
-        && digest(execution.context) === digest(receipt.context) && execution.version === current.version;
+        && digest(execution.context) === digest(receipt.context) && execution.version === current.version
+        && (execution.status.mode ?? "Daily") === (receipt.status.mode ?? "Daily");
       const captureVerified = executionFresh && current.effective.settings?.noise.enabled === true
         && execution.status.owner === 'Schedule' && execution.status.state === 'Active' && execution.status.signalFresh === true
         && execution.status.reason === 'WINDOW_ACTIVE';
