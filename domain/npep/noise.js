@@ -6,7 +6,20 @@ addFormats(ajv);
 const validators = new Map();
 export function validateNoise(name, value) {
   if (!validators.has(name)) validators.set(name, ajv.compile({definitions: schema.definitions, $ref: `#/definitions/${name}`}));
-  return validators.get(name)(value) && utf16(schema.definitions[name], value);
+  if (!validators.get(name)(value) || !utf16(schema.definitions[name], value)) return false;
+  if (name === 'exchangeRequest') return coherentEstimate(value.status) && value.reports.every(coherentEstimate);
+  return !['status', 'report'].includes(name) || coherentEstimate(value);
+}
+function coherentEstimate(value) {
+  const e = value.estimate;
+  if (!e) return true;
+  const s = e.summary, elapsed = value.summary?.elapsedSeconds ?? 0;
+  const current = e.currentDbA !== null;
+  return current === (e.state === 'Active') && (!current || e.reason === null && value.state === 'Active')
+    && (s.sampledSeconds > 0) === (s.energyMeanDbA !== null && s.maximumDbA !== null)
+    && (s.sampledSeconds > 0 || s.energyMeanDbA === null && s.maximumDbA === null)
+    && Math.abs(s.coverage - (elapsed > 0 ? Math.min(1, s.sampledSeconds / elapsed) : 0)) <= 1e-6
+    && (s.energyMeanDbA === null || s.maximumDbA >= s.energyMeanDbA - 1e-8);
 }
 function utf16(spec, value) {
   if (spec.$ref) return utf16(schema.definitions[spec.$ref.split('/').at(-1)], value);

@@ -33,6 +33,22 @@ test('noise control accepts only bounded statistics, never arbitrary audio or pa
   for (const patch of [{pcm: 'AA=='}, {context: null}, {reports: Array(5).fill({})}]) assert.equal(validateNoise('exchangeRequest', {...f.body, ...patch}), false);
   assert.equal(validateNoise('createRequest', {...f.command(), durationSeconds: 10801}), false);
 });
+
+test('estimated reports retain reference identity, partial coverage and invalidation across retries', async () => {
+  const f=fixture();
+  const report={sessionId:randomUUID(),startedAt:new Date().toISOString(),endedAt:new Date().toISOString(),deviceName:'synthetic',algorithm:'pcm-energy-v1',outcome:'Stopped',
+    summary:{elapsedSeconds:20,sampledSeconds:20,coverage:1,energyMeanDbfs:-30,peakDbfs:-20,clippedPercent:0,frames:200},
+    estimate:{profileId:'a'.repeat(64),algorithm:'a-sos-band8500-v1|sample-energy-fs-v1',method:'ManualReference',timeWeighting:'Slow',offsetDb:90,confirmedAt:new Date().toISOString(),state:'Invalidated',reason:'INPUT_SETTINGS_CHANGED',currentDbA:null,
+      summary:{sampledSeconds:10,coverage:.5,energyMeanDbA:60,maximumDbA:65}}};
+  const request={...f.body,reports:[report]};assert.equal(validateNoise('exchangeRequest',request),true);
+  await f.service.exchange('fake-device',request);await f.service.exchange('fake-device',{...request,sequence:2});
+  const reports=(await f.service.screen('fake-screen')).reports;
+  assert.equal(reports.length,1);assert.deepEqual(reports[0].estimate,report.estimate);
+  assert.equal(reports[0].summary.energyMeanDbfs,-30);
+  for(const patch of [{currentDbA:60},{state:'Active',reason:null,currentDbA:60},{profileId:'not-a-version'},{pcm:'AA=='},{summary:{...report.estimate.summary,coverage:1}},{summary:{...report.estimate.summary,energyMeanDbA:70}},{summary:{sampledSeconds:0,coverage:0,energyMeanDbA:null,maximumDbA:65}}])
+    assert.equal(validateNoise('report',{...report,estimate:{...report.estimate,...patch}}),false);
+  await assert.rejects(f.service.exchange('fake-device',{...request,sequence:3,reports:[{...report,estimate:{...report.estimate,profileId:'b'.repeat(64)}}]}),{code:'IDEMPOTENCY_CONFLICT'});
+});
 test('screen request is idempotent and receipt is distinct from actual microphone state', async () => {
   const f = fixture(); await f.service.exchange('device', f.body);
   const c = f.command(), first = await f.service.create('screen', c);
