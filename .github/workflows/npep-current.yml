@@ -29,5 +29,5 @@ jobs:
     uses: tempChanghong/NPEduTools/.github/workflows/npep-current.yml@eee09d2f7998e9cddf44458f3031770d6d3556c5
     with:
       desktop_sha: ${{ inputs.desktop_sha || (github.event_name == 'pull_request' && 'eee09d2f7998e9cddf44458f3031770d6d3556c5') || '' }}
-      web_sha: ${{ inputs.web_sha || (github.event_name == 'pull_request' && '74fe0d87d95e73f9ec1114b738901b2ec23fd13d') || '' }}
+      web_sha: ${{ inputs.web_sha || (github.event_name == 'pull_request' && '8a2310c074fd5a52408bd8249328c7deea5595f1') || '' }}
       backend_sha: ${{ inputs.backend_sha || '' }}
