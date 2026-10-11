@@ -1,3 +1,4 @@
+import {validStudyDate} from './studySettings.js';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import schema from './noise.schema.json' with {type: 'json'};
@@ -7,7 +8,7 @@ const validators = new Map();
 export function validateNoise(name, value) {
   if (!validators.has(name)) validators.set(name, ajv.compile({definitions: schema.definitions, $ref: `#/definitions/${name}`}));
   if (!validators.get(name)(value) || !utf16(schema.definitions[name], value)) return false;
-  const coherent = v => coherentNoiseSummary(v.summary) && coherentEstimate(v);
+  const coherent = v => coherentNoiseSummary(v.summary) && coherentEstimate(v) && coherentStudy(v);
   if (name === 'exchangeRequest') return coherent(value.status) && value.reports.every(coherent);
   return !['status', 'report'].includes(name) || coherent(value);
 }
@@ -41,4 +42,17 @@ function utf16(spec, value) {
   if (Array.isArray(value)) return value.every(v => utf16(spec.items, v));
   if (value && typeof value === 'object') return Object.entries(value).every(([k, v]) => spec.properties?.[k] && utf16(spec.properties[k], v));
   return true;
+}
+
+function coherentStudy(value) {
+  const s=value.study; if(!s)return true;
+  const start=Date.parse(s.window.start+'Z'),end=Date.parse(s.window.end+'Z');
+  if(!validStudyDate(s.window.start.slice(0,10)) || !validStudyDate(s.window.end.slice(0,10)) || !Number.isFinite(start)||!Number.isFinite(end)||end<=start||end-start>10800000 ||
+    s.clockSource!==(s.mode==='Exam'?'Windows':'ClassIsland'))return false;
+  const p=s.statistics;if(!p)return true;
+  if(p.sessionId!==value.sessionId || p.raw.unit!=='dBFS' || p.estimated && p.estimated.unit!=='estimated-dB(A)')return false;
+  return [p.raw,p.estimated].filter(Boolean).every(c=>c.highSeconds<=c.thresholdSampledSeconds+1e-6 &&
+    c.mediumSeconds<=c.mediumThresholdSampledSeconds+1e-6 && c.thresholdSampledSeconds<=c.sampledSeconds+1e-6 &&
+    c.mediumThresholdSampledSeconds<=c.sampledSeconds+1e-6 && (c.energyMean===null)===(c.maximum===null) &&
+    (c.energyMean===null || c.maximum>=c.energyMean-1e-6));
 }

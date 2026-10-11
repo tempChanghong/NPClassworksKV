@@ -14,6 +14,7 @@ import {createNpepRuntimeService} from '../../services/npepRuntimeService.js';
 import {createNpepExamPlanService} from '../../services/npepExamPlanService.js';
 import {validateExamPlan} from '../../domain/npep/examPlans.js';
 import {validateNoise} from '../../domain/npep/noise.js';
+import {createNpepStudyReportsService} from '../../services/npepStudyReportsService.js';
 import {createNpepNoiseService} from '../../services/npepNoiseService.js';
 import {createNpepNoiseScheduleService} from '../../services/npepNoiseScheduleService.js';
 import {validateScheduleQuery, validateScheduleWrite} from '../../domain/npep/noiseSchedules.js';
@@ -47,6 +48,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const noiseManagement = createNpepNoiseManagementService(service, noise);
   const studySettings = createNpepStudySettingsService(service);
   const studyDevice = createNpepStudyDeviceService(service);
+  const studyReports = createNpepStudyReportsService(service);
   router.use(createNpepSeatingRouter({base: service, study: studyDevice, authenticate, rateLimits}));
   router.use(createNpepPhotoRouter({base: service, study: studyDevice, authenticate, rateLimits}));
   router.use((req, res, next) => {
@@ -65,6 +67,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
       if (/^\/(?:screen\/noise-display\/presence|device\/noise-display\/(?:observe|return))\/?$/i.test(req.path)) req.npepVersion = '0.9';
       if (/^\/schools\/[^/]+\/study-settings(?:\/preview)?\/?$/i.test(req.path)) req.npepVersion = '0.10';
       if (/^\/device\/study-settings(?:\/(?:receipt|execution))?\/?$/i.test(req.path)) req.npepVersion = '0.10';
+      if (/^\/schools\/[^/]+\/study-sessions\/?$/i.test(req.path)) req.npepVersion = '0.17';
       if (/^\/schools\/[^/]+\/devices\/[^/]+\/study-settings\/?$/i.test(req.path)) req.npepVersion = '0.10';
       if (/^\/(?:device\/study-settings\/resume-exchange|schools\/[^/]+\/devices\/[^/]+\/study-settings\/resume)\/?$/i.test(req.path)) req.npepVersion = '0.11';
       if (/^\/device\/study-settings\/homework\/?$/i.test(req.path)) req.npepVersion = '0.12';
@@ -207,6 +210,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const scheduleBody = (req, _res, next) => next(validateScheduleWrite(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   router.post('/schools/:schoolId/noise-schedules/preview', admin, noQuery, scheduleBody, send(req => schedules.preview(req.npepClaims, req.params.schoolId, req.body)));
   router.post('/schools/:schoolId/noise-schedules', admin, noQuery, scheduleBody, send(req => schedules.save(req.npepClaims, req.params.schoolId, req.body)));
+  router.get('/schools/:schoolId/study-sessions', admin, send(req => studyReports.list(req.npepClaims, req.params.schoolId, req.query)));
   router.get('/schools/:schoolId/study-settings', admin,
     (req, _res, next) => next(validateScheduleQuery(req.query) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
     send(req => studySettings.list(req.npepClaims, req.params.schoolId, req.query.termId)));

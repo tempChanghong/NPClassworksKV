@@ -369,6 +369,382 @@
         "endReason": {
           "type": "string",
           "maxLength": 64
+        },
+        "study": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "object",
+              "properties": {
+                "schoolId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,191}$"
+                },
+                "termId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,191}$"
+                },
+                "classId": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_-]{1,191}$"
+                }
+              },
+              "required": [
+                "schoolId",
+                "termId",
+                "classId"
+              ],
+              "additionalProperties": false
+            },
+            "policyVersion": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "mode": {
+              "enum": [
+                "Daily",
+                "Exam"
+              ]
+            },
+            "clockSource": {
+              "enum": [
+                "ClassIsland",
+                "Windows"
+              ]
+            },
+            "window": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}$"
+                },
+                "end": {
+                  "type": "string",
+                  "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}$"
+                }
+              },
+              "required": [
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            "statistics": {
+              "type": "object",
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "complete": {
+                  "type": "boolean"
+                },
+                "elapsedSeconds": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10860
+                },
+                "clippedSeconds": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10860
+                },
+                "frames": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "disciplineReminders": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100000
+                },
+                "raw": {
+                  "type": "object",
+                  "properties": {
+                    "unit": {
+                      "enum": [
+                        "dBFS",
+                        "estimated-dB(A)"
+                      ]
+                    },
+                    "sampledSeconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10860
+                    },
+                    "energyMean": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": -1000,
+                          "maximum": 200
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "maximum": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": -1000,
+                          "maximum": 200
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "thresholdSampledSeconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10860
+                    },
+                    "mediumSeconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10860
+                    },
+                    "highSeconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10860
+                    },
+                    "trend": {
+                      "type": "array",
+                      "maxItems": 180,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "seconds": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10860
+                          },
+                          "sampledSeconds": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10860
+                          },
+                          "mean": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": -1000,
+                                "maximum": 200
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "maximum": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "minimum": -1000,
+                                "maximum": 200
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "seconds",
+                          "sampledSeconds",
+                          "mean",
+                          "maximum"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "mediumThresholdSampledSeconds": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10860
+                    }
+                  },
+                  "required": [
+                    "unit",
+                    "sampledSeconds",
+                    "energyMean",
+                    "maximum",
+                    "thresholdSampledSeconds",
+                    "mediumSeconds",
+                    "highSeconds",
+                    "trend",
+                    "mediumThresholdSampledSeconds"
+                  ],
+                  "additionalProperties": false
+                },
+                "estimated": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "unit": {
+                          "enum": [
+                            "dBFS",
+                            "estimated-dB(A)"
+                          ]
+                        },
+                        "sampledSeconds": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10860
+                        },
+                        "energyMean": {
+                          "anyOf": [
+                            {
+                              "type": "number",
+                              "minimum": -1000,
+                              "maximum": 200
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "maximum": {
+                          "anyOf": [
+                            {
+                              "type": "number",
+                              "minimum": -1000,
+                              "maximum": 200
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "thresholdSampledSeconds": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10860
+                        },
+                        "mediumSeconds": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10860
+                        },
+                        "highSeconds": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10860
+                        },
+                        "trend": {
+                          "type": "array",
+                          "maxItems": 180,
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "seconds": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 10860
+                              },
+                              "sampledSeconds": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 10860
+                              },
+                              "mean": {
+                                "anyOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": -1000,
+                                    "maximum": 200
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "maximum": {
+                                "anyOf": [
+                                  {
+                                    "type": "number",
+                                    "minimum": -1000,
+                                    "maximum": 200
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "seconds",
+                              "sampledSeconds",
+                              "mean",
+                              "maximum"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "mediumThresholdSampledSeconds": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10860
+                        }
+                      },
+                      "required": [
+                        "unit",
+                        "sampledSeconds",
+                        "energyMean",
+                        "maximum",
+                        "thresholdSampledSeconds",
+                        "mediumSeconds",
+                        "highSeconds",
+                        "trend",
+                        "mediumThresholdSampledSeconds"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "estimateReason": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[A-Za-z0-9_]{1,100}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "sessionId",
+                "complete",
+                "elapsedSeconds",
+                "clippedSeconds",
+                "frames",
+                "disciplineReminders",
+                "raw",
+                "estimated",
+                "estimateReason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "scope",
+            "policyVersion",
+            "mode",
+            "clockSource",
+            "window"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [

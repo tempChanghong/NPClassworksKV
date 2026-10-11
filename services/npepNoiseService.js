@@ -19,7 +19,8 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
     if (!d) return {provider: 'browser', online: false, status: null, receivedAt: null, commands: [], reports: []};
     const a = await repo.read(tx, d.id); clean(a); await repo.save(tx, d.id, a);
     return {provider: a.status ? 'native' : 'browser', online: online(a, d), status: a.status,
-      receivedAt: a.receivedAt ?? null, commands: a.commands.slice(-5), reports: a.reports.slice(-20).reverse()};
+      receivedAt: a.receivedAt ?? null, commands: a.commands.slice(-5),
+      reports: a.reports.filter(r => !r.ownership || r.ownership.schoolId === d.schoolId && r.ownership.classId === d.administrativeClassId).slice(-20).reverse()};
   }
   return {
     screen: token => base.withNoiseScreen(token, view),
@@ -77,7 +78,15 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
         if (previous) requireSame(previous.digest, digest(report), 'IDEMPOTENCY_CONFLICT');
         else {
           if (Date.parse(report.endedAt) < Date.parse(report.startedAt)) fail(400, 'INVALID_REPORT');
-          a.reports.push({...report, digest: digest(report), receivedAt: now()});
+          let ownership;
+          if (report.study) {
+            const binding = await tx.classroomScreenBinding.findUnique({where:{id:d.screenBindingId}});
+            const classroom = binding && await tx.workspace.findUnique({where:{id:binding.administrativeClassId}});
+            if (!classroom || binding.schoolId !== d.schoolId) fail(409, 'BINDING_CHANGED');
+            ownership = {schoolId:d.schoolId, termId:classroom.termId, classId:classroom.id};
+            requireSame(report.study.scope, ownership, 'BINDING_CHANGED');
+          }
+          a.reports.push({...report, ...(ownership ? {ownership} : {}), digest: digest(report), receivedAt: now()});
         }
       }
       Object.assign(a, {status: b.status, context: b.context, sequence: b.sequence, digest: digest(b), receivedAt: now()});

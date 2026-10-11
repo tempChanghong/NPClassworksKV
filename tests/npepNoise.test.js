@@ -8,14 +8,15 @@ import {recentObservation} from '../domain/npep/observationFreshness.js';
 
 function fixture() {
   const d = {id: randomUUID(), screenBindingId: randomUUID(), serverInstanceId: randomUUID(),
-    deploymentEpoch: randomUUID(), bindingRevision: 1, sessionId: randomUUID(), statusEpoch: 1};
+    deploymentEpoch: randomUUID(), bindingRevision: 1, sessionId: randomUUID(), statusEpoch: 1, schoolId:'school',administrativeClassId:'class'};
   const context = {identity: identityOf(d), sessionId: d.sessionId, statusEpoch: 1, runId: randomUUID(), controlEpoch: randomUUID()};
   let data = {status: null, commands: [], reports: []};
   let scheduled = null;
   const tx = {
     $queryRaw: async strings => strings[0].includes('NpepNoiseScheduleDevice') && scheduled ? [{data: scheduled}] : [],
     npepSessionReceipt: {findUnique: async () => ({deviceId: d.id, runId: context.runId, statusEpoch: 1})},
-    classroomScreenBinding: {findUnique: async () => ({credentialVersion: 1})},
+    classroomScreenBinding: {findUnique: async () => ({credentialVersion: 1,schoolId:d.schoolId,administrativeClassId:d.administrativeClassId})},
+    workspace:{findUnique:async({where})=>({id:where.id,termId:'term'})},
     npepNoiseScheduleDevice: {findUnique: async () => ({data: scheduled})},
   };
   const base = {withRuntimeDevice: (_a, f) => f(tx, d), withNoiseScreen: (_s, f) => f(tx, d), withRuntimeAdmin: (_c, _s, _d, f) => f(tx, d)};
@@ -115,6 +116,23 @@ test('reports deduplicate, reject altered retries, and preserve no-signal as nul
   await f.service.exchange('device', b); await f.service.exchange('device', {...b, sequence: 2});
   assert.equal((await f.service.screen('screen')).reports.length, 1);
   await assert.rejects(f.service.exchange('device', {...b, sequence: 3, reports: [{...report, outcome: 'Faulted'}]}), {code: 'IDEMPOTENCY_CONFLICT'});
+});
+test('school study report ownership is fixed on acceptance and never moved by a retry after rebinding',async()=>{
+  const f=fixture();
+  const report={sessionId:randomUUID(),startedAt:'2026-10-12T11:00:00.000Z',endedAt:'2026-10-12T11:00:02.000Z',deviceName:'Synthetic',algorithm:'pcm-energy-v1',outcome:'Interrupted',
+    summary:{elapsedSeconds:2,sampledSeconds:0,coverage:0,energyMeanDbfs:null,peakDbfs:null,clippedPercent:0,frames:0},
+    study:{scope:{schoolId:'school',termId:'term',classId:'class'},policyVersion:'a'.repeat(64),mode:'Exam',clockSource:'Windows',
+      window:{start:'2026-10-12T19:00:00.000',end:'2026-10-12T21:30:00.000'}}};
+  assert.equal(validateNoise('report',report),true);
+  await f.service.exchange('device',{...f.body,reports:[report]});
+  assert.deepEqual(f.data().reports[0].ownership,report.study.scope);
+  f.d.administrativeClassId='another';
+  await f.service.exchange('device',{...f.body,sequence:2,reports:[report]});
+  assert.deepEqual(f.data().reports[0].ownership,report.study.scope);
+  assert.equal((await f.service.management({},'school','device')).reports.length,0);
+  await assert.rejects(f.service.exchange('device',{...f.body,sequence:3,reports:[{...report,sessionId:randomUUID()}]}),{code:'BINDING_CHANGED'});
+  for(const study of [{...report.study,clockSource:'ClassIsland'},{...report.study,window:{...report.study.window,start:'2026-02-30T19:00:00.000'}},
+    {...report.study,mode:'Manual'}]) assert.equal(validateNoise('report',{...report,study}),false);
 });
 test('stop targets the reported session and starts require a configured microphone', async () => {
   const f = fixture(); f.status.configured = false; await f.service.exchange('device', f.body);
