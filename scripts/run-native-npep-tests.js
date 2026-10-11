@@ -9,6 +9,7 @@ import {randomBytes} from 'node:crypto';
 import net from 'node:net';
 import {Client} from 'pg';
 import {preparePairingUpgrade} from '../tests/helpers/pairingUpgrade.js';
+import {prepareStudyScheduleUpgrade} from '../tests/helpers/studyScheduleUpgrade.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 // Optional machine-readable reporter for cross-repository acceptance; preserve
@@ -94,7 +95,10 @@ try {
   try { await admin.query('CREATE DATABASE npclassworks_test'); } finally { await admin.end(); }
   console.log(`Native isolated NPEP PostgreSQL ready on loopback port ${port}.`);
   env.NPEP_PAIRING_UPGRADE_FIXTURE = await preparePairingUpgrade({root,directory,env,run});
+  env.NPEP_STUDY_UPGRADE_FIXTURE = await prepareStudyScheduleUpgrade({root,directory,env,run});
   run(process.execPath, ['node_modules/prisma/build/index.js', 'migrate', 'deploy'], env);
+  run(process.execPath, ['--test', ...reporterArguments, 'tests/npepStudyScheduleUpgrade.integration.test.js'], env);
+  delete env.NPEP_STUDY_UPGRADE_FIXTURE;
   run(process.execPath, ['--test', ...reporterArguments, 'tests/npepPairingUpgrade.integration.test.js'], env);
   delete env.NPEP_PAIRING_UPGRADE_FIXTURE;
   run(process.execPath, ['--test', ...reporterArguments, '--test-concurrency=1', 'tests/npepDatabase.integration.test.js'], env);
