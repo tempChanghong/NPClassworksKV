@@ -1,0 +1,212 @@
+[
+  {
+    "name": "complete manifest",
+    "definition": "manifest",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "classId": "one",
+      "revision": 1,
+      "asset": {
+        "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "byteCount": 20000,
+        "width": 1000,
+        "height": 600,
+        "chunks": 2
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "not published",
+    "definition": "manifest",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "classId": "one",
+      "revision": 0,
+      "asset": null
+    },
+    "expected": true
+  },
+  {
+    "name": "bad chunks",
+    "definition": "manifest",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "classId": "one",
+      "revision": 1,
+      "asset": {
+        "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "byteCount": 20000,
+        "width": 1000,
+        "height": 600,
+        "chunks": 3
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "excess pixels",
+    "definition": "manifest",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "classId": "one",
+      "revision": 1,
+      "asset": {
+        "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "byteCount": 20000,
+        "width": 4096,
+        "height": 4096,
+        "chunks": 2
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "big encoded file",
+    "definition": "manifest",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "classId": "one",
+      "revision": 1,
+      "asset": {
+        "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "byteCount": 2097153,
+        "width": 1000,
+        "height": 600,
+        "chunks": 2
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "current scoped request",
+    "definition": "manifestRequest",
+    "value": {
+      "requestId": "0e7f9535-acc1-4a80-ac64-81e8d1b423ca",
+      "context": {
+        "identity": {
+          "serverInstanceId": "bf399156-d307-44a5-9a06-2c01afdc0364",
+          "deploymentEpoch": "c517f260-230c-4a8e-9a21-d1f69892cc43",
+          "deviceId": "1deeee1a-34b9-4273-a3f8-127ec7c1a09e",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "sessionId": "d6bd645b-0114-4732-a6f9-788a944e0dd9",
+        "runId": "bdde9e47-9a63-4d7a-a3ef-59384c2ed5b7",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "downloaded": null,
+      "observation": null
+    },
+    "expected": true
+  },
+  {
+    "name": "context scope override",
+    "definition": "manifestRequest",
+    "value": {
+      "requestId": "0e7f9535-acc1-4a80-ac64-81e8d1b423ca",
+      "context": {
+        "identity": {
+          "serverInstanceId": "bf399156-d307-44a5-9a06-2c01afdc0364",
+          "deploymentEpoch": "c517f260-230c-4a8e-9a21-d1f69892cc43",
+          "deviceId": "1deeee1a-34b9-4273-a3f8-127ec7c1a09e",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "sessionId": "d6bd645b-0114-4732-a6f9-788a944e0dd9",
+        "runId": "bdde9e47-9a63-4d7a-a3ef-59384c2ed5b7",
+        "statusEpoch": 1,
+        "classId": "other"
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "downloaded": null,
+      "observation": null
+    },
+    "expected": false
+  },
+  {
+    "name": "decoded visible observation",
+    "definition": "manifestRequest",
+    "value": {
+      "requestId": "0e7f9535-acc1-4a80-ac64-81e8d1b423ca",
+      "context": {
+        "identity": {
+          "serverInstanceId": "bf399156-d307-44a5-9a06-2c01afdc0364",
+          "deploymentEpoch": "c517f260-230c-4a8e-9a21-d1f69892cc43",
+          "deviceId": "1deeee1a-34b9-4273-a3f8-127ec7c1a09e",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "sessionId": "d6bd645b-0114-4732-a6f9-788a944e0dd9",
+        "runId": "bdde9e47-9a63-4d7a-a3ef-59384c2ed5b7",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "downloaded": null,
+      "observation": {
+        "appInstanceId": "3685a655-d8bc-4725-92f6-2d0fc2094af2",
+        "sequence": 1,
+        "revision": 1,
+        "appliedHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "visible": true,
+        "renderAgeMs": 200
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "visible without fresh render",
+    "definition": "manifestRequest",
+    "value": {
+      "requestId": "0e7f9535-acc1-4a80-ac64-81e8d1b423ca",
+      "context": {
+        "identity": {
+          "serverInstanceId": "bf399156-d307-44a5-9a06-2c01afdc0364",
+          "deploymentEpoch": "c517f260-230c-4a8e-9a21-d1f69892cc43",
+          "deviceId": "1deeee1a-34b9-4273-a3f8-127ec7c1a09e",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "sessionId": "d6bd645b-0114-4732-a6f9-788a944e0dd9",
+        "runId": "bdde9e47-9a63-4d7a-a3ef-59384c2ed5b7",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "downloaded": null,
+      "observation": {
+        "appInstanceId": "3685a655-d8bc-4725-92f6-2d0fc2094af2",
+        "sequence": 1,
+        "revision": 1,
+        "appliedHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "visible": true,
+        "renderAgeMs": null
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "no arbitrary URL",
+    "definition": "manifestRequest",
+    "value": {
+      "requestId": "0e7f9535-acc1-4a80-ac64-81e8d1b423ca",
+      "context": {
+        "identity": {
+          "serverInstanceId": "bf399156-d307-44a5-9a06-2c01afdc0364",
+          "deploymentEpoch": "c517f260-230c-4a8e-9a21-d1f69892cc43",
+          "deviceId": "1deeee1a-34b9-4273-a3f8-127ec7c1a09e",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "sessionId": "d6bd645b-0114-4732-a6f9-788a944e0dd9",
+        "runId": "bdde9e47-9a63-4d7a-a3ef-59384c2ed5b7",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "downloaded": null,
+      "observation": null,
+      "arbitraryImageUrl": "https://example.com/a"
+    },
+    "expected": false
+  }
+]

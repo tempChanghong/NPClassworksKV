@@ -1,0 +1,2112 @@
+[
+  {
+    "name": "configuration from KV",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": null,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "no unknown properties",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": null,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      },
+      "unexpected": true
+    },
+    "expected": false
+  },
+  {
+    "name": "source requires settings",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": null
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "real calendar required",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-02-30",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": null,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "legacy mirror agrees",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": null,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 2,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "medium lower than high",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": -30,
+            "mediumLineDbfs": -20,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "retention acknowledged",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": -30,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": true,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 180,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "class disabled",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Disabled",
+        "settings": null
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice"
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "applied configuration is not capture",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "cannot claim real capture",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "Active",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "cannot claim visible display",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "VISIBLE",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "no ambiguous control authority",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1,
+        "controlEpoch": "11111111-1111-4111-8111-111111111111"
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "active needs valid clock",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": false,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "active needs window",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": null
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "end is exclusive",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T21:30:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "preparation is bounded",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Preparing",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T18:57:59.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "reason must be bounded token",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Active",
+        "reason": "bad\nreason",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "receipt acknowledgment",
+    "definition": "receiptResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "expected": true
+  },
+  {
+    "name": "execution waiting is not a capture claim",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "None",
+        "state": "Idle",
+        "sessionId": null,
+        "reason": "POLICY_EXPIRED",
+        "clockReady": false,
+        "schoolNow": null,
+        "window": null,
+        "signalFresh": false
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "execution fresh frames within school window",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "manual cannot claim scheduled frames",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Manual",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "start acceptance is not active frames",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Starting",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "missing session",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": null,
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "expired policy is not capture",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "POLICY_EXPIRED",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "lost clock is not capture",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": false,
+        "schoolNow": "2026-10-12T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "past end cannot claim active",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T21:30:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "real date for execution",
+    "definition": "executionRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "owner": "Schedule",
+        "state": "Active",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-02-30T19:00:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "signalFresh": true
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "explicit bounded capture grant",
+    "definition": "executionResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "leaseSeconds": 86400
+    },
+    "expected": true
+  },
+  {
+    "name": "cannot exceed established one-day capture lease",
+    "definition": "executionResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "leaseSeconds": 86401
+    },
+    "expected": false
+  },
+  {
+    "name": "0.11 resume request",
+    "definition": "resumeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-12T19:00:00.000",
+        "end": "2026-10-12T21:30:00.000"
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 resume command",
+    "definition": "resumeCommand",
+    "value": {
+      "commandId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-12T19:00:00.000",
+        "end": "2026-10-12T21:30:00.000"
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 resume probe without receipt",
+    "definition": "resumeExchangeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "receipt": null
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 persisted application receipt",
+    "definition": "resumeExchangeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "receipt": {
+        "commandId": "11111111-1111-4111-8111-111111111111",
+        "outcome": "ACCEPTED"
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 resume delivery",
+    "definition": "resumeExchangeResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "command": {
+        "commandId": "11111111-1111-4111-8111-111111111111",
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 empty resume delivery",
+    "definition": "resumeExchangeResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "command": null
+    },
+    "expected": true
+  },
+  {
+    "name": "0.11 impossible date",
+    "definition": "resumeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-02-30T19:00:00.000",
+        "end": "2026-10-12T21:30:00.000"
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.11 invalid hour",
+    "definition": "resumeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-12T24:00:00.000",
+        "end": "2026-10-12T21:30:00.000"
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.11 reverse interval",
+    "definition": "resumeRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-12T21:30:00.000",
+        "end": "2026-10-12T21:30:00.000"
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.11 overlong window",
+    "definition": "resumeCommand",
+    "value": {
+      "commandId": "11111111-1111-4111-8111-111111111111",
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "window": {
+        "start": "2026-10-12T19:00:00.000",
+        "end": "2026-10-12T22:01:00.000"
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.11 malformed delivery calendar",
+    "definition": "resumeExchangeResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "command": {
+        "commandId": "11111111-1111-4111-8111-111111111111",
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "window": {
+          "start": "2026-02-30T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.10 capture grant rejects resume field",
+    "definition": "executionResponse",
+    "value": {
+      "confirmed": true,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "leaseSeconds": 86400,
+      "command": {
+        "commandId": "11111111-1111-4111-8111-111111111111",
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 current school date request",
+    "definition": "homeworkRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "snapshotId": null,
+      "index": 0
+    },
+    "expected": true
+  },
+  {
+    "name": "0.12 multiline homework snapshot",
+    "definition": "homeworkSnapshot",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "items": [
+        {
+          "id": "one",
+          "revision": 1,
+          "subject": "物理",
+          "title": "练习册",
+          "content": "第12页\n🙂下一行",
+          "sources": [
+            {
+              "id": "one",
+              "name": "行政一班"
+            }
+          ]
+        }
+      ]
+    },
+    "expected": true
+  },
+  {
+    "name": "0.12 bounded chunk",
+    "definition": "homeworkChunk",
+    "value": {
+      "snapshotId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "index": 0,
+      "count": 1,
+      "data": "e30="
+    },
+    "expected": true
+  },
+  {
+    "name": "0.12 impossible date",
+    "definition": "homeworkRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-02-30",
+      "snapshotId": null,
+      "index": 0
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 scope injection",
+    "definition": "homeworkRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "snapshotId": null,
+      "index": 0,
+      "classId": "foreign"
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 index without snapshot",
+    "definition": "homeworkRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "snapshotId": null,
+      "index": 1
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 first index with cursor",
+    "definition": "homeworkRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "snapshotId": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "index": 0
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 duplicate publication",
+    "definition": "homeworkSnapshot",
+    "value": {
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "date": "2026-10-12",
+      "items": [
+        {
+          "id": "one",
+          "revision": 1,
+          "subject": "物理",
+          "title": "练习册",
+          "content": "第12页\n🙂下一行",
+          "sources": [
+            {
+              "id": "one",
+              "name": "行政一班"
+            }
+          ]
+        },
+        {
+          "id": "one",
+          "revision": 1,
+          "subject": "物理",
+          "title": "练习册",
+          "content": "第12页\n🙂下一行",
+          "sources": [
+            {
+              "id": "one",
+              "name": "行政一班"
+            }
+          ]
+        }
+      ]
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 chunk outside count",
+    "definition": "homeworkChunk",
+    "value": {
+      "snapshotId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "index": 1,
+      "count": 1,
+      "data": "e30="
+    },
+    "expected": false
+  },
+  {
+    "name": "0.12 excessive chunks",
+    "definition": "homeworkChunk",
+    "value": {
+      "snapshotId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "index": 0,
+      "count": 129,
+      "data": "e30="
+    },
+    "expected": false
+  },
+  {
+    "name": "fresh WPF presentation",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "hidden WPF presentation",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Hidden",
+        "reason": "TEMPORARY_HIDE",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "presentation cannot claim visible without App",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": null,
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation cannot claim visible without current clock",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": false,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "expired visible presentation",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 0
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation may not contain pixels",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000,
+        "image": "pixels"
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation expiry is bounded",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 5001
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation outside actual stage",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Outside",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation end overlay",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Ended",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T21:30:04.999",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "presentation end overlay expires",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Ended",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T21:30:05.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation invalid school calendar",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Visible",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-02-30T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": "11111111-1111-4111-8111-111111111111",
+        "pulse": 1,
+        "remainingMs": 4000
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "presentation unknown has no visible claim",
+    "definition": "presentationRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": {
+        "state": "Unknown",
+        "reason": "FRAME_CURRENT",
+        "phase": "Active",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:01.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        },
+        "hostInstanceId": "11111111-1111-4111-8111-111111111111",
+        "appInstanceId": null,
+        "pulse": null,
+        "remainingMs": 4000
+      }
+    },
+    "expected": true
+  }
+]

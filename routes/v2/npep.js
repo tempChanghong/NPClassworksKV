@@ -1,3 +1,5 @@
+import {createNpepSeatingRouter} from './npepSeating.js';
+import {createNpepPhotoRouter} from './npepPhotos.js';
 import express from 'express';
 import {prisma} from '../../utils/prisma.js';
 import {verifyAccessToken} from '../../utils/tokenManager.js';
@@ -24,6 +26,10 @@ import {createNpepNoiseDisplayPresenceService} from '../../services/npepNoiseDis
 import {validateNoiseManagement} from '../../domain/npep/noiseManagement.js';
 import {createNpepNoiseManagementService} from '../../services/npepNoiseManagementService.js';
 import {authenticateClassroomScreen} from '../../services/classroomScreenService.js';
+import {createNpepStudySettingsService} from '../../services/npepStudySettingsService.js';
+import {validateStudyWrite} from '../../domain/npep/studySettings.js';
+import {createNpepStudyDeviceService} from '../../services/npepStudyDeviceService.js';
+import {validateStudyDevice} from '../../domain/npep/studyDevice.js';
 
 export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true} = {}) {
   const router = express.Router();
@@ -37,6 +43,10 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const noiseDisplay = createNpepNoiseDisplayService(service);
   const noiseDisplayPresence = createNpepNoiseDisplayPresenceService(service, noiseDisplay);
   const noiseManagement = createNpepNoiseManagementService(service, noise);
+  const studySettings = createNpepStudySettingsService(service);
+  const studyDevice = createNpepStudyDeviceService(service);
+  router.use(createNpepSeatingRouter({base: service, study: studyDevice, authenticate, rateLimits}));
+  router.use(createNpepPhotoRouter({base: service, study: studyDevice, authenticate, rateLimits}));
   router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
     // Early protocol/parser errors must still correlate with the caller's request.
@@ -51,6 +61,14 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
       if (/^\/(?:device\/noise-schedule|screen\/noise-schedule(?:\/resume)?|schools\/[^/]+\/devices\/[^/]+\/noise-schedule)\/?$/i.test(req.path)) req.npepVersion = '0.7';
       if (/^\/(?:screen\/noise-display(?:\/return)?|schools\/[^/]+\/noise-display-settings|device\/noise-management\/(?:status|authorize)|screen\/noise-management\/commands)\/?$/i.test(req.path)) req.npepVersion = '0.8';
       if (/^\/(?:screen\/noise-display\/presence|device\/noise-display\/(?:observe|return))\/?$/i.test(req.path)) req.npepVersion = '0.9';
+      if (/^\/schools\/[^/]+\/study-settings(?:\/preview)?\/?$/i.test(req.path)) req.npepVersion = '0.10';
+      if (/^\/device\/study-settings(?:\/(?:receipt|execution))?\/?$/i.test(req.path)) req.npepVersion = '0.10';
+      if (/^\/schools\/[^/]+\/devices\/[^/]+\/study-settings\/?$/i.test(req.path)) req.npepVersion = '0.10';
+      if (/^\/(?:device\/study-settings\/resume-exchange|schools\/[^/]+\/devices\/[^/]+\/study-settings\/resume)\/?$/i.test(req.path)) req.npepVersion = '0.11';
+      if (/^\/device\/study-settings\/homework\/?$/i.test(req.path)) req.npepVersion = '0.12';
+      if (/^\/device\/study-settings\/presentation\/?$/i.test(req.path)) {
+        req.npepVersion = '0.13'; req.studyPresentationStartedAt = performance.now();
+      }
       if (req.get('X-NPEP-Version') !== req.npepVersion) fail(426, 'PROTOCOL_UNSUPPORTED');
       if (req.method === 'POST' && !req.is('application/json')) fail(400, 'INVALID_REQUEST');
       next();
@@ -173,6 +191,55 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const scheduleBody = (req, _res, next) => next(validateScheduleWrite(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   router.post('/schools/:schoolId/noise-schedules/preview', admin, noQuery, scheduleBody, send(req => schedules.preview(req.npepClaims, req.params.schoolId, req.body)));
   router.post('/schools/:schoolId/noise-schedules', admin, noQuery, scheduleBody, send(req => schedules.save(req.npepClaims, req.params.schoolId, req.body)));
+  router.get('/schools/:schoolId/study-settings', admin,
+    (req, _res, next) => next(validateScheduleQuery(req.query) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => studySettings.list(req.npepClaims, req.params.schoolId, req.query.termId)));
+  router.get('/device/study-settings', noQuery, send(async req => {
+    const auth = deviceAuth(req);
+    await deviceRate(auth, 'study-settings', 30, 60);
+    return studyDevice.read(auth);
+  }));
+  router.post('/device/study-settings/homework', noQuery,
+    (req, _res, next) => next(validateStudyDevice('homeworkRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(async req => {
+      const auth = deviceAuth(req); await deviceRate(auth, 'study-homework', 180, 60);
+      return studyDevice.homework(auth, req.body);
+    }));
+  router.post('/device/study-settings/presentation', noQuery,
+    (req, _res, next) => next(validateStudyDevice('presentationRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(async req => {
+      const auth = deviceAuth(req); await deviceRate(auth, 'study-presentation', 90, 60);
+      return studyDevice.presentation(auth, req.body, req.studyPresentationStartedAt);
+    }));
+  router.post('/device/study-settings/receipt', noQuery,
+    (req, _res, next) => next(validateStudyDevice('receiptRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(async req => {
+      const auth = deviceAuth(req); await deviceRate(auth, 'study-receipt', 30, 60);
+      return studyDevice.receipt(auth, req.body);
+    }));
+  router.post('/device/study-settings/execution', noQuery,
+    (req, _res, next) => next(validateStudyDevice('executionRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(async req => {
+      const auth = deviceAuth(req); await deviceRate(auth, 'study-execution', 30, 60);
+      return studyDevice.execution(auth, req.body);
+    }));
+  router.get('/schools/:schoolId/devices/:id/study-settings' , admin, noQuery,
+    send(req => studyDevice.management(req.npepClaims, req.params.schoolId, req.params.id)));
+  router.post('/schools/:schoolId/devices/:id/study-settings/resume', admin, noQuery,
+    (req, _res, next) => next(validateStudyDevice('resumeRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => studyDevice.resume(req.npepClaims, req.params.schoolId, req.params.id, req.body)));
+  router.post('/device/study-settings/resume-exchange', noQuery,
+    (req, _res, next) => next(validateStudyDevice('resumeExchangeRequest', req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(async req => {
+      const auth = deviceAuth(req); await deviceRate(auth, 'study-resume', 30, 60);
+      return studyDevice.resumeExchange(auth, req.body);
+    }));
+  router.post('/schools/:schoolId/study-settings/preview', admin, noQuery,
+    (req, _res, next) => next(validateStudyWrite(req.body, true) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => studySettings.preview(req.npepClaims, req.params.schoolId, req.body)));
+  router.post('/schools/:schoolId/study-settings', admin, noQuery,
+    (req, _res, next) => next(validateStudyWrite(req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST')),
+    send(req => studySettings.save(req.npepClaims, req.params.schoolId, req.body)));
   router.get('/screen/noise', noQuery, send(req => noise.screen(screenToken(req))));
   router.post('/screen/noise/commands', noiseBody('createRequest'), send(req => noise.create(screenToken(req), req.body)));
   const managementBody = name => (req, _res, next) => next(validateNoiseManagement(name, req.body)

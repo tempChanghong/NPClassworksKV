@@ -251,6 +251,16 @@
               "type": "null"
             }
           ]
+        },
+        "estimate": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/estimate"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -272,6 +282,31 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "timing": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "type": "string",
+              "enum": [
+                "Monotonic"
+              ]
+            },
+            "observedEndedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "clockDiscontinuity": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "source",
+            "observedEndedAt",
+            "clockDiscontinuity"
+          ]
+        },
         "sessionId": {
           "type": "string",
           "format": "uuid",
@@ -314,6 +349,26 @@
             "Faulted",
             "Interrupted"
           ]
+        },
+        "estimate": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/estimate"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sessionKind": {
+          "enum": [
+            "Manual",
+            "Schedule"
+          ]
+        },
+        "endReason": {
+          "type": "string",
+          "maxLength": 64
         }
       },
       "required": [
@@ -589,6 +644,143 @@
         "requestId",
         "serverTime",
         "data"
+      ]
+    },
+    "estimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profileId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "algorithm": {
+          "type": "string",
+          "enum": [
+            "a-sos-band8500-v1|sample-energy-fs-v1"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "ManualReference",
+            "UsbReferenceBeta"
+          ]
+        },
+        "timeWeighting": {
+          "type": "string",
+          "enum": [
+            "Fast",
+            "Slow"
+          ]
+        },
+        "offsetDb": {
+          "type": "number",
+          "minimum": -200,
+          "maximum": 300
+        },
+        "confirmedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "WarmingUp",
+            "Active",
+            "Invalidated",
+            "NoData",
+            "Stopped"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "DEVICE_CHANGED",
+                "INPUT_SETTINGS_CHANGED",
+                "INPUT_SETTINGS_UNAVAILABLE",
+                "A_WEIGHTING_UNAVAILABLE",
+                "REFERENCE_STORE_UNAVAILABLE"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "currentDbA": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 30,
+              "maximum": 130
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sampledSeconds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 172800
+            },
+            "coverage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "energyMeanDbA": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 30,
+                  "maximum": 130
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maximumDbA": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 30,
+                  "maximum": 130
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "sampledSeconds",
+            "coverage",
+            "energyMeanDbA",
+            "maximumDbA"
+          ]
+        }
+      },
+      "required": [
+        "profileId",
+        "algorithm",
+        "method",
+        "timeWeighting",
+        "offsetDb",
+        "confirmedAt",
+        "state",
+        "reason",
+        "currentDbA",
+        "summary"
       ]
     }
   }
