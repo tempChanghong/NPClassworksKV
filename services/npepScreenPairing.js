@@ -2,6 +2,7 @@ import {randomUUID, randomInt} from 'node:crypto';
 import {assertInstance} from '../domain/npep/deployment.js';
 import {fail, hash, digest, secretHash, displayText, capabilities} from '../domain/npep/wire.js';
 import {createPairingBatch} from './npepPairingBatch.js';
+import {schoolManagementRepository} from './npepSchoolManagementService.js';
 
 export function assertScreenAdmission(binding, candidate = null) {
   if (!binding.npepPairingEnabled) fail(403, 'SCREEN_PAIRING_DISABLED');
@@ -35,6 +36,7 @@ export function createScreenPairing({transaction, schoolLock, administrator, bin
       const current = await binding(tx, bindingId, schoolId);
       conflict(current.npepPairingRevision === body.expectedRevision, 'REVISION_CONFLICT');
       conflict(current.npepPairingRevision < Number.MAX_SAFE_INTEGER, 'REVISION_CONFLICT');
+      if(body.enabled && !await schoolManagementRepository.credential(tx,schoolId,current.administrativeClassId))fail(409,'MANAGEMENT_NOT_CONFIGURED');
       const changed = await tx.classroomScreenBinding.update({where: {id: current.id}, data: {npepPairingEnabled: body.enabled, npepPairingRevision: {increment: 1}}});
       // Any policy change invalidates previously issued or claimed-but-unconfirmed codes.
       await tx.npepScreenPairingTicket.updateMany({where: {screenBindingId: current.id, state: 'READY'}, data: {state: 'CANCELLED'}});

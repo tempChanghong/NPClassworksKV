@@ -55,6 +55,13 @@ test('saved/applied/active separate; policy edits and old Host never report curr
   await assert.rejects(f.service.resume('screen',{requestId:randomUUID(),version,window}),{code:'SCHEDULE_VERSION_CONFLICT'});
   f.d.sessionId=randomUUID(); assert.equal((await f.service.screen('screen')).online,false);
 });
+test('future schedule observation never reports applied and cannot authorize resume',async()=>{
+  const f=fixture(); await f.service.exchange({},request());
+  f.data().receivedAt=new Date(Date.now()+3600000).toISOString();
+  const view=await f.service.screen('screen'); assert.equal(view.online,false); assert.equal(view.applied,false);
+  assert.equal((await f.service.management({},'school','device')).online,false);
+  await assert.rejects(f.service.resume('screen',{requestId:randomUUID(),version,window}),{code:'DEVICE_OFFLINE'});
+});
 
 test('server clock rollback invalidates schedule freshness and prevents resume from an old observation',async t=>{
   const at=Date.parse('2026-10-01T11:30:00.000Z');

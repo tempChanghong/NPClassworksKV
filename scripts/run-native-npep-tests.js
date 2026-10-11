@@ -11,6 +11,12 @@ import {Client} from 'pg';
 import {preparePairingUpgrade} from '../tests/helpers/pairingUpgrade.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Optional machine-readable reporter for cross-repository acceptance; preserve
+// the existing human-readable default for direct local use.
+const reporterOption = process.argv.indexOf('--test-reporter');
+const reporter = reporterOption >= 0 ? process.argv[reporterOption + 1] : null;
+if (reporterOption >= 0 && !['tap', 'spec'].includes(reporter)) throw new Error('--test-reporter requires tap or spec');
+const reporterArguments = reporter ? [`--test-reporter=${reporter}`] : [];
 const suffix = process.platform === 'win32' ? '.exe' : '';
 async function findBin() {
   if (process.env.NPEP_TEST_PG_BIN) return resolve(process.env.NPEP_TEST_PG_BIN);
@@ -89,9 +95,9 @@ try {
   console.log(`Native isolated NPEP PostgreSQL ready on loopback port ${port}.`);
   env.NPEP_PAIRING_UPGRADE_FIXTURE = await preparePairingUpgrade({root,directory,env,run});
   run(process.execPath, ['node_modules/prisma/build/index.js', 'migrate', 'deploy'], env);
-  run(process.execPath, ['--test', 'tests/npepPairingUpgrade.integration.test.js'], env);
+  run(process.execPath, ['--test', ...reporterArguments, 'tests/npepPairingUpgrade.integration.test.js'], env);
   delete env.NPEP_PAIRING_UPGRADE_FIXTURE;
-  run(process.execPath, ['--test', '--test-concurrency=1', 'tests/npepDatabase.integration.test.js'], env);
+  run(process.execPath, ['--test', ...reporterArguments, '--test-concurrency=1', 'tests/npepDatabase.integration.test.js'], env);
   passed = true;
 } finally {
   try {

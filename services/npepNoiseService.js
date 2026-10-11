@@ -3,14 +3,13 @@ import {digest, fail} from '../domain/npep/wire.js';
 import {identityOf, requireSame} from '../domain/npep/runtimeControl.js';
 import {noiseRepository} from './npepNoiseRepository.js';
 import {scheduledStopProtected} from './npepNoiseManagementService.js';
+import {recentObservation} from '../domain/npep/observationFreshness.js';
+import {coherentNoiseSummary} from '../domain/npep/noise.js';
 
 const active = s => ['Starting', 'Active', 'Stopping'].includes(s?.state);
 const now = () => new Date().toISOString();
 export function createNpepNoiseService(base, repo = noiseRepository) {
-  const online = (a, d) => {
-    const age = Date.now() - Date.parse(a.receivedAt);
-    return !!a.status && a.context.sessionId === d.sessionId && a.context.statusEpoch === d.statusEpoch && age >= 0 && age < 15000;
-  };
+  const online = (a, d) => !!a.status && a.context?.sessionId === d.sessionId && a.context?.statusEpoch === d.statusEpoch && recentObservation(a.receivedAt);
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.command.expiresAt) <= Date.now()) c.receipt = {commandId: c.command.commandId, outcome: 'UNKNOWN', reason: 'COMMAND_EXPIRED'};
     a.commands = a.commands.slice(-64);
@@ -20,7 +19,8 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
     if (!d) return {provider: 'browser', online: false, status: null, receivedAt: null, commands: [], reports: []};
     const a = await repo.read(tx, d.id); clean(a); await repo.save(tx, d.id, a);
     return {provider: a.status ? 'native' : 'browser', online: online(a, d), status: a.status,
-      receivedAt: a.receivedAt ?? null, commands: a.commands.slice(-5), reports: a.reports.slice(-20).reverse()};
+      receivedAt: a.receivedAt ?? null, commands: a.commands.slice(-5),
+      reports: a.reports.filter(r => !r.ownership || r.ownership.schoolId === d.schoolId && r.ownership.classId === d.administrativeClassId).slice(-20).reverse()};
   }
   return {
     screen: token => base.withNoiseScreen(token, view),
@@ -73,11 +73,20 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
         c.receipt = r;
       }
       for (const report of b.reports) {
+        if (!report.summary || !coherentNoiseSummary(report.summary)) fail(400, 'INVALID_REPORT');
         const previous = a.reports.find(r => r.sessionId === report.sessionId);
         if (previous) requireSame(previous.digest, digest(report), 'IDEMPOTENCY_CONFLICT');
         else {
           if (Date.parse(report.endedAt) < Date.parse(report.startedAt)) fail(400, 'INVALID_REPORT');
-          a.reports.push({...report, digest: digest(report), receivedAt: now()});
+          let ownership;
+          if (report.study) {
+            const binding = await tx.classroomScreenBinding.findUnique({where:{id:d.screenBindingId}});
+            const classroom = binding && await tx.workspace.findUnique({where:{id:binding.administrativeClassId}});
+            if (!classroom || binding.schoolId !== d.schoolId) fail(409, 'BINDING_CHANGED');
+            ownership = {schoolId:d.schoolId, termId:classroom.termId, classId:classroom.id};
+            requireSame(report.study.scope, ownership, 'BINDING_CHANGED');
+          }
+          a.reports.push({...report, ...(ownership ? {ownership} : {}), digest: digest(report), receivedAt: now()});
         }
       }
       Object.assign(a, {status: b.status, context: b.context, sequence: b.sequence, digest: digest(b), receivedAt: now()});

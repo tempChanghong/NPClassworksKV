@@ -1,0 +1,521 @@
+[
+  {
+    "name": "first enabled Monday",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-12T19:00:00",
+        "end": "2026-10-12T21:30:00"
+      }
+    ]
+  },
+  {
+    "name": "before effective date",
+    "date": "2026-10-05",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": []
+  },
+  {
+    "name": "nonselected Tuesday",
+    "date": "2026-10-13",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": []
+  },
+  {
+    "name": "school holiday skip",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": [
+          {
+            "date": "2026-10-12",
+            "kind": "Skip",
+            "weekday": null
+          }
+        ]
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": []
+  },
+  {
+    "name": "makeup uses Monday rules",
+    "date": "2026-10-17",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": [
+          {
+            "date": "2026-10-17",
+            "kind": "UseWeekday",
+            "weekday": 1
+          }
+        ]
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-17T19:00:00",
+        "end": "2026-10-17T21:30:00"
+      }
+    ]
+  },
+  {
+    "name": "effective end inclusive",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": "2026-10-12",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-12T19:00:00",
+        "end": "2026-10-12T21:30:00"
+      }
+    ]
+  },
+  {
+    "name": "after effective end",
+    "date": "2026-10-19",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": "2026-10-12",
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": []
+  },
+  {
+    "name": "overnight keeps start date",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "23:00",
+            "end": "01:00"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-12T23:00:00",
+        "end": "2026-10-13T01:00:00"
+      }
+    ]
+  },
+  {
+    "name": "adjacent spans merge",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:00",
+            "end": "20:00"
+          },
+          {
+            "days": [
+              1
+            ],
+            "start": "20:00",
+            "end": "21:30"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-12T19:00:00",
+        "end": "2026-10-12T21:30:00"
+      }
+    ]
+  },
+  {
+    "name": "custom times preserved",
+    "date": "2026-10-12",
+    "settings": {
+      "schedule": {
+        "timeZone": "Asia/Shanghai",
+        "effectiveFrom": "2026-10-12",
+        "effectiveTo": null,
+        "rules": [
+          {
+            "days": [
+              1
+            ],
+            "start": "19:15",
+            "end": "20:45"
+          }
+        ],
+        "exceptions": []
+      },
+      "presentation": {
+        "noiseDisplay": "StatusTrend",
+        "temporaryHideSeconds": 180
+      },
+      "homework": {
+        "enabled": true,
+        "sourceMode": "OwnClass",
+        "sourceClassIds": [],
+        "rotationSeconds": 60
+      },
+      "noise": {
+        "enabled": true,
+        "redLineDbfs": null,
+        "mediumLineDbfs": null,
+        "disciplineCooldownSeconds": 600,
+        "highContinuousSeconds": 5
+      },
+      "photos": {
+        "enabled": false,
+        "continuousSeconds": 5,
+        "cooldownSeconds": 30,
+        "retentionDays": 30,
+        "captureOnExit": true,
+        "extendedRetentionAcknowledged": false
+      }
+    },
+    "windows": [
+      {
+        "start": "2026-10-12T19:15:00",
+        "end": "2026-10-12T20:45:00"
+      }
+    ]
+  }
+]

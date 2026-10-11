@@ -1,4 +1,5 @@
 import {prisma} from '../utils/prisma.js';
+import {cleanupStudyPhotos} from './npepPhotoMaintenance.js';
 
 // Bounded batches; only the process holding the transaction advisory lock cleans.
 export async function cleanupNpep(client = prisma) {
@@ -44,7 +45,7 @@ export function startNpepMaintenance() {
   const tick = async () => {
     if (running) return;
     running = true;
-    try { await cleanupNpep(); } catch { console.warn('NPEP maintenance unavailable'); }
+    try { await cleanupNpep(); await cleanupStudyPhotos(prisma); } catch { console.warn('NPEP maintenance unavailable'); }
     finally { running = false; }
   };
   const timer = setInterval(tick, 60000);

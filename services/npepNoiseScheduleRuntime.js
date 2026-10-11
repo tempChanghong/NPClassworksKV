@@ -2,7 +2,10 @@ import {randomUUID} from 'node:crypto';
 import {digest, fail} from '../domain/npep/wire.js';
 import {identityOf, requireSame} from '../domain/npep/runtimeControl.js';
 import {resolvePolicy, validatePolicy} from '../domain/npep/noiseScheduleRules.js';
+import {resolveStudyPolicy, validateStudyPolicy} from '../domain/npep/studySettings.js';
+import {studySettingsRepository} from './npepStudySettingsRepository.js';
 import {noiseScheduleRepository as policies} from './npepNoiseScheduleRepository.js';
+import {recentObservation} from '../domain/npep/observationFreshness.js';
 
 export const noiseScheduleRuntimeRepository = {
   async read(tx,id) {
@@ -28,18 +31,25 @@ export const noiseScheduleRuntimeRepository = {
     const grade=rows.find(p=>p.targetType==='GRADE'&&p.targetId===c.gradeId);
     const local=rows.find(p=>p.targetType==='CLASS'&&p.targetId===c.id);
     if (validatePolicy(grade?.policy??null,true) || validatePolicy(local?.policy??null)) fail(503,'INVALID_SCHEDULE_POLICY');
-    const effective=resolvePolicy(grade?.policy??null,local?.policy??null);
-    return {...effective,version:digest({identity:identityOf(d),term:c.termId,classId:c.id,gradeId:c.gradeId,
-      gradeRevision:grade?.revision??0,classRevision:local?.revision??0,effective})};
+    let effective=resolvePolicy(grade?.policy??null,local?.policy??null);
+    const studyRows=await studySettingsRepository.settings(tx,d.schoolId,c.termId);
+    const studyGrade=studyRows.find(p=>p.targetType==='GRADE'&&p.targetId===c.gradeId);
+    const studyClass=studyRows.find(p=>p.targetType==='CLASS'&&p.targetId===c.id);
+    if (studyGrade && validateStudyPolicy(studyGrade.policy,true) || studyClass && validateStudyPolicy(studyClass.policy)) fail(503,'INVALID_STUDY_POLICY');
+    const study=resolveStudyPolicy(studyGrade?.policy,studyClass?.policy);
+    // Legacy clients cannot execute dates/calendar exceptions. Explicitly stop that
+    // scheduler when a study policy owns this class, instead of giving it weekly rules.
+    if (study.source!=='None') effective={source:'Disabled',rules:[]};
+    const fingerprint={identity:identityOf(d),term:c.termId,classId:c.id,gradeId:c.gradeId,
+      gradeRevision:grade?.revision??0,classRevision:local?.revision??0,effective};
+    if(study.source!=='None') Object.assign(fingerprint,{studyGradeRevision:studyGrade?.revision??0,studyClassRevision:studyClass?.revision??0,study});
+    return {...effective,version:digest(fingerprint)};
   },
 };
 
 export function createNpepNoiseScheduleRuntime(base,repo=noiseScheduleRuntimeRepository) {
-  const fresh=(a,d)=>{
-    const age=Date.now()-Date.parse(a.receivedAt);
-    return !!a.status && a.context?.sessionId===d.sessionId && a.context?.statusEpoch===d.statusEpoch &&
-      digest(a.context.identity)===digest(identityOf(d)) && age>=0 && age<15000;
-  };
+  const fresh=(a,d)=>!!a.status && a.context?.sessionId===d.sessionId && a.context?.statusEpoch===d.statusEpoch &&
+    digest(a.context.identity)===digest(identityOf(d)) && recentObservation(a.receivedAt);
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.expiresAt)<=Date.now()) c.receipt={commandId:c.command.commandId,outcome:'UNKNOWN'};
     a.commands=a.commands.slice(-32);

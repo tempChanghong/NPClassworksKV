@@ -26,8 +26,8 @@ permissions:
 jobs:
   current:
     # Merge the desktop provider workflow before enabling this caller.
-    uses: tempChanghong/NPEduTools/.github/workflows/npep-current.yml@main
+    uses: tempChanghong/NPEduTools/.github/workflows/npep-current.yml@1466c2e81095c3833d7f24b489ae7d6a05be3e99
     with:
-      desktop_sha: ${{ inputs.desktop_sha || '' }}
-      web_sha: ${{ inputs.web_sha || '' }}
+      desktop_sha: ${{ inputs.desktop_sha || (github.event_name == 'pull_request' && '1466c2e81095c3833d7f24b489ae7d6a05be3e99') || '' }}
+      web_sha: ${{ inputs.web_sha || (github.event_name == 'pull_request' && 'ac014d1270ee82a4f943d55c46a5e4527bf3c12e') || '' }}
       backend_sha: ${{ inputs.backend_sha || '' }}

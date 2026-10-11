@@ -732,11 +732,19 @@ model NpepDevice {
   revokedAt DateTime? @db.Timestamptz(3)
   notificationSnapshot NpepNotificationSnapshot?
   noiseScheduleState NpepNoiseScheduleDevice?
+  studyConfigurationState NpepStudyDevice?
   notificationExposures NpepNotificationExposure[]
   notificationReceipts NpepNotificationReceipt[]
   @@index([schoolId, id])
   @@index([screenBindingId, state])
   @@index([credentialExpiresAt])
+}
+
+/// Presentation-policy receipt only; does not certify capture or visible presentation.
+model NpepStudyDevice {
+  deviceId String @id @db.Uuid
+  data Json
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 }
 
 model NpepSessionReceipt {
@@ -851,6 +859,32 @@ model NpepNoiseDisplayPresence {
 model NpepNoiseManagementDevice {
   deviceId String @id @db.Uuid
   data     Json   @db.JsonB
+}
+
+/// New native study presentation/photo configuration, independent of legacy 0.7 capture rules.
+model NpepStudySetting {
+  schoolId   String   @db.VarChar(191)
+  termId     String   @db.VarChar(191)
+  targetType String   @db.VarChar(8)
+  targetId   String   @db.VarChar(191)
+  revision   Int
+  policy     Json     @db.JsonB
+  updatedBy  String   @db.VarChar(191)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, termId, targetType, targetId])
+  @@index([schoolId, termId])
+}
+
+model NpepStudySettingRequest {
+  schoolId  String   @db.VarChar(191)
+  requestId String   @db.Uuid
+  actorId   String   @db.VarChar(191)
+  digest    String   @db.VarChar(64)
+  result    Json     @db.JsonB
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, requestId])
 }
 
 model NpepRateLimit {
@@ -1026,4 +1060,109 @@ model NpepNotificationReceipt {
   @@id([deviceId, eventId])
   @@index([publicationId, revision, receivedAt])
   @@index([receivedAt])
+}
+
+model NpepSeatingVersion {
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  revision Int
+  hash String? @db.VarChar(64)
+  width Int?
+  height Int?
+  imageBytes Bytes? @db.ByteA
+  requestId String @db.Uuid
+  digest String @db.VarChar(64)
+  actorId String @db.VarChar(191)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@id([schoolId, termId, classId, revision])
+  @@unique([schoolId, requestId])
+}
+model NpepSeatingReceipt {
+  deviceId String @id @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  data Json
+  @@index([schoolId, termId, classId])
+}
+
+/// Separate short camera permission; never an extension of the noise capture lease.
+model NpepStudyExitEvent {
+  eventId String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  digest String @db.VarChar(64)
+  metadata Json @db.JsonB
+  createdAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([schoolId, termId, classId, createdAt, eventId])
+  @@index([expiresAt])
+}
+
+model NpepPhotoLease {
+  id String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  version String @db.VarChar(64)
+  context Json
+  settings Json
+  createdAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([deviceId, createdAt])
+  @@index([expiresAt])
+}
+
+/// Private JPEG bytes live in the private photo directory, not in PostgreSQL or public assets.
+model NpepStudyPhoto {
+  eventId String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  leaseId String @db.Uuid
+  version String @db.VarChar(64)
+  metadata Json
+  digest String @db.VarChar(64)
+  storedHash String @db.VarChar(64)
+  width Int
+  height Int
+  byteCount Int
+  capturedAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  state String @db.VarChar(16)
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([schoolId, termId, classId, capturedAt, eventId])
+  @@index([deviceId, capturedAt])
+  @@index([state, expiresAt])
+}
+// Class-scoped NPEP credentials are independent of screen login and native device bearer credentials.
+model NpepClassManagement {
+  schoolId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  revision BigInt
+  verifier Json
+  updatedAt DateTime @db.Timestamptz(3)
+  @@id([schoolId, classId])
+}
+
+model NpepManagementRequest {
+  schoolId String @db.VarChar(191)
+  requestId String @db.Uuid
+  data Json
+  @@id([schoolId, requestId])
+}
+
+model NpepEquipmentPolicy {
+  deviceId String @id @db.Uuid
+  data Json
+}
+
+model NpepEquipmentInventory {
+  deviceId String @id @db.Uuid
+  data Json
 }

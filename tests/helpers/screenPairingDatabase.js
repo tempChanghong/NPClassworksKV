@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {randomUUID, randomBytes} from 'node:crypto';
 import {hash} from '../../domain/npep/wire.js';
+import {managementVerifier} from '../../domain/npep/schoolManagement.js';
+import {schoolManagementRepository} from '../../services/npepSchoolManagementService.js';
 import {writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {spawn} from 'node:child_process';
@@ -10,6 +12,8 @@ export async function verifyScreenPairingDatabase(t, {fixture, request, prisma, 
   const secret = () => randomBytes(32).toString('base64url');
   async function setup(enabled = true) {
     const f = await fixture(), token = secret();
+    await schoolManagementRepository.saveCredential(prisma,f.school.id,f.workspace.id,{revision:1,
+      verifier:managementVerifier('isolated-school-credential'),updatedAt:new Date()});
     await prisma.classroomScreenBinding.update({where:{id:f.binding.id},data:{tokenHash:hash(token)}});
     f.policy = (extra = {}) => request(`/schools/${f.school.id}/screen-bindings/${f.binding.id}/pairing-access`,
       {auth:f.admin,body:req({enabled,expectedRevision:1,...extra})});
@@ -25,6 +29,14 @@ export async function verifyScreenPairingDatabase(t, {fixture, request, prisma, 
     };
     return f;
   }
+  await t.test('Web pairing: preauthorization requires a configured school management credential', async () => {
+    const f = await fixture();
+    const result = await request(`/schools/${f.school.id}/screen-bindings/${f.binding.id}/pairing-access`,
+      {auth:f.admin,body:req({enabled:true,expectedRevision:1})});
+    assert.equal(result.status,409);
+    assert.equal(result.error.code,'MANAGEMENT_NOT_CONFIGURED');
+    assert.equal((await prisma.classroomScreenBinding.findUnique({where:{id:f.binding.id}})).npepPairingEnabled,false);
+  });
   await t.test('Web pairing: disabled by default, isolated screen and school credentials, strict bodies', async () => {
     const f = await setup(false), other = await fixture();
     assert.equal((await f.screen()).data.enabled,false);
