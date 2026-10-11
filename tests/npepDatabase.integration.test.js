@@ -552,7 +552,10 @@ test('N1 real HTTP/PostgreSQL pairing, lifecycle fencing and recovery gate', {sk
       return spawnSync('docker', ['exec', ...(input ? ['-i'] : []), container, name, '-U', decodeURIComponent(url.username), '-d', url.pathname.slice(1), ...args],
         {input, maxBuffer: 32 * 1024 * 1024});
     }
-    const backup = pgTool('pg_dump', ['-Fc', '-t', 'public."NpepDevice"', '-t', 'public."NpepDeployment"', '-t', 'public."NpepNotificationSnapshot"', '-t', 'public."NpepNotificationExposure"', '-t', 'public."NpepNotificationReceipt"', '-t', 'public."NpepNoiseDevice"', '-t', 'public."NpepNoiseScheduleDevice"']);
+    // Include every foreign-key child when replacing the device table in this isolated restore.
+    const backup = pgTool('pg_dump', ['-Fc', ...['NpepDevice','NpepDeployment','NpepNotificationSnapshot',
+      'NpepNotificationExposure','NpepNotificationReceipt','NpepNoiseDevice','NpepNoiseScheduleDevice',
+      'NpepSeatingReceipt','NpepStudyDevice'].flatMap(table => ['-t', `public."${table}"`])]);
     assert.equal(backup.status, 0, 'isolated pg_dump must succeed');
     const closed = await closeBeforeRestore(gateFile);
     assert.equal((await request('/device/me', {auth: d.auth})).status, 503);

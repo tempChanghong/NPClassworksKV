@@ -982,6 +982,7 @@
                 "TEMPORARILY_UNAVAILABLE",
                 "SCREEN_TOKEN_INVALID",
                 "SCREEN_PAIRING_DISABLED",
+                "MANAGEMENT_NOT_CONFIGURED",
                 "PREAUTHORIZATION_CHANGED",
                 "PAIRING_CODE_UNAVAILABLE"
               ]

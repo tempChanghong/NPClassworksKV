@@ -1,16 +1,22 @@
 import assert from 'node:assert/strict';
 import {randomBytes, randomUUID} from 'node:crypto';
 import {hash} from '../../domain/npep/wire.js';
+import {managementVerifier} from '../../domain/npep/schoolManagement.js';
+import {schoolManagementRepository} from '../../services/npepSchoolManagementService.js';
 
 export async function verifyPairingBatchDatabase(t, {fixture, request, prisma, req, activate, identity}) {
   async function setup() {
     const f = await fixture();
+    const verifier = managementVerifier('isolated-school-credential');
+    const authorize = classId => schoolManagementRepository.saveCredential(prisma,f.school.id,classId,{revision:1,verifier,updatedAt:new Date()});
+    await authorize(f.workspace.id);
     f.scope = {termId:f.term.id,targetType:'SCHOOL',targetId:null,enabled:true};
     f.preview = (extra = {}) => request(`/schools/${f.school.id}/pairing-access/preview`,{auth:f.admin,body:req({...f.scope,...extra})});
     f.apply = (preview, extra = {}) => request(`/schools/${f.school.id}/pairing-access/batch`,{auth:f.admin,
       body:req({...f.scope,previewDigest:preview.data.previewDigest,...extra})});
     f.add = async (extra = {}, bindingExtra = {}) => {
       const w = await prisma.workspace.create({data:{termId:f.term.id,name:'批量测试班',code:randomUUID(),type:'ADMIN_CLASS',...extra}});
+      await authorize(w.id);
       return prisma.classroomScreenBinding.create({data:{schoolId:f.school.id,administrativeClassId:w.id,name:'批量测试屏',
         tokenHash:randomBytes(32).toString('hex'),createdByAccountId:f.account.id,...bindingExtra}});
     };
