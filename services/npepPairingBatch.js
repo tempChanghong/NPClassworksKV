@@ -1,4 +1,5 @@
 import {fail, digest, displayText} from '../domain/npep/wire.js';
+import {schoolManagementRepository} from './npepSchoolManagementService.js';
 
 // Bulk operations affect an explicit preview of existing screens, not future screens.
 export function createPairingBatch({transaction, schoolLock, administrator, audit}) {
@@ -46,6 +47,7 @@ export function createPairingBatch({transaction, schoolLock, administrator, audi
       if (!save) return data;
       if (data.previewDigest !== body.previewDigest) fail(409, 'PREAUTHORIZATION_CHANGED');
       if (changed.some(b => b.npepPairingRevision >= Number.MAX_SAFE_INTEGER)) fail(409, 'REVISION_CONFLICT');
+      if(body.enabled)for(const b of changed)if(!await schoolManagementRepository.credential(tx,schoolId,b.administrativeClassId))fail(409,'MANAGEMENT_NOT_CONFIGURED');
       const ids = changed.map(b => b.id);
       if (ids.length) {
         await tx.classroomScreenBinding.updateMany({where: {id: {in: ids}}, data: {npepPairingEnabled: body.enabled, npepPairingRevision: {increment: 1}}});

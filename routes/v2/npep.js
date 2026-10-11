@@ -30,10 +30,12 @@ import {createNpepStudySettingsService} from '../../services/npepStudySettingsSe
 import {validateStudyWrite} from '../../domain/npep/studySettings.js';
 import {createNpepStudyDeviceService} from '../../services/npepStudyDeviceService.js';
 import {validateStudyDevice} from '../../domain/npep/studyDevice.js';
+import {createSchoolManagementService} from '../../services/npepSchoolManagementService.js';
 
 export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true} = {}) {
   const router = express.Router();
   const service = createNpepService(client, deployment);
+  const schoolManagement = createSchoolManagementService(service);
   const notifications = createNpepNotificationService(service);
   const runtime = createNpepRuntimeService(service);
   const plans = createNpepExamPlanService(service);
@@ -69,6 +71,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
       if (/^\/device\/study-settings\/presentation\/?$/i.test(req.path)) {
         req.npepVersion = '0.13'; req.studyPresentationStartedAt = performance.now();
       }
+      if (/^\/(?:admission\/catalog|device\/school-management(?:\/receipt)?|schools\/[^/]+\/(?:class-management\/[^/]+|devices\/[^/]+\/equipment))\/?$/i.test(req.path)) req.npepVersion = '0.16';
       if (req.get('X-NPEP-Version') !== req.npepVersion) fail(426, 'PROTOCOL_UNSUPPORTED');
       if (req.method === 'POST' && !req.is('application/json')) fail(400, 'INVALID_REQUEST');
       next();
@@ -100,6 +103,8 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   };
   router.param('id', (req, _res, next, id) => next(UUID.test(id) ? undefined : new NpepError(400, 'INVALID_REQUEST')));
   router.param('operationId', (req, _res, next, id) => next(UUID.test(id) ? undefined : new NpepError(400, 'INVALID_REQUEST')));
+  router.param('bindingId', (req, _res, next, id) => next(OPAQUE_ID.test(id) ? undefined : new NpepError(400, 'INVALID_REQUEST')));
+  router.param('deviceId', (req, _res, next, id) => next(UUID.test(id) ? undefined : new NpepError(400, 'INVALID_REQUEST')));
   router.param('schoolId', (req, _res, next, id) => next(OPAQUE_ID.test(id) ? undefined : new NpepError(400, 'INVALID_REQUEST')));
   const admin = async (req, _res, next) => {
     try {
@@ -123,6 +128,17 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   router.get('/info', send(() => service.info()));
   const runtimeBody = name => (req, _res, next) => next(validateRuntime(name, req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   const noQuery = (req, _res, next) => next(Object.keys(req.query).length ? new NpepError(400, 'INVALID_REQUEST') : undefined);
+  router.get('/admission/catalog', noQuery, send(async req => { await rate('class-catalog',req.ip,30,60); return service.classCatalogue(); }));
+  for(const [path,password] of [['apply',false],['password',true]]) router.post(`/pairings/${path}`,noQuery,body(password?'passwordClassPairing':'applyClassPairing'),send(async req=>{
+    await rate('class-admission',hashScreenToken(req.ip),10,60);
+    return service.createClassPairing(req.body,password);
+  }));
+  router.get('/schools/:schoolId/class-management/:bindingId',admin,noQuery,send(req=>schoolManagement.read(req.npepClaims,req.params.schoolId,req.params.bindingId)));
+  router.post('/schools/:schoolId/class-management/:bindingId',admin,noQuery,send(req=>schoolManagement.write(req.npepClaims,req.params.schoolId,req.params.bindingId,req.body)));
+  router.get('/schools/:schoolId/devices/:deviceId/equipment',admin,noQuery,send(req=>schoolManagement.equipment(req.npepClaims,req.params.schoolId,req.params.deviceId)));
+  router.post('/schools/:schoolId/devices/:deviceId/equipment',admin,noQuery,send(req=>schoolManagement.setEquipment(req.npepClaims,req.params.schoolId,req.params.deviceId,req.body)));
+  router.get('/device/school-management',noQuery,send(async req=>{const auth=deviceAuth(req);await deviceRate(auth,'school-management',30,60);return schoolManagement.devicePolicy(auth);}));
+  router.post('/device/school-management/receipt',noQuery,send(async req=>{const auth=deviceAuth(req);await deviceRate(auth,'school-management-receipts',30,60);return schoolManagement.observe(auth,req.body);}));
   const noiseBody = name => (req, _res, next) => next(validateNoise(name, req.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   const screenToken = req => req.get('X-Classworks-Screen-Token') || '';
   router.get('/screen/pairing', noQuery, send(req => service.screenPairingStatus(screenToken(req))));

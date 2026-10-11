@@ -1140,3 +1140,29 @@ model NpepStudyPhoto {
   @@index([deviceId, capturedAt])
   @@index([state, expiresAt])
 }
+// Class-scoped NPEP credentials are independent of screen login and native device bearer credentials.
+model NpepClassManagement {
+  schoolId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  revision BigInt
+  verifier Json
+  updatedAt DateTime @db.Timestamptz(3)
+  @@id([schoolId, classId])
+}
+
+model NpepManagementRequest {
+  schoolId String @db.VarChar(191)
+  requestId String @db.Uuid
+  data Json
+  @@id([schoolId, requestId])
+}
+
+model NpepEquipmentPolicy {
+  deviceId String @id @db.Uuid
+  data Json
+}
+
+model NpepEquipmentInventory {
+  deviceId String @id @db.Uuid
+  data Json
+}

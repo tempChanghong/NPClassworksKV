@@ -3,6 +3,8 @@ import {Prisma} from '../generated/prisma/client.ts';
 import {assertDeployment, assertInstance} from '../domain/npep/deployment.js';
 import {NpepError, fail, capabilities, secretHash, hashMatches, digest, displayText, hash} from '../domain/npep/wire.js';
 import {createScreenPairing, assertScreenAdmission} from './npepScreenPairing.js';
+import {createClassAdmission} from './npepClassAdmission.js';
+import {schoolManagementRepository} from './npepSchoolManagementService.js';
 import {buildDeviceOverview} from '../domain/npep/deviceOverview.js';
 
 const DAY = 86400000;
@@ -103,9 +105,13 @@ export function createNpepService(prisma, deploymentProvider) {
     await tx.npepDevice.updateMany({where: {screenBindingId: bindingId, state: 'ACTIVE', credentialExpiresAt: {lte: new Date()}}, data: {state: 'EXPIRED', sessionId: null}});
     if (await tx.npepDevice.findFirst({where: {screenBindingId: bindingId, state: 'ACTIVE'}})) fail(409, 'BINDING_OCCUPIED');
   }
-  const approved = pair => ({pairingId: pair.id, state: 'APPROVED', expiresAt: pair.expiresAt.toISOString(), pollAfterSeconds: 5, approvalId: pair.approvalId, ...pair.approvalSnapshot});
+  const approved = pair => {
+    const {managementRevision: unused, requestedBindingId: requested, ...snapshot} = pair.approvalSnapshot;
+    return {pairingId:pair.id,state:'APPROVED',expiresAt:pair.expiresAt.toISOString(),pollAfterSeconds:5,approvalId:pair.approvalId,...snapshot};
+  };
 
   return {
+    ...createClassAdmission({transaction,schoolLock,binding,available,audit,pairValid}),
     ...createScreenPairing({transaction, schoolLock, administrator, binding, available, audit, pairValid, approved}),
     // Cheap credential preflight before admission control. The operation still
     // performs full transactional authorization after the limiter admits it.
@@ -218,6 +224,10 @@ export function createNpepService(prisma, deploymentProvider) {
       const pair = await tx.npepPairing.findUnique({where: {id}});
       if (!pair || (pair.schoolId && pair.schoolId !== schoolId)) fail(404, 'NOT_FOUND');
       pairValid(pair, config);
+      if(pair.approvalSource==='CLASS_APPLY' && pair.state==='PENDING'){
+        if(pair.approvalSnapshot.requestedBindingId!==currentBinding.id)fail(409,'BINDING_CHANGED');
+        if(!await schoolManagementRepository.credential(tx,schoolId,currentBinding.administrativeClassId))fail(409,'MANAGEMENT_NOT_CONFIGURED');
+      }
       if (pair.state !== 'PENDING') {
         conflict(pair.state === 'APPROVED' && pair.approverId === claims.accountId && pair.approverSessionId === claims.sessionId && pair.approvalRequestId === body.requestId, 'PAIRING_STATE_CONFLICT');
         conflict(pair.approvalDigest === digest(body), 'IDEMPOTENCY_CONFLICT');
@@ -241,7 +251,7 @@ export function createNpepService(prisma, deploymentProvider) {
     poll: (id, auth) => transaction(async (tx, config) => {
       const pair = await pairing(tx, id, auth, config, false);
       if (pair.state === 'APPROVED') {
-        if (pair.approvalSource === 'SCREEN') {
+        if (['SCREEN','CLASS_PASSWORD'].includes(pair.approvalSource)) {
           await schoolLock(tx, pair.schoolId);
           assertScreenAdmission(await binding(tx, pair.screenBindingId, pair.schoolId, pair.approvalSnapshot.bindingRevision), pair);
         }
@@ -256,9 +266,9 @@ export function createNpepService(prisma, deploymentProvider) {
       const initial = await pairing(tx, id, auth, config, false);
       conflict(['APPROVED', 'ACTIVATED'].includes(initial.state), 'PAIRING_STATE_CONFLICT');
       await schoolLock(tx, initial.schoolId);
-      if (initial.state === 'APPROVED' && initial.approvalSource !== 'SCREEN') await administrator(tx, context(initial), initial.schoolId, true);
+      if (initial.state === 'APPROVED' && !['SCREEN','CLASS_PASSWORD'].includes(initial.approvalSource)) await administrator(tx, context(initial), initial.schoolId, true);
       const currentBinding = await binding(tx, initial.screenBindingId, initial.schoolId, initial.approvalSnapshot.bindingRevision);
-      if (initial.state === 'APPROVED' && initial.approvalSource === 'SCREEN') assertScreenAdmission(currentBinding, initial);
+      if (initial.state === 'APPROVED' && ['SCREEN','CLASS_PASSWORD'].includes(initial.approvalSource)) assertScreenAdmission(currentBinding, initial);
       const pair = await pairing(tx, id, auth, config);
       conflict(pair.approvalId === body.approvalId, 'PAIRING_STATE_CONFLICT');
       if (pair.state === 'ACTIVATED') {
@@ -271,8 +281,12 @@ export function createNpepService(prisma, deploymentProvider) {
       conflict(secretHash(body.deviceSecret) !== pair.secretHash, 'IDEMPOTENCY_CONFLICT');
       await available(tx, currentBinding.id);
       if (await tx.npepDevice.findUnique({where: {credentialId: body.credentialId}})) fail(409, 'CREDENTIAL_ID_CONFLICT');
-      if (pair.approvalSource === 'SCREEN') assertScreenAdmission(currentBinding, pair);
+      if (['SCREEN','CLASS_PASSWORD'].includes(pair.approvalSource)) assertScreenAdmission(currentBinding, pair);
       else await administrator(tx, context(pair), pair.schoolId, true);
+      if(pair.approvalSource==='CLASS_PASSWORD'){
+        const management=await schoolManagementRepository.credential(tx,pair.schoolId,currentBinding.administrativeClassId);
+        if(management?.revision!==pair.approvalSnapshot.managementRevision)fail(409,'PREAUTHORIZATION_CHANGED');
+      }
       pairValid(pair, config);
       const created = await tx.npepDevice.create({data: {
         id: randomUUID(), installationId: pair.installationId, credentialId: body.credentialId, secretHash: secretHash(body.deviceSecret),
