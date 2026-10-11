@@ -4,6 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {createNpepNoiseService} from '../services/npepNoiseService.js';
 import {validateNoise} from '../domain/npep/noise.js';
 import {identityOf} from '../domain/npep/runtimeControl.js';
+import {recentObservation} from '../domain/npep/observationFreshness.js';
 
 function fixture() {
   const d = {id: randomUUID(), screenBindingId: randomUUID(), serverInstanceId: randomUUID(),
@@ -33,6 +34,30 @@ test('noise control accepts only bounded statistics, never arbitrary audio or pa
   for (const patch of [{pcm: 'AA=='}, {context: null}, {reports: Array(5).fill({})}]) assert.equal(validateNoise('exchangeRequest', {...f.body, ...patch}), false);
   assert.equal(validateNoise('createRequest', {...f.command(), durationSeconds: 10801}), false);
 });
+test('observation freshness rejects future, invalid and expired timestamps in views and command acceptance',async()=>{
+  const now=Date.now();
+  for(const [age,expected] of [[-3600000,false],[-1,false],[0,true],[14999,true],[15000,false]])
+    assert.equal(recentObservation(new Date(now-age).toISOString(),now),expected);
+  assert.equal(recentObservation('invalid',now),false);
+  const f=fixture(); await f.service.exchange('device',f.body);
+  f.data().receivedAt=new Date(now+3600000).toISOString();
+  assert.equal((await f.service.screen('screen')).online,false);
+  assert.equal((await f.service.management({},'school','device')).online,false);
+  await assert.rejects(f.service.create('screen',f.command()),{code:'DEVICE_OFFLINE'});
+});
+test('raw reports reject impossible statistics while accepting silence and partial or overrun coverage',async()=>{
+  const f=fixture(); const summary={elapsedSeconds:60,sampledSeconds:30,coverage:.5,energyMeanDbfs:-30,peakDbfs:-20,clippedPercent:0,frames:300};
+  const report={sessionId:randomUUID(),startedAt:new Date().toISOString(),endedAt:new Date().toISOString(),deviceName:null,algorithm:'pcm-energy-v1',outcome:'Stopped',summary};
+  for(const patch of [{sampledSeconds:0},{frames:0},{coverage:1},{peakDbfs:-80},{energyMeanDbfs:null},{clippedPercent:90}]) {
+    const invalid={...report,summary:{...summary,...patch}};
+    assert.equal(validateNoise('report',invalid),false);
+    await assert.rejects(f.service.exchange('device',{...f.body,reports:[invalid]}),{code:'INVALID_REPORT'});
+    assert.equal(f.data().reports.length,0);
+  }
+  for(const patch of [{},{energyMeanDbfs:null,peakDbfs:null},{sampledSeconds:60.01,coverage:1},{clippedPercent:90,peakDbfs:0},
+    {sampledSeconds:0,frames:0,coverage:0,energyMeanDbfs:null,peakDbfs:null}])
+    assert.equal(validateNoise('report',{...report,summary:{...summary,...patch}}),true);
+});
 
 test('estimated reports retain reference identity, partial coverage and invalidation across retries', async () => {
   const f=fixture();
@@ -59,6 +84,17 @@ test('screen request is idempotent and receipt is distinct from actual microphon
   await f.service.exchange('device', next);
   assert.equal((await f.service.screen('screen')).commands[0].receipt.outcome, 'ACCEPTED');
   assert.equal((await f.service.screen('screen')).status.state, 'Idle');
+});
+test('derived report timing preserves wall-clock diagnostics through save, query and retries',async()=>{
+  const f=fixture(); const report={sessionId:randomUUID(),startedAt:'2026-10-11T23:59:30.000Z',endedAt:'2026-10-12T00:00:30.000Z',deviceName:null,algorithm:'pcm-energy-v1',outcome:'Interrupted',
+    summary:{elapsedSeconds:60,sampledSeconds:30,coverage:.5,energyMeanDbfs:-30,peakDbfs:-20,clippedPercent:0,frames:300},
+    timing:{source:'Monotonic',observedEndedAt:'2026-10-11T23:00:30.000Z',clockDiscontinuity:true}};
+  const body={...f.body,reports:[report]}; assert.equal(validateNoise('exchangeRequest',body),true);
+  await f.service.exchange('device',body); await f.service.exchange('device',{...body,sequence:2});
+  assert.deepEqual((await f.service.screen('screen')).reports[0].timing,report.timing);
+  assert.equal(f.data().reports.length,1);
+  for(const timing of [{...report.timing,source:'Local'}, {...report.timing,observedEndedAt:'invalid'}, {...report.timing,clockDiscontinuity:'true'}])
+    assert.equal(validateNoise('report',{...report,timing}),false);
 });
 test('expired starts and session changes cannot be replayed; duplicates do not refresh freshness', async () => {
   const f = fixture(); await f.service.exchange('device', f.body);

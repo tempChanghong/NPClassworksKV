@@ -3,11 +3,13 @@ import {digest, fail} from '../domain/npep/wire.js';
 import {identityOf, requireSame} from '../domain/npep/runtimeControl.js';
 import {noiseRepository} from './npepNoiseRepository.js';
 import {scheduledStopProtected} from './npepNoiseManagementService.js';
+import {recentObservation} from '../domain/npep/observationFreshness.js';
+import {coherentNoiseSummary} from '../domain/npep/noise.js';
 
 const active = s => ['Starting', 'Active', 'Stopping'].includes(s?.state);
 const now = () => new Date().toISOString();
 export function createNpepNoiseService(base, repo = noiseRepository) {
-  const online = (a, d) => !!a.status && a.context.sessionId === d.sessionId && a.context.statusEpoch === d.statusEpoch && Date.now() - Date.parse(a.receivedAt) < 15000;
+  const online = (a, d) => !!a.status && a.context?.sessionId === d.sessionId && a.context?.statusEpoch === d.statusEpoch && recentObservation(a.receivedAt);
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.command.expiresAt) <= Date.now()) c.receipt = {commandId: c.command.commandId, outcome: 'UNKNOWN', reason: 'COMMAND_EXPIRED'};
     a.commands = a.commands.slice(-64);
@@ -70,6 +72,7 @@ export function createNpepNoiseService(base, repo = noiseRepository) {
         c.receipt = r;
       }
       for (const report of b.reports) {
+        if (!report.summary || !coherentNoiseSummary(report.summary)) fail(400, 'INVALID_REPORT');
         const previous = a.reports.find(r => r.sessionId === report.sessionId);
         if (previous) requireSame(previous.digest, digest(report), 'IDEMPOTENCY_CONFLICT');
         else {

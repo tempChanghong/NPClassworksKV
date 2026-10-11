@@ -5,6 +5,7 @@ import {resolvePolicy, validatePolicy} from '../domain/npep/noiseScheduleRules.j
 import {resolveStudyPolicy, validateStudyPolicy} from '../domain/npep/studySettings.js';
 import {studySettingsRepository} from './npepStudySettingsRepository.js';
 import {noiseScheduleRepository as policies} from './npepNoiseScheduleRepository.js';
+import {recentObservation} from '../domain/npep/observationFreshness.js';
 
 export const noiseScheduleRuntimeRepository = {
   async read(tx,id) {
@@ -48,7 +49,7 @@ export const noiseScheduleRuntimeRepository = {
 
 export function createNpepNoiseScheduleRuntime(base,repo=noiseScheduleRuntimeRepository) {
   const fresh=(a,d)=>!!a.status && a.context?.sessionId===d.sessionId && a.context?.statusEpoch===d.statusEpoch &&
-    digest(a.context.identity)===digest(identityOf(d)) && Date.now()-Date.parse(a.receivedAt)<15000;
+    digest(a.context.identity)===digest(identityOf(d)) && recentObservation(a.receivedAt);
   function clean(a) {
     for (const c of a.commands) if (!c.receipt && Date.parse(c.expiresAt)<=Date.now()) c.receipt={commandId:c.command.commandId,outcome:'UNKNOWN'};
     a.commands=a.commands.slice(-32);
