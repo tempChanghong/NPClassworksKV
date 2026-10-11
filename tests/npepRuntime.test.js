@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {createNpepRuntimeService} from '../services/npepRuntimeService.js';
-import {validateRuntime, identityOf} from '../domain/npep/runtimeControl.js';
+import {validateRuntime, identityOf, operationView} from '../domain/npep/runtimeControl.js';
 import {fail} from '../domain/npep/wire.js';
 
 const clone = value => value == null ? null : structuredClone(value);
@@ -30,7 +30,8 @@ async function fixture() {
   const repo = {policy: async (_tx, id) => clone(policies.get(id)), savePolicy: async (_tx, id, p) => policies.set(id, clone(p)),
     operation: async (_tx, id) => clone(operations.get(id)), saveOperation: async (_tx, op) => operations.set(op.view.operationId, clone(op)),
     list: async (_tx, id, active) => [...operations.values()].filter(op => op.view.deviceId === id && (!active || !op.view.resolvedAt)).map(clone),
-    byRequest: async (_tx, id, request) => clone([...operations.values()].find(op => op.view.deviceId === id && op.view.requestId === request))};
+    byRequest: async (_tx, id, request) => clone([...operations.values()].find(op => op.view.deviceId === id &&
+      (op.view.requestId === request || op.coalescedRequests?.some(r => r.requestId === request))))};
   const service = createNpepRuntimeService(base, repo);
   const body = value => ({requestId: randomUUID(), context: clone(context), ...value});
   await service.policy('device', body({policy}));
@@ -44,6 +45,14 @@ async function fixture() {
   return {service, device, context, policy, claims, body, status, create, start, policies, operations, revokeInitiator: () => { authorized = false; }};
 }
 const invoke = (f, method, ...args) => f.service[method](f.claims, 'school', f.device.id, ...args);
+
+test('server clock rollback does not label a future-dated operation receipt current', () => {
+  const at = Date.parse('2026-10-04T10:00:00.000Z');
+  const op = {view: {progressReceivedAt: new Date(at).toISOString()}};
+  assert.equal(operationView(op, at - 60000).freshness, 'STALE');
+  assert.equal(operationView(op, at).freshness, 'CURRENT');
+  assert.equal(operationView(op, at + 60001).freshness, 'STALE');
+});
 
 test('N3 preserves old history without upgrading its execution scope', async () => {
   const f = await fixture();
@@ -75,6 +84,12 @@ test('N3 schema rejects startup/path/bulk authority and accepts fixed EXAM or DA
   }
 });
 
+test('runtime wire rejects uppercase request IDs before SQL or coalesced alias lookup', async () => {
+  const f = await fixture();
+  assert.equal(validateRuntime('createRequest', f.create), true);
+  assert.equal(validateRuntime('createRequest', {...f.create, requestId: f.create.requestId.toUpperCase()}), false);
+});
+
 test('remote Daily needs capability, cannot merge opposite target and requires complete Daily evidence', async () => {
   const f = await fixture(); const daily = {...f.create, target: 'DAILY'};
   delete f.policies.get(f.device.id).policy.remoteDailyControl;
@@ -104,6 +119,60 @@ test('N3 duplicate and concurrent equivalent requests share the active execution
   assert.equal(validateRuntime('managementStatus', await invoke(f, 'managementStatus')), true);
   assert.equal((await invoke(f, 'create', {...f.create, requestId: randomUUID()})).data.operationId, a.data.operationId);
   await assert.rejects(f.service.create(f.claims, 'another-school', f.device.id, f.create), {code: 'SCHOOL_ADMIN_REQUIRED'});
+});
+
+test('lost response to a coalesced request cannot replay old EXAM after DAILY completes', async () => {
+  const f = await fixture();
+  const first = (await invoke(f, 'create', f.create)).data;
+  const retry = {...f.create, requestId: randomUUID()};
+  assert.equal((await invoke(f, 'create', retry)).data.operationId, first.operationId);
+  async function complete(op) {
+    const {grant} = await f.service.start('device', op.operationId, f.start());
+    const exam = op.target === 'EXAM';
+    const evidence = {examAware: exam ? 'READY' : 'EXITED', classIsland: exam ? 'EXITED' : 'READY',
+      remoteExamPause: exam, startup: exam ? 'EXAM_MODE_APPLIED' : 'DAILY_MODE_APPLIED', sideEffects: 'APPLIED',
+      alreadySatisfied: false, observedAt: new Date().toISOString(), configurationRevision: 0};
+    const event = {eventId: randomUUID(), operationId: op.operationId, sequence: 1, state: 'SUCCEEDED',
+      step: 'VERIFY', reasonCode: null, occurredAt: evidence.observedAt, evidence,
+      execution: Object.fromEntries(['runId', 'sessionId', 'statusEpoch', 'controlEpoch', 'grantId'].map(k => [k, grant[k]]))};
+    await f.service.events('device', f.body({events: [event]}));
+  }
+  await complete(first);
+  const daily = (await invoke(f, 'create', {...f.create, requestId: randomUUID(), target: 'DAILY'})).data;
+  await complete(daily);
+  const replay = await invoke(f, 'create', retry);
+  assert.equal(replay.created, false);
+  assert.equal(replay.data.operationId, first.operationId);
+  assert.equal(replay.data.state, 'SUCCEEDED');
+  assert.deepEqual((await f.service.poll('device')).items, []);
+  await assert.rejects(invoke(f, 'create', {...retry, target: 'DAILY'}), {code: 'IDEMPOTENCY_CONFLICT'});
+});
+
+test('coalesced request aliases retain their own fingerprint and initiator session without replacing the execution initiator', async () => {
+  const f = await fixture();
+  const first = (await invoke(f, 'create', f.create)).data;
+  const originalSession = f.claims.sessionId;
+  f.claims.sessionId = 'other-authorized-session';
+  const retry = {...f.create, requestId: randomUUID()};
+  const both = await Promise.all([invoke(f, 'create', retry), invoke(f, 'create', retry)]);
+  assert.ok(both.every(result => result.data.operationId === first.operationId));
+  assert.equal(f.operations.get(first.operationId).claims.sessionId, originalSession);
+  await assert.rejects(invoke(f, 'create', {...retry, expectedConfigurationRevision: 1}), {code: 'IDEMPOTENCY_CONFLICT'});
+  f.claims.sessionId = originalSession;
+  await assert.rejects(invoke(f, 'create', retry), {code: 'IDEMPOTENCY_CONFLICT'});
+  f.revokeInitiator();
+  await assert.rejects(f.service.start('device', first.operationId, f.start()), {code: 'INITIATOR_NO_LONGER_AUTHORIZED'});
+});
+
+test('coalesced aliases are bounded without evicting accepted idempotency keys', async () => {
+  const f = await fixture();
+  const first = (await invoke(f, 'create', f.create)).data;
+  const requests = Array.from({length: 256}, () => ({...f.create, requestId: randomUUID()}));
+  const results = await Promise.all(requests.map(body => invoke(f, 'create', body)));
+  assert.ok(results.every(result => result.data.operationId === first.operationId));
+  await assert.rejects(invoke(f, 'create', {...f.create, requestId: randomUUID()}), {code: 'OPERATION_BUSY'});
+  assert.equal((await invoke(f, 'create', requests[0])).data.operationId, first.operationId);
+  assert.equal(f.operations.get(first.operationId).coalescedRequests.length, 256);
 });
 
 test('paired priority requests accept notices, recording, old pause and stale UI revisions', async () => {

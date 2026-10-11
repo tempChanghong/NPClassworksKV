@@ -1,0 +1,33 @@
+name: NPEP current three-repository acceptance
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      desktop_sha:
+        description: Optional full NPEduTools SHA for replay
+        type: string
+        default: ''
+      web_sha:
+        description: Optional full NPClassworks SHA for replay
+        type: string
+        default: ''
+      backend_sha:
+        description: Optional full NPClassworksKV SHA for replay
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  current:
+    # Merge the desktop provider workflow before enabling this caller.
+    uses: tempChanghong/NPEduTools/.github/workflows/npep-current.yml@main
+    with:
+      desktop_sha: ${{ inputs.desktop_sha || '' }}
+      web_sha: ${{ inputs.web_sha || '' }}
+      backend_sha: ${{ inputs.backend_sha || '' }}

@@ -12,7 +12,11 @@ export const runtimeRepository = {
       : await tx.$queryRaw`SELECT data FROM "NpepRuntimeOperation" WHERE "deviceId"=${id}::uuid ORDER BY "createdAt" DESC, id DESC LIMIT 20`;
     return rows.map(r => r.data);
   },
-  async byRequest(tx, id, requestId) { const rows = await tx.$queryRaw`SELECT data FROM "NpepRuntimeOperation" WHERE "deviceId"=${id}::uuid AND "requestId"=${requestId}::uuid`; return rows[0]?.data ?? null; },
+  async byRequest(tx, id, requestId) {
+    const rows = await tx.$queryRaw`SELECT data FROM "NpepRuntimeOperation" WHERE "deviceId"=${id}::uuid
+      AND ("requestId"=${requestId}::uuid OR data->'coalescedRequests' @> ${JSON.stringify([{requestId}])}::jsonb)`;
+    return rows[0]?.data ?? null;
+  },
   async saveOperation(tx, op) {
     const v = op.view;
     await tx.$executeRaw`INSERT INTO "NpepRuntimeOperation" (id,"deviceId","requestId","createdAt","resolvedAt",data)
