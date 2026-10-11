@@ -21,8 +21,8 @@ export function defaultStudySettings() {
       rules: [{days: [], start: '19:00', end: '21:30'}], exceptions: []},
     presentation: {noiseDisplay: 'StatusTrend', temporaryHideSeconds: 180},
     homework: {enabled: true, sourceMode: 'OwnClass', sourceClassIds: [], rotationSeconds: 60},
-    noise: {enabled: true, redLineDbfs: null, mediumLineDbfs: null, disciplineCooldownSeconds: 600, highContinuousSeconds: 5},
-    photos: {enabled: false, continuousSeconds: 5, cooldownSeconds: 30, retentionDays: 30,
+    noise: {enabled: true, redLineDbfs: null, mediumLineDbfs: null, disciplineCooldownSeconds: 600, highContinuousSeconds: 3},
+    photos: {enabled: false, continuousSeconds: 3, cooldownSeconds: 30, retentionDays: 30,
       captureOnExit: true, extendedRetentionAcknowledged: false},
   };
 }

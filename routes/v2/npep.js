@@ -1,4 +1,5 @@
 import {createNpepSeatingRouter} from './npepSeating.js';
+import {createNpepPhotoRouter} from './npepPhotos.js';
 import express from 'express';
 import {prisma} from '../../utils/prisma.js';
 import {verifyAccessToken} from '../../utils/tokenManager.js';
@@ -45,6 +46,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
   const studySettings = createNpepStudySettingsService(service);
   const studyDevice = createNpepStudyDeviceService(service);
   router.use(createNpepSeatingRouter({base: service, study: studyDevice, authenticate, rateLimits}));
+  router.use(createNpepPhotoRouter({base: service, study: studyDevice, authenticate, rateLimits}));
   router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
     // Early protocol/parser errors must still correlate with the caller's request.

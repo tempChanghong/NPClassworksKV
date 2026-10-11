@@ -59,7 +59,7 @@ test('new defaults require dates/weekdays and do not invent the school activatio
   assert.equal(s.schedule.effectiveFrom,''); assert.equal(s.noise.redLineDbfs,null);
   assert.equal(s.presentation.noiseDisplay,'StatusTrend'); assert.equal(s.homework.rotationSeconds,60);
   assert.equal(s.presentation.temporaryHideSeconds,180); assert.equal(s.photos.enabled,false);
-  assert.equal(s.photos.continuousSeconds,5); assert.equal(s.photos.cooldownSeconds,30); assert.equal(s.photos.retentionDays,30);
+  assert.equal(s.photos.continuousSeconds,3); assert.equal(s.photos.cooldownSeconds,30); assert.equal(s.photos.retentionDays,30);
   assert.equal(validateStudyPolicy({mode:'Override',settings:s},true),'INVALID_DATES');
   assert.equal(validateStudyPolicy(enabled(),true),null);
   for (const mode of ['Disabled','Inherit']) assert.equal(validateStudyPolicy({mode,settings:null}),null);
@@ -173,9 +173,9 @@ test('dual thresholds validate order and independent cooldown while legacy reads
   assert.deepEqual(f.rows[0].policy,p);
 });
 
-test('high qualification default is five seconds and legacy photo duration is a consistent compatibility mirror',()=>{
-  const p=enabled();assert.equal(p.settings.noise.highContinuousSeconds,5);assert.equal(p.settings.photos.continuousSeconds,5);
-  p.settings.noise.highContinuousSeconds=3;assert.equal(validateStudyPolicy(p),'INCONSISTENT_THRESHOLD_DURATION');
-  p.settings.photos.continuousSeconds=3;assert.equal(validateStudyPolicy(p),null);
+test('high qualification default is three seconds and legacy photo duration is a consistent compatibility mirror',()=>{
+  const p=enabled();assert.equal(p.settings.noise.highContinuousSeconds,3);assert.equal(p.settings.photos.continuousSeconds,3);
+  p.settings.noise.highContinuousSeconds=4;assert.equal(validateStudyPolicy(p),'INCONSISTENT_THRESHOLD_DURATION');
+  p.settings.photos.continuousSeconds=4;assert.equal(validateStudyPolicy(p),null);
   for(const bad of [0,11,'5',NaN]){p.settings.noise.highContinuousSeconds=bad;assert.equal(validateStudyPolicy(p),'INVALID_NOISE');}
 });

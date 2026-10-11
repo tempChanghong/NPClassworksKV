@@ -57,6 +57,7 @@
     "express": "~5.1.0",
     "express-rate-limit": "^7.5.0",
     "http-errors": "~2.0.0",
+    "jpeg-js": "0.4.4",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.10.0",
     "pg": "^8.18.0",

@@ -1086,3 +1086,57 @@ model NpepSeatingReceipt {
   data Json
   @@index([schoolId, termId, classId])
 }
+
+/// Separate short camera permission; never an extension of the noise capture lease.
+model NpepStudyExitEvent {
+  eventId String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  digest String @db.VarChar(64)
+  metadata Json @db.JsonB
+  createdAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([schoolId, termId, classId, createdAt, eventId])
+  @@index([expiresAt])
+}
+
+model NpepPhotoLease {
+  id String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  version String @db.VarChar(64)
+  context Json
+  settings Json
+  createdAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([deviceId, createdAt])
+  @@index([expiresAt])
+}
+
+/// Private JPEG bytes live in the private photo directory, not in PostgreSQL or public assets.
+model NpepStudyPhoto {
+  eventId String @id @db.Uuid
+  deviceId String @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  leaseId String @db.Uuid
+  version String @db.VarChar(64)
+  metadata Json
+  digest String @db.VarChar(64)
+  storedHash String @db.VarChar(64)
+  width Int
+  height Int
+  byteCount Int
+  capturedAt DateTime @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  state String @db.VarChar(16)
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([schoolId, termId, classId, capturedAt, eventId])
+  @@index([deviceId, capturedAt])
+  @@index([state, expiresAt])
+}

@@ -4,7 +4,7 @@ import {STUDY_LIMITS, normalizeStudyPolicy, validateStudyWrite, resolveStudyPoli
 import {studySettingsRepository} from './npepStudySettingsRepository.js';
 
 const integration = Object.freeze({executionState: 'NOT_VERIFIED', nativeDisplay: 'PENDING_INTEGRATION',
-  thresholdPhotos: 'PENDING_INTEGRATION', cameraSelection: 'ExplicitOnDevice', backupRetention: 'UNKNOWN'});
+  thresholdPhotos: 'REQUIRES_UPDATED_HOST', cameraSelection: 'ExplicitOnDevice', backupRetention: 'UNKNOWN'});
 const entry = (rows, type, id) => rows.find(row => row.targetType === type && row.targetId === id);
 
 export function createNpepStudySettingsService(base, repo = studySettingsRepository) {
