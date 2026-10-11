@@ -435,6 +435,9 @@
         },
         "cameraSelection": {
           "const": "ExplicitOnDevice"
+        },
+        "displayLeadSeconds": {
+          "const": 300
         }
       },
       "required": [
@@ -444,7 +447,8 @@
         "maxPhotoRetentionDays",
         "photoMaxEdge",
         "photoMaxBytes",
-        "cameraSelection"
+        "cameraSelection",
+        "displayLeadSeconds"
       ],
       "additionalProperties": false
     },
@@ -455,20 +459,32 @@
           "const": 120
         },
         "preparationUntilStart": {
-          "const": true
+          "const": false
         },
         "startNoticeSeconds": {
           "const": 5
         },
         "endNoticeSeconds": {
           "const": 5
+        },
+        "displayLeadSeconds": {
+          "const": 300
+        },
+        "preparationNoticeSeconds": {
+          "const": 10
+        },
+        "seatingDismissAfterStartSeconds": {
+          "const": 120
         }
       },
       "required": [
         "prepareSeconds",
         "preparationUntilStart",
         "startNoticeSeconds",
-        "endNoticeSeconds"
+        "endNoticeSeconds",
+        "displayLeadSeconds",
+        "preparationNoticeSeconds",
+        "seatingDismissAfterStartSeconds"
       ],
       "additionalProperties": false
     },

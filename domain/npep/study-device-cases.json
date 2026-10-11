@@ -74,13 +74,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": true
@@ -160,13 +164,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       },
       "unexpected": true
     },
@@ -206,13 +214,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": false
@@ -292,13 +304,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": false
@@ -378,13 +394,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": false
@@ -464,13 +484,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": false
@@ -550,13 +574,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": false
@@ -595,13 +623,17 @@
         "maxPhotoRetentionDays": 180,
         "photoMaxEdge": 1280,
         "photoMaxBytes": 262144,
-        "cameraSelection": "ExplicitOnDevice"
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
       },
       "presentationTiming": {
         "prepareSeconds": 120,
-        "preparationUntilStart": true,
+        "preparationUntilStart": false,
         "startNoticeSeconds": 5,
-        "endNoticeSeconds": 5
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
       }
     },
     "expected": true
@@ -875,7 +907,7 @@
         "phase": "Preparing",
         "reason": "WINDOW_ACTIVE",
         "clockReady": true,
-        "schoolNow": "2026-10-12T18:57:59.000",
+        "schoolNow": "2026-10-12T18:54:59.000",
         "window": {
           "start": "2026-10-12T19:00:00.000",
           "end": "2026-10-12T21:30:00.000"
@@ -2108,5 +2140,200 @@
       }
     },
     "expected": true
+  },
+  {
+    "name": "five-minute display boundary accepted",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Preparing",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T18:55:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": true
+  },
+  {
+    "name": "before five-minute display boundary rejected",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Preparing",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T18:54:59.999",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "preparing cannot enter capture start",
+    "definition": "receiptRequest",
+    "value": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "context": {
+        "identity": {
+          "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+          "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+          "deviceId": "11111111-1111-4111-8111-111111111111",
+          "bindingRevision": 1,
+          "credentialGeneration": 1
+        },
+        "runId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "statusEpoch": 1
+      },
+      "sequence": 1,
+      "status": {
+        "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "policyState": "APPLIED",
+        "presentationState": "NOT_INTEGRATED",
+        "captureState": "NOT_INTEGRATED",
+        "phase": "Preparing",
+        "reason": "WINDOW_ACTIVE",
+        "clockReady": true,
+        "schoolNow": "2026-10-12T19:00:00.000",
+        "window": {
+          "start": "2026-10-12T19:00:00.000",
+          "end": "2026-10-12T21:30:00.000"
+        }
+      }
+    },
+    "expected": false
+  },
+  {
+    "name": "persistent preparation timing is no longer current",
+    "definition": "configuration",
+    "value": {
+      "identity": {
+        "serverInstanceId": "11111111-1111-4111-8111-111111111111",
+        "deploymentEpoch": "11111111-1111-4111-8111-111111111111",
+        "deviceId": "11111111-1111-4111-8111-111111111111",
+        "bindingRevision": 1,
+        "credentialGeneration": 1
+      },
+      "scope": {
+        "schoolId": "school",
+        "termId": "term",
+        "classId": "class",
+        "gradeId": "grade"
+      },
+      "revisions": {
+        "grade": 1,
+        "classroom": 0
+      },
+      "effective": {
+        "source": "Grade",
+        "settings": {
+          "schedule": {
+            "timeZone": "Asia/Shanghai",
+            "effectiveFrom": "2026-10-12",
+            "effectiveTo": null,
+            "rules": [
+              {
+                "days": [
+                  1
+                ],
+                "start": "19:00",
+                "end": "21:30"
+              }
+            ],
+            "exceptions": []
+          },
+          "presentation": {
+            "noiseDisplay": "StatusTrend",
+            "temporaryHideSeconds": 180
+          },
+          "homework": {
+            "enabled": true,
+            "sourceMode": "OwnClass",
+            "sourceClassIds": [],
+            "rotationSeconds": 60
+          },
+          "noise": {
+            "enabled": true,
+            "redLineDbfs": null,
+            "mediumLineDbfs": null,
+            "disciplineCooldownSeconds": 600,
+            "highContinuousSeconds": 5
+          },
+          "photos": {
+            "enabled": false,
+            "continuousSeconds": 5,
+            "cooldownSeconds": 30,
+            "retentionDays": 30,
+            "captureOnExit": true,
+            "extendedRetentionAcknowledged": false
+          }
+        }
+      },
+      "version": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "executionState": "NOT_VERIFIED",
+      "limits": {
+        "prepareSeconds": 120,
+        "holdSeconds": 2,
+        "maxHideSeconds": 180,
+        "maxPhotoRetentionDays": 180,
+        "photoMaxEdge": 1280,
+        "photoMaxBytes": 262144,
+        "cameraSelection": "ExplicitOnDevice",
+        "displayLeadSeconds": 300
+      },
+      "presentationTiming": {
+        "prepareSeconds": 120,
+        "preparationUntilStart": true,
+        "startNoticeSeconds": 5,
+        "endNoticeSeconds": 5,
+        "displayLeadSeconds": 300,
+        "preparationNoticeSeconds": 10,
+        "seatingDismissAfterStartSeconds": 120
+      }
+    },
+    "expected": false
   }
 ]

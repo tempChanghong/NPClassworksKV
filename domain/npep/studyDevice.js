@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import schema from './study-device.schema.json' with {type: 'json'};
-import {validStudyDate, validateStudyPolicy} from './studySettings.js';
+import {validStudyDate, validateStudyPolicy, STUDY_LIMITS} from './studySettings.js';
 
 const ajv = new Ajv({strict: true});
 addFormats(ajv);
@@ -60,7 +60,7 @@ export function validateStudyDevice(name, value) {
     if (['Active', 'Preparing'].includes(s.phase)) {
       if (!s.clockReady || s.schoolNow === null || s.window === null) return false;
       const now = Date.parse(`${s.schoolNow}Z`), start = Date.parse(`${s.window.start}Z`), end = Date.parse(`${s.window.end}Z`);
-      if (s.phase === 'Active' ? now < start || now >= end : now >= start || start - now > 120000) return false;
+      if (s.phase === 'Active' ? now < start || now >= end : now >= start || start - now > STUDY_LIMITS.displayLeadSeconds * 1000) return false;
     }
   }
   return true;

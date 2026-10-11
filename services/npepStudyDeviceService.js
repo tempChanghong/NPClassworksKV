@@ -46,9 +46,10 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
     const identity = identityOf(device);
     const revisions = {grade: grade?.revision ?? 0, classroom: local?.revision ?? 0};
     const result = {identity, scope, revisions, effective,
-      version: digest({identity, scope, revisions, effective}),
+      version: digest({identity, scope, revisions, effective, presentationRevision: 2}),
       executionState: 'NOT_VERIFIED', limits: STUDY_LIMITS,
-      presentationTiming: {prepareSeconds: 120, preparationUntilStart: true, startNoticeSeconds: 5, endNoticeSeconds: 5}};
+      presentationTiming: {prepareSeconds: 120, preparationUntilStart: false, startNoticeSeconds: 5, endNoticeSeconds: 5,
+        displayLeadSeconds: STUDY_LIMITS.displayLeadSeconds, preparationNoticeSeconds: 10, seatingDismissAfterStartSeconds: 120}};
     if (!validateStudyDevice('configuration', result)) fail(503, 'INVALID_STUDY_POLICY');
     return result;
   }
@@ -68,7 +69,7 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
     }
     const start = Date.parse(`${status.window.start}Z`), end = Date.parse(`${status.window.end}Z`);
     const now = Date.parse(`${status.schoolNow}Z`);
-    const inStage = status.phase === 'Preparing' ? now >= start - 120000 && now < start
+    const inStage = status.phase === 'Preparing' ? now >= start - STUDY_LIMITS.displayLeadSeconds * 1000 && now < start
       : status.phase === 'Ended' ? now >= end && now < end + 5000 : now >= start && now < end;
     return inStage && merged.some(window => window.start === start && window.end === end && end - start <= 180 * 60000);
   }

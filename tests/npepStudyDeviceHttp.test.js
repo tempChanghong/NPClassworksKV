@@ -69,7 +69,7 @@ test('device study configuration uses actual router/auth/repository without gran
     assert.equal(first.data.identity.deviceId,device.id);assert.equal(first.data.version,second.data.version);
     assert.equal(first.data.executionState,'NOT_VERIFIED');assert.equal(Object.hasOwn(first.data,'applied'),false);
     assert.equal(writes,0);
-    assert.deepEqual(first.data.presentationTiming,{prepareSeconds:120,preparationUntilStart:true,startNoticeSeconds:5,endNoticeSeconds:5});
+    assert.deepEqual(first.data.presentationTiming,{prepareSeconds:120,preparationUntilStart:false,startNoticeSeconds:5,endNoticeSeconds:5,displayLeadSeconds:300,preparationNoticeSeconds:10,seatingDismissAfterStartSeconds:120});
   });
   await t.test('class closure/override and policy edits change the feed fingerprint',async()=>{
     const before=await request();const local={schoolId:'school',termId:'term',targetType:'CLASS',targetId:'one',revision:1,policy:{mode:'Disabled',settings:null}};
@@ -320,7 +320,15 @@ test('device study configuration uses actual router/auth/repository without gran
     stored.presentation.context={...context,sessionId:randomUUID()};assert.equal((await management.management({},'school',device.id)).presentationFresh,false);
     stored.presentation.context=context;
     stored.presentation.version='b'.repeat(64);assert.equal((await management.management({},'school',device.id)).presentationFresh,false);stored.presentation.version=configView.version;
-    const invalid=value();invalid.sequence=6;
+    const captureBeforePreparation=structuredClone(stored.execution);
+    const prep=value();prep.sequence=6;prep.status.phase='Preparing';prep.status.schoolNow='2026-10-12T18:55:00.000';
+    stored.status.phase='Preparing';stored.status.schoolNow=prep.status.schoolNow;
+    assert.equal((await present(prep)).status,200);
+    assert.equal((await management.management({},'school',device.id)).presentationVerified,true);
+    assert.deepEqual(stored.execution,captureBeforePreparation);
+    assert.equal((await present({...prep,requestId:randomUUID(),sequence:7,status:{...prep.status,schoolNow:'2026-10-12T18:54:59.999'}})).status,400);
+    stored.status.phase='Active';stored.status.schoolNow='2026-10-12T19:10:00.000';
+    const invalid=value();invalid.sequence=8;
     assert.equal((await present({...invalid,status:{...invalid.status,remainingMs:5001}})).status,400);
     assert.equal((await present({...invalid,status:{...invalid.status,image:'no pixels'}})).status,400);
     assert.equal((await present({...invalid,status:{...invalid.status,appInstanceId:null}})).status,400);

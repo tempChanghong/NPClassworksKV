@@ -5,7 +5,7 @@ const exact = (value, keys) => value && typeof value === 'object' && !Array.isAr
   && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
 const integer = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
 const id = value => typeof value === 'string' && /^[A-Za-z0-9_-]{1,191}$/.test(value);
-export const STUDY_LIMITS = Object.freeze({prepareSeconds: 120, holdSeconds: 2, maxHideSeconds: 180,
+export const STUDY_LIMITS = Object.freeze({prepareSeconds: 120, displayLeadSeconds: 300, holdSeconds: 2, maxHideSeconds: 180,
   maxPhotoRetentionDays: 180, photoMaxEdge: 1280, photoMaxBytes: 262144, cameraSelection: 'ExplicitOnDevice'});
 
 export function validStudyDate(value) {
