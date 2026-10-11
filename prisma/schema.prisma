@@ -732,11 +732,19 @@ model NpepDevice {
   revokedAt DateTime? @db.Timestamptz(3)
   notificationSnapshot NpepNotificationSnapshot?
   noiseScheduleState NpepNoiseScheduleDevice?
+  studyConfigurationState NpepStudyDevice?
   notificationExposures NpepNotificationExposure[]
   notificationReceipts NpepNotificationReceipt[]
   @@index([schoolId, id])
   @@index([screenBindingId, state])
   @@index([credentialExpiresAt])
+}
+
+/// Presentation-policy receipt only; does not certify capture or visible presentation.
+model NpepStudyDevice {
+  deviceId String @id @db.Uuid
+  data Json
+  device NpepDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 }
 
 model NpepSessionReceipt {
@@ -851,6 +859,32 @@ model NpepNoiseDisplayPresence {
 model NpepNoiseManagementDevice {
   deviceId String @id @db.Uuid
   data     Json   @db.JsonB
+}
+
+/// New native study presentation/photo configuration, independent of legacy 0.7 capture rules.
+model NpepStudySetting {
+  schoolId   String   @db.VarChar(191)
+  termId     String   @db.VarChar(191)
+  targetType String   @db.VarChar(8)
+  targetId   String   @db.VarChar(191)
+  revision   Int
+  policy     Json     @db.JsonB
+  updatedBy  String   @db.VarChar(191)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, termId, targetType, targetId])
+  @@index([schoolId, termId])
+}
+
+model NpepStudySettingRequest {
+  schoolId  String   @db.VarChar(191)
+  requestId String   @db.Uuid
+  actorId   String   @db.VarChar(191)
+  digest    String   @db.VarChar(64)
+  result    Json     @db.JsonB
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@id([schoolId, requestId])
 }
 
 model NpepRateLimit {
@@ -1026,4 +1060,29 @@ model NpepNotificationReceipt {
   @@id([deviceId, eventId])
   @@index([publicationId, revision, receivedAt])
   @@index([receivedAt])
+}
+
+model NpepSeatingVersion {
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  revision Int
+  hash String? @db.VarChar(64)
+  width Int?
+  height Int?
+  imageBytes Bytes? @db.ByteA
+  requestId String @db.Uuid
+  digest String @db.VarChar(64)
+  actorId String @db.VarChar(191)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@id([schoolId, termId, classId, revision])
+  @@unique([schoolId, requestId])
+}
+model NpepSeatingReceipt {
+  deviceId String @id @db.Uuid
+  schoolId String @db.VarChar(191)
+  termId String @db.VarChar(191)
+  classId String @db.VarChar(191)
+  data Json
+  @@index([schoolId, termId, classId])
 }
