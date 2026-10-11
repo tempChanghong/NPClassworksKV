@@ -6,7 +6,7 @@ import {createSchoolManagementService} from '../services/npepSchoolManagementSer
 
 function fixture() {
   const credentials=new Map(),requests=new Map(),equipment=new Map(),inventories=new Map(),audits=[];
-  const d={id:randomUUID(),schoolId:'school',administrativeClassId:'class',serverInstanceId:randomUUID(),deploymentEpoch:randomUUID(),bindingRevision:1,sessionId:randomUUID()};
+  const d={id:randomUUID(),schoolId:'school',administrativeClassId:'class',serverInstanceId:randomUUID(),deploymentEpoch:randomUUID(),bindingRevision:1,sessionId:randomUUID(),statusEpoch:1};
   const context={identity:{serverInstanceId:d.serverInstanceId,deploymentEpoch:d.deploymentEpoch,deviceId:d.id,bindingRevision:1,credentialGeneration:1},sessionId:d.sessionId,runId:randomUUID(),statusEpoch:1};
   const b={id:'screen',administrativeClassId:'class',npepPairingRevision:0,npepPairingEnabled:false};
   const tx={classroomScreenBinding:{update:async({data})=>{b.npepPairingEnabled=data.npepPairingEnabled;b.npepPairingRevision++;}},npepScreenPairingTicket:{updateMany:async()=>{}},
@@ -40,6 +40,8 @@ test('device policy is authenticated scope and inventory must match the live ses
   await assert.rejects(f.service.observe({},inventory(f,{context:{...f.context,runId:randomUUID()}})),{code:'SESSION_SUPERSEDED'});
   await assert.rejects(f.service.observe({},inventory(f,{context:{...f.context,identity:{...f.context.identity,deviceId:randomUUID()}}})),{code:'SESSION_SUPERSEDED'});
   await assert.rejects(f.service.observe({},inventory(f,{context:{...f.context,sessionId:'bad'}})),{code:'INVALID_REQUEST'});
+  f.d.statusEpoch=2;
+  await assert.rejects(f.service.observe({},inventory(f)),{code:'SESSION_SUPERSEDED'});
 });
 test('inventory sequence rejects stale observations and changed same-sequence content',async()=>{
   const f=fixture(),body=inventory(f,{sequence:2});await f.service.observe({},body);await f.service.observe({},body);
