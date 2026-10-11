@@ -286,11 +286,26 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "source": { "type": "string", "enum": ["Monotonic"] },
-            "observedEndedAt": { "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$" },
-            "clockDiscontinuity": { "type": "boolean" }
+            "source": {
+              "type": "string",
+              "enum": [
+                "Monotonic"
+              ]
+            },
+            "observedEndedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+            },
+            "clockDiscontinuity": {
+              "type": "boolean"
+            }
           },
-          "required": ["source", "observedEndedAt", "clockDiscontinuity"]
+          "required": [
+            "source",
+            "observedEndedAt",
+            "clockDiscontinuity"
+          ]
         },
         "sessionId": {
           "type": "string",
@@ -344,6 +359,16 @@
               "type": "null"
             }
           ]
+        },
+        "sessionKind": {
+          "enum": [
+            "Manual",
+            "Schedule"
+          ]
+        },
+        "endReason": {
+          "type": "string",
+          "maxLength": 64
         }
       },
       "required": [

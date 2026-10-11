@@ -52,3 +52,12 @@ test('actual loopback exit event route is scoped, rejects secrets and protects a
   f.setRole('TEACHER');assert.equal((await fetch(list,{headers:admin})).status,403);
   f.setRole('ADMIN');assert.equal((await fetch(root+'/schools/foreign/study-exit-events?termId=term&classId=one',{headers:admin})).status,403);
 });
+
+test('recovery incident uses a distinct audit action, remains private and does not duplicate on retry',async()=>{
+  const f=fixture(),actions=[];f.tx.npepAudit.create=async row=>actions.push(row.data.action);
+  f.body.event.reason='ProcessRecovery';f.body.event.photoEventId=f.body.event.eventId;
+  await f.service.store(f.auth,f.body);await f.service.store(f.auth,{...f.body,requestId:randomUUID()});
+  assert.equal(f.rows.size,1);assert.ok(actions.includes('STUDY_PROCESS_RECOVERED'));assert.ok(!actions.includes('STUDY_EXIT_VERIFICATION_FAILED'));
+  assert.equal((await f.service.list(f.claims,'school','term','one')).items[0].reason,'ProcessRecovery');
+  f.setRole('TEACHER');await assert.rejects(f.service.list(f.claims,'school','term','one'),e=>e.code==='ADMIN_REQUIRED');
+});

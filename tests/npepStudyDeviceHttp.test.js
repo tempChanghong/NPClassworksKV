@@ -64,7 +64,7 @@ test('device study configuration uses actual router/auth/repository without gran
   await t.test('current paired device gets only its grade inheritance with stable version and no applied claim',async()=>{
     rows.push({schoolId:'foreign',termId:'foreign-term',targetType:'CLASS',targetId:'one',revision:9,policy:{mode:'Disabled',settings:null}});
     const first=await request(),second=await request();assert.equal(first.status,200);
-    assert.equal(first.data.effective.source,'Grade');assert.equal(first.data.effective.settings.noise.highContinuousSeconds,5);
+    assert.equal(first.data.effective.source,'Grade');assert.equal(first.data.effective.settings.noise.highContinuousSeconds,3);
     assert.deepEqual(first.data.scope,{schoolId:'school',termId:'term',classId:'one',gradeId:'grade'});
     assert.equal(first.data.identity.deviceId,device.id);assert.equal(first.data.version,second.data.version);
     assert.equal(first.data.executionState,'NOT_VERIFIED');assert.equal(Object.hasOwn(first.data,'applied'),false);

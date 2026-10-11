@@ -182,3 +182,31 @@ test('malformed JPEG marker padding is rejected before decoding', () => {
   const bytes=Buffer.from([255,216,255,255,255,255,255,255,217]);
   assert.throws(()=>jpegDimensions(bytes),e=>e.code==='INVALID_PHOTO');
 });
+
+function manualLeaseBody(f) {
+  const now=f.clock(), start=new Date(now-10000).toISOString(), end=new Date(now+120000).toISOString();
+  const wall=stamp=>new Date(Date.parse(stamp)+8*3600000).toISOString().slice(0,-1);
+  return {...f.body,manual:{sessionId:randomUUID(),startUtc:start,endUtc:end,schoolNow:wall(new Date(now).toISOString()),window:{start:wall(start),end:wall(end)},signalFresh:true}};
+}
+test('manual photos require a fresh authenticated policy and record the actual manual session kind',async()=>{
+  const f=fixture(),body=manualLeaseBody(f),lease=await f.service.lease(f.auth,body);
+  const meta={...f.meta(lease),sessionId:body.manual.sessionId,sessionKind:'Manual',schoolNow:body.manual.schoolNow};
+  assert.equal((await f.service.upload(f.auth,meta,f.bytes)).state,'Stored');
+  const item=(await f.service.list(f.claims,'school','term','one')).items[0];assert.equal(item.sessionKind,'Manual');
+  await assert.rejects(f.service.upload(f.auth,{...meta,eventId:randomUUID(),sessionKind:'Schedule'},f.bytes),e=>e.code==='PHOTO_SESSION_CHANGED');
+  await assert.rejects(f.service.upload(f.auth,{...meta,eventId:randomUUID(),reason:'ProcessRecovery'},f.bytes),e=>e.code==='PHOTO_SESSION_CHANGED');
+});
+test('stale policy, invalid manual range, unfresh signal or false wall progress cannot grant manual photo lease',async()=>{
+  const f=fixture(),body=manualLeaseBody(f);
+  for(const manual of [ {...body.manual,signalFresh:false},{...body.manual,endUtc:new Date(f.clock()+10800000).toISOString()},
+    {...body.manual,schoolNow:body.manual.window.end},{...body.manual,startUtc:new Date(f.clock()+6000).toISOString()}])
+    await assert.rejects(f.service.lease(f.auth,{...body,manual}),e=>['INVALID_REQUEST','PHOTO_MANUAL_NOT_FRESH'].includes(e.code));
+  f.advance(15000);await assert.rejects(f.service.lease(f.auth,manualLeaseBody(f)),e=>e.code==='PHOTO_MANUAL_NOT_FRESH');
+});
+test('process recovery photo is independently labeled, idempotent and shares the existing cooldown',async()=>{
+  const f=fixture(),lease=await f.service.lease(f.auth,f.body),meta={...f.meta(lease),reason:'ProcessRecovery',level:null};
+  assert.equal((await f.service.upload(f.auth,meta,f.bytes)).state,'Stored');await f.service.upload(f.auth,meta,f.bytes);assert.equal(f.rows.size,1);
+  await assert.rejects(f.service.upload(f.auth,{...f.meta(lease),eventId:randomUUID()},f.bytes),e=>e.code==='PHOTO_COOLDOWN');
+  const g=fixture();g.config.effective.settings.photos.captureOnExit=false;const l=await g.service.lease(g.auth,g.body);
+  await assert.rejects(g.service.upload(g.auth,{...g.meta(l),reason:'ProcessRecovery',level:null},g.bytes),e=>e.code==='PHOTO_EXIT_DISABLED');
+});

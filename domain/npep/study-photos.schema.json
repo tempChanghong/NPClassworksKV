@@ -75,6 +75,57 @@
         "version": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$"
+        },
+        "manual": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "startUtc": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}Z$"
+            },
+            "endUtc": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}Z$"
+            },
+            "schoolNow": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}$"
+            },
+            "window": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}$"
+                },
+                "end": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}$"
+                }
+              },
+              "required": [
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            },
+            "signalFresh": {
+              "const": true
+            }
+          },
+          "required": [
+            "sessionId",
+            "startUtc",
+            "endUtc",
+            "schoolNow",
+            "window",
+            "signalFresh"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
@@ -159,7 +210,8 @@
         "reason": {
           "enum": [
             "Noise",
-            "ExitAttempt"
+            "ExitAttempt",
+            "ProcessRecovery"
           ]
         },
         "unit": {
@@ -219,6 +271,12 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 262144
+        },
+        "sessionKind": {
+          "enum": [
+            "Manual",
+            "Schedule"
+          ]
         }
       },
       "required": [
@@ -281,7 +339,8 @@
         "reason": {
           "enum": [
             "Timeout",
-            "WrongPassword"
+            "WrongPassword",
+            "ProcessRecovery"
           ]
         },
         "deviceTime": {

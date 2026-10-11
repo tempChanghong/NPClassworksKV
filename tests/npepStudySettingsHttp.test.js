@@ -41,7 +41,8 @@ test('study settings HTTP contract enforces school/session authority, preview fr
         const row={schoolId,termId,targetType,targetId,revision,policy:JSON.parse(policy)};
         const index=rows.findIndex(r=>r.schoolId===schoolId && r.termId===termId && r.targetType===targetType && r.targetId===targetId);
         if(index<0) rows.push(row); else rows[index]=row;
-      } else throw new Error(`Unexpected write: ${sql}`);
+      } else if (sql.includes('UPDATE "NpepStudyPhoto"') || sql.includes('UPDATE "NpepStudyExitEvent"')) return 0;
+      else throw new Error(`Unexpected write: ${sql}`);
       return 1;
     },
   };

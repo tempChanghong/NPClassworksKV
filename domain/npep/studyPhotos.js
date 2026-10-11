@@ -12,7 +12,8 @@ const leaseValidator = ajv.compile({definitions: schema.definitions, $ref: '#/de
 export const validatePhotoLeaseRequest = value => leaseValidator(value);
 export function validatePhotoMetadata(v) {
   if (!exact(v, ['eventId', 'leaseId', 'sessionId', 'version', 'capturedAt', 'schoolNow', 'reason',
-    'unit', 'level', 'high', 'continuousSeconds', 'calibrationId', 'hash', 'width', 'height', 'byteCount'])) return false;
+    'unit', 'level', 'high', 'continuousSeconds', 'calibrationId', 'hash', 'width', 'height', 'byteCount', ...(Object.hasOwn(v || {}, 'sessionKind') ? ['sessionKind'] : [])])) return false;
+  if(v.sessionKind !== undefined && !['Schedule','Manual'].includes(v.sessionKind)) return false;
   const stamp = s => typeof s === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(s)
     && Number.isFinite(Date.parse(s)) && new Date(s).toISOString() === s;
   const acoustic = v.unit === 'EstimatedDbA';
@@ -20,9 +21,9 @@ export function validatePhotoMetadata(v) {
   return ['eventId', 'leaseId', 'sessionId'].every(k => UUID.test(v[k] || ''))
     && /^[a-f0-9]{64}$/.test(v.version || '') && /^[a-f0-9]{64}$/.test(v.hash || '')
     && stamp(v.capturedAt) && typeof v.schoolNow === 'string' && stamp(v.schoolNow + 'Z')
-    && ['Noise', 'ExitAttempt'].includes(v.reason) && ['Dbfs', 'EstimatedDbA'].includes(v.unit)
-    && level(v.high) && (v.level === null ? v.reason === 'ExitAttempt' : level(v.level))
-    && (acoustic ? /^[a-f0-9]{64}$/.test(v.calibrationId || '') || v.reason === 'ExitAttempt' && v.level === null && v.calibrationId === null : v.calibrationId === null)
+    && ['Noise', 'ExitAttempt','ProcessRecovery'].includes(v.reason) && ['Dbfs', 'EstimatedDbA'].includes(v.unit)
+    && level(v.high) && (v.level === null ? ['ExitAttempt','ProcessRecovery'].includes(v.reason) : level(v.level))
+    && (acoustic ? /^[a-f0-9]{64}$/.test(v.calibrationId || '') || ['ExitAttempt','ProcessRecovery'].includes(v.reason) && v.level === null && v.calibrationId === null : v.calibrationId === null)
     && Number.isInteger(v.continuousSeconds) && v.continuousSeconds >= 1 && v.continuousSeconds <= 10
     && ['width', 'height'].every(k => Number.isInteger(v[k]) && v[k] >= 1 && v[k] <= PHOTO_LIMITS.maxEdge)
     && Number.isInteger(v.byteCount) && v.byteCount > 0 && v.byteCount <= PHOTO_LIMITS.maxBytes;

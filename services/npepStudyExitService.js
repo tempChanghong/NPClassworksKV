@@ -33,7 +33,7 @@ export function createNpepStudyExitService(base,study,{exitRepo=exitRepository,c
       // deviceTime/schoolNow are diagnostic observations, never the trusted retention clock.
       const createdAt=new Date(clock()),days=Math.min(180,config.effective.settings.photos.retentionDays);
       await exitRepo.save(tx,{eventId:m.eventId,deviceId:device.id,...config.scope,digest:fingerprint,metadata:m,createdAt,expiresAt:new Date(createdAt.getTime()+days*86400000)});
-      await tx.npepAudit.create({data:{id:randomUUID(),schoolId:device.schoolId,action:'STUDY_EXIT_VERIFICATION_FAILED',objectId:m.eventId}});
+      await tx.npepAudit.create({data:{id:randomUUID(),schoolId:device.schoolId,action:m.reason==='ProcessRecovery'?'STUDY_PROCESS_RECOVERED':'STUDY_EXIT_VERIFICATION_FAILED',objectId:m.eventId}});
       return{eventId:m.eventId,state:'Stored'};
     }),
     list:(claims,school,term,classroom,cursor=null)=>base.withScheduleAdmin(claims,school,async tx=>{

@@ -7,7 +7,7 @@ import {sanitizePhoto, NpepPhotoStore} from './npepPhotoStore.js';
 import {PHOTO_LIMITS, validatePhotoMetadata, validatePhotoLeaseRequest, jpegDimensions, photoHash} from '../domain/npep/studyPhotos.js';
 const fresh = (stamp, now) => Number.isFinite(Date.parse(stamp)) && now - Date.parse(stamp) >= 0 && now - Date.parse(stamp) < 15000;
 const view = r => ({eventId: r.eventId, classId: r.classId, capturedAt: new Date(r.capturedAt).toISOString(),
-  expiresAt: new Date(r.expiresAt).toISOString(), reason: r.metadata.reason, unit: r.metadata.unit,
+  expiresAt: new Date(r.expiresAt).toISOString(), reason: r.metadata.reason, sessionKind:r.metadata.sessionKind || 'Schedule', unit: r.metadata.unit,
   level: r.metadata.level, high: r.metadata.high, width: r.width, height: r.height, byteCount: r.byteCount});
 const configuredQuota = () => {
   const value = process.env.NPEP_PHOTO_SCHOOL_QUOTA_BYTES;
@@ -31,6 +31,8 @@ export function createNpepPhotoService(base, study, {repo = photoRepository, sto
     requireSame(lease.context.identity, identityOf(device), 'BINDING_CHANGED');
     requireSame(meta.version, lease.version, 'POLICY_CHANGED');
     const window = lease.settings.window;
+    if((meta.sessionKind || 'Schedule') !== (lease.settings.sessionKind || 'Schedule'))fail(409,'PHOTO_SESSION_CHANGED');
+    if(meta.reason==='ProcessRecovery' && meta.sessionKind==='Manual')fail(409,'PHOTO_SESSION_CHANGED');
     if (!window || meta.schoolNow < window.start || meta.schoolNow >= window.end) fail(409, 'PHOTO_OUTSIDE_WINDOW');
     const at = new Date(meta.capturedAt), age = now - at.getTime();
     if (age < 0 || age > PHOTO_LIMITS.maxUploadAgeSeconds * 1000 || at < new Date(lease.createdAt) || at >= new Date(lease.expiresAt)) fail(409, 'PHOTO_TIME_INVALID');
@@ -39,7 +41,7 @@ export function createNpepPhotoService(base, study, {repo = photoRepository, sto
     // Local confirmed quick calibration may replace raw thresholds; its effective high is recorded by the device.
     if (unit !== meta.unit || unit === 'EstimatedDbA' && meta.high !== high || meta.continuousSeconds !== lease.settings.noise.highContinuousSeconds) fail(409, 'PHOTO_THRESHOLD_CHANGED');
     if (meta.reason === 'Noise' && (meta.level === null || meta.level < meta.high)) fail(400, 'PHOTO_THRESHOLD_NOT_REACHED');
-    if (meta.reason === 'ExitAttempt' && !lease.settings.photos.captureOnExit) fail(409, 'PHOTO_EXIT_DISABLED');
+    if (['ExitAttempt','ProcessRecovery'].includes(meta.reason) && !lease.settings.photos.captureOnExit) fail(409, 'PHOTO_EXIT_DISABLED');
     const expiresAt = new Date(at.getTime() + Math.min(lease.settings.photos.retentionDays, config.effective.settings.photos.retentionDays) * 86400000);
     if (expiresAt.getTime() <= now) fail(410, 'PHOTO_EXPIRED');
     return {lease, config, at, expiresAt};
@@ -53,6 +55,22 @@ export function createNpepPhotoService(base, study, {repo = photoRepository, sto
         || session.expiresAt <= new Date(clock()) || device.sessionId !== body.context.sessionId || device.statusEpoch !== body.context.statusEpoch) fail(409, 'SESSION_SUPERSEDED');
       const config = await photoPolicy(tx, device); requireSame(body.version, config.version, 'POLICY_CHANGED');
       const receipt = await studyDeviceRepository.receipt(tx, device.id), execution = receipt?.execution, now = clock();
+      if(body.manual) {
+        const m=body.manual, start=Date.parse(m.startUtc), end=Date.parse(m.endUtc);
+        const validStamp=s=>Number.isFinite(Date.parse(s)) && new Date(s).toISOString()===s;
+        const wallDelta=Date.parse(m.schoolNow+'Z')-Date.parse(m.window.start+'Z');
+        const wallDuration=Date.parse(m.window.end+'Z')-Date.parse(m.window.start+'Z');
+        // This is an authenticated native manual declaration, never a scheduled execution receipt.
+        if(!config.effective.settings.noise.enabled || !receipt || !fresh(receipt.receivedAt,now) || receipt.status.version!==config.version
+          || receipt.status.policyState!=='APPLIED' || digest(receipt.context)!==digest(body.context)
+          || ![m.startUtc,m.endUtc,m.schoolNow+'Z',m.window.start+'Z',m.window.end+'Z'].every(validStamp)
+          || !(end>start && end-start<=10800000 && start<=now+5000 && end>now)
+          || Math.abs(wallDuration-(end-start))>1 || wallDelta<0 || wallDelta>=wallDuration || Math.abs(wallDelta-(now-start))>5000)
+          fail(409,'PHOTO_MANUAL_NOT_FRESH');
+        const row={id:randomUUID(),deviceId:device.id,...config.scope,version:config.version,context:body.context,
+          settings:{...config.effective.settings,noiseSessionId:m.sessionId,sessionKind:'Manual',window:m.window},createdAt:new Date(now),expiresAt:new Date(now+60000)};
+        await repo.saveLease(tx,row);return {leaseId:row.id,version:row.version,sessionId:m.sessionId,leaseSeconds:60,createdAt:row.createdAt.toISOString(),expiresAt:row.expiresAt.toISOString(),maxBytes:PHOTO_LIMITS.maxBytes,maxEdge:PHOTO_LIMITS.maxEdge};
+      }
       if (!receipt || !fresh(receipt.receivedAt, now) || !fresh(execution?.receivedAt, now)
         || receipt.status.version !== config.version || receipt.status.policyState !== 'APPLIED'
         || execution.version !== config.version || digest(receipt.context) !== digest(body.context)
