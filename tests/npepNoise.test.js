@@ -59,11 +59,11 @@ test('raw reports reject impossible statistics while accepting silence and parti
     assert.equal(validateNoise('report',{...report,summary:{...summary,...patch}}),true);
 });
 
-test('estimated reports retain reference identity, partial coverage and invalidation across retries', async () => {
+for (const method of ['ManualReference', 'UsbReferenceBeta']) test(`estimated ${method} reports retain reference identity, partial coverage and invalidation across retries`, async () => {
   const f=fixture();
   const report={sessionId:randomUUID(),startedAt:new Date().toISOString(),endedAt:new Date().toISOString(),deviceName:'synthetic',algorithm:'pcm-energy-v1',outcome:'Stopped',
     summary:{elapsedSeconds:20,sampledSeconds:20,coverage:1,energyMeanDbfs:-30,peakDbfs:-20,clippedPercent:0,frames:200},
-    estimate:{profileId:'a'.repeat(64),algorithm:'a-sos-band8500-v1|sample-energy-fs-v1',method:'ManualReference',timeWeighting:'Slow',offsetDb:90,confirmedAt:new Date().toISOString(),state:'Invalidated',reason:'INPUT_SETTINGS_CHANGED',currentDbA:null,
+    estimate:{profileId:'a'.repeat(64),algorithm:'a-sos-band8500-v1|sample-energy-fs-v1',method,timeWeighting:'Slow',offsetDb:90,confirmedAt:new Date().toISOString(),state:'Invalidated',reason:'INPUT_SETTINGS_CHANGED',currentDbA:null,
       summary:{sampledSeconds:10,coverage:.5,energyMeanDbA:60,maximumDbA:65}}};
   const request={...f.body,reports:[report]};assert.equal(validateNoise('exchangeRequest',request),true);
   await f.service.exchange('fake-device',request);await f.service.exchange('fake-device',{...request,sequence:2});

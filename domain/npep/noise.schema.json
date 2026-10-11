@@ -638,7 +638,8 @@
         "method": {
           "type": "string",
           "enum": [
-            "ManualReference"
+            "ManualReference",
+            "UsbReferenceBeta"
           ]
         },
         "timeWeighting": {
