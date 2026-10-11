@@ -46,6 +46,8 @@ export function createNpepSeatingRouter({base, study, authenticate, rateLimits})
   const body = name => (r, _s, next) => next(validateSeating(name, r.body) ? undefined : new NpepError(400, 'INVALID_REQUEST'));
   router.post('/device/study-settings/seating', query([]), body('manifestRequest'), send(r => service.manifest(r.seatAuth, r.body)));
   router.post('/device/study-settings/seating/chunk', query([]), body('chunkRequest'), send(r => service.chunk(r.seatAuth, r.body)));
+  router.post('/device/study-settings/seating/upload-status', query([]), body('uploadStatusRequest'), send(r => service.uploadStatus(r.seatAuth, r.body)));
+  router.post('/device/study-settings/seating/upload', query([]), body('uploadRequest'), send(r => service.upload(r.seatAuth, r.body)));
   router.use((_req, _res, next) => next(new NpepError(404, 'NOT_FOUND')));
   router.use((e, req, res, _next) => {
     const safe = e instanceof NpepError ? e : new NpepError(e.type === 'entity.too.large' ? 413 : e.status === 415 ? 400 : 503, e.type === 'entity.too.large' ? 'PAYLOAD_TOO_LARGE' : 'TEMPORARILY_UNAVAILABLE');

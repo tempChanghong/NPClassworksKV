@@ -7,7 +7,9 @@ import {seatingRepository} from './npepSeatingRepository.js';
 import {noiseScheduleRepository} from './npepNoiseScheduleRepository.js';
 const view = row => ({revision: row?.revision ?? 0, hash: row?.hash ?? null, width: row?.width ?? null,
   height: row?.height ?? null, createdAt: row?.createdAt ? new Date(row.createdAt).toISOString() : null,
-  restorable: Boolean(row?.hash && row?.imageBytes)});
+  restorable: Boolean(row?.hash && row?.imageBytes),
+  source: row?.actorId?.startsWith('device:') ? 'Device' : 'Administrator',
+  deviceId: row?.actorId?.startsWith('device:') ? row.actorId.slice(7) : null});
 export function createNpepSeatingService(base, study, repo = seatingRepository) {
   async function scope(tx, school, term, classroom) {
     if (!OPAQUE_ID.test(term || '') || !OPAQUE_ID.test(classroom || '')) fail(400, 'INVALID_REQUEST');
@@ -31,6 +33,10 @@ export function createNpepSeatingService(base, study, repo = seatingRepository) 
       || applied.status.policyState !== 'APPLIED' || Date.now() - Date.parse(applied.receivedAt) < 0
       || Date.now() - Date.parse(applied.receivedAt) >= 15000) fail(409, 'STUDY_NOT_APPLIED');
     return config.scope;
+  }
+  async function deviceResult(tx, s, version, row) {
+    const classroom = await tx.workspace.findUnique({where: {id: s.classId}});
+    return {version, classId: s.classId, className: classroom?.name || s.classId, revision: row?.revision ?? 0, hash: row?.hash ?? null};
   }
   return {
     catalog: (claims, school, term) => base.withScheduleAdmin(claims, school, (tx, config) => noiseScheduleRepository.catalog(tx, school, term, config)),
@@ -80,6 +86,30 @@ export function createNpepSeatingService(base, study, repo = seatingRepository) 
       await scope(tx, school, term, classroom);
       const row = (await repo.versions(tx, school, term, classroom)).find(v => v.revision === revision);
       if (!row?.imageBytes) fail(404, 'NOT_FOUND'); return {image: Buffer.from(row.imageBytes).toString('base64'), ...view(row)};
+    }),
+    uploadStatus: (auth, body) => base.withRuntimeDevice(auth, async (tx, device) => {
+      const s = await deviceScope(tx, device, body);
+      await scope(tx, s.schoolId, s.termId, s.classId);
+      return deviceResult(tx, s, body.version, await repo.current(tx, s.schoolId, s.termId, s.classId));
+    }),
+    upload: (auth, body) => base.withRuntimeDevice(auth, async (tx, device) => {
+      // Both administrator and device transactions already take the same school lock.
+      // Class scope is derived only from the current bound device, never from the upload.
+      const s = await deviceScope(tx, device, body);
+      await scope(tx, s.schoolId, s.termId, s.classId);
+      const actor = `device:${device.id}`, fingerprint = digest(body), prior = await repo.request(tx, s.schoolId, body.requestId);
+      if (prior) {
+        requireSame([prior.actorId, prior.digest, prior.termId, prior.classId], [actor, fingerprint, s.termId, s.classId], 'IDEMPOTENCY_CONFLICT');
+        return deviceResult(tx, s, body.version, prior);
+      }
+      const current = await repo.current(tx, s.schoolId, s.termId, s.classId);
+      requireSame(body.expectedRevision, current?.revision ?? 0, 'SEATING_CHANGED');
+      const image = readSeatingPng(body.image);
+      const row = {revision: body.expectedRevision + 1, hash: image.hash, width: image.width, height: image.height,
+        imageBytes: image.bytes, createdAt: new Date()};
+      await repo.save(tx, s.schoolId, actor, {...body, termId: s.termId, classId: s.classId}, row, fingerprint);
+      await tx.npepAudit.create({data: {id: randomUUID(), schoolId: s.schoolId, actorId: actor, action: 'DEVICE_SEATING_PUBLISHED', objectId: s.classId}});
+      return deviceResult(tx, s, body.version, row);
     }),
     manifest: (auth, body) => base.withRuntimeDevice(auth, async (tx, device) => {
       const s = await deviceScope(tx, device, body), row = await repo.current(tx, s.schoolId, s.termId, s.classId);
