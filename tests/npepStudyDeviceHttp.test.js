@@ -23,6 +23,7 @@ test('device study configuration uses actual router/auth/repository without gran
   session.deviceId=device.id;
   let stored=null, writes=0, role='OWNER', revokedAt=null;
   const settings=defaultStudySettings();settings.schedule.effectiveFrom='2026-10-12';settings.schedule.rules[0].days=[1];
+  settings.schedule.rules[0].start='19:00'; // Explicit existing schedule, independent of new defaults.
   const rows=[{schoolId:'school',termId:'term',targetType:'GRADE',targetId:'grade',revision:3,policy:{mode:'Override',settings}}];
   const tx={
     account:{findUnique:async()=>({id:'admin',tokenVersion:1,localDisabled:false})},

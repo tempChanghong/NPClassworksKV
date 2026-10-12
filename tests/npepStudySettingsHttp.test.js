@@ -81,7 +81,7 @@ test('study settings HTTP contract enforces school/session authority, preview fr
     const body=draft(), preview=await request(path+'/preview',{...body,previewDate:'2026-10-12'});
     assert.equal(preview.status,200);assert.equal(rows.length,0);assert.equal(audit.length,0);
     assert.deepEqual(preview.data.items[0].homeworkSources.map(row=>row.id),['one','walk-a','walk-b']);
-    assert.equal(preview.data.items[0].windows[0].start,'2026-10-12T19:00:00');
+    assert.equal(preview.data.items[0].windows[0].start,'2026-10-12T19:15:00');
     body.expectedPreviewFingerprint=preview.data.previewFingerprint;
     const saved=await request(path,body);assert.equal(saved.status,200);assert.equal(saved.data.revision,1);
     const repeated=await request(path,body);assert.deepEqual(repeated.data,saved.data);assert.equal(audit.length,1);

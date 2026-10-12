@@ -19,10 +19,14 @@ export function defaultStudyEstimatedThresholds() {
   return {highDbA: 65, mediumDbA: 50};
 }
 
+export function defaultStudyRule() {
+  return {days: [], start: '19:15', end: '21:30'};
+}
+
 export function defaultStudySettings() {
   return {
     schedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null,
-      rules: [{days: [], start: '19:00', end: '21:30'}], exceptions: []},
+      rules: [defaultStudyRule()], exceptions: []},
     examSchedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null, rules: [], exceptions: []},
     presentation: {noiseDisplay: 'StatusTrend', temporaryHideSeconds: 180},
     homework: {enabled: true, sourceMode: 'OwnClass', sourceClassIds: [], rotationSeconds: 60},

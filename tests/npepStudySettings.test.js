@@ -55,7 +55,7 @@ test('estimated thresholds have explicit acoustic units without changing legacy 
 
 test('new defaults require dates/weekdays and use explicitly configured 50/65 estimated dB(A) thresholds', () => {
   const s=defaultStudySettings();
-  assert.deepEqual(s.schedule.rules,[{days:[],start:'19:00',end:'21:30'}]);
+  assert.deepEqual(s.schedule.rules,[{days:[],start:'19:15',end:'21:30'}]);
   assert.equal(s.schedule.effectiveFrom,''); assert.equal(s.noise.redLineDbfs,null);
   assert.deepEqual(s.noise.estimated,{highDbA:65,mediumDbA:50});
   s.noise.estimated.mediumDbA = 54;
@@ -87,7 +87,7 @@ test('photo hard limits, redline and extended retention acknowledgment cannot be
 test('calendar exceptions and cross-midnight windows use explicit start-date school calendars', () => {
   const s=enabled().settings;
   assert.equal(studyWindowsForDate(s,'2026-10-11').length,0);
-  assert.deepEqual(studyWindowsForDate(s,'2026-10-12'),[{start:'2026-10-12T19:00:00',end:'2026-10-12T21:30:00'}]);
+  assert.deepEqual(studyWindowsForDate(s,'2026-10-12'),[{start:'2026-10-12T19:15:00',end:'2026-10-12T21:30:00'}]);
   s.schedule.exceptions=[{date:'2026-10-12',kind:'Skip',weekday:null},{date:'2026-10-18',kind:'UseWeekday',weekday:1}];
   assert.equal(studyWindowsForDate(s,'2026-10-12').length,0);
   assert.equal(studyWindowsForDate(s,'2026-10-18').length,1);
@@ -123,6 +123,19 @@ test('grade preview respects class overrides/closures and computes source scope 
   assert.equal(result.integration.executionState,'NOT_VERIFIED'); assert.equal(result.integration.backupRetention,'UNKNOWN');
   assert.equal(f.audit.length,0); assert.equal(f.rows.length,1);
   assert.deepEqual(resolveStudyPolicy(enabled(),{mode:'Inherit',settings:null}).settings,enabled().settings);
+});
+
+test('reading saved 19:00 and custom schedules preserves their policies and revisions', async () => {
+  for (const start of ['19:00','18:40']) {
+    const f=fixture(), policy=enabled(); policy.settings.schedule.rules[0].start=start;
+    const original=structuredClone(policy);
+    f.rows.push({targetType:'GRADE',targetId:'grade',revision:7,policy});
+    const result=await f.service.list(f.claims,'school','term');
+    assert.deepEqual(result.settings[0].policy,original);
+    assert.equal(result.settings[0].revision,7);
+    assert.equal(studyWindowsForDate(result.settings[0].policy.settings,'2026-10-12')[0].start,`2026-10-12T${start}:00`);
+    assert.deepEqual(f.rows[0].policy,original);assert.equal(f.audit.length,0);
+  }
 });
 
 test('save/read is versioned, idempotent, audited, and rejects a changed preview or foreign source', async () => {

@@ -18,7 +18,7 @@ const binding={id:'screen',schoolId:'school',administrativeClassId:'class',isAct
 const session={sessionId:randomUUID(),deviceId:id,runId:randomUUID(),statusEpoch:1,expiresAt:new Date(Date.now()+120000)};
 const device={id,credentialId,secretHash:secretHash(secret),...deployment,schoolId:'school',administrativeClassId:'class',screenBindingId:'screen',bindingRevision:1,
   state:'ACTIVE',sessionId:session.sessionId,statusEpoch:1,controlEpoch:randomUUID(),credentialExpiresAt:new Date(Date.now()+120000)};
-const settings=defaultStudySettings();settings.schedule.effectiveFrom='2026-10-12';settings.schedule.rules[0].days=[1];settings.schedule.rules[0].end='19:01'; // Short synthetic window, not a school default.
+const settings=defaultStudySettings();settings.schedule.effectiveFrom='2026-10-12';settings.schedule.rules[0]={days:[1],start:'19:00',end:'19:01'}; // Short synthetic window, not a school default.
 settings.noise.redLineDbfs=-40;settings.noise.mediumLineDbfs=-50; // Explicit synthetic fixture thresholds; never a calibrated school default.
 let policy=null,stored=null,noiseStored=null;
 const requests=new Map(),audits=[];
