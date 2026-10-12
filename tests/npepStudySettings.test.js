@@ -53,10 +53,13 @@ test('estimated thresholds have explicit acoustic units without changing legacy 
   }
 });
 
-test('new defaults require dates/weekdays and do not invent the school activation date or threshold', () => {
+test('new defaults require dates/weekdays and use explicitly configured 50/65 estimated dB(A) thresholds', () => {
   const s=defaultStudySettings();
   assert.deepEqual(s.schedule.rules,[{days:[],start:'19:00',end:'21:30'}]);
   assert.equal(s.schedule.effectiveFrom,''); assert.equal(s.noise.redLineDbfs,null);
+  assert.deepEqual(s.noise.estimated,{highDbA:65,mediumDbA:50});
+  s.noise.estimated.mediumDbA = 54;
+  assert.deepEqual(defaultStudySettings().noise.estimated,{highDbA:65,mediumDbA:50});
   assert.equal(s.presentation.noiseDisplay,'StatusTrend'); assert.equal(s.homework.rotationSeconds,60);
   assert.equal(s.presentation.temporaryHideSeconds,180); assert.equal(s.photos.enabled,false);
   assert.equal(s.photos.continuousSeconds,3); assert.equal(s.photos.cooldownSeconds,30); assert.equal(s.photos.retentionDays,30);
@@ -68,6 +71,7 @@ test('new defaults require dates/weekdays and do not invent the school activatio
 
 test('photo hard limits, redline and extended retention acknowledgment cannot be bypassed by coercion', () => {
   const p=enabled(), s=p.settings; s.photos.enabled=true;
+  s.noise.estimated=null; // Test the independent legacy digital threshold path.
   assert.equal(validateStudyPolicy(p),'PHOTO_THRESHOLD_REQUIRED');
   s.noise.redLineDbfs=-35; assert.equal(validateStudyPolicy(p),null);
   s.photos.retentionDays=180; assert.equal(validateStudyPolicy(p),'RETENTION_ACK_REQUIRED');
@@ -155,6 +159,7 @@ test('source repository includes every related same-subject walk group, excludes
 
 test('dual thresholds validate order and independent cooldown while legacy reads preserve customs',async()=>{
   const p=enabled();p.settings.noise.redLineDbfs=-35;p.settings.noise.mediumLineDbfs=-45;
+  p.settings.noise.estimated=null;
   assert.equal(validateStudyPolicy(p),null);
   for(const bad of [-35,-30,'-45',Infinity,NaN]){p.settings.noise.mediumLineDbfs=bad;assert.equal(validateStudyPolicy(p),'INVALID_NOISE');}
   p.settings.noise.mediumLineDbfs=-45;
@@ -171,6 +176,22 @@ test('dual thresholds validate order and independent cooldown while legacy reads
   f.rows[0].policy=structuredClone(p);
   await assert.rejects(f.service.preview(f.claims,'school',body({expectedRevision:4,policy:legacy})),error=>error.code==='STUDY_SETTING_UPGRADE_REQUIRED');
   assert.deepEqual(f.rows[0].policy,p);
+});
+
+test('reading and saving preserve custom acoustic values and old digital policies instead of installing new defaults',async()=>{
+  for (const estimated of [{highDbA:72,mediumDbA:54},null,undefined]) {
+    const p=enabled();
+    p.settings.noise.redLineDbfs=-37;p.settings.noise.mediumLineDbfs=-48;
+    if (estimated === undefined) delete p.settings.noise.estimated;
+    else p.settings.noise.estimated=estimated;
+    const original=structuredClone(p),f=fixture();
+    f.rows.push({targetType:'GRADE',targetId:'grade',revision:4,policy:p});
+    const listed=await f.service.list(f.claims,'school','term');
+    assert.deepEqual(listed.settings[0].policy,original);
+    const request=body({expectedRevision:4,policy:original});
+    await f.service.save(f.claims,'school',await prepared(f,request));
+    assert.deepEqual(f.rows[0].policy,original);
+  }
 });
 
 test('high qualification default is three seconds and legacy photo duration is a consistent compatibility mirror',()=>{

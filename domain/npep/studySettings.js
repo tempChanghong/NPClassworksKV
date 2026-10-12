@@ -15,6 +15,10 @@ export function validStudyDate(value) {
     && new Date(time).toISOString().slice(0, 10) === value;
 }
 
+export function defaultStudyEstimatedThresholds() {
+  return {highDbA: 65, mediumDbA: 50};
+}
+
 export function defaultStudySettings() {
   return {
     schedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null,
@@ -22,7 +26,8 @@ export function defaultStudySettings() {
     examSchedule: {timeZone: 'Asia/Shanghai', effectiveFrom: '', effectiveTo: null, rules: [], exceptions: []},
     presentation: {noiseDisplay: 'StatusTrend', temporaryHideSeconds: 180},
     homework: {enabled: true, sourceMode: 'OwnClass', sourceClassIds: [], rotationSeconds: 60},
-    noise: {enabled: true, redLineDbfs: null, mediumLineDbfs: null, disciplineCooldownSeconds: 600, highContinuousSeconds: 3},
+    noise: {enabled: true, redLineDbfs: null, mediumLineDbfs: null, disciplineCooldownSeconds: 600, highContinuousSeconds: 3,
+      estimated: defaultStudyEstimatedThresholds()},
     photos: {enabled: false, continuousSeconds: 3, cooldownSeconds: 30, retentionDays: 30,
       captureOnExit: true, extendedRetentionAcknowledged: false},
   };

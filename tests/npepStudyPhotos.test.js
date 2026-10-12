@@ -18,6 +18,7 @@ function fixture(options = {}) {
   const f = seatingFixture(), leases = new Map(), rows = new Map(), files = new Map();
   let now = Date.now();
   f.config.effective.settings = defaultStudySettings();
+  f.config.effective.settings.noise.estimated = null; // This fixture exercises legacy dBFS photo metadata.
   f.config.effective.settings.photos.enabled = true;
   f.config.effective.settings.noise.redLineDbfs = -30;
   const sessionId = randomUUID();
