@@ -32,9 +32,11 @@ import {validateStudyWrite} from '../../domain/npep/studySettings.js';
 import {createNpepStudyDeviceService} from '../../services/npepStudyDeviceService.js';
 import {validateStudyDevice} from '../../domain/npep/studyDevice.js';
 import {createSchoolManagementService} from '../../services/npepSchoolManagementService.js';
+import {connectionDiagnostics} from '../../domain/npep/connectionDiagnostics.js';
 
-export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true} = {}) {
+export function createNpepRouter({client = prisma, deployment = readDeployment, authenticate = verifyAccessToken, rateLimits = true, diagnosticLog, diagnosticClock} = {}) {
   const router = express.Router();
+  router.use(connectionDiagnostics({write: diagnosticLog, clock: diagnosticClock}));
   const service = createNpepService(client, deployment);
   const schoolManagement = createSchoolManagementService(service);
   const notifications = createNpepNotificationService(service);
@@ -384,6 +386,7 @@ export function createNpepRouter({client = prisma, deployment = readDeployment, 
     if (error.type === 'entity.too.large') safe = new NpepError(413, 'PAYLOAD_TOO_LARGE');
     else if (error.status === 415 || error.type === 'request.aborted') safe = new NpepError(400, 'INVALID_REQUEST');
     else if (error.code === 'P2002') safe = new NpepError(409, 'CREDENTIAL_ID_CONFLICT');
+    req.npepDiagnosticError = safe.code;
     if (safe.retryAfterSeconds) res.set('Retry-After', String(safe.retryAfterSeconds));
     const {data: unused, ...base} = envelope(req.npepRequestId);
     res.status(safe.status).json({...base, protocolVersion: req.npepVersion || '0.1', error: {code: safe.code, message: safe.code, retryAfterSeconds: safe.retryAfterSeconds}});
