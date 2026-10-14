@@ -51,6 +51,7 @@ export function createNpepSeatingRouter({base, study, authenticate, rateLimits})
   router.use((_req, _res, next) => next(new NpepError(404, 'NOT_FOUND')));
   router.use((e, req, res, _next) => {
     const safe = e instanceof NpepError ? e : new NpepError(e.type === 'entity.too.large' ? 413 : e.status === 415 ? 400 : 503, e.type === 'entity.too.large' ? 'PAYLOAD_TOO_LARGE' : 'TEMPORARILY_UNAVAILABLE');
+    req.npepDiagnosticError = safe.code;
     res.status(safe.status).json({protocolVersion: '0.14', requestId: req.seatId ?? null, serverTime: new Date().toISOString(), error: {code: safe.code}});
   });
   return router;

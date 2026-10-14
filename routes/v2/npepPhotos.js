@@ -76,6 +76,7 @@ export function createNpepPhotoRouter({base, study, authenticate, rateLimits = t
   router.use((e, req, res, _next) => {
     const safe = e instanceof NpepError ? e : new NpepError(e.type === 'entity.too.large' ? 413 : 503,
       e.type === 'entity.too.large' ? 'PAYLOAD_TOO_LARGE' : 'PHOTO_TEMPORARILY_UNAVAILABLE');
+    req.npepDiagnosticError = safe.code;
     res.status(safe.status).json({protocolVersion: '0.15', requestId: req.photoRequestId ?? null,
       serverTime: new Date().toISOString(), error: {code: safe.code}});
   });
