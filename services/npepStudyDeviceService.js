@@ -4,7 +4,7 @@ import {identityOf, requireSame} from '../domain/npep/runtimeControl.js';
 import {resolveStudyPolicy, validateStudyPolicy, studyWindowsForDate, STUDY_LIMITS} from '../domain/npep/studySettings.js';
 import {studySettingsRepository} from './npepStudySettingsRepository.js';
 import {validateStudyDevice} from '../domain/npep/studyDevice.js';
-import {readStudyHomework, homeworkChunk} from './npepStudyHomework.js';
+import {readStudyHomework, homeworkChunk, studyHomeworkDate} from './npepStudyHomework.js';
 
 export const studyDeviceRepository = {
   settings: studySettingsRepository.settings,
@@ -151,8 +151,13 @@ export function createNpepStudyDeviceService(base, repo = studyDeviceRepository)
       const current = await configuration(tx, device);
       requireSame(body.version, current.version, 'POLICY_CHANGED');
       const receipt = await repo.receipt(tx, device.id);
-      if (!applied(receipt, current, body.context) || !receipt.status.clockReady ||
-          !['Preparing', 'Active'].includes(receipt.status.phase) || receipt.status.schoolNow?.slice(0, 10) !== body.date)
+      // Manual study uses Windows time and may run without a scheduled window or
+      // a ClassIsland clock. It still needs the fresh applied binding/version;
+      // only today's school sources are readable, and this grants no capture.
+      const dateAllowed = body.purpose === 'Manual'
+        ? current.effective.settings?.homework.enabled === true && body.date === studyHomeworkDate()
+        : receipt?.status.clockReady && ['Preparing', 'Active'].includes(receipt.status.phase) && receipt.status.schoolNow?.slice(0, 10) === body.date;
+      if (!applied(receipt, current, body.context) || !dateAllowed)
         fail(409, 'STUDY_NOT_APPLIED');
       return homeworkChunk(await readStudyHomework(tx, current, body.date), body.index, body.snapshotId);
     }),

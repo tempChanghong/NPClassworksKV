@@ -1,8 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readStudyHomework, homeworkChunk, HOMEWORK_MAX_BYTES} from '../services/npepStudyHomework.js';
+import {readStudyHomework, homeworkChunk, HOMEWORK_MAX_BYTES, studyHomeworkDate} from '../services/npepStudyHomework.js';
 import {hash} from '../domain/npep/wire.js';
 import {validateStudyDevice} from '../domain/npep/studyDevice.js';
+
+test('manual homework date is the school date across UTC midnight independently of server timezone', () => {
+  assert.equal(studyHomeworkDate(new Date('2026-10-12T15:59:59.999Z')), '2026-10-12');
+  assert.equal(studyHomeworkDate(new Date('2026-10-12T16:00:00.000Z')), '2026-10-13');
+});
 
 function fixture() {
   const sources = [{id: 'one', name: '行政一班'}, {id: 'walk1', name: '物理走班 A'}, {id: 'walk2', name: '物理走班 B'}];
