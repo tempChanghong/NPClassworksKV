@@ -448,6 +448,12 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         });
         assert.equal(screenPublication.isCertified, false);
         assert.equal(screenPublication.latestActorType, "CLASSROOM_SCREEN");
+        const futureCopySource = await publicationService.createScreenPublication({
+            screenBinding: authenticatedScreen,
+            input: {subjectId: physics.id, title: "尚未发布，不能经整日复制提前展示", content: "明天才允许看到的不同作业",
+                boardDate: fixtureBoardDate, publishAt: new Date(Date.now() + 86400000).toISOString(),
+                targetWorkspaceIds: [physicsA1Workspace.id]},
+        });
         const copiedBoard = await publicationService.copyScreenBoardDate({
             screenBinding: authenticatedScreen,
             sourceBoardDate: fixtureBoardDate,
@@ -455,6 +461,7 @@ test("local school login and pending OAuth assignments work together", {skip: !s
         });
         // Both the earlier class-local assignment and the physics assignment are copied.
         assert.equal(copiedBoard.createdCount, 2);
+        assert.ok(!copiedBoard.created.some(item => item.content === futureCopySource.content));
         assert.deepEqual(copiedBoard.created.map(item => item.subjectId).sort(), [chinese.id, physics.id].sort());
         const copiedAgain = await publicationService.copyScreenBoardDate({
             screenBinding: authenticatedScreen,
