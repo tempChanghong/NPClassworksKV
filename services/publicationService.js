@@ -875,6 +875,7 @@ export async function copyScreenBoardDate({screenBinding, sourceBoardDate, targe
         where: {
             type: PUBLICATION_TYPES.ASSIGNMENT,
             status: PUBLICATION_STATUSES.PUBLISHED,
+            publishAt: {lte: new Date()},
             boardDate: source,
             targets: {some: {workspaceId: {in: allowedIds}}},
         },

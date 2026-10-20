@@ -6,6 +6,11 @@ import {validateStudyDevice} from '../domain/npep/studyDevice.js';
 // Read-only snapshots. Chunks are transport boundaries, never homework display pages.
 export const HOMEWORK_CHUNK_BYTES = 16384;
 export const HOMEWORK_MAX_BYTES = 2 * 1024 * 1024;
+const dateFormat = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'});
+export function studyHomeworkDate(now = new Date()) {
+  const parts = Object.fromEntries(dateFormat.formatToParts(now).map(part => [part.type, part.value]));
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
 export async function readStudyHomework(tx, current, date, repository = studySettingsRepository) {
   const homework = current.effective.settings?.homework;
   let items = [];

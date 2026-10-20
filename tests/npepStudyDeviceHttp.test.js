@@ -280,6 +280,44 @@ test('device study configuration uses actual router/auth/repository without gran
     stored.receivedAt=new Date(Date.now()-15000).toISOString();assert.equal((await homework()).error.code,'STUDY_NOT_APPLIED');
     stored=structuredClone(initialStored);device.state='REVOKED';assert.equal((await homework()).status,401);device.state='ACTIVE';
   });
+  await t.test('manual homework uses the bound school sources outside scheduled windows, without granting capture',async()=>{
+    const previous=structuredClone(stored), initialWrites=writes, previousPolicy=structuredClone(rows[0].policy);
+    stored=structuredClone(baseline);stored.receivedAt=new Date().toISOString();
+    stored.status={...stored.status,phase:'Outside',window:null,clockReady:false,schoolNow:null};
+    tx.workspace.findMany=async query=>{assert.equal(query.where.term.schoolId,'school');return [classroom];};
+    let revision=1;
+    tx.publication={findMany:async query=>{
+      assert.deepEqual(query.where.targets.some.workspaceId.in,['one']);
+      return [{id:'manual-work',revision,title:'',content:`手动作业 ${revision}`,subject:{name:'物理'},targets:[{workspaceId:'one'}]}];
+    }};
+    const today=new Date(Date.now()+8*3600000).toISOString().slice(0,10);
+    const body=()=>({requestId:randomUUID(),context,version:configView.version,date:today,purpose:'Manual',index:0,snapshotId:null});
+    async function homework(value=body()) {
+      const response=await fetch(`http://127.0.0.1:${server.address().port}/api/v2/npep/device/study-settings/homework`,{method:'POST',
+        headers:{'Content-Type':'application/json','X-NPEP-Version':'0.12','X-Request-Id':value.requestId,Authorization:`Bearer npep1.${credentialId}.${secret}`},body:JSON.stringify(value)});
+      return {status:response.status,...await response.json()};
+    }
+    try {
+      const first=await homework();assert.equal(first.status,200,JSON.stringify(first));
+      const firstValue=JSON.parse(Buffer.from(first.data.data,'base64'));assert.equal(firstValue.date,today);assert.equal(firstValue.items[0].content,'手动作业 1');
+      revision++;const updated=await homework();assert.equal(updated.status,200);assert.notEqual(first.data.snapshotId,updated.data.snapshotId);
+      assert.equal(JSON.parse(Buffer.from(updated.data.data,'base64')).items[0].content,'手动作业 2');
+      const scheduled=body();delete scheduled.purpose;assert.equal((await homework(scheduled)).error.code,'STUDY_NOT_APPLIED');
+      assert.equal((await homework({...body(),date:'2000-01-01'})).error.code,'STUDY_NOT_APPLIED');
+      assert.equal((await homework({...body(),purpose:'Other'})).status,400);
+      assert.equal((await homework({...body(),classId:'foreign'})).status,400);
+      assert.equal((await homework({...body(),version:'b'.repeat(64)})).error.code,'POLICY_CHANGED');
+      assert.equal((await homework({...body(),context:{...context,runId:randomUUID()}})).error.code,'SESSION_SUPERSEDED');
+      const retained=structuredClone(stored);
+      stored.receivedAt=new Date(Date.now()-16000).toISOString();assert.equal((await homework()).error.code,'STUDY_NOT_APPLIED');
+      stored=retained;stored.status.policyState='UNAVAILABLE';assert.equal((await homework()).error.code,'STUDY_NOT_APPLIED');
+      rows[0].policy.settings.homework.enabled=false;
+      const disabled=(await request()).data;
+      stored={...retained,status:{...retained.status,version:disabled.version}};
+      assert.equal((await homework({...body(),version:disabled.version})).error.code,'STUDY_NOT_APPLIED');
+      assert.equal(writes,initialWrites); // Homework reads never fabricate configuration or execution receipts.
+    } finally {stored=previous;rows[0].policy=previousPolicy;}
+  });
   await t.test('WPF visibility is a separate bounded current-session observation, not policy or capture acceptance',async()=>{
     const initial=structuredClone(stored), window={start:'2026-10-12T19:00:00.000',end:'2026-10-12T21:30:00.000'};
     const context={identity:configView.identity,runId:session.runId,sessionId:session.sessionId,statusEpoch:1};
